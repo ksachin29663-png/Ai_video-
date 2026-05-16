@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>एआई वीडियो स्टूडियो</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+        body { background-color: #0f0f0f; color: #fff; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: #1a1a1a; padding: 12px; text-align: center; border-bottom: 2px solid #333; }
+        header h2 { color: #00ff88; font-size: 18px; }
+        .workspace { display: flex; flex: 1; width: 100%; }
+        .left-panel { width: 25%; background: #141414; border-right: 1px solid #2d2d2d; padding: 15px; display: flex; flex-direction: column; gap: 15px; }
+        .center-panel { width: 50%; background: #050505; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
+        .right-panel { width: 25%; background: #141414; border-left: 1px solid #2d2d2d; padding: 15px; display: flex; flex-direction: column; gap: 15px; }
+        label { font-size: 12px; color: #aaa; font-weight: bold; text-transform: uppercase; }
+        input[type="file"], textarea { width: 100%; padding: 10px; background: #222; border: 1px solid #3c3c3c; border-radius: 6px; color: #fff; font-size: 14px; }
+        textarea { resize: none; flex: 1; min-height: 150px; }
+        .btn-green { background: #00ff88; color: #000; font-weight: bold; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 15px; text-transform: uppercase; width: 100%; }
+        .video-container { width: 100%; max-width: 540px; aspect-ratio: 16/9; background: #111; border: 2px dashed #333; border-radius: 8px; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+        video { width: 100%; height: 100%; object-fit: contain; display: none; }
+        #status { color: #00ff88; font-weight: bold; font-size: 14px; margin-top: 15px; text-align: center; }
+    </style>
+</head>
+<body>
+<header><h2>CUSTOM STUDIO ENGINE ⚡</h2></header>
+<div class="workspace">
+    <div class="left-panel">
+        <label>1. फोटो अपलोड करें</label>
+        <input type="file" id="mediaFiles" required>
+    </div>
+    <div class="center-panel">
+        <div class="video-container">
+            <div id="placeholder">वीडियो यहाँ लोड होगी 🎬</div>
+            <video id="outputVideo" controls></video>
+        </div>
+        <div id="status">सिस्टम तैयार है...</div>
+    </div>
+    <div class="right-panel">
+        <label>2. अपनी कमान लिखें (यह बोली जाएगी)</label>
+        <textarea id="cmdText" placeholder="इस फोटो में जो तितली है उसे हवा में उड़ा दो..."></textarea>
+        <button id="generateBtn" class="btn-green">वीडियो जनरेट करें 🚀</button>
+    </div>
+</div>
+<script>
+document.getElementById('generateBtn').addEventListener('click', async function() {
+    const statusDiv = document.getElementById('status');
+    const videoTag = document.getElementById('outputVideo');
+    const placeholder = document.getElementById('placeholder');
+    const fileInput = document.getElementById('mediaFiles').files;
+    const commandText = document.getElementById('cmdText').value;
+
+    if (fileInput.length === 0) { alert('कृपया पहले फोटो सिलेक्ट करें!'); return; }
+
+    statusDiv.innerText = "वॉइस और मोशन वीडियो रेंडर हो रहा है... ⏳";
+    videoTag.style.display = "none";
+    placeholder.style.display = "block";
+
+    const formData = new FormData();
+    formData.append('files', fileInput[0]);
+    formData.append('command', commandText); // यहाँ कमान को टेक्स्ट के रूप में भेजा जा रहा है
+
+    try {
+        const response = await fetch('http://localhost:3000/generate-video', { method: 'POST', body: formData });
+        if (response.ok) {
+            const blob = await response.blob();
+            const videoURL = URL.createObjectURL(blob);
+            statusDiv.innerText = "प्रोसेसिंग सफल! वीडियो लोड हो गई। 🔥";
+            placeholder.style.display = "none";
+            videoTag.src = videoURL;
+            videoTag.style.display = "block";
+        } else { statusDiv.innerText = "सिस्टम एरर: प्रोसेसिंग फेल हुई।"; }
+    } catch (err) { statusDiv.innerText = "नोड सर्वर चालू नहीं है।"; }
+});
+</script>
+</body>
+</html>
