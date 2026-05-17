@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sachin AI - World Jankari Chat Studio</title>
+    <style>
+        /* 🖤 प्रीमियम डार्क यूआई */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #060913; color: #e1e7f0; display: flex; flex-direction: column; height: 100vh; }
+        
+        header { background: linear-gradient(135deg, #0044ff, #001133); padding: 15px; text-align: center; border-bottom: 2px solid #00d2ff; box-shadow: 0 4px 15px rgba(0, 68, 255, 0.3); }
+        header h1 { color: #00d2ff; font-size: 1.4rem; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .chat-container { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 12px; }
+        
+        .msg { max-width: 80%; padding: 12px 16px; border-radius: 12px; font-size: 0.95rem; line-height: 1.4; word-wrap: break-word; }
+        .user-msg { background: #0044ff; color: white; align-self: flex-end; border-bottom-right-radius: 2px; box-shadow: 0 4px 10px rgba(0,68,255,0.2); }
+        .ai-msg { background: #111827; color: #e1e7f0; align-self: flex-start; border-bottom-left-radius: 2px; border: 1px solid #1e293b; }
+        
+        /* 📣 विज्ञापन के लिए खाली जगह (Ad Slots) */
+        .ad-space { background: #0b0f19; text-align: center; padding: 10px; color: #8b949e; font-size: 0.8rem; border: 1px dashed #1e293b; }
+
+        .input-area { background: #0b0f19; padding: 12px; display: flex; gap: 8px; border-top: 1px solid #1e293b; padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+        .chat-input { flex: 1; background: #05070c; border: 1px solid #0044ff; padding: 12px; border-radius: 8px; color: white; font-size: 0.95rem; outline: none; }
+        .chat-input:focus { border-color: #00d2ff; box-shadow: 0 0 8px rgba(0, 210, 255, 0.3); }
+        
+        .send-btn { background: linear-gradient(90deg, #0044ff, #00d2ff); color: white; border: none; padding: 0 20px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1rem; }
+        .loading { color: #00d2ff; font-style: italic; font-size: 0.85rem; padding: 5px 15px; display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="ad-space">👉 Sponsored Ad Space</div>
+
+    <header>
+        <h1>🤖 SACHIN AI Studio (Groq Speed)</h1>
+    </header>
+
+    <div class="chat-container" id="chat-box">
+        <div class="msg ai-msg">
+            <strong>Sachin AI:</strong> नमस्कार भाई! Groq AI के साथ आपका सुपरफास्ट पर्सनल चैट सिस्टम लाइव हो चुका है। अब कोडिंग का असली मज़ा देखो, पूछो क्या पूछना है! 😎
+        </div>
+    </div>
+
+    <div class="loading" id="loader">⚡ सचिन AI रॉकेट की स्पीड से सोच रहा है...</div>
+
+    <div class="ad-space">👉 Sponsored Ad Space</div>
+
+    <div class="input-area">
+        <input type="text" id="user-input" class="chat-input" placeholder="यहाँ अपना सवाल लिखें...">
+        <button class="send-btn" id="send-btn">भेजें</button>
+    </div>
+
+<script>
+    // 🔑 आपकी Groq API Key यहाँ फिट कर दी है भाई!
+    const GROQ_API_KEY = "Gsk_8u7WaJ00k4m7HEiVnBIqWGdyb3FYk7B14b99BD3VmuwevXgvcgyb"; 
+    const API_URL = "https://api.groq.com/openai/v1/chat/completions";
+
+    const chatBox = document.getElementById('chat-box');
+    const userInput = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
+    const loader = document.getElementById('loader');
+
+    function appendMessage(text, sender) {
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('msg', sender === 'user' ? 'user-msg' : 'ai-msg');
+        msgDiv.innerHTML = sender === 'user' ? `<strong>आप:</strong> ${text}` : `<strong>AI:</strong> ${text}`;
+        chatBox.appendChild(msgDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // ⚡ Groq Cloud AI से कनेक्ट करने का फंक्शन
+    async function fetchAIResponse(prompt) {
+        loader.style.display = "block";
+        try {
+            const response = await fetch(API_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${GROQ_API_KEY}`
+                },
+                body: JSON.stringify({
+                    model: "llama-3.3-70b-versatile", // कड़क और फ़ास्ट ओपन-सोर्स मॉडल
+                    messages: [
+                        { role: "system", content: "You are Sachin AI, a helpful and smart assistant on World Jankari Website." },
+                        { role: "user", content: prompt }
+                    ]
+                })
+            });
+
+            const data = await response.json();
+            const aiText = data.choices[0].message.content;
+            appendMessage(aiText, 'ai');
+        } catch (error) {
+            console.error(error);
+            appendMessage("अरे भाई, कनेक्ट करने में कोई छोटी दिक्कत आई है। एक बार फिर से बटन दबाएं!", 'ai');
+        }
+        loader.style.display = "none";
+    }
+
+    sendBtn.addEventListener('click', () => {
+        const text = userInput.value.trim();
+        if (text === "") return;
+
+        appendMessage(text, 'user');
+        userInput.value = "";
+        fetchAIResponse(text);
+    });
+
+    userInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendBtn.click();
+    });
+</script>
+
+</body>
+</html>
