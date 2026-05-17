@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sachin AI - World Jankari Chat Studio</title>
     <style>
-        /* 🖤 प्रीमियम डार्क यूआई और मोबाइल फ्रेंडली फिक्स्ड लेआउट */
+        /* 🖤 प्रीमियम डार्क थीम और मोबाइल फ्रेंडली फिक्स्ड लेआउट */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background: #060913; color: #e1e7f0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
         
@@ -26,7 +26,7 @@
         .loading { color: #00d2ff; font-style: italic; font-size: 0.85rem; padding: 5px 15px; display: none; }
 
         /* 📥 नीचे फिक्स रहने वाला इनपुट सेक्शन */
-        .bottom-section { background: #0b0f19; border-top: 1px solid #1e293b; display: flex; flex-direction: column; width: 100%; z-index: 999; padding-bottom: env(safe-area-inset-bottom)); }
+        .bottom-section { background: #0b0f19; border-top: 1px solid #1e293b; display: flex; flex-direction: column; width: 100%; z-index: 999; padding-bottom: env(safe-area-inset-bottom); }
         
         .input-area { padding: 10px; display: flex; gap: 8px; align-items: center; }
         .chat-input { flex: 1; background: #05070c; border: 1px solid #0044ff; padding: 12px; border-radius: 8px; color: white; font-size: 0.95rem; outline: none; }
@@ -53,7 +53,7 @@
 
     <div class="chat-container" id="chat-box">
         <div class="msg ai-msg">
-            <strong>Sachin AI:</strong> नमस्कार भाई! 8 एक्टिवेटेड ऐड्स और सुपरफास्ट स्पीड के साथ आपका अपना एआई स्टूडियो तैयार है। पूछिए, क्या जानना है? 😎
+            <strong>Sachin AI:</strong> नमस्कार भाई! 8 एक्टिवेटेड ऐड्स और Google Gemini की सुपरफास्ट स्पीड के साथ आपका अपना एआई स्टूडियो पूरी तरह तैयार है। पूछिए भाई, आज क्या जानना है? 😎
         </div>
         
         <div class="ad-inline-slot" id="ad-slot-3">
@@ -84,9 +84,9 @@
     </div>
 
     <script>
-    // 🔑 आपकी Groq API Key यहाँ पूरी तरह फिट है भाई
-    const GROQ_API_KEY = "Gsk_8u7WaJ00k4m7HEiVnBIqWGdyb3FYk7B14b99BD3VmuwevXgvcgyb"; 
-    const API_URL = "https://api.groq.com/openai/v1/chat/completions";
+    // 🔑 आपकी अपनी स्क्रीनशॉट वाली Gemini API Key यहाँ एकदम सही तरीके से फिट कर दी है
+    const GEMINI_API_KEY = "AlzaSyBPWiuNiYNrPxPlcbIT_6ZfHNr..."; 
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
     const chatBox = document.getElementById('chat-box');
     const userInput = document.getElementById('user-input');
@@ -101,30 +101,34 @@
         chatBox.scrollTop = chatBox.scrollHeight;
     }
 
+    // ⚡ Google Gemini सर्वर से बिजली की रफ़्तार से जवाब लाने का नया फंक्शन
     async function fetchAIResponse(prompt) {
         loader.style.display = "block";
         try {
             const response = await fetch(API_URL, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${GROQ_API_KEY}`
+                    "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    model: "llama-3.3-70b-versatile",
-                    messages: [
-                        { role: "system", content: "You are Sachin AI, a helpful, smart, and friendly assistant on World Jankari Website. Always answer politely, clearly and fastly in Hindi or English as requested." },
-                        { role: "user", content: prompt }
-                    ]
+                    contents: [{
+                        parts: [{
+                            text: `You are Sachin AI, a helpful, smart, and friendly assistant on World Jankari Website. Answer this prompt beautifully and politely in Hindi/English: ${prompt}`
+                        }]
+                    }]
                 })
             });
 
             const data = await response.json();
-            const aiText = data.choices[0].message.content;
-            appendMessage(aiText, 'ai');
+            if(data.candidates && data.candidates[0].content.parts[0].text) {
+                const aiText = data.candidates[0].content.parts[0].text;
+                appendMessage(aiText, 'ai');
+            } else {
+                appendMessage("अरे भाई, थोड़ा लोड है सर्वर पर। एक बार फिर से अपना सवाल भेजें!", 'ai');
+            }
         } catch (error) {
             console.error(error);
-            appendMessage("अरे भाई, थोड़ा लोड है सर्वर पर। एक बार फिर से अपना सवाल भेजें!", 'ai');
+            appendMessage("कनेक्ट करने में थोड़ी दिक्कत आई है भाई। कृपया दोबारा प्रयास करें!", 'ai');
         }
         loader.style.display = "none";
     }
@@ -145,4 +149,4 @@
 
 </body>
     </html>
-            
+    
