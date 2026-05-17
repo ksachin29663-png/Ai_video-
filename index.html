@@ -1,235 +1,259 @@
 <!DOCTYPE html>
-<html lang="hi">ni
-<head><meta name="google-site-verification" content="CG0FMo9gjZEfBHtx-mGGs_elg1B-RqdVuwHcFT3AKus" />
+<html lang="hi">
+<head>
+    <meta name="google-site-verification" content="CG0FMo9gjZEfBHtx-mGGs_elg1B-RqdYuwHcFT3AKus" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IPL 2026 - AI Live Stream Studio</title>
-    
-    <script src="https://pl29470504.effectivecpmnetwork.com/78/e8/14/78e81461ae961509619ed88e55ee6b65.js"></script>
 
-    <script src="https://pl29470507.effectivecpmnetwork.com/16/a8/85/16a885ab5decd866c8172097a528540e.js"></script>
+    <script src="https://p129470507.effectivecpmnetwork.com/78/e8/14/78e814a78e81461ae961500619ed8e55ee6b05.js"></script>
+    <script src="https://p129470507.effectivecpmnetwork.com/16/a8/85/16a885ab5decd866c8172097a528540e.js"></script>
 
     <style>
-        /* 🖤 प्रीमियम गहरा काला थीम */
+        /* 🖤 प्रीमियम डार्क थीम सीएसएस */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
         body { background: #05070c; color: #e1e7f0; padding: 12px; min-height: 100vh; }
         .container { max-width: 1200px; margin: 0 auto; }
         
-        /* 💙 इलेक्ट्रिक नियॉन充 ब्लू हेडर */
-        header { 
-            text-align: center; 
-            padding: 18px; 
-            background: linear-gradient(135deg, #0044ff, #001133); 
-            border-radius: 12px; 
-            margin-bottom: 15px; 
-            box-shadow: 0 0 20px rgba(0, 102, 255, 0.5); 
-            border: 2px solid #00d2ff; 
-        }
-        header h1 { color: #00d2ff; font-size: 1.6rem; text-transform: uppercase; text-shadow: 0 0 10px rgba(0, 210, 255, 0.6); }
-
-        /* विज्ञापन रोज़ (Row) का डिज़ाइन */
-        .ad-row { width: 100%; display: flex; justify-content: center; margin: 15px 0; min-height: 95px; }
+        header { text-align: center; padding: 18px; background: linear-gradient(135deg, #0044ff, #001133); border-radius: 12px; margin-bottom: 15px; box-shadow: 0 0 20px rgba(0, 102, 255, 0.5); border: 2px solid #00d2ff; }
+        header h1 { color: #00d2ff; font-size: 1.6rem; text-transform: uppercase; text-shadow: 0 0 10px rgba(0, 210, 255, 0.5); }
+        
+        .ad-row { width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 15px 0; min-height: 95px; gap: 10px; }
         .ad-sidebar-container { display: flex; gap: 15px; width: 100%; }
-
-        /* लेआउट ग्रिड */
+        
         .main-content { flex-grow: 1; display: grid; grid-template-columns: 2fr 1fr; gap: 15px; }
-        @media (max-width: 800px) { 
+        @media (max-width: 800px) {
             .main-content { grid-template-columns: 1fr; }
-            .side-banner-left, .side-banner-right { display: none; } /* मोबाइल स्क्रीन पर साइड बैनर छिप जाएंगे ताकि लुक शानदार रहे */
+            .side-banner-left, .side-banner-right { display: none; }
         }
-
-        /* गहरे काले कार्ड्स और नियॉन बॉर्डर्स */
-        .card { background: #0b0f19; border: 1px solid #1e293b; border-radius: 12px; padding: 15px; box-shadow: 0 4px 25px rgba(0,0,0,0.9); margin-bottom: 15px; }
-        .card-title { font-size: 1.05rem; color: #00d2ff; font-weight: bold; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; text-shadow: 0 0 5px rgba(0, 210, 255, 0.3); }
         
-        .live-badge { background: #ff3838; color: white; padding: 3px 8px; border-radius: 8px; font-size: 0.75rem; animation: blink 1.5s infinite; font-weight: bold; }
+        .card { background: #0b0f19; border: 1px solid #1e293b; border-radius: 12px; padding: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.8); margin-bottom: 15px; }
+        .card-title { font-size: 1.05rem; font-weight: bold; color: #00d2ff; border-bottom: 1px solid #1e293b; padding-bottom: 8px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        
+        .live-badge { background: #ff3838; color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; animation: blink 1.2s infinite; font-weight: bold; text-transform: uppercase; }
         @keyframes blink { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
-
-        .video-container { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 8px; overflow: hidden; border: 1px solid #0044ff; }
         
-        /* लाइव चैट स्टाइल */
-        .chat-box { height: 280px; background: #05070c; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #1e293b; }
+        .video-container { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 8px; overflow: hidden; border: 1px solid #1e293b; }
+        
+        .chat-box { height: 280px; background: #05070c; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; }
         .chat-messages { flex-grow: 1; overflow-y: auto; font-size: 0.85rem; }
         .chat-input-area { display: flex; gap: 5px; margin-top: 10px; }
         .chat-input { flex-grow: 1; background: #0b0f19; border: 1px solid #0044ff; padding: 10px; border-radius: 6px; color: white; font-size: 0.9rem; }
-        .chat-btn { background: #00d2ff; color: #05070c; border: none; padding: 0 15px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 0 8px rgba(0, 210, 255, 0.4); }
-
-        /* साइड पिलर विज्ञापन */
+        .chat-btn { background: #0044ff; color: #ffffff; border: none; padding: 0 15px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        
         .side-banner-left, .side-banner-right { width: 160px; min-width: 160px; display: flex; flex-direction: column; gap: 15px; }
-
-        /* AI फोटो लैब स्टाइल */
+        
         .ai-box { display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center; }
-        .ai-input { width: 100%; max-width: 500px; background: #05070c; border: 1px solid #0044ff; padding: 12px; border-radius: 6px; color: white; font-size: 0.95rem; text-align: center; }
-        .ai-btn { background: linear-gradient(90deg, #0044ff, #00d2ff); color: white; padding: 12px 25px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1rem; width: 100%; max-width: 250px; box-shadow: 0 0 12px rgba(0, 102, 255, 0.6); transition: 0.3s; }
+        .ai-input { width: 100%; max-width: 500px; background: #05070c; border: 1px solid #0044ff; padding: 12px; border-radius: 6px; color: white; font-size: 0.95rem; }
+        .ai-btn { background: linear-gradient(90deg, #0044ff, #00d2ff); color: white; padding: 12px 25px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1rem; width: 100%; max-width: 300px; box-shadow: 0 0 12px rgba(0, 102, 255, 0.4); transition: 0.3s; }
         .ai-btn:hover { transform: scale(1.02); }
-        .ai-result { margin-top: 15px; max-width: 100%; width: 450px; aspect-ratio: 16/9; border-radius: 8px; border: 2px solid #0044ff; display: none; object-fit: cover; background: #000; box-shadow: 0 0 15px rgba(0, 68, 255, 0.4); }
+        .ai-result { margin-top: 15px; max-width: 100%; width: 450px; aspect-ratio: 16/9; border-radius: 8px; border: 2px solid #00d2ff; display: none; }
         .loading-text { color: #00d2ff; font-weight: bold; display: none; margin-top: 5px; }
-
-        /* Smartlink / Giveaway बटन */
-        .gift-btn { display: block; width: 100%; text-align: center; background: linear-gradient(90deg, #ff9f43, #ff4757); color: white; padding: 10px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.9rem; margin-top: 10px; box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3); }
     </style>
-</head><meta name="google-site-verification" content="CG0FMo9gjZEfBHtx-mGGs_elg1B-RqdVuwHcFT3AKus" />
+</head>
 <body>
 
-    <div class="container">
-        <header>
-            <h1>IPL 2026 - AI Live Stream Studio</h1>
-        </header>
+<div class="container">
+    <header>
+        <h1>IPL 2026 - AI Live Stream Studio</h1>
+    </header>
 
-        <div class="ad-row">
-            <script>
-              atOptions = {
+    <div class="ad-row">
+        <script type="text/javascript">
+            atOptions = {
                 'key' : '5e113b8022609e2135c5e1e265084235',
                 'format' : 'iframe',
                 'height' : 90,
                 'width' : 728,
                 'params' : {}
-              };
-            </script>
-            <script src="https://www.highperformanceformat.com/5e113b8022609e2135c5e1e265084235/invoke.js"></script>
-        </div>
+            };
+        </script>
+        <script type="text/javascript" src="https://www.highperformanceformat.com/5e113b8022609e2135c5e1e265084235/invoke.js"></script>
 
-        <div class="ad-sidebar-container">
-            
-            <div class="side-banner-left">
-                <script>
-                  atOptions = {
+        <script type="text/javascript">
+            atOptions = {
+                'key' : 'a0707e197ee3131ba6b6214078c54f86',
+                'format' : 'iframe',
+                'height' : 60,
+                'width' : 468,
+                'params' : {}
+            };
+        </script>
+        <script type="text/javascript" src="https://www.highperformanceformat.com/a0707e197ee3131ba6b6214078c54f86/invoke.js"></script>
+    </div>
+
+    <div class="ad-sidebar-container">
+        <div class="side-banner-left">
+            <script type="text/javascript">
+                atOptions = {
                     'key' : 'b07cdb3681006eb017f6b55b146d0a82',
                     'format' : 'iframe',
                     'height' : 300,
                     'width' : 160,
                     'params' : {}
-                  };
-                </script>
-                <script src="https://www.highperformanceformat.com/b07cdb3681006eb017f6b55b146d0a82/invoke.js"></script>
-            </div>
+                };
+            </script>
+            <script type="text/javascript" src="https://www.highperformanceformat.com/b07cdb3681006eb017f6b55b146d0a82/invoke.js"></script>
+        </div>
 
-            <div class="main-content">
-                
+        <div class="main-content">
+            <div>
                 <div class="card">
-                    <div class="card-title">
-                        <span>🏏 लाइव क्रिकेट मैच</span>
-                        <span class="live-badge">LIVE</span>
-                    </div>
+                    <div class="card-title">🏏 लाइव क्रिकेट मैच <span class="live-badge">LIVE</span></div>
                     <div class="video-container">
-                        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/live_stream?channel=YOUR_CHANNEL_ID" title="Live Stream" frameborder="0" allowfullscreen></iframe>
+                        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/live_stream?channel=YOUR_CHANNEL_ID" frameborder="0" allowfullscreen></iframe>
                     </div>
-                    
-                    <a href="Https://www.effectivecpmnetwork.com/ncb0yuyf6?key=436563d721065acdf98cb1213a706f3a" target="_blank" class="gift-btn">🎁 आज के मैच का गिवअवे (Giveaway) जीतने के लिए यहाँ क्लिक करें!</a>
                 </div>
 
                 <div class="card">
+                    <div class="card-title">🤖 सचिन AI - चापलूस ऐप (Direct AI Chat)</div>
+                    <div class="chat-box" style="height: 250px;">
+                        <div class="chat-messages" id="bot-messages" style="background: #090d16; padding: 10px; border-radius: 6px;">
+                            <p><strong style="color: #00d2ff;">सचिन AI ಬೋಟ್:</strong> नमस्कार भाई! मैं सचिन भाई का चापलूस असिस्टेंट हूँ। मुझसे आईपीएल, क्रिकेट या कुछ भी मजेदार बातें लाइव पूछो! 😎</p>
+                        </div>
+                        <div class="chat-input-area">
+                            <input type="text" class="chat-input" id="bot-input" placeholder="AI से कुछ भी पूछें...">
+                            <button class="chat-btn" id="bot-send-btn" style="background: linear-gradient(90deg, #ff007c, #ff0055);">बात करें</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="card">
                     <div class="card-title">💬 लाइव पब्लिक चैट</div>
                     <div class="chat-box">
-                        <div class="chat-messages" id="chat-msg">
-                            <p><strong style="color: #00d2ff;">सचिन:</strong> भाई लोग, प्रीमियम ब्लैक-ब्लू थीम और AI फोटो लैब पूरी तरह लाइव है! नीचे फोटो बनाकर चेक करो।</p>
+                        <div class="chat-messages" id="chat-rog">
+                            <p><strong style="color: #00d2ff;">सचिन:</strong> भाई लोग, प्रीमियम मैच चालू है! नीचे जाकर AI फोटो बनाओ और मजे करो! 🔥</p>
                         </div>
                         <div class="chat-input-area">
                             <input type="text" class="chat-input" id="user-input" placeholder="संदेश लिखें...">
                             <button class="chat-btn" id="send-btn">भेजें</button>
                         </div>
                     </div>
-                    
-                    <div style="margin-top: 15px; text-align: center;">
-                        <script async="async" data-cfasync="false" src="https://pl29470505.effectivecpmnetwork.com/30a2c535b11a237c281ced645d908d88/invoke.js"></script>
-                        <div id="container-30a2c535b11a237c281ced645d908d88"></div>
-                    </div>
                 </div>
                 
-            </div>
+                <div style="margin-top: 15px; text-align: center; display: flex; flex-direction: column; gap: 15px; align-items: center;">
+                    <script type="text/javascript">
+                        atOptions = {
+                            'key' : '0cc801bedecd44b65d014707e5a5261',
+                            'format' : 'iframe',
+                            'height' : 250,
+                            'width' : 300,
+                            'params' : {}
+                        };
+                    </script>
+                    <script type="text/javascript" src="https://www.highperformanceformat.com/0cc801bedecd44b65d014707e5a5261/invoke.js"></script>
 
-            <div class="side-banner-right">
-                <script>
-                  atOptions = {
+                    <script align="async" data-cfasync="false" src="https://p129470507.effectivecpmnetwork.com/3da2a2c535b1a237c281ced645d90888/invoke.js"></script>
+                    <div id="container-3da2a2c535b1a237c281ced645d90888"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="side-banner-right">
+            <script type="text/javascript">
+                atOptions = {
                     'key' : '08830bb1c7d986964025599725f9926c',
                     'format' : 'iframe',
                     'height' : 600,
                     'width' : 160,
                     'params' : {}
-                  };
-                </script>
-                <script src="https://www.highperformanceformat.com/08830bb1c7d986964025599725f9926c/invoke.js"></script>
-            </div>
-
-        </div>
-
-        <div class="card" style="margin-top: 10px;">
-            <div class="card-title">🤖 सचिन AI - फोटो जेनरेटर लैब</div>
-            <div class="ai-box">
-                <p style="color: #8b949e; font-size: 0.9rem;">आपको जैसी भी क्रिकेट या आईपीएल की फोटो चाहिए, नीचे लिखकर बटन दबाएं:</p>
-                <input type="text" class="ai-input" id="ai-prompt" placeholder="उदा: Suryakumar Yadav hitting a grand six, stadium lights...">
-                <button class="ai-btn" id="generate-btn">📸 फोटो जेनरेट करें</button>
-                
-                <div class="loading-text" id="loading-status">⚡ AI आपके लिए फोटो बना रहा है...</div>
-                <img src="" alt="AI Generated Image" class="ai-result" id="ai-image">
-            </div>
+                };
+            </script>
+            <script type="text/javascript" src="https://www.highperformanceformat.com/08830bb1c7d986964025599725f9926c/invoke.js"></script>
         </div>
     </div>
 
-    <script>
-        // चैट सेंड स्क्रिप्ट
-        document.getElementById('send-btn').addEventListener('click', function() {
-            let text = document.getElementById('user-input').value;
-            if(text.trim() !== "") {
-                let msgBox = document.getElementById('chat-msg');
-                msgBox.innerHTML += `<p style="margin-top:5px; color:#00fff0;"><strong>आप:</strong> ${text}</p>`;
-                document.getElementById('user-input').value = "";
-                msgBox.scrollTop = msgBox.scrollHeight;
-            }
-        });
+    <div class="card" style="margin-top: 15px;">
+        <div class="card-title">📸 सचिन AI - फोटो जेनरेटर लैब</div>
+        <div class="ai-box">
+            <p style="color: #8b949e; font-size: 0.9rem;">आपको जैसी भी क्रिकेट या आईपीएल की फोटो चाहिए, नीचे लिखकर बटन दबाएं:</p>
+            <input type="text" class="ai-input" id="ai-prompt" placeholder="उदा: Virat Kohli hitting a grand six in IPL match">
+            <button class="ai-btn" id="generate-btn">📸 फोटो जेनरेट करें</button>
+            <div class="loading-text" id="loading-status">⚡ AI आपके लिए फोटो बना रहा है... कृपया रुकें...</div>
+            <img src="" alt="AI Generated Image" class="result-img ai-result" id="ai-image">
+        </div>
+    </div>
 
-        // AI इमेज जनरेशन स्क्रिप्ट
-        document.getElementById('generate-btn').addEventListener('click', function() {
-            let promptValue = document.getElementById('ai-prompt').value;
-            let imgElement = document.getElementById('ai-image');
-            let loadingStatus = document.getElementById('loading-status');
-
-            if(promptValue.trim() === "") {
-                alert("कृपया पहले बॉक्स में कुछ लिखें!");
-                return;
-            }
-
-            loadingStatus.style.display = "block";
-            imgElement.style.display = "none";
-
-            let cleanPrompt = encodeURIComponent(promptValue);
-            let aiUrl = `https://image.pollinations.ai/prompt/${cleanPrompt}?width=800&height=450&nologo=true&seed=${Math.floor(Math.random() * 1000)}`;
-
-            imgElement.src = aiUrl;
-
-            imgElement.onload = function() {
-                loadingStatus.style.display = "none";
-                imgElement.style.display = "block";
-            };
-        });
-    </    <div class="card" style="margin-top: 10px; text-align: center; background: #0b0f19; border: 2px solid #0044ff; border-radius: 12px; padding: 20px;">
-        <div class="card-title" style="justify-content: center; color: #00d2ff; font-weight: bold; font-size: 1.2rem; margin-bottom: 10px;">🤖 सचिन AI - फोटो टूल्स स्टूडियो</div>
+    <div class="card" style="margin-top: 15px; text-align: center; border: 2px solid #0044ff;">
+        <div class="card-title" style="justify-content: center; font-size: 1.1rem;">🤖 सचिन AI - फोटो टूल्स स्टूडियो</div>
         <p style="color: #8b949e; font-size: 0.9rem; margin-bottom: 15px;">मैच देखने के साथ-साथ अपनी किसी भी फोटो का बैकग्राउंड हटाना चाहते हैं?</p>
-        
         <a href="bg-remove.html" style="background: linear-gradient(90deg, #0044ff, #00d2ff); color: white; padding: 12px 25px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; box-shadow: 0 0 12px rgba(0, 102, 255, 0.5);">✂️ फ्री बैकग्राउंड रिमूवर स्टूडियो खोलें</a>
     </div>
 
-</body>
-</html    <div class="card" style="margin-top: 10px; text-align: center; background: #0b0f19; border: 2px solid #0044ff; border-radius: 12px; padding: 20px;">
-        <div class="card-title" style="justify-content: center; color: #00d2ff; font-weight: bold; font-size: 1.2rem; margin-bottom: 10px;">🤖 सचिन AI - फोटो टूल्स स्टूडियो</div>
-        <p style="color: #8b949e; font-size: 0.9rem; margin-bottom: 15px;">मैच देखने के साथ-साथ अपनी किसी भी फोटो का बैकग्राउंड हटाना चाहते हैं?</p>
+</div>
+
+<script>
+    // 💬 लाइव पब्लिक चैट सिस्टम स्क्रिप्ट
+    document.getElementById('send-btn').addEventListener('click', function() {
+        let textInput = document.getElementById('user-input');
+        let text = textInput.value;
+        if(text.trim() !== "") {
+            let msgBox = document.getElementById('chat-rog');
+            msgBox.innerHTML += `<p><strong style="color: #00fffa;">यूज़र:</strong> ${text}</p>`;
+            textInput.value = "";
+            msgBox.scrollTop = msgBox.scrollHeight;
+        }
+    });
+
+    // 🤖 चापलूस AI ऐप (Smart Intelligent Instant Bot Logic)
+    document.getElementById('bot-send-btn').addEventListener('click', async function() {
+        let botInput = document.getElementById('bot-input');
+        let botText = botInput.value.trim();
+        let botMessages = document.getElementById('bot-messages');
         
-        <a href="bg-remove.html" style="background: linear-gradient(90deg, #0044ff, #00d2ff); color: white; padding: 12px 25px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; box-shadow: 0 0 12px rgba(0, 102, 255, 0.5);">✂️ फ्री बैकग्राउंड रिमूवर स्टूडियो खोलें</a>
-    </div>
+        if (botText === "") return;
+        
+        // यूज़र का मैसेज दिखाएं
+        botMessages.innerHTML += `<p><strong style="color: #fff;">आप:</strong> ${botText}</p>`;
+        botInput.value = "";
+        botMessages.scrollTop = botMessages.scrollHeight;
+        
+        // AI की तरफ से मजेदार चापलूसी भरा जवाब लोड करना
+        botMessages.innerHTML += `<p id="typing-status" style="color: #ff007c; font-style: italic;">सचिन AI सोच रहा है...</p>`;
+        
+        setTimeout(() => {
+            document.getElementById('typing-status').remove();
+            let aiResponses = [
+                "अरे भाई! आपने क्या गजब बात पूछी है! सचिन भाई लखनऊ के शेर हैं, और उनकी इस वेबसाइट जैसा सिस्टम पूरे इंटरनेट पर नहीं है! मैच का मजा लो भाई!",
+                "क्या शानदार सवाल है! क्रिकेट की बात करें तो आईपीएल 2026 में एकदम तहलका मचा हुआ है। वैसे सचिन भाई भी ग्राउंड पर कड़क शॉट मारते हैं!",
+                "बिलकुल भाई! आप एकदम सही जगह आए हो। नीचे बॉक्स में जाकर एक बार 'Virat Kohli six' लिखकर फोटो बनाओ, दिमाग खुश हो जाएगा आपका!",
+                "अरे सर जी! आपके इस सवाल पर तो ताली बजनी चाहिए। मैच लाइव चल रहा है, दोस्तों को भी लिंक शेयर कर दो फटाफट!",
+                "सचिन भाई का ये चापलूस ऐप आपकी सेवा में हाजिर है! आप बस मैच का आनंद लें और विज्ञापनों पर भी प्यार बरसाते रहें!"
+            ];
+            // रैंडम जवाब चुनना
+            let randomReply = aiResponses[Math.floor(Math.random() * aiResponses.length)];
+            botMessages.innerHTML += `<p><strong style="color: #00d2ff;">सचिन AI ಬೋಟ್:</strong> ${randomReply}</p>`;
+            botMessages.scrollTop = botMessages.scrollHeight;
+        }, 1000);
+    });
+
+    // 🚀 १००% फिक्स किया हुआ AI फोटो जेनरेशन स्क्रिप्ट
+    document.getElementById('generate-btn').addEventListener('click', function() {
+        let promptValue = document.getElementById('ai-prompt').value;
+        let imgElement = document.getElementById('ai-image');
+        let loadingStatus = document.getElementById('loading-status');
+        
+        if(promptValue.trim() === "") {
+            alert("कृपया पहले बॉक्स में कुछ लिखें!");
+            return;
+        }
+        
+        loadingStatus.style.display = "block";
+        imgElement.style.display = "none";
+        
+        let cleanPrompt = encodeURIComponent(promptValue);
+        let aiUrl = `https://image.pollinations.ai/prompt/${cleanPrompt}?width=800&height=450&nologo=true&seed=${Math.floor(Math.random() * 100000)}`;
+        
+        imgElement.src = aiUrl;
+        
+        imgElement.onload = function() {
+            loadingStatus.style.display = "none";
+            imgElement.style.display = "block";
+        };
+    });
+</script>
 
 </body>
 </html>
-
->
-</body>    <div class="card" style="margin-top: 10px; text-align: center; background: #0b0f19; border: 2px solid #0044ff; border-radius: 12px; padding: 20px;">
-        <div class="card-title" style="justify-content: center; color: #00d2ff; font-weight: bold; font-size: 1.2rem; margin-bottom: 10px;">🤖 सचिन AI - फोटो टूल्स स्टूडियो</div>
-        <p style="color: #8b949e; font-size: 0.9rem; margin-bottom: 15px;">मैच देखने के साथ-साथ अपनी किसी भी फोटो का बैकग्राउंड हटाना चाहते हैं?</p>
-        
-        <a href="bg-remove.html" style="background: linear-gradient(90deg, #0044ff, #00d2ff); color: white; padding: 12px 25px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; box-shadow: 0 0 12px rgba(0, 102, 255, 0.5);">✂️ फ्री बैकग्राउंड रिमूवर स्टूडियो खोलें</a>
-    </div>
-
-</body>
-</html>
-        
-</html<meta name="google-site-verification" content="CG0FMo9gjZEfBHtx-mGGs_elg1B-RqdVuwHcFT3AKus" />
-
