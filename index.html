@@ -13,39 +13,20 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
         body { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px; }
         
-        /* मुख्य स्टूडियो बॉक्स */
         .studio-container { max-width: 550px; width: 100%; background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; margin: 15px 0; }
-        .studio-title { font-size: 2.2rem; color: #00ffcc; margin-bottom: 15px; }
+        .studio-title { font-size: 2.2rem; color: #00ffcc; margin-bottom: 20px; font-weight: bold; }
         
-        /* फोटो फ्रेम */
         .photo-frame { width: 100%; height: 300px; background: rgba(0, 0, 0, 0.4); border: 2px dashed #00ffcc; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; overflow: hidden; }
         .photo-frame img { max-width: 100%; max-height: 100%; object-fit: contain; }
         
-        /* इनपुट और बटन */
         .input-row { display: flex; gap: 10px; margin-bottom: 15px; width: 100%; }
         .prompt-input { flex: 1; padding: 14px 20px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.5); color: #fff; font-size: 16px; outline: none; }
         .prompt-input:focus { border-color: #00ffcc; }
         
-        .btn { padding: 14px 25px; font-size: 16px; font-weight: bold; border: none; border-radius: 25px; cursor: pointer; transition: 0.3s; }
-        .btn-generate { background: #00ffcc; color: #0f2027; }
+        .btn-generate { padding: 14px 25px; font-size: 16px; font-weight: bold; border: none; border-radius: 25px; background: #00ffcc; color: #0f2027; cursor: pointer; transition: 0.3s; }
         .btn-generate:hover { box-shadow: 0 0 15px #00ffcc; }
-        .btn-login { background: #fff; color: #333; margin-top: 10px; }
-        .btn-submit { width: 100%; background: #00ffcc; color: #0f2027; border-radius: 8px; margin-top: 10px; }
-
-        /* लॉगिन दीवार पॉपअप */
-        .login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 9999; padding: 20px; }
-        .login-card { background: #1c2d37; border: 1px solid #00ffcc; border-radius: 16px; padding: 30px; width: 100%; max-width: 380px; position: relative; }
-        .close-btn { position: absolute; top: 10px; right: 15px; background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; }
-
-        .tab-box { display: flex; justify-content: space-around; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .tab { padding: 10px; cursor: pointer; color: #aaa; font-weight: bold; }
-        .tab.active { color: #00ffcc; border-bottom: 2px solid #00ffcc; }
-
-        .form-group { margin-bottom: 15px; text-align: left; }
-        .form-group label { display: block; margin-bottom: 5px; font-size: 14px; color: #ccc; }
-        .form-input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #0f1a20; color: #fff; outline: none; }
         
-        .ad-container { margin: 15px auto; text-align: center; width: 100%; display: block; min-height: 50px; }
+        .ad-container { margin: 15px auto; text-align: center; width: 100%; display: block; }
         .hidden { display: none !important; }
     </style>
 </head>
@@ -68,14 +49,6 @@
     <div class="studio-container">
         <h1 class="studio-title">सचिन एआई फोटो लैब</h1>
         
-        <div id="auth-status-bar">
-            <button class="btn btn-login" onclick="openLoginWindow()">लॉगइन / साइनअप करें 🔐</button>
-        </div>
-        <div id="user-logged-in-bar" class="hidden" style="margin-bottom: 15px;">
-            <span id="user-tag" style="color: #00ffcc; font-weight: bold; font-size:14px; margin-right:15px;"></span>
-            <button onclick="logoutSession()" style="background:none; border:none; color:#ff5555; font-weight:bold; cursor:pointer; font-size:14px;">लॉगआउट</button>
-        </div>
-
         <div class="ad-container">
             <script type="text/javascript">
                 atOptions = { 'key' : '158e2ee0ba286b240b2a342cd28bfdf4', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };
@@ -96,8 +69,8 @@
         </div>
 
         <div class="input-row">
-            <input type="text" id="input-prompt" class="prompt-input" placeholder="लिखें कैसी फोटो चाहिए... (जैसे: Neon boy running)">
-            <button class="btn btn-generate" onclick="generateAiPhotoNow()">बनाएं ✨</button>
+            <input type="text" id="input-prompt" class="prompt-input" placeholder="लिखें कैसी फोटो चाहिए... (যেমন: Neon cricket stadium)">
+            <button class="btn-generate" onclick="generateAiPhotoNow()">बनाएं ✨</button>
         </div>
 
         <div class="ad-container">
@@ -115,37 +88,6 @@
         <script type="text/javascript" src="https://www.highperformanceformat.com/2a342cd28bfdf4158e2ee0ba286b240b/invoke.js"></script>
     </div>
 
-
-    <div class="login-overlay" id="popup-gateway">
-        <div class="login-card">
-            <button class="close-btn" onclick="closeLoginWindow()">×</button>
-            
-            <div class="tab-box">
-                <div class="tab active" id="tab-login" onclick="toggleTab('login')">लॉगिन</div>
-                <div class="tab" id="tab-signup" onclick="toggleTab('signup')">साइनअप</div>
-            </div>
-
-            <div id="form-login-block">
-                <div class="form-group"><label>ईमेल</label><input type="email" id="log-email" class="form-input" placeholder="xyz@gmail.com"></div>
-                <div class="form-group"><label>पासवर्ड</label><input type="password" id="log-pass" class="form-input" placeholder="******"></div>
-                <button class="btn btn-submit" onclick="submitEmailLogin()">प्रवेश करें</button>
-            </div>
-
-            <div id="form-signup-block" class="hidden">
-                <div class="form-group"><label>नया ईमेल आईडी</label><input type="email" id="sign-email" class="form-input" placeholder="xyz@gmail.com"></div>
-                <div class="form-group"><label>नया पासवर्ड बनाएं</label><input type="password" id="sign-pass" class="form-input" placeholder="******"></div>
-                <button class="btn btn-submit" onclick="submitEmailSignup()">खाता बनाएं</button>
-            </div>
-
-            <div class="ad-container" style="margin-top:15px;">
-                <script type="text/javascript">
-                    atOptions = { 'key' : 'ba368cdb28956b620494cf0b8ffef1c6', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
-                </script>
-                <script type="text/javascript" src="https://www.highperformanceformat.com/ba368cdb28956b620494cf0b8ffef1c6/invoke.js"></script>
-            </div>
-        </div>
-    </div>
-
     <div class="ad-container">
         <script type="text/javascript">
             atOptions = { 'key' : 'cd28956b620494cf0b8ffef1c60b240b', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
@@ -154,79 +96,13 @@
     </div>
 
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { 
-            getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged 
-        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-        // 🔥 आपका फायरबेस कॉन्फ़िगरेशन
-        const firebaseConfig = {
-            apiKey: "AIzaSyCglO0vHutINDOWaIWMsv4N9_54dpbPvIo",
-            authDomain: "project-8621d575-e2f7-45a2-963.firebaseapp.com",
-            projectId: "project-8621d575-e2f7-45a2-963",
-            storageBucket: "project-8621d575-e2f7-45a2-963.firebasestorage.app",
-            messagingSenderId: "756626829965",
-            appId: "1:756626829965:web:f9507ceeac2901c311a8c4"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-
-        // इंटरफ़ेस फंक्शन्स
-        window.openLoginWindow = function() { document.getElementById('popup-gateway').style.display = 'flex'; }
-        window.closeLoginWindow = function() { document.getElementById('popup-gateway').style.display = 'none'; }
-
-        window.toggleTab = function(type) {
-            if(type === 'login') {
-                document.getElementById('tab-login').classList.add('active');
-                document.getElementById('tab-signup').classList.remove('active');
-                document.getElementById('form-login-block').classList.remove('hidden');
-                document.getElementById('form-signup-block').classList.add('hidden');
-            } else {
-                document.getElementById('tab-signup').classList.add('active');
-                document.getElementById('tab-login').classList.remove('active');
-                document.getElementById('form-signup-block').classList.remove('hidden');
-                document.getElementById('form-login-block').classList.add('hidden');
-            }
-        }
-
-        // लॉगिन स्थिति ट्रैकर
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                document.getElementById('auth-status-bar').classList.add('hidden');
-                document.getElementById('user-logged-in-bar').classList.remove('hidden');
-                document.getElementById('user-tag').innerText = "सत्यापित ईमेल: " + user.email;
-                closeLoginWindow();
-            } else {
-                document.getElementById('auth-status-bar').classList.remove('hidden');
-                document.getElementById('user-logged-in-bar').classList.add('hidden');
-            }
-        });
-
-        // ईमेल से लॉगिन और साइनअप एक्शन्स
-        window.submitEmailLogin = function() {
-            const m = document.getElementById('log-email').value.trim();
-            const p = document.getElementById('log-pass').value;
-            if(!m || !p) { alert("कृपया फॉर्म भरें!"); return; }
-            signInWithEmailAndPassword(auth, m, p).catch(e => alert("त्रुटि: " + e.message));
-        }
-
-        window.submitEmailSignup = function() {
-            const m = document.getElementById('sign-email').value.trim();
-            const p = document.getElementById('sign-pass').value;
-            if(!m || !p) { alert("कृपया फॉर्म भरें!"); return; }
-            createUserWithEmailAndPassword(auth, m, p)
-                .then(() => alert("सफलतापूर्वक खाता पंजीकृत हुआ!"))
-                .catch(e => alert("त्रुटि: " + e.message));
-        }
-
-        window.logoutSession = function() { signOut(auth); }
-
-        // 🎨 शुद्ध एआई फोटो जनरेटर इंजन
-        window.generateAiPhotoNow = function() {
+    <script type="text/javascript">
+        function generateAiPhotoNow() {
             var prompt = document.getElementById('input-prompt').value.trim();
-            if(!prompt) { alert("कृपया बताएं कि आपको कैसी फोटो चाहिए!"); return; }
+            if(!prompt) { 
+                alert("कृपया बताएं कि आपको कैसी फोटो चाहिए!"); 
+                return; 
+            }
 
             var outImg = document.getElementById('output-photo');
             var txt = document.getElementById('placeholder-text');
@@ -251,4 +127,5 @@
         }
     </script>
 </body>
-</html>
+    </html>
+                
