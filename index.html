@@ -10,95 +10,31 @@
     <script type='text/javascript' src='https://pl26456200.highratecpm.com/a5/cb/a0/a5cba0cf08fa69c10756784d6b6378ef.js'></script>
 
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            color: #fff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-            padding-bottom: 60px;
-        }
-
-        .adsterra-slot {
-            margin: 15px auto;
-            text-align: center;
-            max-width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 60px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px dashed rgba(255,255,255,0.15);
-            border-radius: 8px;
-            padding: 5px;
-        }
-
-        .studio-container {
-            max-width: 600px;
-            width: 90%;
-            margin: 20px auto;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            text-align: center;
-        }
-
-        .studio-title {
-            font-size: 2.2rem;
-            color: #00ffcc;
-            margin-bottom: 10px;
-        }
-
-        .photo-frame {
-            width: 100%;
-            height: 300px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 2px dashed #00ffcc;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px; }
+        
+        /* मुख्य स्टूडियो बॉक्स */
+        .studio-container { max-width: 550px; width: 100%; background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; margin: 15px 0; }
+        .studio-title { font-size: 2.2rem; color: #00ffcc; margin-bottom: 15px; }
+        
+        /* फोटो फ्रेम */
+        .photo-frame { width: 100%; height: 300px; background: rgba(0, 0, 0, 0.4); border: 2px dashed #00ffcc; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; overflow: hidden; }
         .photo-frame img { max-width: 100%; max-height: 100%; object-fit: contain; }
-
-        .input-row { display: flex; gap: 10px; margin-bottom: 15px; }
-        .prompt-input {
-            flex: 1; padding: 14px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.2);
-            background: rgba(0,0,0,0.5); color: #fff; font-size: 16px; outline: none;
-        }
+        
+        /* इनपुट और बटन */
+        .input-row { display: flex; gap: 10px; margin-bottom: 15px; width: 100%; }
+        .prompt-input { flex: 1; padding: 14px 20px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.5); color: #fff; font-size: 16px; outline: none; }
         .prompt-input:focus { border-color: #00ffcc; }
-
-        .btn {
-            padding: 14px 25px; font-size: 16px; font-weight: bold; border: none;
-            border-radius: 25px; cursor: pointer; transition: 0.3s;
-        }
+        
+        .btn { padding: 14px 25px; font-size: 16px; font-weight: bold; border: none; border-radius: 25px; cursor: pointer; transition: 0.3s; }
         .btn-generate { background: #00ffcc; color: #0f2027; }
         .btn-generate:hover { box-shadow: 0 0 15px #00ffcc; }
-        .btn-login { background: #fff; color: #333; margin-top: 15px; }
+        .btn-login { background: #fff; color: #333; margin-top: 10px; }
+        .btn-submit { width: 100%; background: #00ffcc; color: #0f2027; border-radius: 8px; margin-top: 10px; }
 
-        /* लॉगिन पॉपअप */
-        .login-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); display: none; justify-content: center;
-            align-items: center; z-index: 9999; padding: 20px;
-        }
-        .login-card {
-            background: #1c2d37; border: 1px solid #00ffcc; border-radius: 16px;
-            padding: 30px; width: 100%; max-width: 380px; position: relative;
-        }
+        /* लॉगिन दीवार पॉपअप */
+        .login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 9999; padding: 20px; }
+        .login-card { background: #1c2d37; border: 1px solid #00ffcc; border-radius: 16px; padding: 30px; width: 100%; max-width: 380px; position: relative; }
         .close-btn { position: absolute; top: 10px; right: 15px; background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; }
 
         .tab-box { display: flex; justify-content: space-around; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
@@ -109,22 +45,20 @@
         .form-group label { display: block; margin-bottom: 5px; font-size: 14px; color: #ccc; }
         .form-input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #0f1a20; color: #fff; outline: none; }
         
-        .btn-submit { width: 100%; background: #00ffcc; color: #0f2027; border-radius: 8px; margin-top: 10px; }
-        .btn-google { width: 100%; background: #fff; color: #333; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 15px; }
-
+        .ad-container { margin: 15px auto; text-align: center; width: 100%; display: block; min-height: 50px; }
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <div class="adsterra-slot">
+    <div class="ad-container">
         <script type="text/javascript">
             atOptions = { 'key' : '20494cf0ba368cda3887258bd521e16f', 'format' : 'iframe', 'height' : 60, 'width' : 468, 'params' : {} };
         </script>
         <script type="text/javascript" src="https://www.highperformanceformat.com/20494cf0ba368cda3887258bd521e16f/invoke.js"></script>
     </div>
 
-    <div class="adsterra-slot">
+    <div class="ad-container">
         <script type="text/javascript">
             atOptions = { 'key' : '8ffef1c60b240bfdf4a0342cd28956b6', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
         </script>
@@ -135,14 +69,14 @@
         <h1 class="studio-title">सचिन एआई फोटो लैब</h1>
         
         <div id="auth-status-bar">
-            <button class="btn btn-login" onclick="openLoginWindow()">अकाउंट लॉगिन करें 🔐</button>
+            <button class="btn btn-login" onclick="openLoginWindow()">लॉगइन / साइनअप करें 🔐</button>
         </div>
         <div id="user-logged-in-bar" class="hidden" style="margin-bottom: 15px;">
             <span id="user-tag" style="color: #00ffcc; font-weight: bold; font-size:14px; margin-right:15px;"></span>
-            <button onclick="logoutSession()" style="background:none; border:none; color:#ff5555; font-weight:bold; cursor:pointer;">लॉगआउट</button>
+            <button onclick="logoutSession()" style="background:none; border:none; color:#ff5555; font-weight:bold; cursor:pointer; font-size:14px;">लॉगआउट</button>
         </div>
 
-        <div class="adsterra-slot">
+        <div class="ad-container">
             <script type="text/javascript">
                 atOptions = { 'key' : '158e2ee0ba286b240b2a342cd28bfdf4', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };
             </script>
@@ -151,10 +85,10 @@
 
         <div class="photo-frame">
             <img src="" id="output-photo" class="hidden" alt="AI Photo">
-            <span id="placeholder-text" style="color:#888;">आपकी जादुई फोटो यहाँ दिखेगी</span>
+            <span id="placeholder-text" style="color:#aaa;">आपकी जादुई फोटो यहाँ दिखेगी</span>
         </div>
 
-        <div class="adsterra-slot">
+        <div class="ad-container">
             <script type="text/javascript">
                 atOptions = { 'key' : '3887258bd521e16f20494cf0ba368cda', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
             </script>
@@ -162,11 +96,11 @@
         </div>
 
         <div class="input-row">
-            <input type="text" id="input-prompt" class="prompt-input" placeholder="लिखें कैसी फोटो चाहिए...">
+            <input type="text" id="input-prompt" class="prompt-input" placeholder="लिखें कैसी फोटो चाहिए... (जैसे: Neon boy running)">
             <button class="btn btn-generate" onclick="generateAiPhotoNow()">बनाएं ✨</button>
         </div>
 
-        <div class="adsterra-slot">
+        <div class="ad-container">
             <script type="text/javascript">
                 atOptions = { 'key' : 'fdfdf400ba368cdb28956b620494cf0b', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
             </script>
@@ -174,18 +108,11 @@
         </div>
     </div>
 
-    <div class="adsterra-slot">
+    <div class="ad-container">
         <script type="text/javascript">
             atOptions = { 'key' : '2a342cd28bfdf4158e2ee0ba286b240b', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };
         </script>
         <script type="text/javascript" src="https://www.highperformanceformat.com/2a342cd28bfdf4158e2ee0ba286b240b/invoke.js"></script>
-    </div>
-
-    <div class="adsterra-slot">
-        <script type="text/javascript">
-            atOptions = { 'key' : 'a342cd28956b620494cf0ba368cda388', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
-        </script>
-        <script type="text/javascript" src="https://www.highperformanceformat.com/a342cd28956b620494cf0ba368cda388/invoke.js"></script>
     </div>
 
 
@@ -193,13 +120,6 @@
         <div class="login-card">
             <button class="close-btn" onclick="closeLoginWindow()">×</button>
             
-            <div class="adsterra-slot">
-                <script type="text/javascript">
-                    atOptions = { 'key' : 'cf0ba368cda3887258bd521e16f20494', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
-                </script>
-                <script type="text/javascript" src="https://www.highperformanceformat.com/cf0ba368cda3887258bd521e16f20494/invoke.js"></script>
-            </div>
-
             <div class="tab-box">
                 <div class="tab active" id="tab-login" onclick="toggleTab('login')">लॉगिन</div>
                 <div class="tab" id="tab-signup" onclick="toggleTab('signup')">साइनअप</div>
@@ -208,22 +128,16 @@
             <div id="form-login-block">
                 <div class="form-group"><label>ईमेल</label><input type="email" id="log-email" class="form-input" placeholder="xyz@gmail.com"></div>
                 <div class="form-group"><label>पासवर्ड</label><input type="password" id="log-pass" class="form-input" placeholder="******"></div>
-                <button class="btn btn-submit" onclick="submitEmailLogin()">लॉगिन करें</button>
+                <button class="btn btn-submit" onclick="submitEmailLogin()">प्रवेश करें</button>
             </div>
 
             <div id="form-signup-block" class="hidden">
-                <div class="form-group"><label>ईमेल आईडी</label><input type="email" id="sign-email" class="form-input" placeholder="xyz@gmail.com"></div>
-                <div class="form-group"><label>पासवर्ड सेट करें</label><input type="password" id="sign-pass" class="form-input" placeholder="******"></div>
-                <button class="btn btn-submit" onclick="submitEmailSignup()">अकाउंट बनाएं</button>
+                <div class="form-group"><label>नया ईमेल आईडी</label><input type="email" id="sign-email" class="form-input" placeholder="xyz@gmail.com"></div>
+                <div class="form-group"><label>नया पासवर्ड बनाएं</label><input type="password" id="sign-pass" class="form-input" placeholder="******"></div>
+                <button class="btn btn-submit" onclick="submitEmailSignup()">खाता बनाएं</button>
             </div>
 
-            <div style="text-align:center; margin: 10px 0; color:#888; font-size:12px;">या फिर</div>
-            <button class="btn btn-google" onclick="submitGoogleLogin()">
-                <img src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/web-24dp/logo_googleg_color_24dp.png" width="16" alt="Google">
-                Google से लॉगिन करें
-            </button>
-
-            <div class="adsterra-slot" style="margin-top:15px;">
+            <div class="ad-container" style="margin-top:15px;">
                 <script type="text/javascript">
                     atOptions = { 'key' : 'ba368cdb28956b620494cf0b8ffef1c6', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
                 </script>
@@ -232,7 +146,7 @@
         </div>
     </div>
 
-    <div class="adsterra-slot" style="margin-top:auto;">
+    <div class="ad-container">
         <script type="text/javascript">
             atOptions = { 'key' : 'cd28956b620494cf0b8ffef1c60b240b', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
         </script>
@@ -243,23 +157,23 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { 
-            getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, 
-            GoogleAuthProvider, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged 
+            getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged 
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
+        // 🔥 आपका फायरबेस कॉन्फ़िगरेशन
         const firebaseConfig = {
             apiKey: "AIzaSyCglO0vHutINDOWaIWMsv4N9_54dpbPvIo",
             authDomain: "project-8621d575-e2f7-45a2-963.firebaseapp.com",
             projectId: "project-8621d575-e2f7-45a2-963",
             storageBucket: "project-8621d575-e2f7-45a2-963.firebasestorage.app",
             messagingSenderId: "756626829965",
-            appId: "1:756626829965:web:f9507ceeac2901c311a8c4",
-            measurementId: "G-9LQHG6RP9Q"
+            appId: "1:756626829965:web:f9507ceeac2901c311a8c4"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
+        // इंटरफ़ेस फंक्शन्स
         window.openLoginWindow = function() { document.getElementById('popup-gateway').style.display = 'flex'; }
         window.closeLoginWindow = function() { document.getElementById('popup-gateway').style.display = 'none'; }
 
@@ -277,13 +191,12 @@
             }
         }
 
-        getRedirectResult(auth).catch(e => console.log("Google redirect info: ", e.message));
-
+        // लॉगिन स्थिति ट्रैकर
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 document.getElementById('auth-status-bar').classList.add('hidden');
                 document.getElementById('user-logged-in-bar').classList.remove('hidden');
-                document.getElementById('user-tag').innerText = user.email || "सत्यापित सदस्य";
+                document.getElementById('user-tag').innerText = "सत्यापित ईमेल: " + user.email;
                 closeLoginWindow();
             } else {
                 document.getElementById('auth-status-bar').classList.remove('hidden');
@@ -291,52 +204,51 @@
             }
         });
 
+        // ईमेल से लॉगिन और साइनअप एक्शन्स
         window.submitEmailLogin = function() {
             const m = document.getElementById('log-email').value.trim();
             const p = document.getElementById('log-pass').value;
-            if(!m || !p) return;
-            signInWithEmailAndPassword(auth, m, p).catch(e => alert("लॉगिन विफल: " + e.message));
+            if(!m || !p) { alert("कृपया फॉर्म भरें!"); return; }
+            signInWithEmailAndPassword(auth, m, p).catch(e => alert("त्रुटि: " + e.message));
         }
 
         window.submitEmailSignup = function() {
             const m = document.getElementById('sign-email').value.trim();
             const p = document.getElementById('sign-pass').value;
-            if(!m || !p) return;
-            createUserWithEmailAndPassword(auth, m, p).then(() => alert("सफलतापूर्वक अकाउंट बन गया!")).catch(e => alert("साइनअप विफल: " + e.message));
-        }
-
-        window.submitGoogleLogin = function() {
-            const provider = new GoogleAuthProvider();
-            signInWithRedirect(auth, provider);
+            if(!m || !p) { alert("कृपया फॉर्म भरें!"); return; }
+            createUserWithEmailAndPassword(auth, m, p)
+                .then(() => alert("सफलतापूर्वक खाता पंजीकृत हुआ!"))
+                .catch(e => alert("त्रुटि: " + e.message));
         }
 
         window.logoutSession = function() { signOut(auth); }
 
-        // 🎨 एआई फोटो जनरेटर इंजन
-        window.generateAiPhotoNow = async function() {
-            const prompt = document.getElementById('input-prompt').value.trim();
+        // 🎨 शुद्ध एआई फोटो जनरेटर इंजन
+        window.generateAiPhotoNow = function() {
+            var prompt = document.getElementById('input-prompt').value.trim();
             if(!prompt) { alert("कृपया बताएं कि आपको कैसी फोटो चाहिए!"); return; }
 
-            const outImg = document.getElementById('output-photo');
-            const txt = document.getElementById('placeholder-text');
+            var outImg = document.getElementById('output-photo');
+            var txt = document.getElementById('placeholder-text');
 
             outImg.classList.add('hidden');
-            txt.innerText = '✨ आपकी फोटो गढ़ी जा रही है... कृपया रुकें...';
+            txt.innerText = '✨ आपकी फोटो तैयार की जा रही है... कृपया प्रतीक्षा करें...';
             txt.classList.remove('hidden');
 
-            const randomSeed = Math.floor(Math.random() * 999999);
-            const finalUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=512&height=512&nologo=true&seed=${randomSeed}`;
+            var seed = Math.floor(Math.random() * 999999);
+            var finalUrl = "https://image.pollinations.ai/prompt/" + encodeURIComponent(prompt) + "?width=512&height=512&nologo=true&seed=" + seed;
 
             outImg.src = finalUrl;
+            
             outImg.onload = function() {
                 outImg.classList.remove('hidden');
                 txt.classList.add('hidden');
             };
+            
             outImg.onerror = function() {
-                txt.innerText = 'फोटो लोड करने में समस्या आई, कृपया दोबारा कोशिश करें।';
+                txt.innerText = 'सर्वर व्यस्त है, कृपया दोबारा प्रयास करें।';
             };
         }
     </script>
 </body>
-    </html>
-            
+</html>
