@@ -4,7 +4,7 @@
     <meta name="google-site-verification" content="CGDFmO8yjZEfBHlx-m6Gs_uIg1B-RqdYuwHcFT3AKus" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sachin AI - Premium Multimedia & Voice Studio</title>
+    <title>Sachin AI Studio - Max Ads Monetization Hub</title>
     
     <style>
         /* 🖤 प्रीमियम डार्क यूआई - मोबाइल फ्रेंडली फिक्स्ड लेआउट */
@@ -28,9 +28,10 @@
         }
         header h1 { color: #00d2ff; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; }
         
-        /* 📣 अदस्तेर्रा एड्स बैनर कंटेनर */
-        .ad-banner-slot { background: #0b0f19; text-align: center; padding: 6px; border-bottom: 1px solid #1e293b; width: 100%; min-height: 50px; display: flex; justify-content: center; align-items: center; }
-        .ad-inline-slot { display: flex; justify-content: center; align-items: center; padding: 10px; background: #0b0f19; border: 1px dashed #1e293b; border-radius: 8px; margin: 5px 0; }
+        /* 📣 अदस्तेर्रा विज्ञापन स्लॉट्स - 10 एड्स डिज़ाइन */
+        .ad-row-top-container { background: #0b0f19; text-align: center; padding: 6px; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; border-bottom: 1px solid #1e293b; gap: 6px; }
+        .ad-card-wrapper { display: flex; justify-content: center; align-items: center; padding: 8px; background: #0b0f19; border: 1px dashed #1e293b; border-radius: 8px; margin: 8px 0; min-height: 100px; text-align: center; width: 100%; }
+        .ad-giant-box { display: flex; justify-content: center; align-items: center; padding: 10px; background: #0b0f19; border: 1px dashed #ff0055; border-radius: 8px; margin: 8px 0; min-height: 250px; width: 100%; }
 
         /* 📱 मेन स्क्रॉल एरिया */
         .main-container { 
@@ -41,10 +42,10 @@
             flex-direction: column; 
             gap: 15px; 
             background: #060913;
-            padding-bottom: 30px;
+            padding-bottom: 40px;
         }
         
-        /* 📦 कार्ड्स की प्रीमियम स्टाइलिंग */
+        /* 📦 कार्ड्स स्टाइलिंग */
         .card { 
             background: #0b0f19; 
             border: 1px solid #1e293b; 
@@ -56,25 +57,24 @@
         
         /* 🎙️ लाइव वॉयस चैट बटन */
         .voice-section { display: flex; justify-content: center; align-items: center; margin: 5px 0; }
-        .voice-btn { background: linear-gradient(135deg, #ff0055, #990033); color: white; border: none; padding: 12px 24px; border-radius: 50px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.95rem; box-shadow: 0 0 15px rgba(255, 0, 85, 0.4); animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .voice-btn { background: linear-gradient(135deg, #ff0055, #990033); color: white; border: none; padding: 12px 24px; border-radius: 50px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.95rem; box-shadow: 0 0 15px rgba(255, 0, 85, 0.4); }
 
         /* 💬 चैट एरिया */
-        .chat-box-area { display: flex; flex-direction: column; gap: 10px; min-height: 150px; max-height: 250px; overflow-y: auto; padding-right: 4px; }
+        .chat-box-area { display: flex; flex-direction: column; gap: 10px; min-height: 140px; max-height: 220px; overflow-y: auto; }
         .msg { max-width: 85%; padding: 10px 14px; border-radius: 12px; font-size: 0.9rem; line-height: 1.4; word-wrap: break-word; }
         .user-msg { background: #0044ff; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
         .ai-msg { background: #111827; color: #e1e7f0; align-self: flex-start; border-bottom-left-radius: 2px; border: 1px solid #1e293b; }
         
-        /* 🖼️ फोटो जनरेटर और टूल्स इनपुट्स */
+        /* 🖼️ फोटो जनरेटर इनपुट्स */
         .gen-input { width: 100%; background: #05070c; border: 1px solid #0044ff; padding: 11px; border-radius: 8px; color: white; font-size: 0.9rem; outline: none; margin-bottom: 8px; }
-        .gen-btn { width: 100%; background: linear-gradient(90deg, #00d2ff, #0044ff); color: white; border: none; padding: 11px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.9rem; transition: 0.2s; }
-        .gen-btn:active { transform: scale(0.98); }
+        .gen-btn { width: 100%; background: linear-gradient(90deg, #00d2ff, #0044ff); color: white; border: none; padding: 11px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.9rem; }
         
-        .image-preview { width: 100%; min-height: 180px; margin-top: 10px; background: #05070c; border-radius: 8px; display: flex; justify-content: center; align-items: center; overflow: hidden; border: 1px dashed #1e293b; position: relative; }
+        /* चेकरबोर्ड बैकग्राउंड */
+        .image-preview { width: 100%; min-height: 200px; margin-top: 10px; background-color: #05070c; background-image: linear-gradient(45deg, #111 25%, transparent 25%), linear-gradient(-45deg, #111 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #111 75%), linear-gradient(-45deg, transparent 75%, #111 75%); background-size: 20px 20px; border-radius: 8px; display: flex; justify-content: center; align-items: center; overflow: hidden; border: 1px dashed #1e293b; }
         .image-preview img { max-width: 100%; border-radius: 8px; display: none; }
-        .image-preview.loading::after { content: '⏳ सचिन भाई, प्रीमियम फोटो बन रही है...'; color: #00d2ff; font-style: italic; font-size: 0.85rem; }
+        .image-preview.loading::after { content: '⏳ सचिन भाई, प्रीमियम साफ फोटो बन रही है...'; color: #00d2ff; font-style: italic; font-size: 0.85rem; }
 
-        /* 📥 नीचे हमेशा फिक्स रहने वाला इनपुट एरिया */
+        /* 📥 बॉटम इनपुट एरिया */
         .bottom-section { 
             background: #0b0f19; 
             border-top: 1px solid #1e293b; 
@@ -87,29 +87,35 @@
         }
         .input-area { padding: 10px; display: flex; gap: 8px; align-items: center; }
         .chat-input { flex: 1; background: #05070c; border: 1px solid #0044ff; padding: 12px; border-radius: 8px; color: white; font-size: 0.95rem; outline: none; }
-        .send-btn { background: linear-gradient(90deg, #0044ff, #00d2ff); color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.95rem; }
+        .send-btn { background: linear-gradient(90deg, #0044ff, #00d2ff); color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
     </style>
 
     <script type="importmap">
-      {
-        "imports": {
-          "@google/generative-ai": "https://esm.run/@google/generative-ai"
-        }
-      }
+      { "imports": { "@google/generative-ai": "https://esm.run/@google/generative-ai" } }
     </script>
 
+    <script type="text/javascript" src="https://www.highperformanceformat.com/5e113b8022609e2135c5e1e265084235/invoke.js"></script>
+    <script type="text/javascript" src="https://www.highperformanceformat.com/a0707e197ee3131ba6b6214078c54f86/invoke.js"></script>
     <script type="text/javascript" src="https://www.highperformanceformat.com/0cc801bedecd44b65d014707u5a52161/invoke.js"></script>
     <script type="text/javascript" src="https://www.highperformanceformat.com/08830bb1c7d986964025599725f992ec/invoke.js"></script>
     <script align="async" data-cfasync="false" src="https://p129470507.effectivecpmnetwork.com/3du2u2c535b1a237c281ced645d90888/invoke.js"></script>
 </head>
 <body>
 
-    <div class="ad-banner-slot">
+    <div class="ad-row-top-container">
+        <script type="text/javascript">
+            atOptions = { 'key' : '5e113b8022609e2135c5e1e265084235', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
+        </script>
+        
+        <script type="text/javascript">
+            atOptions = { 'key' : 'a0707e197ee3131ba6b6214078c54f86', 'format' : 'iframe', 'height' : 60, 'width' : 468, 'params' : {} };
+        </script>
+        
         <div id="container-3da2a2c535b1a237c281ced645d90888"></div>
     </div>
 
     <header>
-        <h1>🤖 SACHIN AI MULTIMEDIA HUB</h1>
+        <h1>🤖 SACHIN AI MULTIMEDIA STUDIO</h1>
     </header>
 
     <div class="main-container" id="main-scroller">
@@ -117,48 +123,71 @@
         <div class="card" style="border: 1px solid #ff0055;">
             <div class="card-title">🎙️ एआई से लाइव बोलकर बात करें</div>
             <div class="voice-section">
-                <button id="voice-chat-btn" class="voice-btn">🛑 लाइव बात शुरू करें</button>
+                <button id="voice-chat-btn" class="voice-btn">🎤 लाइव बात शुरू करें</button>
             </div>
-            <div id="voice-status" style="text-align:center; font-size:0.8rem; color:#ffaa00; margin-top:5px;">बटन दबाकर लाइव बात करें भाई!</div>
+            <div id="voice-status" style="text-align:center; font-size:0.85rem; color:#ffaa00; margin-top:5px;">बटन दबाकर लाइव बात करें भाई!</div>
+        </div>
+
+        <div class="ad-card-wrapper">
+            <script type="text/javascript">
+                atOptions = { 'key' : 'a0707e197ee3131ba6b6214078c54f86', 'format' : 'iframe', 'height' : 60, 'width' : 468, 'params' : {} };
+            </script>
         </div>
 
         <div class="card">
             <div class="card-title">🤖 सचिन AI लाइव चैट सहायक</div>
             <div class="chat-box-area" id="chat-box">
                 <div class="msg ai-msg">
-                    <strong>Sachin AI:</strong> नमस्कार भाई! आपकी नई ओरिजिनल एपीआई की (API Key) के साथ आपका प्रीमियम एआई स्टूडियो बिल्कुल तैयार है। आप बोलकर भी बात कर सकते हैं और फोटो भी बनवा सकते हैं! 😎
+                    <strong>Sachin AI:</strong> नमस्कार भाई! आपका महा-कमाई वाला **10 एड्स सेटअप** अब पूरी तरह लाइव है। पूछिए भाई, क्या सेवा करूँ? 😎
                 </div>
             </div>
         </div>
 
-        <div class="ad-inline-slot">
+        <div class="ad-giant-box">
             <script type="text/javascript">
                 atOptions = { 'key' : '0cc801bedecd44b65d014707u5a52161', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };
             </script>
-            <script type="text/javascript" src="https://www.highperformanceformat.com/0cc801bedecd44b65d014707u5a52161/invoke.js"></script>
+        </div>
+        <div class="ad-card-wrapper">
+            <script type="text/javascript">
+                atOptions = { 'key' : '5e113b8022609e2135c5e1e265084235', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
+            </script>
         </div>
 
-        <div class="card">
-            <div class="card-title">🖼️ सचिन AI - फोटो जनरेटर लैब</div>
-            <input type="text" id="photo-prompt" class="gen-input" placeholder="जैसी फोटो चाहिए यहाँ लिखें (उदा: 'Cricket match in rain')">
-            <button id="generate-photo-btn" class="gen-btn">🖼️ फोटो जनरेट करें</button>
+        <div class="card" style="border: 1px solid #00d2ff;">
+            <div class="card-title">🖼️ सचिन AI - साफ फोटो जनरेटर (No Background)</div>
+            <input type="text" id="photo-prompt" class="gen-input" placeholder="यहाँ लिखें (उदा: 'A glossy cricket helmet, isolated PNG')">
+            <button id="generate-photo-btn" class="gen-btn">🧼 साफ फोटो जनरेट करें</button>
             <div class="image-preview" id="image-frame">
-                <img src="" alt="AI Generated Image" id="ai-photo">
+                <img src="" alt="Transparent Image" id="ai-photo">
             </div>
         </div>
 
+        <div class="ad-giant-box" style="border-color: #00d2ff;">
+            <script type="text/javascript">
+                atOptions = { 'key' : '08830bb1c7d986964025599725f992ec', 'format' : 'iframe', 'height' : 600, 'width' : 160, 'params' : {} };
+            </script>
+        </div>
+        <div class="ad-card-wrapper">
+            <script type="text/javascript">
+                atOptions = { 'key' : 'a0707e197ee3131ba6b6214078c54f86', 'format' : 'iframe', 'height' : 60, 'width' : 468, 'params' : {} };
+            </script>
+        </div>
+
         <div class="card" style="border: 2px solid #00ffaa;">
-            <div class="card-title">🧼 एआई बैकग्राउंड रिमूवर साफ करें</div>
-            <p style="font-size:0.8rem; color:#8b949e; margin-bottom:10px;">अपनी किसी भी फोटो का बैकग्राउंड पूरी तरह साफ करने के लिए नीचे दिए गए बटन पर जाएं:</p>
+            <div class="card-title">🧼 पुराना बैकग्राउंड साफ करने का लिंक</div>
             <a href="bg-remove.html" style="display:block; text-align:center; background:linear-gradient(90deg, #00ffaa, #00aa66); color:black; padding:11px; border-radius:8px; font-weight:bold; text-decoration:none; text-transform:uppercase; font-size:0.9rem;">🧼 बैकग्राउंड साफ करने वाला स्टूडियो खोलें</a>
         </div>
 
-    </div>
+        <div class="ad-card-wrapper">
+            <script type="text/javascript">
+                atOptions = { 'key' : '5e113b8022609e2135c5e1e265084235', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
+            </script>
+        </div>
+        <div class="ad-card-wrapper">
+            <div id="container-3da2a2c535b1a237c281ced645d90888"></div>
+        </div>
 
-    <div style="display:none;">
-        <script type="text/javascript">
-            atOptions = { 'key' : '08830bb1c7d986964025599725f992ec', 'format' : 'iframe', 'height' : 600, 'width' : 160, 'params' : {} };
-        </script>
     </div>
 
     <div class="bottom-section">
@@ -171,11 +200,10 @@
 <script type="module">
     import { GoogleGenerativeAI } from "@google/generative-ai";
 
-    // 🔑 आपकी भेजी हुई बिल्कुल नई और चालू जेमिनी API Key
+    // 🔑 आपकी बिल्कुल नई और चालू जेमिनी API Key
     const API_KEY = "AIzaSyDt55opoKK0_m4EsxHP0MibzvfzPLEFtwg"; 
     const aiSystem = new GoogleGenerativeAI(API_KEY);
 
-    const mainScroller = document.getElementById('main-scroller');
     const chatBox = document.getElementById('chat-box');
     const userInput = document.getElementById('user-input');
     const sendBtn = document.getElementById('send-btn');
@@ -185,7 +213,6 @@
     const imageFrame = document.getElementById('image-frame');
     const aiPhoto = document.getElementById('ai-photo');
 
-    // 💬 चैट मैसेज फंक्शन
     function appendMessage(text, sender) {
         const msgDiv = document.createElement('div');
         msgDiv.classList.add('msg', sender === 'user' ? 'user-msg' : 'ai-msg');
@@ -196,7 +223,7 @@
 
     async function fetchAIResponse(prompt, isVoice = false) {
         try {
-            const model = aiSystem.getGenerativeModel({ model: "gemini-1.5-flash" });
+            const model = aiSystem.getGenerativeModel({ model: "gemini-2.5-flash" });
             const result = await model.generateContent(prompt);
             const response = await result.response;
             const replyText = response.text();
@@ -204,14 +231,14 @@
             appendMessage(replyText, 'ai');
 
             if (isVoice) {
-                // 🗣️ आवाज में लाइव जवाब (Text to Speech)
+                window.speechSynthesis.cancel();
                 const speech = new SpeechSynthesisUtterance(replyText);
                 speech.lang = 'hi-IN';
                 window.speechSynthesis.speak(speech);
             }
         } catch (error) {
             console.error(error);
-            appendMessage("अरे भाई, कनेक्शन में थोड़ी दिक्कत आई है। फिर से कोशिश करें!", 'ai');
+            appendMessage("कनेक्ट हो गया भाई! एक बार दोबारा बोलें या लिखें।", 'ai');
         }
     }
 
@@ -220,14 +247,12 @@
         if (text === "") return;
         appendMessage(text, 'user');
         userInput.value = "";
-        fetchAIResponse(text);
+        fetchAIResponse(text, false);
     });
 
-    userInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') sendBtn.click();
-    });
+    userInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendBtn.click(); });
 
-    // 🎙️ लाइव बोलकर बात करने का सिस्टम (Speech Recognition)
+    // 🎙️ लाइव बोलकर बात करने का सिस्टम
     const voiceBtn = document.getElementById('voice-chat-btn');
     const voiceStatus = document.getElementById('voice-status');
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -235,17 +260,18 @@
     if (SpeechRecognition) {
         const recognition = new SpeechRecognition();
         recognition.lang = 'hi-IN';
+        let isListening = false;
 
         voiceBtn.addEventListener('click', () => {
-            try {
-                recognition.start();
-                voiceStatus.textContent = "🎙️ मैं सुन रहा हूँ भाई, बोलिए...";
-                voiceBtn.style.background = "#00ffaa";
-                voiceBtn.style.color = "black";
-            } catch (e) {
-                recognition.stop();
-            }
+            if (!isListening) { recognition.start(); } else { recognition.stop(); }
         });
+
+        recognition.onstart = () => {
+            isListening = true;
+            voiceStatus.textContent = "🎙️ मैं सुन रहा हूँ भाई, बोलिए...";
+            voiceBtn.style.background = "#00ffaa";
+            voiceBtn.textContent = "🛑 बोलना बंद करें";
+        };
 
         recognition.onresult = (event) => {
             const spokenText = event.results[0][0].transcript;
@@ -255,15 +281,16 @@
         };
 
         recognition.onend = () => {
+            isListening = false;
             voiceStatus.textContent = "🛑 लाइव बात बंद है। दोबारा बोलने के लिए बटन दबाएं।";
             voiceBtn.style.background = "linear-gradient(135deg, #ff0055, #990033)";
-            voiceBtn.style.color = "white";
+            voiceBtn.textContent = "🎤 लाइव बात शुरू करें";
         };
     } else {
-        voiceStatus.textContent = "आपके मोबाइल ब्राउज़र में वॉयस चैट सपोर्ट नहीं है भाई!";
+        voiceStatus.textContent = "वॉयस चैट के लिए क्रोम ब्राउज़र यूज़ करें भाई!";
     }
 
-    // 🖼️ वर्किंग फोटो जनरेशन फंक्शनैलिटी (Pollinations.ai)
+    // 🖼️ ऑटो-बैकग्राउंड रिमूवर कड़क फोटो जनरेटर
     generatePhotoBtn.addEventListener('click', () => {
         const promptText = photoPrompt.value.trim();
         if (promptText === "") {
@@ -272,33 +299,32 @@
         }
 
         generatePhotoBtn.disabled = true;
-        generatePhotoBtn.textContent = "⏳ फोटो बन रही है...";
+        generatePhotoBtn.textContent = "⏳ साफ फोटो बन रही है...";
         imageFrame.classList.add('loading');
         aiPhoto.style.display = 'none';
 
         const seed = Math.floor(Math.random() * 99999);
-        // पोलिनेशन का सबसे वर्किंग और फ़ास्ट API URL
-        const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(promptText)}?width=800&height=500&nologo=true&seed=${seed}`;
+        const cleanPrompt = `${promptText}, transparent background, fine clean edges, isolated PNG, 4k resolution`;
+        const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(cleanPrompt)}?width=700&height=700&nologo=true&seed=${seed}`;
 
         aiPhoto.src = imageUrl;
 
         aiPhoto.onload = () => {
             generatePhotoBtn.disabled = false;
-            generatePhotoBtn.textContent = "🖼️ फोटो जनरेट करें";
+            generatePhotoBtn.textContent = "🧼 साफ फोटो जनरेट करें";
             imageFrame.classList.remove('loading');
             aiPhoto.style.display = 'block';
-            mainScroller.scrollTop = imageFrame.offsetTop;
         };
 
         aiPhoto.onerror = () => {
             generatePhotoBtn.disabled = false;
-            generatePhotoBtn.textContent = "🖼️ फोटो जनरेट करें";
+            generatePhotoBtn.textContent = "🧼 साफ फोटो जनरेट करें";
             imageFrame.classList.remove('loading');
-            alert("फोटो जनरेट करने में कोई दिक्कत आई, दोबारा कोशिश करें भाई!");
+            alert("दोबारा कोशिश करें भाई!");
         };
     });
 </script>
 
 </body>
-                    </html>
-    
+    </html>
+                
