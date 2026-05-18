@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>सचिन एआई फोटो स्टूडियो - All-In-One</title>
+    <title>सचिन एआई फोटो स्टूडियो</title>
     
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-106557068600" crossorigin="anonymous"></script>
+    <script type='text/javascript' src='//pl26456070.highratecpm.com/79/f0/a2/79f0a2ba1a0eef86f2bfa6cfcfb1207e.js'></script>
+
+    <script type='text/javascript' src='//pl26456200.highratecpm.com/a5/cb/a0/a5cba0cf08fa69c10756784d6b6378ef.js'></script>
 
     <style>
         * {
@@ -16,249 +18,241 @@
         }
 
         body {
-            background: linear-gradient(135deg, #1f4037, #99f2c8);
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #fff;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            color: #333;
+            overflow-x: hidden;
+            padding-bottom: 60px;
         }
 
-        /* विज्ञापन की जगहों के लिए क्लास (Adsbygoogle) */
-        .adsbygoogle {
+        /* एड्स्टेरा विज्ञापन के डिब्बे */
+        .adsterra-slot {
             margin: 15px auto;
             text-align: center;
             max-width: 100%;
-            display: block !important;
-            background: rgba(255,255,255,0.1);
-            border-radius: 4px;
-        }
-
-        /* 1. फ्रंट होमपेज (फ़ोटो जनरेटर) */
-        #front-generator-page {
-            flex: 1;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            padding: 20px;
+            min-height: 50px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px dashed rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 5px;
         }
 
-        .hero-banner {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 25px;
+        /* मुख्य स्टूडियो बॉक्स */
+        .studio-container {
+            max-width: 600px;
+            width: 90%;
+            margin: 20px auto;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             text-align: center;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            max-width: 800px;
-            width: 100%;
         }
 
-        .hero-title { font-size: 2.2rem; color: #1f4037; margin-bottom: 10px; }
-        .hero-subtitle { font-size: 1rem; color: #666; margin-bottom: 20px; }
+        .studio-title {
+            font-size: 2.2rem;
+            color: #00ffcc;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+        }
 
-        .image-preview-frame {
-            width: 100%; height: 280px;
-            border: 2px dashed #99f2c8;
+        /* फोटो फ्रेम */
+        .photo-frame {
+            width: 100%;
+            height: 300px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px dashed #00ffcc;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 20px;
-            background: #fff;
             overflow: hidden;
         }
-        .image-preview-frame img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .photo-frame img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-        .input-group-row {
-            display: flex; gap: 10px; width: 100%;
+        .input-row { display: flex; gap: 10px; margin-bottom: 15px; }
+        .prompt-input {
+            flex: 1; padding: 14px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(0,0,0,0.5); color: #fff; font-size: 16px; outline: none;
         }
-        .field-input {
-            flex: 1; padding: 14px; border: 1px solid #ccc; border-radius: 30px;
-            font-size: 16px; outline: none; background: #fff;
-        }
-        .field-input:focus { border-color: #1f4037; box-shadow: 0 0 5px rgba(31,64,55,0.2); }
+        .prompt-input:focus { border-color: #00ffcc; }
 
-        .action-btn {
-            padding: 14px 28px; font-size: 16px; font-weight: bold; border-radius: 30px;
-            border: none; cursor: pointer; transition: 0.3s;
+        .btn {
+            padding: 14px 25px; font-size: 16px; font-weight: bold; border: none;
+            border-radius: 25px; cursor: pointer; transition: 0.3s;
         }
-        .btn-generate { background: #1f4037; color: #fff; flex-shrink: 0;}
-        .btn-generate:hover { background: #152b25; }
-        .btn-login-open { background: #fff; color: #1f4037; margin-top: 20px;}
+        .btn-generate { background: #00ffcc; color: #0f2027; }
+        .btn-generate:hover { box-shadow: 0 0 15px #00ffcc; }
+        .btn-login { background: #fff; color: #333; margin-top: 15px; }
 
-        /* 2. प्रीमियम लॉगिन गेटवे (दीवार) */
-        #login-gateway-page {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
+        /* लॉगिन दीवार पॉपअप */
+        .login-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); display: none; justify-content: center;
+            align-items: center; z-index: 9999; padding: 20px;
         }
-
         .login-card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 35px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            background: #1c2d37; border: 1px solid #00ffcc; border-radius: 16px;
+            padding: 30px; width: 100%; max-width: 380px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
             position: relative;
         }
-        .close-gate-btn {
-            position: absolute; top: 15px; right: 20px;
-            background: none; border: none; font-size: 24px; cursor: pointer; color: #666;
-        }
+        .close-btn { position: absolute; top: 10px; right: 15px; background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; }
 
-        .tab-box {
-            display: flex; justify-content: space-around;
-            margin-bottom: 20px; border-bottom: 1px solid #eee;
-        }
-        .gateway-tab {
-            padding: 10px; cursor: pointer; font-weight: bold; color: #666;
-            border-bottom: 3px solid transparent; transition: 0.3s;
-        }
-        .gateway-tab.active { color: #1f4037; border-color: #1f4037; }
+        .tab-box { display: flex; justify-content: space-around; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .tab { padding: 10px; cursor: pointer; color: #aaa; font-weight: bold; }
+        .tab.active { color: #00ffcc; border-bottom: 2px solid #00ffcc; }
 
-        .auth-field-row { margin-bottom: 15px; }
-        .auth-field-row label { display: block; font-size: 14px; margin-bottom: 5px; color: #333; }
-        .auth-field {
-            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;
-            background: #fff; color: #333; font-size: 16px; outline: none;
-        }
-        .auth-field:focus { border-color: #1f4037; }
-
-        .btn-auth { background: #1f4037; color: #fff; }
-        .btn-auth-otp { background: #e94560; color: #fff;}
-        .or-separator { text-align: center; margin: 15px 0; color: #888; font-size: 14px;}
+        .form-group { margin-bottom: 15px; text-align: left; }
+        .form-group label { display: block; margin-bottom: 5px; font-size: 14px; color: #ccc; }
+        .form-input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #0f1a20; color: #fff; outline: none; }
         
-        .btn-auth-google {
-            background: #fff; color: #3c4043; border: 1px solid #ddd;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
-        .btn-auth-google:hover { background: #f8f9fa; }
+        .btn-submit { width: 100%; background: #00ffcc; color: #0f2027; border-radius: 8px; margin-top: 10px; }
+        .btn-google { width: 100%; background: #fff; color: #333; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 15px; }
 
         .hidden { display: none !important; }
-
     </style>
 </head>
 <body>
 
-    <section id="front-generator-page">
+    <div class="adsterra-slot">
+        <script type="text/javascript">
+            atOptions = { 'key' : '20494cf0ba368cda3887258bd521e16f', 'format' : 'iframe', 'height' : 60, 'width' : 468, 'params' : {} };
+        </script>
+        <script type="text/javascript" src="//www.highperformanceformat.com/20494cf0ba368cda3887258bd521e16f/invoke.js"></script>
+    </div>
+
+    <div class="adsterra-slot">
+        <script type="text/javascript">
+            atOptions = { 'key' : '8ffef1c60b240bfdf4a0342cd28956b6', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
+        </script>
+        <script type="text/javascript" src="//www.highperformanceformat.com/8ffef1c60b240bfdf4a0342cd28956b6/invoke.js"></script>
+    </div>
+
+    <div class="studio-container">
+        <h1 class="studio-title">सचिन एआई फोटो लैब</h1>
         
-        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-106557068600" data-ad-slot="9823451011" data-ad-format="auto" data-full-width-responsive="true"></ins>
-        <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script>
-
-        <div class="hero-banner">
-            <h1 class="hero-title">सचिन एआई फोटो स्टूडियो</h1>
-            <p class="hero-subtitle">एक ही क्लिक में शानदार और प्रीमियम एआई फोटोज़ जनरेट करें।</p>
-            
-            <div id="logged-out-header-content">
-                <p style="color:#666; font-size: 14px;">सभी प्रीमियम फीचर्स और अनलिमिटेड फोटो जनरेशन के लिए लॉगिन करें।</p>
-                <button class="action-btn btn-login-open" onclick="openAuthenticationGate()">गेटवे लॉगिन करें 🔐</button>
-            </div>
-            
-            <div id="logged-in-header-content" class="hidden">
-                <span id="active-user-tag" style="color:#1f4037; font-weight:bold; font-size:14px; margin-right: 15px;"></span>
-                <button onclick="triggerAppLogout()" style="background:none; border:none; color:#e94560; cursor:pointer; font-weight:bold;">लॉगआउट करें</button>
-            </div>
+        <div id="auth-status-bar">
+            <button class="btn btn-login" onclick="openLoginWindow()">अकाउंट लॉगिन करें 🔐</button>
+        </div>
+        <div id="user-logged-in-bar" class="hidden" style="margin-bottom: 15px;">
+            <span id="user-tag" style="color: #00ffcc; font-weight: bold; font-size:14px; margin-right:15px;"></span>
+            <button onclick="logoutSession()" style="background:none; border:none; color:#ff5555; font-weight:bold; cursor:pointer;">लॉगआउट</button>
         </div>
 
-        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-106557068600" data-ad-slot="8712340982" data-ad-format="fluid" data-layout-key="-fb+5w+4e-db+86"></ins>
-        <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script>
-
-        <div class="hero-banner" id="photo-generator-studio-block">
-            <div class="image-preview-frame" id="box-image-preview">
-                <img src="" alt="एआई फोटो यहाँ आएगी" class="hidden" id="ai-final-photo">
-                <span style="color:#aaa;" id="txt-photo-placeholder">प्रीमियम एआई फोटो यहाँ दिखाई देगी</span>
-            </div>
-            
-            <ins class="adsbygoogle" style="display:inline-block;width:300px;height:250px" data-ad-client="ca-pub-106557068600" data-ad-slot="7612349012"></ins>
-            <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script>
-
-            <div class="input-group-row">
-                <input type="text" id="field-prompt-input" class="field-input" placeholder="फोटोग्राफिक विवरण यहाँ लिखें... (उदाहरण: A majestic tiger in jungle)">
-                <button class="action-btn btn-generate" onclick="generatePremiumPhotoFromApp()">फोटो जनरेट करें ✨</button>
-            </div>
+        <div class="adsterra-slot">
+            <script type="text/javascript">
+                atOptions = { 'key' : '158e2ee0ba286b240b2a342cd28bfdf4', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/158e2ee0ba286b240b2a342cd28bfdf4/invoke.js"></script>
         </div>
 
-        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-106557068600" data-ad-slot="6543210987" data-ad-format="horizontal" data-full-width-responsive="true"></ins>
-        <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script>
-    </section>
+        <div class="photo-frame">
+            <img src="" id="output-photo" class="hidden" alt="AI Photo">
+            <span id="placeholder-text" style="color:#888;">आपकी जादुई फोटो यहाँ दिखेगी</span>
+        </div>
+
+        <div class="adsterra-slot">
+            <script type="text/javascript">
+                atOptions = { 'key' : '3887258bd521e16f20494cf0ba368cda', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/3887258bd521e16f20494cf0ba368cda/invoke.js"></script>
+        </div>
+
+        <div class="input-row">
+            <input type="text" id="input-prompt" class="prompt-input" placeholder="लिखें कैसी फोटो चाहिए... (जैसे: Neon cricket stadium)">
+            <button class="btn btn-generate" onclick="generateAiPhotoNow()">बनाएं ✨</button>
+        </div>
+
+        <div class="adsterra-slot">
+            <script type="text/javascript">
+                atOptions = { 'key' : 'fdfdf400ba368cdb28956b620494cf0b', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/fdfdf400ba368cdb28956b620494cf0b/invoke.js"></script>
+        </div>
+    </div>
+
+    <div class="adsterra-slot">
+        <script type="text/javascript">
+            atOptions = { 'key' : '2a342cd28bfdf4158e2ee0ba286b240b', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };
+        </script>
+        <script type="text/javascript" src="//www.highperformanceformat.com/2a342cd28bfdf4158e2ee0ba286b240b/invoke.js"></script>
+    </div>
+
+    <div class="adsterra-slot">
+        <script type="text/javascript">
+            atOptions = { 'key' : 'a342cd28956b620494cf0ba368cda388', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
+        </script>
+        <script type="text/javascript" src="//www.highperformanceformat.com/a342cd28956b620494cf0ba368cda388/invoke.js"></script>
+    </div>
 
 
-    <section id="login-gateway-page">
+    <div class="login-overlay" id="popup-gateway">
         <div class="login-card">
-            <button class="close-gate-btn" onclick="closeAuthenticationGate()">×</button>
+            <button class="close-btn" onclick="closeLoginWindow()">×</button>
             
-            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-106557068600" data-ad-slot="5432109876" data-ad-format="auto" data-full-width-responsive="true"></ins>
-            <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script>
+            <div class="adsterra-slot">
+                <script type="text/javascript">
+                    atOptions = { 'key' : 'cf0ba368cda3887258bd521e16f20494', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
+                </script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/cf0ba368cda3887258bd521e16f20494/invoke.js"></script>
+            </div>
 
-            <h2 style="text-align:center; margin-bottom:15px; color:#1f4037;">प्रीमियम गेटवे</h2>
-            
             <div class="tab-box">
-                <div class="gateway-tab active" onclick="switchGatewayTab('email-login')">ईमेल लॉगिन</div>
-                <div class="gateway-tab" onclick="switchGatewayTab('signup')">नया रजिस्टर</div>
-                <div class="gateway-tab" onclick="switchGatewayTab('otp')">ओटीपी</div>
+                <div class="tab active" id="tab-login" onclick="toggleTab('login')">लॉगिन</div>
+                <div class="tab" id="tab-signup" onclick="toggleTab('signup')">साइनअप</div>
             </div>
 
-            <div id="section-email-login">
-                <div class="auth-field-row"><label>ईमेल</label><input type="email" id="input-login-email" class="auth-field" placeholder="your@email.com"></div>
-                <div class="auth-field-row"><label>पासवर्ड</label><input type="password" id="input-login-pass" class="auth-field" placeholder="******"></div>
-                <button class="action-btn btn-ui btn-auth" onclick="handleEmailAuthLogin()">लॉगिन करें</button>
+            <div id="form-login-block">
+                <div class="form-group"><label>ईमेल</label><input type="email" id="log-email" class="form-input" placeholder="xyz@gmail.com"></div>
+                <div class="form-group"><label>पासवर्ड</label><input type="password" id="log-pass" class="form-input" placeholder="******"></div>
+                <button class="btn btn-submit" onclick="submitEmailLogin()">लॉगिन करें</button>
             </div>
 
-            <div id="section-signup" class="hidden">
-                <div class="auth-field-row"><label>ईमेल आईडी</label><input type="email" id="input-signup-email" class="auth-field" placeholder="your@email.com"></div>
-                <div class="auth-field-row"><label>नया मज़बूत पासवर्ड</label><input type="password" id="input-signup-pass" class="auth-field" placeholder="जैसे: Sachin@2026"></div>
-                <button class="action-btn btn-ui btn-auth" onclick="handleEmailAuthRegister()">नया अकाउंट बनाएं</button>
+            <div id="form-signup-block" class="hidden">
+                <div class="form-group"><label>ईमेल आईडी</label><input type="email" id="sign-email" class="form-input" placeholder="xyz@gmail.com"></div>
+                <div class="form-group"><label>पासवर्ड सेट करें</label><input type="password" id="sign-pass" class="form-input" placeholder="जैसे: Sachin@2026"></div>
+                <button class="btn btn-submit" onclick="submitEmailSignup()">अकाउंट बनाएं</button>
             </div>
 
-            <div id="section-otp" class="hidden">
-                <div class="auth-field-row"><label>मोबाइल नंबर (+91 के साथ)</label><input type="text" id="input-phone-number" class="auth-field" placeholder="+918429644247"></div>
-                <button class="action-btn btn-ui btn-auth-otp" id="btn-send-otp-code" onclick="handleSendOtpAction()">ओटीपी कोड भेजें</button>
-                <div id="recaptcha-container"></div>
-                <div id="otp-verify-block" class="hidden" style="margin-top:15px;">
-                    <div class="auth-field-row"><label>6-अंकों का ओटीपी दर्ज करें</label><input type="text" id="input-otp-code" class="auth-field" placeholder="123456"></div>
-                    <button class="action-btn btn-ui btn-auth" onclick="handleVerifyOtpAction()">कोड वेरिफाई करें</button>
-                </div>
-            </div>
-
-            <div class="or-separator">या फिर</div>
-            
-            <button class="action-btn btn-ui btn-auth-google" onclick="handleGoogleAuthGateway()">
-                <img src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/web-24dp/logo_googleg_color_24dp.png" width="18" alt="Google">
-                Google से डायरेक्ट लॉगिन
+            <div style="text-align:center; margin: 10px 0; color:#888; font-size:12px;">या फिर</div>
+            <button class="btn btn-google" onclick="submitGoogleLogin()">
+                <img src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/web-24dp/logo_googleg_color_24dp.png" width="16" alt="Google">
+                Google से लॉगिन करें
             </button>
 
-            <ins class="adsbygoogle" style="display:inline-block;width:300px;height:250px" data-ad-client="ca-pub-106557068600" data-ad-slot="4321098765"></ins>
-            <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script>
+            <div class="adsterra-slot" style="margin-top:15px;">
+                <script type="text/javascript">
+                    atOptions = { 'key' : 'ba368cdb28956b620494cf0b8ffef1c6', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
+                </script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/ba368cdb28956b620494cf0b8ffef1c6/invoke.js"></script>
+            </div>
         </div>
-    </section>
+    </div>
 
-    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-106557068600" data-ad-slot="3210987654" data-ad-format="fluid" data-layout-key="-fb+5w+4e-db+86"></ins>
-    <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script>
-    
-    <ins class="adsbygoogle" style="display:inline-block;width:300px;height:250px" data-ad-client="ca-pub-106557068600" data-ad-slot="2109876543"></ins>
-    <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script>
+    <div class="adsterra-slot" style="margin-top:auto;">
+        <script type="text/javascript">
+            atOptions = { 'key' : 'cd28956b620494cf0b8ffef1c60b240b', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
+        </script>
+        <script type="text/javascript" src="//www.highperformanceformat.com/cd28956b620494cf0b8ffef1c60b240b/invoke.js"></script>
+    </div>
 
-    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-106557068600" data-ad-slot="1098765432" data-ad-format="fluid" data-layout-key="-fb+5w+4e-db+86"></ins>
-    <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script>
-    
-    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-106557068600" data-ad-slot="0987654321" data-ad-format="horizontal" data-full-width-responsive="true"></ins>
-    <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { 
             getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, 
-            GoogleAuthProvider, signInWithRedirect, getRedirectResult, RecaptchaVerifier, 
-            signInWithPhoneNumber, signOut, onAuthStateChanged 
+            GoogleAuthProvider, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged 
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        // 🔥 आपका फायरबेस क्रेडेंशियल
+        // 🔥 आपका फायरबेस कॉन्फ़िगरेशन
         const firebaseConfig = {
             apiKey: "AIzaSyCglO0vHutINDOWaIWMsv4N9_54dpbPvIo",
             authDomain: "project-8621d575-e2f7-45a2-963.firebaseapp.com",
@@ -271,132 +265,92 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        let phoneAuthConfirmation = null;
 
-        // गेटवे खोलने/बंद करने का लॉजिक
-        window.openAuthenticationGate = function() {
-            document.getElementById('login-gateway-page').style.display = 'flex';
+        // विंडोज़ फंक्शन्स (ग्लोबल एक्सेस के लिए)
+        window.openLoginWindow = function() { document.getElementById('popup-gateway').style.display = 'flex'; }
+        window.closeLoginWindow = function() { document.getElementById('popup-gateway').style.display = 'none'; }
+
+        // टैब स्विचिंग
+        window.toggleTab = function(type) {
+            if(type === 'login') {
+                document.getElementById('tab-login').classList.add('active');
+                document.getElementById('tab-signup').classList.remove('active');
+                document.getElementById('form-login-block').classList.remove('hidden');
+                document.getElementById('form-signup-block').classList.add('hidden');
+            } else {
+                document.getElementById('tab-signup').classList.add('active');
+                document.getElementById('tab-login').classList.remove('active');
+                document.getElementById('form-signup-block').classList.remove('hidden');
+                document.getElementById('form-login-block').classList.add('hidden');
+            }
         }
-        window.closeAuthenticationGate = function() {
-            document.getElementById('login-gateway-page').style.display = 'none';
-        }
 
-        // रीडायरेक्ट होकर वापस आने पर लॉगिन हैंडलर (जरूरी)
-        getRedirectResult(auth).catch((error) => {
-            alert("गूगल लॉगिन एरर: " + error.message + "\n\nटिप: फायरबेस Authorized domains में ksachin29633-png.github.io जोड़ें।");
-        });
+        // गूगल रीडायरेक्ट रिस्पांस ट्रैकर
+        getRedirectResult(auth).catch(e => alert("गूगल लॉगिन त्रुटि: " + e.message));
 
-        // लॉगिन स्टेट ट्रैकर (Real-time Status Checker)
+        // लॉगिन स्टेट ट्रैकर
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // लॉगिन सफल रहा
-                document.getElementById('logged-out-header-content').classList.add('hidden');
-                document.getElementById('logged-in-header-content').classList.remove('hidden');
-                document.getElementById('login-gateway-page').style.display = 'none';
-                document.getElementById('active-user-tag').innerText = user.email || user.phoneNumber || "सत्यापित यूज़र";
+                document.getElementById('auth-status-bar').classList.add('hidden');
+                document.getElementById('user-logged-in-bar').classList.remove('hidden');
+                document.getElementById('user-tag').innerText = user.email || "सत्यापित सदस्य";
+                closeLoginWindow();
             } else {
-                // लॉगआउट है
-                document.getElementById('logged-out-header-content').classList.remove('hidden');
-                document.getElementById('logged-in-header-content').classList.add('hidden');
+                document.getElementById('auth-status-bar').classList.remove('hidden');
+                document.getElementById('user-logged-in-bar').classList.add('hidden');
             }
         });
 
-        // लॉगिन टैब स्विचर
-        window.switchGatewayTab = function(targetTab) {
-            document.querySelectorAll('.gateway-tab').forEach(t => t.classList.remove('active'));
-            document.getElementById('section-email-login').classList.add('hidden');
-            document.getElementById('section-signup').classList.add('hidden');
-            document.getElementById('section-otp').classList.add('hidden');
-
-            if(targetTab === 'email-login') {
-                document.getElementById('section-email-login').classList.remove('hidden');
-                event.target.classList.add('active');
-            } else if(targetTab === 'signup') {
-                document.getElementById('section-signup').classList.remove('hidden');
-                event.target.classList.add('active');
-            } else if(targetTab === 'otp') {
-                document.getElementById('section-otp').classList.remove('hidden');
-                event.target.classList.add('active');
-                initRecaptchaForPhone();
-            }
-        }
-
-        // 1. ईमेल लॉगिन
-        window.handleEmailAuthLogin = function() {
-            const m = document.getElementById('input-login-email').value.trim();
-            const p = document.getElementById('input-login-pass').value;
+        // ईमेल लॉगिन/साइनअप एक्शन
+        window.submitEmailLogin = function() {
+            const m = document.getElementById('log-email').value.trim();
+            const p = document.getElementById('log-pass').value;
             if(!m || !p) return;
-            signInWithEmailAndPassword(auth, m, p).catch(e => alert("लॉगिन फेल: " + e.message));
+            signInWithEmailAndPassword(auth, m, p).catch(e => alert("लॉगिन विफल: " + e.message));
         }
 
-        // 2. ईमेल रजिस्टर
-        window.handleEmailAuthRegister = function() {
-            const m = document.getElementById('input-signup-email').value.trim();
-            const p = document.getElementById('input-signup-pass').value;
+        window.submitEmailSignup = function() {
+            const m = document.getElementById('sign-email').value.trim();
+            const p = document.getElementById('sign-pass').value;
             if(!m || !p) return;
             createUserWithEmailAndPassword(auth, m, p)
-                .then(() => alert("बधाई हो! रजिस्टर हो गया।"))
-                .catch(e => alert("रजिस्ट्रेशन फेल: " + e.message));
+                .then(() => alert("पंजीकरण सफल रहा!"))
+                .catch(e => alert("साइनअप विफल: " + e.message));
         }
 
-        // 3. 🚀 सुधरा हुआ गूगल रीडायरेक्ट साइन-इन (100% वर्किंग गेटवे)
-        window.handleGoogleAuthGateway = function() {
+        window.submitGoogleLogin = function() {
             const provider = new GoogleAuthProvider();
             signInWithRedirect(auth, provider);
         }
 
-        // 4. फोन ओटीपी सिस्टम
-        function initRecaptchaForPhone() {
-            if(!window.recaptchaVerifier) {
-                window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', { 'size': 'invisible' });
-            }
-        }
+        window.logoutSession = function() { signOut(auth); }
 
-        window.handleSendOtpAction = function() {
-            const num = document.getElementById('input-phone-number').value.trim();
-            if(!num.startsWith('+')) { alert("नंबर के आगे कंट्री कोड लगाएं जैसे: +918429644247"); return; }
-            initRecaptchaForPhone();
-            signInWithPhoneNumber(auth, num, window.recaptchaVerifier)
-                .then(confirmation => {
-                    phoneAuthConfirmation = confirmation;
-                    document.getElementById('otp-verify-block').classList.remove('hidden');
-                    alert("कोड भेज दिया गया है!");
-                }).catch(e => alert("ओटीपी सर्वर एरर: " + e.message));
-        }
+        // ================= 🎨 एआई फोटो जनरेटर फंक्शन (100% फिक्स) =================
+        window.generateAiPhotoNow = async function() {
+            const prompt = document.getElementById('input-prompt').value.trim();
+            if(!prompt) { alert("कृपया बताएं कि आपको कैसी फोटो चाहिए!"); return; }
 
-        window.handleVerifyOtpAction = function() {
-            const c = document.getElementById('input-otp-code').value.trim();
-            phoneAuthConfirmation.confirm(c).catch(e => alert("गलत ओटीपी कोड!"));
-        }
+            const outImg = document.getElementById('output-photo');
+            const txt = document.getElementById('placeholder-text');
 
-        // 5. लॉगआउट
-        window.triggerAppLogout = function() {
-            signOut(auth);
-        }
+            outImg.classList.add('hidden');
+            txt.innerText = '✨ आपकी फोटो गढ़ी जा रही है... कृपया रुकें...';
+            txt.classList.remove('hidden');
 
-        // ========================================================
-        // एआई फोटो जनरेट करने वाला इंजन (AI PHOTO GENERATOR)
-        // ========================================================
-        window.generatePremiumPhotoFromApp = async function() {
-            const prompt = document.getElementById('field-prompt-input').value.trim();
-            if(!prompt) { alert("कृपया विवरण लिखें कि कैसी फोटो चाहिए!"); return; }
+            const randomSeed = Math.floor(Math.random() * 999999);
+            const finalUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=512&height=512&nologo=true&seed=${randomSeed}`;
 
-            const finalPhoto = document.getElementById('ai-final-photo');
-            const placeholder = document.getElementById('txt-photo-placeholder');
-            
-            finalPhoto.classList.add('hidden');
-            placeholder.innerText = '✨ एआई फोटो गढ़ी जा रही है, थोड़ा इंतज़ार करें...';
-            placeholder.classList.remove('hidden');
-
-            // पोलिनेशन एआई का सुरक्षित इंजन
-            const generatedUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=512&height=512&nologo=true&seed=${Math.floor(Math.random() * 99999)}`;
-            
-            setTimeout(() => {
-                finalPhoto.src = generatedUrl;
-                finalPhoto.classList.remove('hidden');
-                placeholder.classList.add('hidden');
-            }, 1500); // विजुअल इफेक्ट के लिए छोटा डिले
+            // इमेज लोड होने का इंतज़ार
+            outImg.src = finalUrl;
+            outImg.onload = function() {
+                outImg.classList.remove('hidden');
+                txt.classList.add('hidden');
+            };
+            outImg.onerror = function() {
+                txt.innerText = 'फोटो लोड करने में समस्या आई, कृपया दोबारा कोशिश करें।';
+            };
         }
     </script>
 </body>
-</html>
+            </html>
+            
