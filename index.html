@@ -7,7 +7,7 @@
     <title>Sachin AI Studio</title>
     
     <style>
-        /* 🖤 आपका क्लासिक सिंपल डिज़ाइन - कोई बदलाव नहीं */
+        /* 🖤 क्लासिक सिंपल डिज़ाइन */
         body {
             background-color: #0d1117;
             color: #c9d1d9;
@@ -39,6 +39,35 @@
             margin-bottom: 10px;
             border-bottom: 1px solid #21262d;
             padding-bottom: 5px;
+        }
+
+        /* 🔐 लॉगिन और साइनअप बॉक्स डिज़ाइन */
+        .auth-screen {
+            max-width: 400px;
+            margin: 60px auto;
+            background: #161b22;
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        .auth-title {
+            text-align: center;
+            color: #58a6ff;
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .auth-toggle {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #8b949e;
+        }
+        .auth-toggle span {
+            color: #58a6ff;
+            cursor: pointer;
+            text-decoration: underline;
         }
 
         /* 🎙️ लाइव वॉयस बटन स्टाइल */
@@ -76,7 +105,7 @@
         .ai-text { color: #7ee787; }
 
         /* 🖼️ इनपुट्स और बटन्स */
-        input[type="text"] {
+        input[type="text"], input[type="email"], input[type="password"] {
             width: 100%;
             background-color: #0d1117;
             border: 1px solid #30363d;
@@ -85,7 +114,11 @@
             border-radius: 4px;
             box-sizing: border-box;
             font-size: 15px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            outline: none;
+        }
+        input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus {
+            border-color: #58a6ff;
         }
         
         .action-btn {
@@ -100,6 +133,19 @@
             cursor: pointer;
         }
         .action-btn:disabled { background-color: #21262d; color: #8b949e; }
+        
+        .logout-btn {
+            background-color: #da3637;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: bold;
+            float: right;
+            border: none;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: -5px;
+        }
 
         /* 🧼 पारदर्शी फोटो फ्रेम */
         .photo-display-area {
@@ -129,158 +175,237 @@
             margin-top: 10px;
         }
 
-        /* 📣 विज्ञापनों के साधारण फिक्स्ड क्लीन कंटेनर्स */
+        /* 📣 विज्ञापनों के कंटेनर्स */
         .ad-clean-center { text-align: center; margin: 15px 0; width: 100%; display: flex; justify-content: center; align-items: center; min-height: 60px; overflow: hidden; }
+        
+        /* शुरुआत में मुख्य वेबसाइट छुपी रहेगी */
+        #main-studio-content { display: none; }
     </style>
 
     <script type="importmap">
-      { "imports": { "@google/generative-ai": "https://esm.run/@google/generative-ai" } }
+      {
+        "imports": {
+          "@google/generative-ai": "https://esm.run/@google/generative-ai",
+          "firebase/app": "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js",
+          "firebase/auth": "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"
+        }
+      }
     </script>
 </head>
 <body>
 
-    <div class="ad-clean-center">
-        <iframe src="about:blank" style="width:728px;height:90px;border:none;scrolling:no;" id="ad-slot-1"></iframe>
-        <script>
-            const doc1 = document.getElementById('ad-slot-1').contentWindow.document;
-            doc1.open();
-            doc1.write('<body style="margin:0;padding:0;text-align:center;"><script type="text/javascript">atOptions = { "key" : "5e113b8022609e2135c5e1e265084235", "format" : "iframe", "height" : 90, "width" : 728, "params" : {} };<\/script><script type="text/javascript" src="https://www.highperformanceformat.com/5e113b8022609e2135c5e1e265084235/invoke.js"><\/script><\/body>');
-            doc1.close();
-        </script>
+    <div id="auth-screen-area" class="auth-screen">
+        <div class="auth-title" id="form-title">सचिन AI स्टूडियो - लॉगिन करें</div>
+        <form id="auth-form">
+            <input type="email" id="auth-email" placeholder="अपनी ईमेल डालें..." required>
+            <input type="password" id="auth-password" placeholder="अपना पासवर्ड डालें..." required>
+            <button type="submit" class="action-btn" id="auth-submit-btn">लॉगिन करें भाई</button>
+        </form>
+        <div class="auth-toggle" id="auth-toggle-msg">
+            अकाउंट नहीं है? <span id="switch-to-signup">यहाँ नया अकाउंट बनाएं</span>
+        </div>
     </div>
 
-    <div class="ad-clean-center">
-        <iframe src="about:blank" style="width:468px;height:60px;border:none;scrolling:no;" id="ad-slot-2"></iframe>
-        <script>
-            const doc2 = document.getElementById('ad-slot-2').contentWindow.document;
-            doc2.open();
-            doc2.write('<body style="margin:0;padding:0;text-align:center;"><script type="text/javascript">atOptions = { "key" : "a0707e197ee3131ba6b6214078c54f86", "format" : "iframe", "height" : 60, "width" : 468, "params" : {} };<\/script><script type="text/javascript" src="https://www.highperformanceformat.com/a0707e197ee3131ba6b6214078c54f86/invoke.js"><\/script><\/body>');
-            doc2.close();
-        </script>
-    </div>
 
-    <h1>🤖 Sachin AI Premium Studio</h1>
-
-    <div class="container">
-
-        <div class="ad-clean-center">
-            <iframe src="about:blank" style="width:100%;max-width:728px;height:90px;border:none;scrolling:no;" id="ad-slot-3"></iframe>
-            <script>
-                const doc3 = document.getElementById('ad-slot-3').contentWindow.document;
-                doc3.open();
-                doc3.write('<body style="margin:0;padding:0;text-align:center;"><script align="async" data-cfasync="false" src="https://p129470507.effectivecpmnetwork.com/3da2a2c535b1a237c281ced645d90888/invoke.js"><\/script><div id="container-3da2a2c535b1a237c281ced645d90888"><\/div><\/body>');
-                doc3.close();
-            </script>
-        </div>
-
-        <div class="section-title">🎙️ लाइव वॉयस टॉक स्टूडियो</div>
-        <div class="voice-box">
-            <button id="voice-chat-btn" class="v-btn">🎤 लाइव बोलना शुरू करें</button>
-            <div id="voice-status" style="margin-top:8px; font-size:14px; color:#f0883e;">बटन दबाकर लाइव बात करें भाई!</div>
-        </div>
-
-        <div class="ad-clean-center">
-            <iframe src="about:blank" style="width:468px;height:60px;border:none;scrolling:no;" id="ad-slot-4"></iframe>
-            <script>
-                const doc4 = document.getElementById('ad-slot-4').contentWindow.document;
-                doc4.open();
-                doc4.write('<body style="margin:0;padding:0;text-align:center;"><script type="text/javascript">atOptions = { "key" : "a0707e197ee3131ba6b6214078c54f86", "format" : "iframe", "height" : 60, "width" : 468, "params" : {} };<\/script><script type="text/javascript" src="https://www.highperformanceformat.com/a0707e197ee3131ba6b6214078c54f86/invoke.js"><\/script><\/body>');
-                doc4.close();
-            </script>
-        </div>
-
-        <div class="section-title">🤖 सचिन AI टेक्स्ट चैट सहायक</div>
-        <div class="chat-output-frame" id="chat-box">
-            <div class="chat-row ai-text">
-                <strong>AI:</strong> नमस्कार भाई! आपका लाइव क्लासिक स्टूडियो बिल्कुल तैयार है। यहाँ विज्ञापन लोडर फिक्स कर दिया गया है ताकि सभी एड्स बिना एरर के आपके स्क्रीनशॉट की तरह साफ़ लोड हों! 😎
-            </div>
-        </div>
-
-        <input type="text" id="user-input" placeholder="यहाँ लिखकर चैट करें भाई...">
-        <button class="action-btn" id="send-btn" style="margin-bottom: 15px;">संदेश भेजें</button>
-
-        <div class="ad-clean-center" style="min-height:250px;">
-            <iframe src="about:blank" style="width:300px;height:250px;border:none;scrolling:no;" id="ad-slot-5"></iframe>
-            <script>
-                const doc5 = document.getElementById('ad-slot-5').contentWindow.document;
-                doc5.open();
-                doc5.write('<body style="margin:0;padding:0;text-align:center;"><script type="text/javascript">atOptions = { "key" : "0cc801bedecd44b65d014707u5a52161", "format" : "iframe", "height" : 250, "width" : 300, "params" : {} };<\/script><script type="text/javascript" src="https://www.highperformanceformat.com/0cc801bedecd44b65d014707u5a52161/invoke.js"><\/script><\/body>');
-                doc5.close();
-            </script>
-        </div>
-
-        <div class="ad-clean-center">
-            <iframe src="about:blank" style="width:728px;height:90px;border:none;scrolling:no;" id="ad-slot-6"></iframe>
-            <script>
-                const doc6 = document.getElementById('ad-slot-6').contentWindow.document;
-                doc6.open();
-                doc6.write('<body style="margin:0;padding:0;text-align:center;"><script type="text/javascript">atOptions = { "key" : "5e113b8022609e2135c5e1e265084235", "format" : "iframe", "height" : 90, "width" : 728, "params" : {} };<\/script><script type="text/javascript" src="https://www.highperformanceformat.com/5e113b8022609e2135c5e1e265084235/invoke.js"><\/script><\/body>');
-                doc6.close();
-            </script>
-        </div>
-
-        <div class="section-title">🖼️ सचिन AI - साफ फोटो जनरेटर (Transparent PNG)</div>
-        <p style="font-size:14px; color:#8b949e; margin-bottom:8px;">यहाँ जो भी लिखेंगे, उसकी फोटो बिना बैकग्राउंड के बनकर आएगी:</p>
-        <input type="text" id="photo-prompt" placeholder="उदा: 'A professional cricket bat, isolated PNG, white background'">
-        <button id="generate-photo-btn" class="action-btn" style="background-color: #1f6feb;">🧼 साफ फोटो जनरेट करें</button>
+    <div id="main-studio-content">
         
-        <div class="photo-display-area" id="image-frame">
-            <div class="loading-text" id="loader-msg">⏳ सचिन भाई, प्रीमियम साफ फोटो बन रही है...</div>
-            <img src="" alt="AI Transparent Output" id="ai-photo">
-        </div>
-
-        <div class="ad-clean-center" style="min-height:600px;">
-            <iframe src="about:blank" style="width:160px;height:600px;border:none;scrolling:no;" id="ad-slot-7"></iframe>
-            <script>
-                const doc7 = document.getElementById('ad-slot-7').contentWindow.document;
-                doc7.open();
-                doc7.write('<body style="margin:0;padding:0;text-align:center;"><script type="text/javascript">atOptions = { "key" : "08830bb1c7d986964025599725f992ec", "format" : "iframe", "height" : 600, "width" : 160, "params" : {} };<\/script><script type="text/javascript" src="https://www.highperformanceformat.com/08830bb1c7d986964025599725f992ec/invoke.js"><\/script><\/body>');
-                doc7.close();
-            </script>
+        <div class="ad-clean-center">
+            <iframe src="about:blank" style="width:728px;height:90px;border:none;scrolling:no;" id="ad-slot-1"></iframe>
         </div>
 
         <div class="ad-clean-center">
-            <iframe src="about:blank" style="width:468px;height:60px;border:none;scrolling:no;" id="ad-slot-8"></iframe>
-            <script>
-                const doc8 = document.getElementById('ad-slot-8').contentWindow.document;
-                doc8.open();
-                doc8.write('<body style="margin:0;padding:0;text-align:center;"><script type="text/javascript">atOptions = { "key" : "a0707e197ee3131ba6b6214078c54f86", "format" : "iframe", "height" : 60, "width" : 468, "params" : {} };<\/script><script type="text/javascript" src="https://www.highperformanceformat.com/a0707e197ee3131ba6b6214078c54f86/invoke.js"><\/script><\/body>');
-                doc8.close();
-            </script>
+            <iframe src="about:blank" style="width:468px;height:60px;border:none;scrolling:no;" id="ad-slot-2"></iframe>
         </div>
 
-        <div class="section-title">🧼 मैन्युअल बैकग्राउंड रिमूवर टूल्स</div>
-        <a href="bg-remove.html" class="link-btn">🧼 पुराना बैकग्राउंड साफ करने वाला स्टूडियो खोलें</a>
+        <h1>
+            🤖 Sachin AI Premium Studio
+            <button class="logout-btn" id="logout-action-btn">लॉगआउट</button>
+        </h1>
 
-        <div class="ad-clean-center">
-            <iframe src="about:blank" style="width:728px;height:90px;border:none;scrolling:no;" id="ad-slot-9"></iframe>
-            <script>
-                const doc9 = document.getElementById('ad-slot-9').contentWindow.document;
-                doc9.open();
-                doc9.write('<body style="margin:0;padding:0;text-align:center;"><script type="text/javascript">atOptions = { "key" : "5e113b8022609e2135c5e1e265084235", "format" : "iframe", "height" : 90, "width" : 728, "params" : {} };<\/script><script type="text/javascript" src="https://www.highperformanceformat.com/5e113b8022609e2135c5e1e265084235/invoke.js"><\/script><\/body>');
-                doc9.close();
-            </script>
+        <div class="container">
+
+            <div class="ad-clean-center">
+                <iframe src="about:blank" style="width:100%;max-width:728px;height:90px;border:none;scrolling:no;" id="ad-slot-3"></iframe>
+            </div>
+
+            <div class="section-title">🎙️ लाइव वॉयस टॉक स्टूडियो</div>
+            <div class="voice-box">
+                <button id="voice-chat-btn" class="v-btn">🎤 लाइव बोलना शुरू करें</button>
+                <div id="voice-status" style="margin-top:8px; font-size:14px; color:#f0883e;">बटन दबाकर लाइव बात करें भाई!</div>
+            </div>
+
+            <div class="ad-clean-center">
+                <iframe src="about:blank" style="width:468px;height:60px;border:none;scrolling:no;" id="ad-slot-4"></iframe>
+            </div>
+
+            <div class="section-title">🤖 सचिन AI टेक्स्ट चैट सहायक</div>
+            <div class="chat-output-frame" id="chat-box">
+                <div class="chat-row ai-text">
+                    <strong>AI:</strong> ऑथेंटिकेशन सफल रहा भाई! सुरक्षा लॉक खुल चुका है और विज्ञापनों का सेटअप भी पूरी तरह लोड हो चुका है। पूछिए क्या सेवा करूँ भाई? 😎
+                </div>
+            </div>
+
+            <input type="text" id="user-input" placeholder="यहाँ लिखकर चैट करें भाई...">
+            <button class="action-btn" id="send-btn" style="margin-bottom: 15px;">संदेश भेजें</button>
+
+            <div class="ad-clean-center" style="min-height:250px;">
+                <iframe src="about:blank" style="width:300px;height:250px;border:none;scrolling:no;" id="ad-slot-5"></iframe>
+            </div>
+
+            <div class="ad-clean-center">
+                <iframe src="about:blank" style="width:728px;height:90px;border:none;scrolling:no;" id="ad-slot-6"></iframe>
+            </div>
+
+            <div class="section-title">🖼️ सचिन AI - साफ फोटो जनरेटर (Transparent PNG)</div>
+            <p style="font-size:14px; color:#8b949e; margin-bottom:8px;">यहाँ जो भी लिखेंगे, उसकी फोटो बिना बैकग्राउंड के बनकर आएगी:</p>
+            <input type="text" id="photo-prompt" placeholder="उदा: 'A professional cricket bat, isolated PNG'">
+            <button id="generate-photo-btn" class="action-btn" style="background-color: #1f6feb;">🧼 साफ फोटो जनरेट करें</button>
+            
+            <div class="photo-display-area" id="image-frame">
+                <div class="loading-text" id="loader-msg">⏳ सचिन भाई, प्रीमियम साफ फोटो बन रही है...</div>
+                <img src="" alt="AI Transparent Output" id="ai-photo">
+            </div>
+
+            <div class="ad-clean-center" style="min-height:600px;">
+                <iframe src="about:blank" style="width:160px;height:600px;border:none;scrolling:no;" id="ad-slot-7"></iframe>
+            </div>
+
+            <div class="ad-clean-center">
+                <iframe src="about:blank" style="width:468px;height:60px;border:none;scrolling:no;" id="ad-slot-8"></iframe>
+            </div>
+
+            <div class="section-title">🧼 मैन्युअल बैकग्राउंड रिमूवर टूल्स</div>
+            <a href="bg-remove.html" class="link-btn">🧼 पुराना बैकग्राउंड साफ करने वाला स्टूडियो खोलें</a>
+
+            <div class="ad-clean-center">
+                <iframe src="about:blank" style="width:728px;height:90px;border:none;scrolling:no;" id="ad-slot-9"></iframe>
+            </div>
+
+            <div class="ad-clean-center">
+                <iframe src="about:blank" style="width:100%;max-width:728px;height:90px;border:none;scrolling:no;" id="ad-slot-10"></iframe>
+            </div>
+
         </div>
-
-        <div class="ad-clean-center">
-            <iframe src="about:blank" style="width:100%;max-width:728px;height:90px;border:none;scrolling:no;" id="ad-slot-10"></iframe>
-            <script>
-                const doc10 = document.getElementById('ad-slot-10').contentWindow.document;
-                doc10.open();
-                doc10.write('<body style="margin:0;padding:0;text-align:center;"><script align="async" data-cfasync="false" src="https://p129470507.effectivecpmnetwork.com/3da2a2c535b1a237c281ced645d90888/invoke.js"><\/script><div id="container-3da2a2c535b1a237c281ced645d90888"><\/div><\/body>');
-                doc10.close();
-            </script>
-        </div>
-
     </div>
 
 <script type="module">
+    import { initializeApp } from "firebase/app";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
     import { GoogleGenerativeAI } from "@google/generative-ai";
 
-    // 🔑 आपकी एक्टिव जेमिनी API Key
+    // 🔑 आपकी अपनी जेन्युइन फायरबेस कॉन्फ़िगरेशन कीज़
+    const firebaseConfig = {
+      apiKey: "AIzaSyDiwvbwoD5xHqdi4A76gmK0V17sgnm9Rxk",
+      authDomain: "project-5e3b886e-7397-4959-b56.firebaseapp.com",
+      projectId: "project-5e3b886e-7397-4959-b56",
+      storageBucket: "project-5e3b886e-7397-4959-b56.firebasestorage.app",
+      messagingSenderId: "106557068600",
+      appId: "1:106557068600:web:290d403ca4ae1c27da5dcd",
+      measurementId: "G-R329W3XL52"
+    };
+
+    // फायरबेस इंजन शुरू करें
+    const firebaseApp = initializeApp(firebaseConfig);
+    const auth = getAuth(firebaseApp);
+
+    // 🔑 एक्टिव जेमिनी की
     const API_KEY = "AIzaSyDt55opoKK0_m4EsxHP0MibzvfzPLEFtwg"; 
     const aiSystem = new GoogleGenerativeAI(API_KEY);
 
+    // डॉम एलिमेंट्स
+    const authScreenArea = document.getElementById('auth-screen-area');
+    const mainStudioContent = document.getElementById('main-studio-content');
+    const authForm = document.getElementById('auth-form');
+    const authEmail = document.getElementById('auth-email');
+    const authPassword = document.getElementById('auth-password');
+    const authSubmitBtn = document.getElementById('auth-submit-btn');
+    const formTitle = document.getElementById('form-title');
+    const authToggleMsg = document.getElementById('auth-toggle-msg');
+    const logoutActionBtn = document.getElementById('logout-action-btn');
+
+    let isLoginMode = true;
+
+    // 🔄 लॉगिन और साइनअप मोड स्विच करें
+    authToggleMsg.addEventListener('click', (e) => {
+        if(e.target.id === 'switch-to-signup' || e.target.id === 'switch-to-login') {
+            isLoginMode = !isLoginMode;
+            if(!isLoginMode) {
+                formTitle.textContent = "सचिन AI स्टूडियो - नया अकाउंट बनाएं";
+                authSubmitBtn.textContent = "अकाउंट रजिस्टर करें भाई";
+                authToggleMsg.innerHTML = 'पहले से अकाउंट है? <span id="switch-to-login">यहाँ लॉगिन करें</span>';
+            } else {
+                formTitle.textContent = "सचिन AI स्टूडियो - लॉगिन करें";
+                authSubmitBtn.textContent = "लॉगिन करें भाई";
+                authToggleMsg.innerHTML = 'अकाउंट नहीं है? <span id="switch-to-signup">यहाँ नया अकाउंट बनाएं</span>';
+            }
+        }
+    });
+
+    // 🕵️ यूज़र ट्रैकिंग और गेट कीपर मैकेनिज्म
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            console.log("लॉगिन यूज़र आईडी:", user.uid);
+            authScreenArea.style.display = 'none';
+            mainStudioContent.style.display = 'block';
+            loadAllAdvertisements(); // लॉगिन होते ही विज्ञापन लोड करना
+        } else {
+            authScreenArea.style.display = 'block';
+            mainStudioContent.style.display = 'none';
+        }
+    });
+
+    // 📨 फॉर्म सबमिशन हैंडलर (लॉगिन/रजिस्टर एक्शन)
+    authForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = authEmail.value.trim();
+        const password = authPassword.value;
+
+        if(isLoginMode) {
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+            } catch (err) {
+                alert("लॉगिन फेल भाई! ईमेल या पासवर्ड चेक करें: " + err.message);
+            }
+        } else {
+            try {
+                await createUserWithEmailAndPassword(auth, email, password);
+                alert("बधाई हो भाई! आपका अकाउंट सफलतापूर्वक फायरबेस में बन गया है।");
+            } catch (err) {
+                alert("अकाउंट नहीं बन पाया भाई: " + err.message);
+            }
+        }
+    });
+
+    // 🛑 लॉगआउट एक्शन
+    logoutActionBtn.addEventListener('click', () => {
+        signOut(auth).then(() => { alert("लॉगआउट सफल रहा भाई!"); });
+    });
+
+    // 📣 विज्ञापनों को लोड करने वाला कड़क सेफ फ़ंक्शन
+    function loadAllAdvertisements() {
+        try {
+            const loadAd = (id, html) => {
+                const slot = document.getElementById(id);
+                if(slot) {
+                    const doc = slot.contentWindow.document;
+                    doc.open(); doc.write(html); doc.close();
+                }
+            };
+
+            loadAd('ad-slot-1', '<body style="margin:0;padding:0;text-align:center;"><script type="text/javascript">atOptions = { "key" : "5e113b8022609e2135c5e1e265084235", "format" : "iframe", "height" : 90, "width" : 728, "params" : {} };<\/script><script type="text/javascript" src="https://www.highperformanceformat.com/5e113b8022609e2135c5e1e265084235/invoke.js"><\/script><\/body>');
+            loadAd('ad-slot-2', '<body style="margin:0;padding:0;text-align:center;"><script type="text/javascript">atOptions = { "key" : "a0707e197ee3131ba6b6214078c54f86", "format" : "iframe", "height" : 60, "width" : 468, "params" : {} };<\/script><script type="text/javascript" src="https://www.highperformanceformat.com/a0707e197ee3131ba6b6214078c54f86/invoke.js"><\/script><\/body>');
+            loadAd('ad-slot-3', '<body style="margin:0;padding:0;text-align:center;"><script align="async" data-cfasync="false" src="https://p129470507.effectivecpmnetwork.com/3da2a2c535b1a237c281ced645d90888/invoke.js"><\/script><div id="container-3da2a2c535b1a237c281ced645d90888"><\/div><\/body>');
+            loadAd('ad-slot-4', '<body style="margin:0;padding:0;text-align:center;"><script type="text/javascript">atOptions = { "key" : "a0707e197ee3131ba6b6214078c54f86", "format" : "iframe", "height" : 60, "width" : 468, "params" : {} };<\/script><script type="text/javascript" src="https://www.highperformanceformat.com/a0707e197ee3131ba6b6214078c54f86/invoke.js"><\/script><\/body>');
+            loadAd('ad-slot-5', '<body style="margin:0;padding:0;text-align:center;"><script type="text/javascript">atOptions = { "key" : "0cc801bedecd44b65d014707u5a52161", "format" : "iframe", "height" : 250, "width" : 300, "params" : {} };<\/script><script type="text/javascript" src="https://www.highperformanceformat.com/0cc801bedecd44b65d014707u5a52161/invoke.js"><\/script><\/body>');
+            loadAd('ad-slot-6', '<body style="margin:0;padding:0;text-align:center;"><script type="text/javascript">atOptions = { "key" : "5e113b8022609e2135c5e1e265084235", "format" : "iframe", "height" : 90, "width" : 728, "params" : {} };<\/script><script type="text/javascript" src="https://www.highperformanceformat.com/5e113b8022609e2135c5e1e265084235/invoke.js"><\/script><\/body>');
+            loadAd('ad-slot-7', '<body style="margin:0;padding:0;text-align:center;"><script type="text/javascript">atOptions = { "key" : "08830bb1c7d986964025599725f992ec", "format" : "iframe", "height" : 600, "width" : 160, "params" : {} };<\/script><script type="text/javascript" src="https://www.highperformanceformat.com/08830bb1c7d986964025599725f992ec/invoke.js"><\/script><\/body>');
+            loadAd('ad-slot-8', '<body style="margin:0;padding:0;text-align:center;"><script type="text/javascript">atOptions = { "key" : "a0707e197ee3131ba6b6214078c54f86", "format" : "iframe", "height" : 60, "width" : 468, "params" : {} };<\/script><script type="text/javascript" src="https://www.highperformanceformat.com/a0707e197ee3131ba6b6214078c54f86/invoke.js"><\/script><\/body>');
+            loadAd('ad-slot-9', '<body style="margin:0;padding:0;text-align:center;"><script type="text/javascript">atOptions = { "key" : "5e113b8022609e2135c5e1e265084235", "format" : "iframe", "height" : 90, "width" : 728, "params" : {} };<\/script><script type="text/javascript" src="https://www.highperformanceformat.com/5e113b8022609e2135c5e1e265084235/invoke.js"><\/script><\/body>');
+            loadAd('ad-slot-10', '<body style="margin:0;padding:0;text-align:center;"><script align="async" data-cfasync="false" src="https://p129470507.effectivecpmnetwork.com/3da2a2c535b1a237c281ced645d90888/invoke.js"><\/script><div id="container-3da2a2c535b1a237c281ced645d90888"><\/div><\/body>');
+        } catch(e) { console.error("Ad loading error", e); }
+    }
+
+    // 🤖 जेमिनी टेक्स्ट और लाइव वॉयस चैट इंजन
     const chatBox = document.getElementById('chat-box');
     const userInput = document.getElementById('user-input');
     const sendBtn = document.getElementById('send-btn');
@@ -329,10 +454,10 @@
 
     userInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendBtn.click(); });
 
-    // 🎙️ लाइव बोलकर बात करने का सिस्टम
+    // 🎙️ लाइव वॉयस चैट सिस्टम
     const voiceBtn = document.getElementById('voice-chat-btn');
     const voiceStatus = document.getElementById('voice-status');
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSynthesisSpeechRecognition || window.webkitSpeechRecognition;
 
     if (SpeechRecognition) {
         const recognition = new SpeechRecognition();
@@ -367,7 +492,7 @@
         voiceStatus.textContent = "वॉयस चैट के लिए क्रोम ब्राउज़र यूज़ करें भाई!";
     }
 
-    // 🖼️ ऑटो-बैकग्राउंड रिमूवर कड़क फोटो जनरेटर लैब
+    // 🖼️ कड़क साफ फोटो जनरेटर लैब
     generatePhotoBtn.addEventListener('click', () => {
         const promptText = photoPrompt.value.trim();
         if (promptText === "") {
@@ -403,4 +528,5 @@
 </script>
 
 </body>
-</html>
+            </html>
+            
