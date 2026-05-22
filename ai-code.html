@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Code Generator - सचिन एआई</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background: #060910; color: #e1e7f0; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: linear-gradient(135deg,#0a0e1a,#091020); border-bottom: 1px solid rgba(99,102,241,0.3); padding: 14px 20px; display: flex; align-items: center; gap: 14px; position: sticky; top: 0; z-index: 100; }
+        .back-btn { color: #818cf8; text-decoration: none; font-size: 1.3rem; }
+        .page-title { font-size: 1.1rem; font-weight: 700; color: #818cf8; }
+        .page-sub { font-size: 0.75rem; color: #64748b; }
+
+        main { flex: 1; display: grid; grid-template-columns: 360px 1fr; min-height: calc(100vh - 60px); }
+        @media (max-width: 768px) { main { grid-template-columns: 1fr; } .output-panel { min-height: 50vh; } }
+
+        /* ---- Input Panel ---- */
+        .input-panel { background: #0d1117; border-right: 1px solid rgba(255,255,255,0.06); padding: 20px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; }
+        .panel-label { font-size: 0.8rem; font-weight: 700; color: #818cf8; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+
+        .lang-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+        .lang-btn { padding: 10px 4px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.03); cursor: pointer; text-align: center; font-family: inherit; transition: all 0.2s; }
+        .lang-btn:hover, .lang-btn.selected { border-color: #818cf8; background: rgba(129,140,248,0.1); }
+        .lang-icon { font-size: 1.3rem; display: block; margin-bottom: 4px; }
+        .lang-name { font-size: 0.68rem; font-weight: 700; color: #94a3b8; }
+        .lang-btn.selected .lang-name { color: #818cf8; }
+
+        .examples-box { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 12px; }
+        .ex-label { font-size: 0.72rem; color: #475569; margin-bottom: 8px; }
+        .ex-chip { display: inline-block; padding: 5px 10px; border-radius: 20px; border: 1px solid rgba(129,140,248,0.2); background: rgba(129,140,248,0.05); color: #818cf8; font-size: 0.7rem; cursor: pointer; margin: 3px 2px; transition: all 0.2s; }
+        .ex-chip:hover { background: rgba(129,140,248,0.15); border-color: #818cf8; }
+
+        textarea.prompt { width: 100%; padding: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(129,140,248,0.2); border-radius: 12px; color: #e1e7f0; font-size: 0.85rem; resize: vertical; min-height: 100px; font-family: inherit; outline: none; line-height: 1.5; }
+        textarea.prompt:focus { border-color: #818cf8; box-shadow: 0 0 0 3px rgba(129,140,248,0.1); }
+        textarea.prompt::placeholder { color: #334155; }
+
+        .gen-btn { width: 100%; padding: 15px; font-size: 1rem; font-weight: 700; border: none; border-radius: 14px; cursor: pointer; background: linear-gradient(135deg,#818cf8,#6366f1); color: #fff; font-family: inherit; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .gen-btn:hover { box-shadow: 0 0 24px rgba(129,140,248,0.4); transform: translateY(-1px); }
+        .gen-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        /* ---- Output Panel ---- */
+        .output-panel { display: flex; flex-direction: column; background: #0a0d14; }
+        .output-tabs { display: flex; background: #0d1117; border-bottom: 1px solid rgba(255,255,255,0.06); padding: 0 16px; gap: 4px; }
+        .tab-btn { padding: 12px 18px; font-size: 0.8rem; font-weight: 600; cursor: pointer; border: none; background: transparent; color: #475569; font-family: inherit; border-bottom: 2px solid transparent; transition: all 0.2s; }
+        .tab-btn.active { color: #818cf8; border-bottom-color: #818cf8; }
+        .tab-btn:hover { color: #94a3b8; }
+
+        .code-area { flex: 1; position: relative; display: none; }
+        .code-area.active { display: flex; flex-direction: column; }
+        .code-toolbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: #0d1117; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .code-lang-tag { font-size: 0.72rem; padding: 3px 10px; border-radius: 20px; background: rgba(129,140,248,0.12); color: #818cf8; font-weight: 700; }
+        .toolbar-btns { display: flex; gap: 8px; }
+        .t-btn { padding: 6px 14px; border-radius: 8px; font-size: 0.75rem; cursor: pointer; font-family: inherit; transition: all 0.2s; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); color: #94a3b8; }
+        .t-btn:hover { background: rgba(255,255,255,0.1); color: #e1e7f0; }
+        .t-btn.copied { border-color: #10b981; color: #10b981; background: rgba(16,185,129,0.1); }
+
+        pre { flex: 1; overflow: auto; padding: 20px; font-size: 0.82rem; line-height: 1.7; font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace; white-space: pre; color: #e2e8f0; background: transparent; tab-size: 2; }
+
+        /* Syntax highlighting */
+        .kw { color: #c792ea; } /* keywords */
+        .str { color: #c3e88d; } /* strings */
+        .cm { color: #546e7a; font-style: italic; } /* comments */
+        .fn { color: #82aaff; } /* functions */
+        .num { color: #f78c6c; } /* numbers */
+        .tag { color: #f07178; } /* HTML tags */
+        .attr { color: #ffcb6b; } /* attributes */
+        .val { color: #c3e88d; } /* values */
+        .sel { color: #89ddff; } /* CSS selectors */
+        .prop { color: #80cbc4; } /* CSS properties */
+
+        .preview-area { flex: 1; display: none; }
+        .preview-area.active { display: flex; flex-direction: column; }
+        .preview-area iframe { flex: 1; border: none; width: 100%; background: #fff; }
+
+        .placeholder-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #1e293b; gap: 14px; padding: 40px; }
+        .ph-icon { font-size: 4rem; opacity: 0.3; }
+        .ph-title { font-size: 1.1rem; font-weight: 700; color: #334155; }
+        .ph-sub { font-size: 0.82rem; color: #1e293b; text-align: center; line-height: 1.5; }
+
+        .spinner-overlay { position: absolute; inset: 0; background: rgba(6,9,16,0.85); display: none; flex-direction: column; align-items: center; justify-content: center; gap: 16px; z-index: 50; }
+        .spinner-overlay.show { display: flex; }
+        .spin-ring { width: 52px; height: 52px; border: 3px solid rgba(129,140,248,0.2); border-top-color: #818cf8; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spin-txt { color: #818cf8; font-size: 0.9rem; font-weight: 600; }
+        .spin-sub { color: #475569; font-size: 0.78rem; }
+
+        .char-count { font-size: 0.7rem; color: #334155; text-align: right; margin-top: 4px; }
+        .line-count { font-size: 0.72rem; color: #475569; }
+    </style>
+</head>
+<body>
+<header>
+    <a href="index.html" class="back-btn">←</a>
+    <div>
+        <div class="page-title">💻 AI Code Generator</div>
+        <div class="page-sub">बताओ क्या बनाना है — AI पूरा Code लिखेगा</div>
+    </div>
+</header>
+
+<main>
+    <!-- Input Panel -->
+    <div class="input-panel">
+        <div>
+            <div class="panel-label">Language / Framework</div>
+            <div class="lang-grid" id="langGrid">
+                <div class="lang-btn selected" data-lang="html" onclick="selectLang(this)">
+                    <span class="lang-icon">🌐</span><div class="lang-name">HTML</div>
+                </div>
+                <div class="lang-btn" data-lang="css" onclick="selectLang(this)">
+                    <span class="lang-icon">🎨</span><div class="lang-name">CSS</div>
+                </div>
+                <div class="lang-btn" data-lang="javascript" onclick="selectLang(this)">
+                    <span class="lang-icon">⚡</span><div class="lang-name">JavaScript</div>
+                </div>
+                <div class="lang-btn" data-lang="python" onclick="selectLang(this)">
+                    <span class="lang-icon">🐍</span><div class="lang-name">Python</div>
+                </div>
+                <div class="lang-btn" data-lang="react" onclick="selectLang(this)">
+                    <span class="lang-icon">⚛️</span><div class="lang-name">React</div>
+                </div>
+                <div class="lang-btn" data-lang="nodejs" onclick="selectLang(this)">
+                    <span class="lang-icon">🟩</span><div class="lang-name">Node.js</div>
+                </div>
+                <div class="lang-btn" data-lang="sql" onclick="selectLang(this)">
+                    <span class="lang-icon">🗄️</span><div class="lang-name">SQL</div>
+                </div>
+                <div class="lang-btn" data-lang="java" onclick="selectLang(this)">
+                    <span class="lang-icon">☕</span><div class="lang-name">Java</div>
+                </div>
+                <div class="lang-btn" data-lang="cpp" onclick="selectLang(this)">
+                    <span class="lang-icon">⚙️</span><div class="lang-name">C++</div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="panel-label">Quick Examples</div>
+            <div class="examples-box">
+                <div class="ex-label">इन पर click करके try करें:</div>
+                <span class="ex-chip" onclick="setExample(this)">सुंदर Landing Page</span>
+                <span class="ex-chip" onclick="setExample(this)">Calculator App</span>
+                <span class="ex-chip" onclick="setExample(this)">Animated Login Form</span>
+                <span class="ex-chip" onclick="setExample(this)">Portfolio Website</span>
+                <span class="ex-chip" onclick="setExample(this)">Todo List App</span>
+                <span class="ex-chip" onclick="setExample(this)">Student Record DB</span>
+                <span class="ex-chip" onclick="setExample(this)">Snake Game</span>
+                <span class="ex-chip" onclick="setExample(this)">REST API Server</span>
+                <span class="ex-chip" onclick="setExample(this)">Bubble Sort Program</span>
+                <span class="ex-chip" onclick="setExample(this)">Quiz App with Score</span>
+            </div>
+        </div>
+
+        <div>
+            <div class="panel-label">क्या बनाना है? बताओ</div>
+            <textarea class="prompt" id="promptInput" maxlength="1000"
+                placeholder="जैसे: मुझे एक सुंदर HTML page चाहिए जिसमें dark theme हो, animated hero section हो, और 3 feature cards हों..."></textarea>
+            <div class="char-count"><span id="charCount">0</span>/1000</div>
+        </div>
+
+        <button class="gen-btn" id="genBtn" onclick="generateCode()">
+            <span>💻</span> <span>Code Generate करें</span>
+        </button>
+    </div>
+
+    <!-- Output Panel -->
+    <div class="output-panel">
+        <div class="output-tabs">
+            <button class="tab-btn active" id="tabCode" onclick="switchTab('code')">📄 Code</button>
+            <button class="tab-btn" id="tabPreview" onclick="switchTab('preview')" style="display:none">👁️ Preview</button>
+        </div>
+
+        <div class="code-area active" id="codeArea" style="position:relative">
+            <div class="spinner-overlay" id="spinner">
+                <div class="spin-ring"></div>
+                <div class="spin-txt">⚡ AI Code लिख रहा है...</div>
+                <div class="spin-sub">Gemini 1.5 Flash processing...</div>
+            </div>
+
+            <div id="placeholderState" class="placeholder-state">
+                <div class="ph-icon">💻</div>
+                <div class="ph-title">Code यहाँ दिखेगा</div>
+                <div class="ph-sub">Language चुनो, describe करो और Generate बटन दबाओ — AI तुरंत पूरा code लिखेगा</div>
+            </div>
+
+            <div id="codeDisplay" style="display:none;flex:1;flex-direction:column;overflow:hidden;">
+                <div class="code-toolbar">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <span class="code-lang-tag" id="langTag">HTML</span>
+                        <span class="line-count" id="lineCount"></span>
+                    </div>
+                    <div class="toolbar-btns">
+                        <button class="t-btn" id="copyBtn" onclick="copyCode()">📋 Copy</button>
+                        <button class="t-btn" onclick="downloadCode()">📥 Download</button>
+                        <button class="t-btn" onclick="generateCode()">🔄 Regenerate</button>
+                    </div>
+                </div>
+                <pre id="codeOutput"></pre>
+            </div>
+        </div>
+
+        <div class="preview-area" id="previewArea">
+            <iframe id="previewFrame" sandbox="allow-scripts allow-same-origin"></iframe>
+        </div>
+    </div>
+</main>
+
+<script>
+    let currentLang = 'html';
+    let currentCode = '';
+
+    document.getElementById('promptInput').addEventListener('input', function() {
+        document.getElementById('charCount').textContent = this.value.length;
+    });
+
+    function selectLang(el) {
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('selected'));
+        el.classList.add('selected');
+        currentLang = el.dataset.lang;
+        // Hide preview tab for non-HTML
+        const showPreview = ['html'].includes(currentLang);
+        document.getElementById('tabPreview').style.display = showPreview ? 'block' : 'none';
+        if (!showPreview && document.getElementById('tabPreview').classList.contains('active')) {
+            switchTab('code');
+        }
+    }
+
+    function setExample(el) {
+        const examples = {
+            'सुंदर Landing Page': 'मुझे एक सुंदर dark theme Landing Page बनाएं जिसमें animated hero section हो, 3 feature cards हों, एक testimonial section और footer हो।',
+            'Calculator App': 'एक fully functional Calculator बनाएं जिसमें basic operations (+, -, ×, ÷) हों, keyboard support हो और dark theme हो।',
+            'Animated Login Form': 'एक सुंदर animated login/signup form बनाएं जिसमें glassmorphism effect हो, validation हो और smooth transitions हों।',
+            'Portfolio Website': 'एक professional portfolio website बनाएं जिसमें skills section, projects grid, about me और contact form हो।',
+            'Todo List App': 'एक interactive Todo List app बनाएं जिसमें add/delete/complete tasks हो, local storage में save हो और filter options हों।',
+            'Student Record DB': 'एक Student management system के लिए SQL database schema बनाएं जिसमें students, courses, grades tables हों with proper JOINs।',
+            'Snake Game': 'एक playable Snake game बनाएं canvas पर जिसमें score tracking हो, speed increase हो और game over screen हो।',
+            'REST API Server': 'एक Node.js Express REST API server बनाएं जिसमें CRUD operations हों for a Products API with proper error handling।',
+            'Bubble Sort Program': 'Bubble Sort algorithm का implementation बनाएं जिसमें array visualization हो और step-by-step explanation comments हों।',
+            'Quiz App with Score': 'एक interactive Quiz App बनाएं जिसमें multiple choice questions हों, timer हो, score tracking हो और result page हो।',
+        };
+        document.getElementById('promptInput').value = examples[el.textContent] || el.textContent;
+        document.getElementById('charCount').textContent = document.getElementById('promptInput').value.length;
+    }
+
+    function switchTab(tab) {
+        document.getElementById('tabCode').classList.toggle('active', tab === 'code');
+        document.getElementById('tabPreview').classList.toggle('active', tab === 'preview');
+        document.getElementById('codeArea').classList.toggle('active', tab === 'code');
+        document.getElementById('previewArea').classList.toggle('active', tab === 'preview');
+    }
+
+    async function generateCode() {
+        const prompt = document.getElementById('promptInput').value.trim();
+        if (!prompt) { alert('कृपया बताएं क्या बनाना है!'); return; }
+
+        // Show spinner
+        document.getElementById('genBtn').disabled = true;
+        document.getElementById('spinner').classList.add('show');
+        document.getElementById('placeholderState').style.display = 'none';
+        document.getElementById('codeDisplay').style.display = 'none';
+        switchTab('code');
+
+        try {
+            const res = await fetch('/generate-code', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ description: prompt, language: currentLang })
+            });
+            if (!res.ok) throw new Error('Server error: ' + res.status);
+            const data = await res.json();
+            if (data.error) throw new Error(data.error);
+
+            currentCode = data.code;
+            displayCode(currentCode, currentLang);
+
+            // Enable preview for HTML
+            if (currentLang === 'html') {
+                document.getElementById('tabPreview').style.display = 'block';
+                document.getElementById('previewFrame').srcdoc = currentCode;
+            }
+        } catch (err) {
+            document.getElementById('placeholderState').style.display = 'flex';
+            document.getElementById('placeholderState').innerHTML = `
+                <div class="ph-icon">❌</div>
+                <div class="ph-title" style="color:#ef4444">Error आया</div>
+                <div class="ph-sub" style="color:#ef4444">${err.message}</div>`;
+        } finally {
+            document.getElementById('spinner').classList.remove('show');
+            document.getElementById('genBtn').disabled = false;
+        }
+    }
+
+    function displayCode(code, lang) {
+        const lines = code.split('\n');
+        document.getElementById('lineCount').textContent = `${lines.length} lines`;
+        document.getElementById('langTag').textContent = lang.toUpperCase();
+
+        // Apply basic syntax highlighting
+        const highlighted = highlightCode(code, lang);
+        document.getElementById('codeOutput').innerHTML = highlighted;
+
+        document.getElementById('codeDisplay').style.display = 'flex';
+        document.getElementById('codeDisplay').style.flexDirection = 'column';
+        document.getElementById('codeDisplay').style.overflow = 'hidden';
+        document.getElementById('codeDisplay').style.flex = '1';
+    }
+
+    function highlightCode(code, lang) {
+        let esc = code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+        if (lang === 'html') {
+            esc = esc
+                .replace(/(&lt;\/?)([\w-]+)/g, '$1<span class="tag">$2</span>')
+                .replace(/([\w-]+)(=)(&quot;[^&]*&quot;)/g, '<span class="attr">$1</span>$2<span class="val">$3</span>')
+                .replace(/(&lt;!--[\s\S]*?--&gt;)/g, '<span class="cm">$1</span>');
+        } else if (lang === 'css') {
+            esc = esc
+                .replace(/(\/\*[\s\S]*?\*\/)/g, '<span class="cm">$1</span>')
+                .replace(/([.#]?[\w-]+)\s*\{/g, '<span class="sel">$1</span> {')
+                .replace(/([\w-]+)(\s*:)/g, '<span class="prop">$1</span>$2');
+        } else if (lang === 'javascript' || lang === 'nodejs' || lang === 'react') {
+            esc = esc
+                .replace(/(\/\/[^\n]*)/g, '<span class="cm">$1</span>')
+                .replace(/\b(const|let|var|function|return|if|else|for|while|class|import|export|from|async|await|new|this|typeof|true|false|null|undefined)\b/g, '<span class="kw">$1</span>')
+                .replace(/(&#39;[^&#]*&#39;|&quot;[^&]*&quot;|`[^`]*`)/g, '<span class="str">$1</span>')
+                .replace(/\b([A-Z][\w]*)\b/g, '<span class="fn">$1</span>')
+                .replace(/\b(\d+\.?\d*)\b/g, '<span class="num">$1</span>');
+        } else if (lang === 'python') {
+            esc = esc
+                .replace(/(#[^\n]*)/g, '<span class="cm">$1</span>')
+                .replace(/\b(def|class|import|from|return|if|elif|else|for|while|in|not|and|or|True|False|None|print|self|try|except|with|as)\b/g, '<span class="kw">$1</span>')
+                .replace(/(&#39;[^&#]*&#39;|&quot;[^&]*&quot;)/g, '<span class="str">$1</span>')
+                .replace(/\b(\d+)\b/g, '<span class="num">$1</span>');
+        } else if (lang === 'sql') {
+            esc = esc
+                .replace(/(--[^\n]*)/g, '<span class="cm">$1</span>')
+                .replace(/\b(SELECT|FROM|WHERE|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|DATABASE|INDEX|JOIN|LEFT|RIGHT|INNER|ON|AND|OR|NOT|NULL|PRIMARY|KEY|FOREIGN|REFERENCES|AUTO_INCREMENT|VARCHAR|INT|TEXT|DATETIME|DROP|ALTER|ADD|COLUMN|CONSTRAINT|UNIQUE)\b/gi, '<span class="kw">$1</span>')
+                .replace(/(&#39;[^&#]*&#39;)/g, '<span class="str">$1</span>');
+        } else if (lang === 'java' || lang === 'cpp') {
+            esc = esc
+                .replace(/(\/\/[^\n]*)/g, '<span class="cm">$1</span>')
+                .replace(/(\/\*[\s\S]*?\*\/)/g, '<span class="cm">$1</span>')
+                .replace(/\b(public|private|protected|static|void|int|String|boolean|class|new|return|if|else|for|while|import|package|this|super|extends|implements|final|abstract|try|catch|throw)\b/g, '<span class="kw">$1</span>')
+                .replace(/(&quot;[^&]*&quot;)/g, '<span class="str">$1</span>')
+                .replace(/\b(\d+)\b/g, '<span class="num">$1</span>');
+        }
+        return esc;
+    }
+
+    function copyCode() {
+        if (!currentCode) return;
+        navigator.clipboard.writeText(currentCode).then(() => {
+            const btn = document.getElementById('copyBtn');
+            btn.textContent = '✅ Copied!';
+            btn.classList.add('copied');
+            setTimeout(() => { btn.textContent = '📋 Copy'; btn.classList.remove('copied'); }, 2000);
+        });
+    }
+
+    function downloadCode() {
+        if (!currentCode) return;
+        const ext = { html:'html', css:'css', javascript:'js', python:'py', react:'jsx', nodejs:'js', sql:'sql', java:'java', cpp:'cpp', php:'php' };
+        const a = document.createElement('a');
+        a.download = `sachin-ai-code.${ext[currentLang] || 'txt'}`;
+        a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(currentCode);
+        a.click();
+    }
+
+    // Allow Enter with Ctrl to generate
+    document.getElementById('promptInput').addEventListener('keydown', e => {
+        if (e.ctrlKey && e.key === 'Enter') generateCode();
+    });
+</script>
+<script src="/tracker.js"></script>
+<script src="/ads.js"></script>
+</body>
+</html>

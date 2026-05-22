@@ -116,6 +116,50 @@ app.post('/generate-video', upload.array('files'), (req, res) => {
     });
 });
 
+// ---- AI Code Generator Endpoint ----
+app.post('/generate-code', async (req, res) => {
+    const { description, language } = req.body;
+    if (!description) return res.status(400).json({ error: 'Description required' });
+
+    const langInstructions = {
+        html: 'Write a complete, beautiful, modern HTML page with embedded CSS and JavaScript. Use gradients, animations, and modern design. Return ONLY the raw HTML code, no markdown fences.',
+        css: 'Write complete, beautiful CSS code with modern techniques (flexbox, grid, animations, custom properties). Return ONLY the raw CSS code, no markdown fences.',
+        javascript: 'Write clean, modern JavaScript (ES6+) code. Include comments. Return ONLY the raw JS code, no markdown fences.',
+        python: 'Write clean, well-commented Python code with proper structure. Return ONLY the raw Python code, no markdown fences.',
+        react: 'Write a complete React functional component with hooks. Use modern JSX. Return ONLY the raw JSX/React code, no markdown fences.',
+        nodejs: 'Write a complete Node.js/Express server or script. Return ONLY the raw code, no markdown fences.',
+        sql: 'Write complete, well-structured SQL queries/schema. Return ONLY the raw SQL code, no markdown fences.',
+        java: 'Write clean Java code with proper class structure. Return ONLY the raw Java code, no markdown fences.',
+        cpp: 'Write clean C++ code. Return ONLY the raw C++ code, no markdown fences.',
+        php: 'Write complete PHP code. Return ONLY the raw PHP code, no markdown fences.',
+    };
+
+    const sysPrompt = langInstructions[language] || 'Write clean, well-structured code. Return ONLY the raw code, no markdown fences.';
+    const fullPrompt = `${sysPrompt}\n\nUser request: ${description}\n\nIMPORTANT: Return ONLY the code itself — no explanation, no markdown code fences, no \`\`\` blocks. Just the raw code.`;
+
+    try {
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+        const payload = { contents: [{ parts: [{ text: fullPrompt }] }] };
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        if (!response.ok) {
+            const errText = await response.text();
+            return res.status(500).json({ error: 'Gemini API failed', detail: errText });
+        }
+        const data = await response.json();
+        let code = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        // Strip any accidental markdown fences
+        code = code.replace(/^```[\w]*\n?/gm, '').replace(/^```$/gm, '').trim();
+        res.json({ code, language });
+    } catch (err) {
+        console.error('Code gen error:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // ---- Serve Static Files ----
 app.use(express.static(path.join(__dirname)));
 

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard - सचिन एआई</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background: #080c16; color: #e1e7f0; min-height: 100vh; }
+        header { background: linear-gradient(135deg,#0a0e1a,#0a1a10); border-bottom: 1px solid rgba(16,185,129,0.3); padding: 14px 20px; display: flex; align-items: center; gap: 14px; position: sticky; top: 0; z-index: 100; }
+        .back-btn { color: #10b981; text-decoration: none; font-size: 1.3rem; }
+        .page-title { font-size: 1.1rem; font-weight: 700; color: #10b981; }
+        .page-sub { font-size: 0.75rem; color: #64748b; }
+        main { padding: 20px 16px; max-width: 900px; margin: 0 auto; }
+
+        .stats-hero { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 24px; }
+        .stat-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(16,185,129,0.2); border-radius: 16px; padding: 18px; text-align: center; }
+        .stat-icon { font-size: 1.8rem; margin-bottom: 8px; }
+        .stat-val { font-size: 2rem; font-weight: 900; color: #10b981; line-height: 1; }
+        .stat-label { font-size: 0.75rem; color: #64748b; margin-top: 4px; }
+
+        .section-title { font-size: 0.95rem; font-weight: 700; color: #10b981; margin: 24px 0 14px; display: flex; align-items: center; gap: 8px; }
+        .section-title::after { content: ''; flex: 1; height: 1px; background: rgba(16,185,129,0.15); }
+
+        .bar-list { display: flex; flex-direction: column; gap: 10px; }
+        .bar-item { display: grid; grid-template-columns: 160px 1fr 60px; align-items: center; gap: 10px; }
+        .bar-name { font-size: 0.8rem; color: #94a3b8; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .bar-track { background: rgba(255,255,255,0.05); border-radius: 20px; height: 10px; overflow: hidden; }
+        .bar-fill { height: 100%; border-radius: 20px; background: linear-gradient(90deg,#10b981,#06b6d4); transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .bar-count { font-size: 0.8rem; font-weight: 700; color: #10b981; }
+
+        .daily-grid { display: grid; grid-template-columns: repeat(14, 1fr); gap: 4px; }
+        .day-cell { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .day-bar-wrap { width: 100%; display: flex; align-items: flex-end; height: 50px; }
+        .day-bar { width: 100%; border-radius: 4px 4px 0 0; background: linear-gradient(to top,#10b981,#06b6d4); min-height: 3px; transition: height 0.5s ease; }
+        .day-label { font-size: 0.55rem; color: #475569; text-align: center; }
+
+        .empty-state { text-align: center; padding: 40px; color: #475569; }
+        .empty-icon { font-size: 3rem; margin-bottom: 12px; opacity: 0.4; }
+        .empty-txt { font-size: 0.85rem; }
+
+        .reset-btn { padding: 8px 20px; border-radius: 10px; border: 1px solid rgba(239,68,68,0.3); background: rgba(239,68,68,0.05); color: #ef4444; font-size: 0.78rem; cursor: pointer; font-family: inherit; transition: all 0.2s; float: right; margin-top: -4px; }
+        .reset-btn:hover { background: rgba(239,68,68,0.12); }
+
+        .top-badge { background: linear-gradient(135deg,#f59e0b,#d97706); color: #000; font-size: 0.6rem; font-weight: 700; padding: 1px 6px; border-radius: 10px; margin-left: 6px; }
+
+        @media (max-width:600px) { .bar-item { grid-template-columns: 110px 1fr 50px; } .bar-name { font-size: 0.72rem; } }
+    </style>
+</head>
+<body>
+<header>
+    <a href="index.html" class="back-btn">←</a>
+    <div>
+        <div class="page-title">📊 Analytics Dashboard</div>
+        <div class="page-sub">आपके AI Studio का उपयोग कैसा है — देखें</div>
+    </div>
+</header>
+<main>
+    <div class="stats-hero" id="heroStats">
+        <div class="stat-card"><div class="stat-icon">👁️</div><div class="stat-val" id="totalVisits">0</div><div class="stat-label">Total Page Views</div></div>
+        <div class="stat-card"><div class="stat-icon">🛠️</div><div class="stat-val" id="toolsUsed">0</div><div class="stat-label">Tools Tried</div></div>
+        <div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-val" id="favTool">—</div><div class="stat-label">Favorite Tool</div></div>
+        <div class="stat-card"><div class="stat-icon">📅</div><div class="stat-val" id="todayCount">0</div><div class="stat-label">Today's Visits</div></div>
+    </div>
+
+    <div class="section-title">
+        🏆 Tool Usage Ranking
+        <button class="reset-btn" onclick="resetStats()">🗑 Reset</button>
+    </div>
+    <div id="barChartArea" class="bar-list"></div>
+
+    <div class="section-title">📅 Last 14 Days Activity</div>
+    <div id="dailyChart" class="daily-grid"></div>
+</main>
+
+<script src="/tracker.js"></script>
+<script>
+    function loadStats() {
+        const stats = JSON.parse(localStorage.getItem('sachin_ai_stats') || '{}');
+        const daily = JSON.parse(localStorage.getItem('sachin_ai_daily') || '{}');
+        const today = new Date().toISOString().split('T')[0];
+
+        const entries = Object.entries(stats).filter(([k]) => k !== 'analytics.html');
+        const totalVisits = entries.reduce((s, [, v]) => s + v.visits, 0);
+        const toolsUsed = entries.filter(([, v]) => v.visits > 0).length;
+
+        document.getElementById('totalVisits').textContent = totalVisits;
+        document.getElementById('toolsUsed').textContent = toolsUsed;
+        document.getElementById('todayCount').textContent = daily[today] || 0;
+
+        entries.sort((a, b) => b[1].visits - a[1].visits);
+        const maxVisits = entries[0]?.[1]?.visits || 1;
+
+        if (entries.length === 0) {
+            document.getElementById('barChartArea').innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">📊</div>
+                    <div class="empty-txt">कोई data नहीं है अभी। Tools use करना शुरू करो!</div>
+                </div>`;
+            document.getElementById('favTool').textContent = '—';
+        } else {
+            const favName = entries[0][1].name || entries[0][0];
+            const shortName = favName.length > 6 ? favName.slice(0, 5) + '..' : favName;
+            document.getElementById('favTool').textContent = shortName;
+
+            document.getElementById('barChartArea').innerHTML = entries.slice(0, 16).map(([key, val], i) => `
+                <div class="bar-item">
+                    <div class="bar-name">${val.name || key}${i === 0 ? '<span class="top-badge">TOP</span>' : ''}</div>
+                    <div class="bar-track"><div class="bar-fill" style="width:0%" data-pct="${Math.round((val.visits / maxVisits) * 100)}"></div></div>
+                    <div class="bar-count">${val.visits}</div>
+                </div>`).join('');
+
+            // Animate bars after render
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    document.querySelectorAll('.bar-fill').forEach(bar => {
+                        bar.style.width = bar.dataset.pct + '%';
+                    });
+                });
+            });
+        }
+
+        // Daily chart
+        const allDays = [];
+        for (let i = 13; i >= 0; i--) {
+            const d = new Date(); d.setDate(d.getDate() - i);
+            allDays.push(d.toISOString().split('T')[0]);
+        }
+        const maxDay = Math.max(...allDays.map(d => daily[d] || 0), 1);
+
+        document.getElementById('dailyChart').innerHTML = allDays.map(d => {
+            const count = daily[d] || 0;
+            const h = Math.max(3, Math.round((count / maxDay) * 46));
+            const label = d.slice(5);
+            const isToday = d === today;
+            return `<div class="day-cell">
+                <div class="day-bar-wrap"><div class="day-bar" style="height:${h}px;${isToday ? 'box-shadow:0 0 8px #10b981' : ''}"></div></div>
+                <div class="day-label" style="${isToday ? 'color:#10b981' : ''}">${label}</div>
+            </div>`;
+        }).join('');
+    }
+
+    function resetStats() {
+        if (!confirm('सारा data delete हो जाएगा। Confirm?')) return;
+        localStorage.removeItem('sachin_ai_stats');
+        localStorage.removeItem('sachin_ai_daily');
+        localStorage.removeItem('sachin_ai_sessions');
+        loadStats();
+    }
+
+    loadStats();
+</script>
+<script src="/ads.js"></script>
+</body>
+</html>
