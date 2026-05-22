@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Variations - सचिन एआई</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background: #080c16; color: #e1e7f0; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: linear-gradient(135deg,#0a0e1a,#0a1220); border-bottom: 1px solid rgba(250,204,21,0.3); padding: 14px 20px; display: flex; align-items: center; gap: 14px; }
+        .back-btn { color: #facc15; text-decoration: none; font-size: 1.3rem; }
+        .page-title { font-size: 1.1rem; font-weight: 700; color: #facc15; }
+        .page-sub { font-size: 0.75rem; color: #64748b; }
+        main { flex: 1; padding: 24px 16px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        .card { width: 100%; max-width: 680px; background: rgba(255,255,255,0.04); border: 1px solid rgba(250,204,21,0.2); border-radius: 20px; padding: 24px; }
+        .card-title { font-size: 0.9rem; font-weight: 700; color: #facc15; margin-bottom: 14px; }
+        .upload-zone { border: 2px dashed rgba(250,204,21,0.3); border-radius: 14px; padding: 28px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .upload-zone:hover { border-color: #facc15; background: rgba(250,204,21,0.04); }
+        .upload-zone input { display: none; }
+        .upload-icon { font-size: 2.5rem; margin-bottom: 8px; }
+        .upload-text { color: #64748b; font-size: 0.85rem; }
+        .upload-text b { color: #facc15; }
+        .preview-img { width: 120px; height: 120px; object-fit: cover; border-radius: 12px; border: 2px solid rgba(250,204,21,0.3); margin: 12px auto 0; display: none; }
+        textarea.desc { width: 100%; padding: 12px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: #fff; font-size: 0.85rem; resize: none; height: 70px; font-family: inherit; outline: none; margin: 12px 0; }
+        textarea.desc:focus { border-color: #facc15; }
+        .variation-styles { margin: 8px 0 14px; }
+        .vs-label { font-size: 0.8rem; color: #94a3b8; margin-bottom: 8px; font-weight: 600; }
+        .vs-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .vs-set { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 10px 6px; }
+        .vs-set-title { font-size: 0.72rem; font-weight: 700; color: #facc15; text-align: center; margin-bottom: 6px; }
+        .vs-option { padding: 6px; border-radius: 8px; border: 1px solid transparent; font-size: 0.7rem; color: #94a3b8; cursor: pointer; text-align: center; margin-bottom: 4px; font-family: inherit; width: 100%; background: transparent; transition: all 0.2s; }
+        .vs-option:hover, .vs-option.selected { border-color: #facc15; color: #facc15; background: rgba(250,204,21,0.08); }
+        .gen-btn { width: 100%; padding: 15px; font-size: 1rem; font-weight: 700; border: none; border-radius: 14px; cursor: pointer; background: linear-gradient(135deg,#facc15,#eab308); color: #0a0e1a; font-family: inherit; transition: all 0.3s; }
+        .gen-btn:hover { box-shadow: 0 0 24px rgba(250,204,21,0.4); transform: translateY(-1px); }
+        .gen-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .spinner-box { text-align: center; padding: 20px; display: none; }
+        .spin-ring { width: 44px; height: 44px; border: 3px solid rgba(250,204,21,0.2); border-top-color: #facc15; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 10px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spin-txt { color: #facc15; font-size: 0.85rem; }
+        .variations-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 10px; }
+        .variation-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(250,204,21,0.15); border-radius: 14px; overflow: hidden; }
+        .variation-img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; background: #111; }
+        .variation-footer { padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; }
+        .variation-label { font-size: 0.78rem; font-weight: 700; color: #facc15; }
+        .var-dl-btn { padding: 5px 12px; border-radius: 8px; border: 1px solid rgba(250,204,21,0.3); background: transparent; color: #facc15; font-size: 0.72rem; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+        .var-dl-btn:hover { background: rgba(250,204,21,0.1); }
+        .loading-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px; }
+        .loading-card .mini-spin { width: 28px; height: 28px; border: 2px solid rgba(250,204,21,0.2); border-top-color: #facc15; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        .loading-card span { font-size: 0.75rem; color: #64748b; }
+    </style>
+</head>
+<body>
+<header>
+    <a href="index.html" class="back-btn">←</a>
+    <div>
+        <div class="page-title">🎲 AI Image Variations Generator</div>
+        <div class="page-sub">एक फोटो से 3 अलग Artistic Variations बनाओ</div>
+    </div>
+</header>
+<main>
+    <div class="card">
+        <div class="card-title">Step 1 — फोटो अपलोड करें & विवरण दें</div>
+        <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+            <div class="upload-icon">🖼️</div>
+            <div class="upload-text"><b>Reference फोटो अपलोड करें</b></div>
+            <input type="file" id="fileInput" accept="image/*" onchange="loadImg(event)">
+        </div>
+        <img id="previewImg" class="preview-img" alt="Preview">
+        <textarea class="desc" id="descInput" placeholder="फोटो का विवरण दें — जैसे: A young Indian woman in traditional dress, outdoor, golden light..."></textarea>
+
+        <div class="variation-styles">
+            <div class="vs-label">Step 2 — 3 Variations के Styles चुनें</div>
+            <div class="vs-row">
+                <div class="vs-set">
+                    <div class="vs-set-title">Variation 1</div>
+                    <button class="vs-option selected" data-slot="1" data-prompt="photorealistic, 8K, DSLR, cinematic lighting">Realistic</button>
+                    <button class="vs-option" data-slot="1" data-prompt="anime style, vibrant, manga illustration">Anime</button>
+                    <button class="vs-option" data-slot="1" data-prompt="oil painting, impressionist, artistic">Oil Paint</button>
+                    <button class="vs-option" data-slot="1" data-prompt="cyberpunk, neon lights, futuristic">Cyberpunk</button>
+                </div>
+                <div class="vs-set">
+                    <div class="vs-set-title">Variation 2</div>
+                    <button class="vs-option selected" data-slot="2" data-prompt="3D render, Pixar cartoon, vibrant">3D Cartoon</button>
+                    <button class="vs-option" data-slot="2" data-prompt="watercolor painting, soft, artistic">Watercolor</button>
+                    <button class="vs-option" data-slot="2" data-prompt="pencil sketch, detailed, black and white">Sketch</button>
+                    <button class="vs-option" data-slot="2" data-prompt="fantasy art, magical, ethereal glow">Fantasy</button>
+                </div>
+                <div class="vs-set">
+                    <div class="vs-set-title">Variation 3</div>
+                    <button class="vs-option selected" data-slot="3" data-prompt="pop art, bold colors, comic style">Pop Art</button>
+                    <button class="vs-option" data-slot="3" data-prompt="minimal flat design, vector, clean">Minimal</button>
+                    <button class="vs-option" data-slot="3" data-prompt="vintage film photo, grain, retro">Vintage</button>
+                    <button class="vs-option" data-slot="3" data-prompt="surreal digital art, dreamlike, glowing">Surreal</button>
+                </div>
+            </div>
+        </div>
+
+        <button class="gen-btn" id="genBtn" onclick="generateVariations()" disabled>🎲 3 Variations बनाएं</button>
+    </div>
+
+    <div class="card" id="resultCard" style="display:none">
+        <div class="card-title">✅ आपकी 3 Variations तैयार हैं!</div>
+        <div class="spinner-box" id="spinnerBox">
+            <div class="spin-ring"></div>
+            <div class="spin-txt" id="spinTxt">⏳ Variations बन रही हैं... (1/3)</div>
+        </div>
+        <div class="variations-grid" id="variationsGrid"></div>
+    </div>
+</main>
+<script>
+    var selectedStyles = { 1: 'photorealistic, 8K, DSLR, cinematic lighting', 2: '3D render, Pixar cartoon, vibrant', 3: 'pop art, bold colors, comic style' };
+    var variationUrls = {};
+
+    document.querySelectorAll('.vs-option').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const slot = this.dataset.slot;
+            document.querySelectorAll(`.vs-option[data-slot="${slot}"]`).forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+            selectedStyles[slot] = this.dataset.prompt;
+        });
+    });
+
+    function loadImg(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = e => {
+            document.getElementById('previewImg').src = e.target.result;
+            document.getElementById('previewImg').style.display = 'block';
+            document.getElementById('genBtn').disabled = false;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function generateVariations() {
+        const desc = document.getElementById('descInput').value.trim();
+        if (!desc) { alert('कृपया फोटो का विवरण लिखें!'); return; }
+        document.getElementById('genBtn').disabled = true;
+        document.getElementById('resultCard').style.display = 'block';
+        document.getElementById('spinnerBox').style.display = 'block';
+        document.getElementById('variationsGrid').innerHTML = '';
+        document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+
+        const slots = [1, 2, 3];
+        const labels = ['Variation 1', 'Variation 2', 'Variation 3'];
+
+        // Create loading placeholders
+        slots.forEach((_, i) => {
+            const lc = document.createElement('div');
+            lc.className = 'loading-card';
+            lc.id = 'loadCard' + (i + 1);
+            lc.innerHTML = `<div class="mini-spin"></div><span>${labels[i]}</span>`;
+            document.getElementById('variationsGrid').appendChild(lc);
+        });
+
+        let completed = 0;
+        slots.forEach((slot, i) => {
+            const style = selectedStyles[slot];
+            const seed = Math.floor(Math.random() * 999999);
+            const prompt = `${desc}, ${style}, high quality, detailed, 4K`;
+            const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=768&height=768&nologo=true&seed=${seed}`;
+            variationUrls[i + 1] = url;
+
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload = function() {
+                completed++;
+                document.getElementById('spinTxt').textContent = `⏳ Variations बन रही हैं... (${completed}/3)`;
+                const lc = document.getElementById('loadCard' + (i + 1));
+                if (lc) lc.remove();
+                const vc = document.createElement('div');
+                vc.className = 'variation-card';
+                vc.innerHTML = `
+                    <img src="${url}" class="variation-img" alt="${labels[i]}">
+                    <div class="variation-footer">
+                        <span class="variation-label">${labels[i]}</span>
+                        <button class="var-dl-btn" onclick="downloadVar(${i+1}, '${url}')">📥 Save</button>
+                    </div>`;
+                document.getElementById('variationsGrid').appendChild(vc);
+                if (completed === 3) {
+                    document.getElementById('spinnerBox').style.display = 'none';
+                    document.getElementById('genBtn').disabled = false;
+                }
+            };
+            img.onerror = function() {
+                completed++;
+                const lc = document.getElementById('loadCard' + (i + 1));
+                if (lc) lc.innerHTML = '<span style="color:#ef4444;font-size:0.75rem;padding:10px;">❌ फेल</span>';
+                if (completed === 3) {
+                    document.getElementById('spinnerBox').style.display = 'none';
+                    document.getElementById('genBtn').disabled = false;
+                }
+            };
+            img.src = url;
+        });
+    }
+
+    function downloadVar(num, url) {
+        const a = document.createElement('a');
+        a.download = `sachin-ai-variation-${num}.png`;
+        a.href = url;
+        a.target = '_blank';
+        a.click();
+    }
+</script>
+<script src="/ads.js"></script>
+</body>
+</html>
