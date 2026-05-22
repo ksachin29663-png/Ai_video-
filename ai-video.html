@@ -23,7 +23,10 @@
             border: 1px solid rgba(99,102,241,0.25); border-radius: 12px;
             color: #fff; font-size: 0.88rem; font-family: inherit; outline: none; transition: border 0.2s;
         }
-        textarea.vi-input { resize: none; height: 80px; line-height: 1.5; }
+        textarea.vi-input { resize: vertical; height: 80px; line-height: 1.5; min-height: 60px; }
+        .char-counter { font-size: 0.7rem; text-align: right; margin-top: 4px; color: #475569; }
+        .char-counter.warn { color: #f59e0b; }
+        .char-counter.over { color: #ef4444; }
         textarea.vi-input:focus, input.vi-input:focus { border-color: #818cf8; box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
         textarea.vi-input::placeholder, input.vi-input::placeholder { color: #334155; }
 
@@ -113,9 +116,10 @@
         </div>
 
         <div class="input-group">
-            <div class="input-label">🎙️ Hindi Script (Voiceover के लिए — optional)</div>
-            <textarea class="vi-input" id="scriptInput" placeholder="जैसे: भारत की मिट्टी में जादू है। हर किसान की मेहनत इस देश की ताकत है। यही है असली भारत।" style="height:70px;"></textarea>
-            <div style="font-size:0.72rem;color:#334155;margin-top:4px;">खाली छोड़ें तो Visual Prompt ही बोला जाएगा</div>
+            <div class="input-label">🎙️ Hindi Script (Voiceover के लिए — optional) <span style="color:#475569;font-weight:400;font-size:0.7rem;">max 1500 अक्षर</span></div>
+            <textarea class="vi-input" id="scriptInput" maxlength="1500" oninput="updateCounter(this,'scriptCounter',1500)" placeholder="जैसे: भारत की मिट्टी में जादू है। हर किसान की मेहनत इस देश की ताकत है। यही है असली भारत।" style="height:110px;"></textarea>
+            <div class="char-counter" id="scriptCounter">0 / 1500</div>
+            <div style="font-size:0.72rem;color:#334155;margin-top:3px;">खाली छोड़ें तो Visual Prompt ही बोला जाएगा</div>
         </div>
 
         <div class="card-title">Step 2 — Video Style चुनें</div>
@@ -196,6 +200,14 @@
     let selectedStyle = 'cinematic';
     let selectedDur = 5;
     let videoBlob = null;
+    let stepTimers = [];
+
+    function updateCounter(el, counterId, max) {
+        const len = el.value.length;
+        const counter = document.getElementById(counterId);
+        counter.textContent = len + ' / ' + max;
+        counter.className = 'char-counter' + (len > max * 0.9 ? (len >= max ? ' over' : ' warn') : '');
+    }
 
     function selectStyle(el) {
         document.querySelectorAll('.style-card').forEach(b => b.classList.remove('active'));
@@ -213,14 +225,15 @@
         for (let i = 1; i <= 4; i++) {
             const el = document.getElementById('step' + i);
             el.classList.remove('active', 'done');
-            if (i < num) el.classList.add('done'), el.querySelector('.step-dot').textContent = '✓';
+            if (i < num) { el.classList.add('done'); el.querySelector('.step-dot').textContent = '✓'; }
             else if (i === num) el.classList.add('active');
         }
-        const pct = { 1: 10, 2: 35, 3: 65, 4: 88 };
-        document.getElementById('progressBar').style.width = (pct[num] || 10) + '%';
+        const pct = { 1: 12, 2: 38, 3: 68, 4: 90 };
+        document.getElementById('progressBar').style.width = (pct[num] || 12) + '%';
     }
 
-    // Preview scenes client-side for visual feedback
+    function clearStepTimers() { stepTimers.forEach(t => clearTimeout(t)); stepTimers = []; }
+
     function previewScenes(prompt, style) {
         const styleMap = {
             cinematic: 'cinematic photography, dramatic lighting, 8K',
@@ -234,12 +247,10 @@
         document.getElementById('sceneCard').style.display = 'block';
         labels.forEach((label, i) => {
             const seed = Math.floor(Math.random() * 999999);
-            const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt + ', ' + label + ', ' + sp)}?width=640&height=360&nologo=true&seed=${seed}`;
+            const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt.slice(0,300) + ', ' + label + ', ' + sp)}?width=640&height=360&nologo=true&seed=${seed}`;
             const img = document.getElementById('sceneImg' + i);
-            img.onload = () => {
-                img.style.display = 'block';
-                document.querySelector('#scene' + i + ' .scene-loading').style.display = 'none';
-            };
+            const loading = document.querySelector('#scene' + i + ' .scene-loading');
+            img.onload = () => { img.style.display = 'block'; if(loading) loading.style.display = 'none'; };
             img.src = url;
         });
     }
@@ -249,13 +260,16 @@
         const script = document.getElementById('scriptInput').value.trim();
         if (!prompt) { alert('कृपया Video का Topic लिखें!'); return; }
 
+        clearStepTimers();
+
         // Reset UI
-        document.getElementById('genBtn').disabled = true;
+        const btn = document.getElementById('genBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<span>⏳</span><span>Video बन रही है... (2-4 मिनट)</span>';
         document.getElementById('progressWrap').style.display = 'block';
         document.getElementById('errorBox').style.display = 'none';
         document.getElementById('resultCard').style.display = 'none';
         document.getElementById('progressBar').style.width = '5%';
-        // Reset step dots
         for (let i = 1; i <= 4; i++) {
             const el = document.getElementById('step' + i);
             el.classList.remove('active', 'done');
@@ -266,45 +280,61 @@
         previewScenes(prompt, selectedStyle);
         setStep(1);
 
-        // Simulate step progress while waiting
-        const stepTimings = [0, 4000, 12000, 20000];
-        stepTimings.forEach((delay, i) => {
-            setTimeout(() => setStep(i + 1), delay);
-        });
+        // Simulate step progress (video gen takes 2-4 min total)
+        const delays = [0, 15000, 60000, 140000];
+        delays.forEach((d, i) => { stepTimers.push(setTimeout(() => setStep(i + 1), d)); });
 
         try {
+            const controller = new AbortController();
+            const fetchTimeout = setTimeout(() => controller.abort(), 290000); // 4.8 min timeout
+
             const res = await fetch('/generate-ai-video', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt, script, style: selectedStyle, duration: selectedDur })
+                body: JSON.stringify({ prompt, script, style: selectedStyle, duration: selectedDur }),
+                signal: controller.signal
             });
+            clearTimeout(fetchTimeout);
 
             if (!res.ok) {
-                const err = await res.json().catch(() => ({ error: 'Server error ' + res.status }));
-                throw new Error(err.error || 'Video generation failed');
+                let errMsg = 'Server error ' + res.status;
+                try { const j = await res.json(); errMsg = j.error || errMsg; } catch(e) {}
+                throw new Error(errMsg);
             }
 
+            clearStepTimers();
             document.getElementById('progressBar').style.width = '100%';
-            setStep(4);
-            document.getElementById('step4').classList.add('done');
-            document.getElementById('step4').querySelector('.step-dot').textContent = '✓';
+            for (let i = 1; i <= 4; i++) {
+                const el = document.getElementById('step' + i);
+                el.classList.add('done'); el.classList.remove('active');
+                el.querySelector('.step-dot').textContent = '✓';
+            }
 
             videoBlob = await res.blob();
+            if (videoBlob.size < 5000) throw new Error('Video file is empty — please retry');
+
             const videoUrl = URL.createObjectURL(videoBlob);
             const videoEl = document.getElementById('resultVideo');
             videoEl.src = videoUrl;
             videoEl.load();
-
             document.getElementById('resultCard').style.display = 'block';
             document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
 
         } catch (err) {
+            clearStepTimers();
             const errBox = document.getElementById('errorBox');
             errBox.style.display = 'block';
-            errBox.innerHTML = `❌ <b>Video नहीं बन सकी:</b> ${err.message}<br><br>💡 दोबारा कोशिश करें — Pollinations server कभी-कभी busy होता है।`;
+            let msg = err.message || 'Unknown error';
+            if (err.name === 'AbortError') msg = 'Request timeout — video took too long. Please try with shorter duration (3 sec).';
+            errBox.innerHTML = `❌ <b>Video नहीं बनी:</b> ${msg}<br><br>
+            💡 <b>Solutions:</b><br>
+            • Duration कम करें (3 sec try करें)<br>
+            • Script छोटी करें<br>
+            • दोबारा try करें — images server कभी-कभी slow होता है`;
             document.getElementById('progressWrap').style.display = 'none';
         } finally {
-            document.getElementById('genBtn').disabled = false;
+            btn.disabled = false;
+            btn.innerHTML = '<span>🎬</span><span>AI Video बनाएं</span>';
         }
     }
 
