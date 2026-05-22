@@ -3,127 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>सचिन एआई फोटो स्टूडियो</title>
-    
-    <script type='text/javascript' src='https://pl29470507.effectivecpmnetwork.com/16/a8/85/16a885ab5decd866c8172097a528540e.js'></script>
-
-    <script type='text/javascript' src='https://pl29470504.effectivecpmnetwork.com/78/e8/14/78e8141ae961509619ed88e55ee6b65.js'></script>
-
+    <title>सचिन एआई फोटो स्टूडियो - 10 AI Tools</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px; }
-        
-        /* स्टूडियो बॉक्स कंटेनर */
-        .studio-container { max-width: 550px; width: 100%; background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; margin: 15px 0; }
-        .studio-title { font-size: 2.2rem; color: #00ffcc; margin-bottom: 20px; font-weight: bold; text-shadow: 0 0 10px rgba(0,255,204,0.3); }
-        
-        /* फोटो डिस्प्ले फ्रेम */
-        .photo-frame { width: 100%; height: 300px; background: rgba(0, 0, 0, 0.4); border: 2px dashed #00ffcc; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; overflow: hidden; position: relative; }
-        .photo-frame img { max-width: 100%; max-height: 100%; object-fit: contain; }
-        
-        /* इनपुट बार और जनरेट बटन */
-        .input-row { display: flex; gap: 10px; margin-bottom: 15px; width: 100%; }
-        .prompt-input { flex: 1; padding: 14px 20px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.5); color: #fff; font-size: 16px; outline: none; transition: 0.3s; }
-        .prompt-input:focus { border-color: #00ffcc; box-shadow: 0 0 8px rgba(0,255,204,0.2); }
-        
-        .btn-generate { padding: 14px 25px; font-size: 16px; font-weight: bold; border: none; border-radius: 25px; background: #00ffcc; color: #0f2027; cursor: pointer; transition: 0.3s; white-space: nowrap; }
-        .btn-generate:hover { box-shadow: 0 0 15px #00ffcc; transform: scale(1.02); }
-        
-        /* विज्ञापन बॉक्स स्टाइल */
-        .ad-container { margin: 18px auto; text-align: center; width: 100%; display: block; min-height: 50px; }
-        .hidden { display: none !important; }
+        body { background: #080c16; color: #e1e7f0; min-height: 100vh; }
+
+        header {
+            background: linear-gradient(135deg, #0a0e1a, #0d1b2e);
+            border-bottom: 1px solid rgba(0,255,204,0.2);
+            padding: 18px 20px;
+            text-align: center;
+            position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        .logo { font-size: 1.6rem; font-weight: 900; color: #00ffcc; text-shadow: 0 0 20px rgba(0,255,204,0.4); }
+        .logo span { color: #7c3aed; }
+        .tagline { font-size: 0.8rem; color: #64748b; margin-top: 3px; letter-spacing: 1px; text-transform: uppercase; }
+
+        .hero {
+            background: linear-gradient(135deg, #0a0e1a 0%, #0f1f35 50%, #100a1f 100%);
+            padding: 50px 20px 40px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .hero h2 { font-size: 2rem; font-weight: 800; line-height: 1.3; margin-bottom: 12px; }
+        .hero h2 span { color: #00ffcc; }
+        .hero p { color: #64748b; font-size: 0.95rem; max-width: 500px; margin: 0 auto; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 18px;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 30px 16px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 22px;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: '';
+            position: absolute; inset: 0;
+            border-radius: 16px;
+            padding: 1px;
+            background: linear-gradient(135deg, var(--accent), transparent);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor; mask-composite: exclude;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .card:hover { transform: translateY(-4px); background: rgba(255,255,255,0.07); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
+        .card:hover::before { opacity: 1; }
+
+        .card-icon { font-size: 2.4rem; margin-bottom: 14px; display: block; }
+        .card-num { font-size: 0.7rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+        .card-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; line-height: 1.3; }
+        .card-desc { font-size: 0.82rem; color: #64748b; line-height: 1.5; }
+        .card-badge {
+            display: inline-block; margin-top: 14px;
+            background: var(--accent-bg);
+            color: var(--accent);
+            font-size: 0.72rem; font-weight: 700;
+            padding: 4px 12px; border-radius: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .c1 { --accent: #00ffcc; --accent-bg: rgba(0,255,204,0.1); }
+        .c2 { --accent: #7c3aed; --accent-bg: rgba(124,58,237,0.15); }
+        .c3 { --accent: #f59e0b; --accent-bg: rgba(245,158,11,0.12); }
+        .c4 { --accent: #ef4444; --accent-bg: rgba(239,68,68,0.12); }
+        .c5 { --accent: #06b6d4; --accent-bg: rgba(6,182,212,0.12); }
+        .c6 { --accent: #10b981; --accent-bg: rgba(16,185,129,0.12); }
+        .c7 { --accent: #f97316; --accent-bg: rgba(249,115,22,0.12); }
+        .c8 { --accent: #8b5cf6; --accent-bg: rgba(139,92,246,0.12); }
+        .c9 { --accent: #ec4899; --accent-bg: rgba(236,72,153,0.12); }
+        .c10 { --accent: #14b8a6; --accent-bg: rgba(20,184,166,0.12); }
+
+        footer {
+            text-align: center; padding: 30px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            color: #334155; font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
 
-    <div class="ad-container">
-        <script type="text/javascript">
-            atOptions = { 'key' : '5e113b8022609e2135c5e1e265084235', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
-        </script>
-        <script type="text/javascript" src="https://www.highperformanceformat.com/5e113b8022609e2135c5e1e265084235/invoke.js"></script>
-    </div>
+<header>
+    <div class="logo">सचिन <span>एआई</span> फोटो स्टूडियो</div>
+    <div class="tagline">10 Next-Level AI Photo Tools — सब कुछ मुफ़्त</div>
+</header>
 
-    <div class="ad-container">
-        <script type="text/javascript">
-            atOptions = { 'key' : 'a0707e197ee3131ba5b5214078c54f86', 'format' : 'iframe', 'height' : 60, 'width' : 468, 'params' : {} };
-        </script>
-        <script type="text/javascript" src="https://www.highperformanceformat.com/a0707e197ee3131ba5b5214078c54f86/invoke.js"></script>
-    </div>
+<div class="hero">
+    <h2>AI की ताकत से बनाएं <span>शानदार फोटोज़</span></h2>
+    <p>बैकग्राउंड हटाना, फोटो बनाना, स्केच, अवतार — सब कुछ एक ही जगह पर, बिल्कुल फ्री!</p>
+</div>
 
-    <div class="studio-container">
-        <h1 class="studio-title">सचिन एआई फोटो लैब</h1>
-        
-        <div class="ad-container">
-            <script type="text/javascript">
-                atOptions = { 'key' : '0cc801bedecd4b65d014707e5a5a5261', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };
-            </script>
-            <script type="text/javascript" src="https://www.highperformanceformat.com/0cc801bedecd4b65d014707e5a5a5261/invoke.js"></script>
-        </div>
+<div class="grid">
 
-        <div class="photo-frame">
-            <img src="" id="output-photo" class="hidden" alt="AI Photo">
-            <span id="placeholder-text" style="color:#aaa; font-size: 15px; padding: 10px;">आपकी जादुई फोटो यहाँ दिखेगी</span>
-        </div>
+    <a href="text-to-image.html" class="card c1">
+        <span class="card-icon">✨</span>
+        <div class="card-num">Feature 01</div>
+        <div class="card-title">टेक्स्ट-टू-इमेज जनरेटर</div>
+        <div class="card-desc">जो भी सोचो, लिखो — AI उसे एक शानदार हाई-क्वालिटी फोटो में बदल देगा।</div>
+        <div class="card-badge">Text → Image</div>
+    </a>
 
-        <div class="ad-container">
-            <script type="text/javascript">
-                atOptions = { 'key' : 'b1c20d5cd8e1095bc458e4c59f785aa9', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
-            </script>
-            <script type="text/javascript" src="https://www.highperformanceformat.com/b1c20d5cd8e1095bc458e4c59f785aa9/invoke.js"></script>
-        </div>
+    <a href="bg-changer.html" class="card c2">
+        <span class="card-icon">🎭</span>
+        <div class="card-num">Feature 02</div>
+        <div class="card-title">एआई बैकग्राउंड रिमूवर & चेंजर</div>
+        <div class="card-desc">फोटो का बैकग्राउंड हटाओ और AI से नया जादुई बैकग्राउंड लगाओ — सिर्फ एक क्लिक में।</div>
+        <div class="card-badge">BG Remove + Replace</div>
+    </a>
 
-        <div class="input-row">
-            <input type="text" id="input-prompt" class="prompt-input" placeholder="लिखें कैसी फोटो चाहिए... (जैसे: Cyberpunk cricket boy)">
-            <button class="btn-generate" onclick="generateAiPhotoNow()">बनाएं ✨</button>
-        </div>
-    </div>
+    <a href="photo-restore.html" class="card c3">
+        <span class="card-icon">🔮</span>
+        <div class="card-num">Feature 03</div>
+        <div class="card-title">एआई फोटो रेस्टोरर & कलरइज़र</div>
+        <div class="card-desc">पुरानी, धुंधली और ब्लैक-व्हाइट तस्वीरें HD में साफ करो और असली रंग वापस लाओ।</div>
+        <div class="card-badge">Restore + Colorize</div>
+    </a>
 
-    <div class="ad-container">
-        <script type="text/javascript">
-            atOptions = { 'key' : 'fdfdf400ba368cdb28956b620494cf0b', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
-        </script>
-        <script type="text/javascript" src="https://www.highperformanceformat.com/fdfdf400ba368cdb28956b620494cf0b/invoke.js"></script>
-    </div>
+    <a href="object-eraser.html" class="card c4">
+        <span class="card-icon">🧹</span>
+        <div class="card-num">Feature 04</div>
+        <div class="card-title">मैजिक ऑब्जेक्ट इरेज़र</div>
+        <div class="card-desc">फोटो में जो नहीं चाहिए उस पर उंगली घुमाओ — AI उसे जादू की तरह गायब कर देगा।</div>
+        <div class="card-badge">Magic Eraser</div>
+    </a>
 
-    <div class="ad-container">
-        <script type="text/javascript">
-            atOptions = { 'key' : '2a342cd28bfdf4158e2ee0ba286b240b', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };
-        </script>
-        <script type="text/javascript" src="https://www.highperformanceformat.com/2a342cd28bfdf4158e2ee0ba286b240b/invoke.js"></script>
-    </div>
+    <a href="ai-avatar.html" class="card c5">
+        <span class="card-icon">🤖</span>
+        <div class="card-num">Feature 05</div>
+        <div class="card-title">एआई अवतार & कार्टून पोर्ट्रेट</div>
+        <div class="card-desc">अपनी सेल्फी को 3D कार्टून, Anime, Cyberpunk या LinkedIn प्रोफेशनल लुक में बदलो।</div>
+        <div class="card-badge">Avatar Creator</div>
+    </a>
 
+    <a href="image-expander.html" class="card c6">
+        <span class="card-icon">🖼️</span>
+        <div class="card-num">Feature 06</div>
+        <div class="card-title">इमेज एक्सपैंडर / आउटपेंटिंग</div>
+        <div class="card-desc">Square फोटो को YouTube Thumbnail (16:9) या Reels (9:16) साइज में AI से बढ़ाओ।</div>
+        <div class="card-badge">Outpainting</div>
+    </a>
 
-    <script type="text/javascript">
-        function generateAiPhotoNow() {
-            var prompt = document.getElementById('input-prompt').value.trim();
-            if(!prompt) { 
-                alert("कृपया बताएं कि आपको कैसी फोटो चाहिए!"); 
-                return; 
-            }
+    <a href="ai-relight.html" class="card c7">
+        <span class="card-icon">💡</span>
+        <div class="card-num">Feature 07</div>
+        <div class="card-title">एआई लाइटिंग & रीलाइटिंग</div>
+        <div class="card-desc">खराब रोशनी की फोटो को प्रोफेशनल 3D स्टूडियो लाइटिंग लुक दो — AI से।</div>
+        <div class="card-badge">AI Relight</div>
+    </a>
 
-            var outImg = document.getElementById('output-photo');
-            var txt = document.getElementById('placeholder-text');
+    <a href="ai-sketch.html" class="card c8">
+        <span class="card-icon">🎨</span>
+        <div class="card-num">Feature 08</div>
+        <div class="card-title">एआई स्केच & डिजिटल आर्ट मेकर</div>
+        <div class="card-desc">किसी भी फोटो को Pencil Sketch, Watercolor Painting या Digital Art में बदलो।</div>
+        <div class="card-badge">Art Styles</div>
+    </a>
 
-            outImg.classList.add('hidden');
-            txt.innerText = '✨ आपकी फोटो तैयार की जा रही है... कृपया थोड़ा इंतज़ार करें...';
-            txt.classList.remove('hidden');
+    <a href="ai-beauty.html" class="card c9">
+        <span class="card-icon">💄</span>
+        <div class="card-num">Feature 09</div>
+        <div class="card-title">वन-टैप एआई ब्यूटी & एन्हांसर</div>
+        <div class="card-desc">दाग-धब्बे हटाओ, स्किन ग्लो बढ़ाओ और दांत सफेद करो — बिना नकली दिखाए।</div>
+        <div class="card-badge">Beauty Enhancer</div>
+    </a>
 
-            // यूनीक इमेज लोड करने के लिए रैंडम सीड
-            var seed = Math.floor(Math.random() * 999999);
-            var finalUrl = "https://image.pollinations.ai/prompt/" + encodeURIComponent(prompt) + "?width=512&height=512&nologo=true&seed=" + seed;
+    <a href="image-to-prompt.html" class="card c10">
+        <span class="card-icon">🔍</span>
+        <div class="card-num">Feature 10</div>
+        <div class="card-title">एआई इमेज-टू-प्रॉम्प्ट जनरेटर</div>
+        <div class="card-desc">कोई भी फोटो अपलोड करो — AI बताएगा कि उसे बनाने के लिए कौन सा prompt लिखना था।</div>
+        <div class="card-badge">Image → Prompt</div>
+    </a>
 
-            outImg.src = finalUrl;
-            
-            outImg.onload = function() {
-                outImg.classList.remove('hidden');
-                txt.classList.add('hidden');
-            };
-            
-            outImg.onerror = function() {
-                txt.innerText = 'सर्वर व्यस्त है, कृपया दोबारा बनाने पर क्लिक करें।';
-            };
-        }
-    </script>
+</div>
+
+<footer>
+    &copy; 2025 सचिन एआई फोटो स्टूडियो — सभी अधिकार सुरक्षित
+</footer>
+
 </body>
-                                                                                                                                      </html>
-                
+</html>

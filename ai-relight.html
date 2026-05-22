@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>एआई रीलाइटिंग - सचिन एआई</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background: #080c16; color: #e1e7f0; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: linear-gradient(135deg,#0a0e1a,#160900); border-bottom: 1px solid rgba(249,115,22,0.3); padding: 14px 20px; display: flex; align-items: center; gap: 14px; }
+        .back-btn { color: #f97316; text-decoration: none; font-size: 1.3rem; }
+        .page-title { font-size: 1.1rem; font-weight: 700; color: #f97316; }
+        .page-sub { font-size: 0.75rem; color: #64748b; }
+        main { flex: 1; padding: 24px 16px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+        .card { width: 100%; max-width: 620px; background: rgba(255,255,255,0.04); border: 1px solid rgba(249,115,22,0.2); border-radius: 20px; padding: 24px; }
+        .card-title { font-size: 0.9rem; font-weight: 700; color: #f97316; margin-bottom: 14px; }
+        .upload-zone { border: 2px dashed rgba(249,115,22,0.3); border-radius: 14px; padding: 28px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .upload-zone:hover { border-color: #f97316; background: rgba(249,115,22,0.04); }
+        .upload-zone input { display: none; }
+        .upload-icon { font-size: 2.5rem; margin-bottom: 8px; }
+        .upload-text { color: #64748b; font-size: 0.85rem; }
+        .upload-text b { color: #f97316; }
+        .light-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 14px 0; }
+        .light-btn { padding: 14px 6px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); cursor: pointer; text-align: center; font-family: inherit; transition: all 0.2s; }
+        .light-btn:hover, .light-btn.active { border-color: #f97316; background: rgba(249,115,22,0.08); }
+        .light-icon { font-size: 1.6rem; margin-bottom: 4px; }
+        .light-name { font-size: 0.75rem; font-weight: 700; color: #f97316; }
+        .sliders { margin: 14px 0; }
+        .sl-row { margin-bottom: 12px; }
+        .sl-label { display: flex; justify-content: space-between; font-size: 0.8rem; color: #94a3b8; margin-bottom: 5px; }
+        input[type=range] { width: 100%; cursor: pointer; }
+        .apply-btn { width: 100%; padding: 14px; font-size: 0.95rem; font-weight: 700; border: none; border-radius: 12px; cursor: pointer; background: linear-gradient(135deg,#f97316,#ea580c); color: #fff; font-family: inherit; transition: all 0.3s; }
+        .apply-btn:hover { box-shadow: 0 0 20px rgba(249,115,22,0.4); }
+        .apply-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .compare-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; display: none; }
+        .compare-panel { border-radius: 12px; overflow: hidden; aspect-ratio: 1; background: #000; position: relative; }
+        .compare-panel img { width: 100%; height: 100%; object-fit: contain; }
+        .panel-label { position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; color: #94a3b8; white-space: nowrap; }
+        .dl-btn { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: #e1e7f0; font-size: 0.85rem; cursor: pointer; font-family: inherit; margin-top: 10px; }
+        .dl-btn:hover { background: rgba(255,255,255,0.1); }
+        canvas { display: none; }
+        .color-pickers { display: flex; gap: 10px; align-items: center; margin: 10px 0; flex-wrap: wrap; }
+        .cp-label { font-size: 0.8rem; color: #94a3b8; }
+        input[type=color] { width: 36px; height: 36px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; background: none; padding: 2px; }
+    </style>
+</head>
+<body>
+<header>
+    <a href="index.html" class="back-btn">←</a>
+    <div>
+        <div class="page-title">💡 एआई लाइटिंग & रीलाइटिंग</div>
+        <div class="page-sub">खराब रोशनी को Studio Light में बदलो</div>
+    </div>
+</header>
+<main>
+    <div class="card">
+        <div class="card-title">Step 1 — फोटो अपलोड करें</div>
+        <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+            <div class="upload-icon">📸</div>
+            <div class="upload-text"><b>फोटो अपलोड करें</b> — कम रोशनी या खराब लाइटिंग वाली</div>
+            <input type="file" id="fileInput" accept="image/*" onchange="loadImg(event)">
+        </div>
+
+        <div class="card-title" style="margin-top:16px;">Step 2 — लाइटिंग प्रीसेट चुनें</div>
+        <div class="light-grid">
+            <div class="light-btn active" data-brightness="130" data-contrast="115" data-warm="20" onclick="selectLight(this)">
+                <div class="light-icon">☀️</div><div class="light-name">Bright Day</div>
+            </div>
+            <div class="light-btn" data-brightness="110" data-contrast="130" data-warm="0" onclick="selectLight(this)">
+                <div class="light-icon">🎬</div><div class="light-name">Cinematic</div>
+            </div>
+            <div class="light-btn" data-brightness="120" data-contrast="110" data-warm="40" onclick="selectLight(this)">
+                <div class="light-icon">🌅</div><div class="light-name">Golden Hour</div>
+            </div>
+            <div class="light-btn" data-brightness="115" data-contrast="120" data-warm="0" onclick="selectLight(this)">
+                <div class="light-icon">💡</div><div class="light-name">Studio White</div>
+            </div>
+            <div class="light-btn" data-brightness="100" data-contrast="130" data-warm="-30" onclick="selectLight(this)">
+                <div class="light-icon">🌃</div><div class="light-name">Night Neon</div>
+            </div>
+            <div class="light-btn" data-brightness="125" data-contrast="108" data-warm="10" onclick="selectLight(this)">
+                <div class="light-icon">✨</div><div class="light-name">Soft Light</div>
+            </div>
+        </div>
+
+        <div class="sliders">
+            <div class="sl-row">
+                <div class="sl-label"><span>Brightness</span><span id="bVal">130</span></div>
+                <input type="range" id="brightness" min="40" max="220" value="130" style="accent-color:#f97316" oninput="document.getElementById('bVal').textContent=this.value">
+            </div>
+            <div class="sl-row">
+                <div class="sl-label"><span>Contrast</span><span id="cVal">115</span></div>
+                <input type="range" id="contrast" min="50" max="250" value="115" style="accent-color:#f97316" oninput="document.getElementById('cVal').textContent=this.value">
+            </div>
+            <div class="sl-row">
+                <div class="sl-label"><span>Saturation</span><span id="sVal">110</span></div>
+                <input type="range" id="saturation" min="0" max="250" value="110" style="accent-color:#f97316" oninput="document.getElementById('sVal').textContent=this.value">
+            </div>
+            <div class="sl-row">
+                <div class="sl-label"><span>Warmth (Orange ↔ Cool Blue)</span><span id="wVal">+20</span></div>
+                <input type="range" id="warmth" min="-60" max="60" value="20" style="accent-color:#f97316" oninput="document.getElementById('wVal').textContent=(this.value>0?'+':'')+this.value">
+            </div>
+        </div>
+
+        <button class="apply-btn" id="applyBtn" onclick="applyLighting()" disabled>💡 लाइटिंग लगाएं</button>
+    </div>
+
+    <div class="card" id="resultCard" style="display:none">
+        <div class="card-title">✅ रीलाइटिंग पूरी हुई!</div>
+        <div class="compare-row" id="compareRow">
+            <div class="compare-panel"><img id="origImg" alt="Before"><div class="panel-label">Before</div></div>
+            <div class="compare-panel"><img id="litImg" alt="After"><div class="panel-label">After (Relit)</div></div>
+        </div>
+        <button class="dl-btn" onclick="downloadLit()">📥 रीलिट फोटो डाउनलोड करें</button>
+    </div>
+</main>
+<canvas id="workCanvas"></canvas>
+
+<script>
+    let originalSrc = null;
+
+    function selectLight(el) {
+        document.querySelectorAll('.light-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById('brightness').value = el.dataset.brightness;
+        document.getElementById('bVal').textContent = el.dataset.brightness;
+        document.getElementById('contrast').value = el.dataset.contrast;
+        document.getElementById('cVal').textContent = el.dataset.contrast;
+        const w = parseInt(el.dataset.warm);
+        document.getElementById('warmth').value = w;
+        document.getElementById('wVal').textContent = (w > 0 ? '+' : '') + w;
+    }
+
+    function loadImg(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = e => {
+            originalSrc = e.target.result;
+            document.getElementById('applyBtn').disabled = false;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function applyLighting() {
+        const brightness = document.getElementById('brightness').value;
+        const contrast = document.getElementById('contrast').value;
+        const saturation = document.getElementById('saturation').value;
+        const warmth = parseInt(document.getElementById('warmth').value);
+
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.getElementById('workCanvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.filter = `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%)`;
+            ctx.drawImage(img, 0, 0);
+
+            if (warmth !== 0) {
+                ctx.filter = 'none';
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const d = imageData.data;
+                for (let i = 0; i < d.length; i += 4) {
+                    d[i] = Math.min(255, Math.max(0, d[i] + warmth));
+                    d[i+2] = Math.min(255, Math.max(0, d[i+2] - warmth));
+                }
+                ctx.putImageData(imageData, 0, 0);
+            }
+
+            const result = canvas.toDataURL('image/jpeg', 0.95);
+            document.getElementById('origImg').src = originalSrc;
+            document.getElementById('litImg').src = result;
+            document.getElementById('compareRow').style.display = 'grid';
+            document.getElementById('resultCard').style.display = 'block';
+            document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+        };
+        img.src = originalSrc;
+    }
+
+    function downloadLit() {
+        const canvas = document.getElementById('workCanvas');
+        const a = document.createElement('a');
+        a.download = 'sachin-ai-relit.jpg';
+        a.href = canvas.toDataURL('image/jpeg', 0.95);
+        a.click();
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>इमेज-टू-प्रॉम्प्ट - सचिन एआई</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background: #080c16; color: #e1e7f0; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: linear-gradient(135deg,#0a0e1a,#041414); border-bottom: 1px solid rgba(20,184,166,0.3); padding: 14px 20px; display: flex; align-items: center; gap: 14px; }
+        .back-btn { color: #14b8a6; text-decoration: none; font-size: 1.3rem; }
+        .page-title { font-size: 1.1rem; font-weight: 700; color: #14b8a6; }
+        .page-sub { font-size: 0.75rem; color: #64748b; }
+        main { flex: 1; padding: 24px 16px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+        .card { width: 100%; max-width: 620px; background: rgba(255,255,255,0.04); border: 1px solid rgba(20,184,166,0.2); border-radius: 20px; padding: 24px; }
+        .card-title { font-size: 0.9rem; font-weight: 700; color: #14b8a6; margin-bottom: 14px; }
+        .upload-zone { border: 2px dashed rgba(20,184,166,0.3); border-radius: 14px; padding: 28px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .upload-zone:hover { border-color: #14b8a6; background: rgba(20,184,166,0.04); }
+        .upload-zone input { display: none; }
+        .upload-icon { font-size: 2.5rem; margin-bottom: 8px; }
+        .upload-text { color: #64748b; font-size: 0.85rem; }
+        .upload-text b { color: #14b8a6; }
+        .img-preview { width: 100%; max-height: 280px; object-fit: contain; border-radius: 12px; margin-top: 14px; border: 1px solid rgba(20,184,166,0.2); display: none; background: rgba(0,0,0,0.3); }
+        .mode-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 14px 0; }
+        .mode-btn { padding: 10px 6px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); cursor: pointer; text-align: center; font-family: inherit; transition: all 0.2s; }
+        .mode-btn:hover, .mode-btn.active { border-color: #14b8a6; background: rgba(20,184,166,0.08); }
+        .mode-icon { font-size: 1.3rem; margin-bottom: 3px; }
+        .mode-name { font-size: 0.72rem; font-weight: 700; color: #14b8a6; }
+        .analyze-btn { width: 100%; padding: 14px; font-size: 0.95rem; font-weight: 700; border: none; border-radius: 12px; cursor: pointer; background: linear-gradient(135deg,#14b8a6,#0d9488); color: #fff; font-family: inherit; transition: all 0.3s; }
+        .analyze-btn:hover { box-shadow: 0 0 20px rgba(20,184,166,0.4); }
+        .analyze-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .spinner-box { display: none; text-align: center; padding: 24px; }
+        .spin-ring { width: 44px; height: 44px; border: 3px solid rgba(20,184,166,0.2); border-top-color: #14b8a6; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 10px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spin-txt { color: #14b8a6; font-size: 0.85rem; }
+        .result-section { display: none; }
+        .prompt-label { font-size: 0.82rem; color: #94a3b8; margin-bottom: 8px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+        .prompt-box { background: rgba(20,184,166,0.06); border: 1px solid rgba(20,184,166,0.2); border-radius: 12px; padding: 16px; font-size: 0.88rem; line-height: 1.6; color: #e1e7f0; margin-bottom: 12px; white-space: pre-wrap; word-break: break-word; position: relative; }
+        .copy-btn { position: absolute; top: 8px; right: 8px; padding: 5px 12px; background: rgba(20,184,166,0.15); border: 1px solid rgba(20,184,166,0.3); border-radius: 8px; color: #14b8a6; font-size: 0.72rem; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(20,184,166,0.25); }
+        .tags-box { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+        .tag { padding: 4px 12px; background: rgba(20,184,166,0.1); border: 1px solid rgba(20,184,166,0.2); border-radius: 20px; font-size: 0.75rem; color: #14b8a6; cursor: pointer; transition: all 0.2s; }
+        .tag:hover { background: rgba(20,184,166,0.2); }
+        .try-btn { width: 100%; padding: 13px; border-radius: 12px; border: 1px solid rgba(20,184,166,0.3); background: rgba(20,184,166,0.08); color: #14b8a6; font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.2s; text-align: center; text-decoration: none; display: block; }
+        .try-btn:hover { background: rgba(20,184,166,0.15); }
+        .info-box { background: rgba(20,184,166,0.05); border: 1px solid rgba(20,184,166,0.15); border-radius: 12px; padding: 14px; font-size: 0.8rem; color: #64748b; line-height: 1.5; margin-bottom: 14px; }
+        .info-box b { color: #14b8a6; }
+    </style>
+</head>
+<body>
+<header>
+    <a href="index.html" class="back-btn">←</a>
+    <div>
+        <div class="page-title">🔍 एआई इमेज-टू-प्रॉम्प्ट</div>
+        <div class="page-sub">कोई भी फोटो अपलोड करो — AI Prompt बताएगा</div>
+    </div>
+</header>
+<main>
+    <div class="card">
+        <div class="info-box">
+            💡 <b>यह कैसे काम करता है:</b> आप कोई भी AI-generated या real photo अपलोड करें। Gemini AI उसे देखकर बताएगा कि उसे बनाने के लिए किस प्रकार का prompt इस्तेमाल होता — ताकि आप वैसी ही फोटो दोबारा बना सकें!
+        </div>
+
+        <div class="card-title">Step 1 — कोई भी फोटो अपलोड करें</div>
+        <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+            <div class="upload-icon">🖼️</div>
+            <div class="upload-text"><b>फोटो अपलोड करें</b> — AI या Real कोई भी</div>
+            <input type="file" id="fileInput" accept="image/*" onchange="loadImg(event)">
+        </div>
+        <img id="imgPreview" class="img-preview" alt="Preview">
+
+        <div class="card-title" style="margin-top:16px;">Step 2 — Prompt Type चुनें</div>
+        <div class="mode-grid">
+            <div class="mode-btn active" data-mode="detailed" onclick="selectMode(this)">
+                <div class="mode-icon">📝</div><div class="mode-name">Detailed</div>
+            </div>
+            <div class="mode-btn" data-mode="midjourney" onclick="selectMode(this)">
+                <div class="mode-icon">🎨</div><div class="mode-name">Midjourney</div>
+            </div>
+            <div class="mode-btn" data-mode="stable" onclick="selectMode(this)">
+                <div class="mode-icon">🤖</div><div class="mode-name">Stable Diff.</div>
+            </div>
+            <div class="mode-btn" data-mode="short" onclick="selectMode(this)">
+                <div class="mode-icon">⚡</div><div class="mode-name">Short</div>
+            </div>
+            <div class="mode-btn" data-mode="hindi" onclick="selectMode(this)">
+                <div class="mode-icon">🇮🇳</div><div class="mode-name">हिंदी</div>
+            </div>
+            <div class="mode-btn" data-mode="creative" onclick="selectMode(this)">
+                <div class="mode-icon">✨</div><div class="mode-name">Creative</div>
+            </div>
+        </div>
+
+        <button class="analyze-btn" id="analyzeBtn" onclick="analyzeImage()" disabled>🔍 AI से Prompt जानें</button>
+    </div>
+
+    <div class="card" id="resultCard" style="display:none">
+        <div class="spinner-box" id="spinnerBox">
+            <div class="spin-ring"></div>
+            <div class="spin-txt">Gemini AI फोटो देख रहा है...</div>
+        </div>
+
+        <div class="result-section" id="resultSection">
+            <div class="prompt-label">🎯 AI Prompt:</div>
+            <div class="prompt-box" id="promptBox">
+                <button class="copy-btn" onclick="copyPrompt()">📋 Copy</button>
+                <span id="promptText"></span>
+            </div>
+
+            <div class="prompt-label" style="margin-bottom:8px;">🏷️ Key Tags:</div>
+            <div class="tags-box" id="tagsBox"></div>
+
+            <a href="text-to-image.html" class="try-btn" id="tryBtn">✨ इस Prompt से फोटो बनाएं →</a>
+        </div>
+    </div>
+</main>
+
+<script>
+    let imageBase64 = null;
+    let imageMime = 'image/jpeg';
+    let selectedMode = 'detailed';
+    let generatedPrompt = '';
+
+    const modeInstructions = {
+        detailed: "Analyze this image and generate a detailed AI image generation prompt in English. Include: main subject, style, lighting, colors, composition, mood, camera angle, and any special effects. Format as a natural prompt sentence.",
+        midjourney: "Analyze this image and generate a Midjourney-style prompt. Include subject, art style, lighting, --ar ratio, --style, --q 2, and other relevant parameters. Make it optimized for Midjourney v6.",
+        stable: "Analyze this image and generate a Stable Diffusion prompt with positive prompts and negative prompts. Include: (main elements), art style, lighting, quality tags like (masterpiece:1.2), (best quality). Add NEGATIVE PROMPT section.",
+        short: "Analyze this image and generate a short, punchy AI prompt in under 15 words that captures the essence of this image.",
+        hindi: "इस तस्वीर को देखकर बताएं: 1) यह किस चीज़ की फोटो है? 2) इसे AI से बनाने के लिए हिंदी में prompt क्या होगा? 3) कौन से Keywords जरूरी हैं?",
+        creative: "Analyze this image with a creative eye. Generate a poetic, evocative AI prompt that not just describes but evokes the mood and feeling of this image. Be imaginative and artistic."
+    };
+
+    function selectMode(el) {
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        selectedMode = el.dataset.mode;
+    }
+
+    function loadImg(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        imageMime = file.type || 'image/jpeg';
+        const reader = new FileReader();
+        reader.onload = e => {
+            const dataUrl = e.target.result;
+            imageBase64 = dataUrl.split(',')[1];
+            document.getElementById('imgPreview').src = dataUrl;
+            document.getElementById('imgPreview').style.display = 'block';
+            document.getElementById('analyzeBtn').disabled = false;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    async function analyzeImage() {
+        if (!imageBase64) return;
+        document.getElementById('analyzeBtn').disabled = true;
+        document.getElementById('resultCard').style.display = 'block';
+        document.getElementById('spinnerBox').style.display = 'block';
+        document.getElementById('resultSection').style.display = 'none';
+        document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+
+        try {
+            const response = await fetch('/analyze-image', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    imageBase64,
+                    mimeType: imageMime,
+                    instruction: modeInstructions[selectedMode]
+                })
+            });
+
+            if (!response.ok) throw new Error('Server error');
+            const data = await response.json();
+            generatedPrompt = data.prompt || 'Prompt generate नहीं हो सका।';
+
+        } catch (e) {
+            generatedPrompt = '❌ Gemini AI से connect नहीं हो सका। Server check करें।\n\nError: ' + e.message;
+        }
+
+        document.getElementById('promptText').textContent = generatedPrompt;
+
+        // Extract tags
+        const words = generatedPrompt.match(/\b[a-zA-Z]{4,}\b/g) || [];
+        const tagWords = [...new Set(words)].slice(0, 12);
+        const tagsBox = document.getElementById('tagsBox');
+        tagsBox.innerHTML = tagWords.map(w => `<span class="tag" onclick="copyTag('${w}')">${w}</span>`).join('');
+
+        // Prefill try link
+        document.getElementById('tryBtn').href = `text-to-image.html`;
+
+        document.getElementById('spinnerBox').style.display = 'none';
+        document.getElementById('resultSection').style.display = 'block';
+        document.getElementById('analyzeBtn').disabled = false;
+    }
+
+    function copyPrompt() {
+        navigator.clipboard.writeText(generatedPrompt).then(() => {
+            const btn = document.querySelector('.copy-btn');
+            btn.textContent = '✅ Copied!';
+            setTimeout(() => btn.textContent = '📋 Copy', 2000);
+        });
+    }
+
+    function copyTag(word) {
+        navigator.clipboard.writeText(word);
+    }
+</script>
+</body>
+</html>

@@ -8,16 +8,74 @@ const gTTS = require('gtts');
 
 const app = express();
 const PORT = 5000;
-const VIDEO_PORT = 3000;
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '20mb' }));
 
 if (!fs.existsSync('uploads')) { fs.mkdirSync('uploads'); }
 const upload = multer({ dest: 'uploads/' });
 
 const GEMINI_API_KEY = "AIzaSyBPWiuNiYNrPxPlcbIT_6ZfHNrwV5jQlWM";
 
+// ---- Gemini Image-to-Prompt Endpoint ----
+app.post('/analyze-image', async (req, res) => {
+    const { imageBase64, mimeType, instruction } = req.body;
+    if (!imageBase64 || !instruction) {
+        return res.status(400).json({ error: 'Missing imageBase64 or instruction' });
+    }
+    try {
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+        const payload = {
+            contents: [{
+                parts: [
+                    { inline_data: { mime_type: mimeType || 'image/jpeg', data: imageBase64 } },
+                    { text: instruction }
+                ]
+            }]
+        };
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        if (!response.ok) {
+            const errText = await response.text();
+            console.error('Gemini API error:', errText);
+            return res.status(500).json({ error: 'Gemini API failed', detail: errText });
+        }
+        const data = await response.json();
+        const prompt = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'No response from AI';
+        res.json({ prompt });
+    } catch (err) {
+        console.error('Analyze image error:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ---- Background Removal Endpoint (client-side fallback works without key) ----
+app.post('/remove-background', upload.single('image_file'), async (req, res) => {
+    if (!req.file) return res.status(400).send('No file uploaded');
+    const filePath = req.file.path;
+    try {
+        const formData = new (require('form-data'))();
+        formData.append('image_file', fs.createReadStream(filePath));
+        const response = await fetch('https://api.remove.bg/v1.0/removebg', {
+            method: 'POST',
+            headers: { 'X-Api-Key': process.env.REMOVE_BG_API_KEY || '' },
+            body: formData
+        });
+        if (!response.ok) throw new Error('Remove.bg failed');
+        const buffer = await response.arrayBuffer();
+        res.set('Content-Type', 'image/png');
+        res.send(Buffer.from(buffer));
+    } catch (err) {
+        res.status(500).send('BG removal failed — client-side fallback will handle it');
+    } finally {
+        if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+    }
+});
+
+// ---- Video Generation Endpoint ----
 app.post('/generate-video', upload.array('files'), (req, res) => {
     const files = req.files;
     const userCommand = req.body.command || "तितली उड़ रही है";
@@ -31,7 +89,7 @@ app.post('/generate-video', upload.array('files'), (req, res) => {
     const outputVideoPath = path.join(__dirname, 'final_output.mp4');
 
     console.log(`कस्टमर की स्क्रिप्ट: ${userCommand}`);
-    console.log("1. हिंदी वॉइस-ओवर फाइल लॉक की जा रही है...");
+    console.log("1. हिंदी वॉइस-ओवर फाइल बन रही है...");
 
     const gtts = new gTTS(userCommand, 'hi');
     gtts.save(audioPath, (err) => {
@@ -40,17 +98,15 @@ app.post('/generate-video', upload.array('files'), (req, res) => {
             return res.status(500).send('वॉइस फेल।');
         }
 
-        console.log("2. जेमिनी इंजन एक्टिव! ऑडियो ट्रैक को वीडियो के साथ मर्ज किया जा रहा है...");
-
-        const ffmpegCmd = `ffmpeg -y -loop 1 -i ${inputPath} -i ${audioPath} -vf "unsharp=5:5:1.5:5:5:0.0,scale=1280:720,zoompan=z='min(zoom+0.0015,1.2)':d=125:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1280x720" -map 0:v:0 -map 1:a:0 -c:v libx264 -c:a aac -b:a 192k -shortest -pix_fmt yuv420p ${outputVideoPath}`;
+        console.log("2. FFmpeg वीडियो बना रहा है...");
+        const ffmpegCmd = `ffmpeg -y -loop 1 -i "${inputPath}" -i "${audioPath}" -vf "scale=1280:720,zoompan=z='min(zoom+0.0015,1.2)':d=125:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1280x720" -map 0:v:0 -map 1:a:0 -c:v libx264 -c:a aac -b:a 192k -shortest -pix_fmt yuv420p "${outputVideoPath}"`;
 
         exec(ffmpegCmd, (error) => {
             if (error) {
                 console.error("FFmpeg एरर:", error);
                 return res.status(500).send('रेंडर फेल।');
             }
-
-            console.log("वॉइस-ओवर के साथ वीडियो रेडी!");
+            console.log("वीडियो रेडी!");
             res.sendFile(outputVideoPath, () => {
                 if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
                 if (fs.existsSync(audioPath)) fs.unlinkSync(audioPath);
@@ -60,6 +116,7 @@ app.post('/generate-video', upload.array('files'), (req, res) => {
     });
 });
 
+// ---- Serve Static Files ----
 app.use(express.static(path.join(__dirname)));
 
 app.get('/', (req, res) => {
@@ -67,5 +124,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`सचिन एआई फोटो स्टूडियो http://0.0.0.0:${PORT} पर रेडी है... 🚀`);
+    console.log(`सचिन एआई फोटो स्टूडियो http://0.0.0.0:${PORT} पर रेडी है 🚀`);
 });
