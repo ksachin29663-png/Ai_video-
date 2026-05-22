@@ -3,189 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sachin AI - World Jankari Chat & Photo Studio</title>
+    <title>Sachin AI - Chat & Photo Studio</title>
     <style>
-        /* 🖤 प्रीमियम डार्क यूआई - जैसा मेरा डिज़ाइन है */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
-        
-        body { 
-            background: #060913; 
-            color: #e1e7f0; 
-            display: flex; 
-            flex-direction: column; 
-            height: 100vh; 
-            overflow: hidden;
-        }
-        
-        header { 
-            background: linear-gradient(135deg, #0044ff, #001133); 
-            padding: 12px; 
-            text-align: center; 
-            border-bottom: 2px solid #00d2ff; 
-            box-shadow: 0 4px 15px rgba(0, 68, 255, 0.3); 
-        }
+        body { background: #060913; color: #e1e7f0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        header { background: linear-gradient(135deg, #0044ff, #001133); padding: 12px; text-align: center; border-bottom: 2px solid #00d2ff; box-shadow: 0 4px 15px rgba(0,68,255,0.3); display: flex; align-items: center; gap: 12px; justify-content: center; }
+        .back-btn { color: #00d2ff; text-decoration: none; font-size: 1.3rem; position: absolute; left: 16px; }
         header h1 { color: #00d2ff; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; }
-        
-        /* 📣 विज्ञापन की जगह (ताकि कमाई न रुके) */
-        .ad-banner-slot { background: #0b0f19; text-align: center; padding: 6px; border-bottom: 1px solid #1e293b; width: 100%; min-height: 50px; display: flex; justify-content: center; align-items: center; color: #555; font-size: 0.75rem; }
-
-        /* 💬 चैट बॉक्स और फोटो सेक्शन - मेन एरिया */
-        .main-container { 
-            flex: 1; 
-            overflow-y: auto; 
-            padding: 15px; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 15px; 
-            background: #060913;
-            padding-bottom: 20px;
-        }
-        
-        /* 🤖 चैट मैसेजेस */
+        .main-container { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 15px; background: #060913; padding-bottom: 20px; }
         .chat-container { display: flex; flex-direction: column; gap: 12px; }
-        .msg { max-width: 85%; padding: 12px 16px; border-radius: 12px; font-size: 0.95rem; line-height: 1.4; word-wrap: break-word; }
-        .user-msg { background: #0044ff; color: white; align-self: flex-end; border-bottom-right-radius: 2px; box-shadow: 0 4px 10px rgba(0, 68, 255, 0.2); }
+        .msg { max-width: 85%; padding: 12px 16px; border-radius: 12px; font-size: 0.95rem; line-height: 1.5; word-wrap: break-word; }
+        .user-msg { background: #0044ff; color: white; align-self: flex-end; border-bottom-right-radius: 2px; box-shadow: 0 4px 10px rgba(0,68,255,0.2); }
         .ai-msg { background: #111827; color: #e1e7f0; align-self: flex-start; border-bottom-left-radius: 2px; border: 1px solid #1e293b; }
-        
-        /* 🖼️ फोटो जनरेटर सेक्शन */
-        .photo-generator {
-            background: #0b0f19;
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid #0044ff;
-            box-shadow: 0 0 15px rgba(0, 68, 255, 0.1);
-            margin-top: 10px;
-        }
+        .photo-generator { background: #0b0f19; padding: 15px; border-radius: 12px; border: 1px solid #0044ff; box-shadow: 0 0 15px rgba(0,68,255,0.1); margin-top: 10px; }
         .photo-generator h3 { color: #00d2ff; font-size: 1.1rem; margin-bottom: 10px; text-align: center; }
         .gen-input { width: 100%; background: #05070c; border: 1px solid #0044ff; padding: 12px; border-radius: 8px; color: white; font-size: 0.95rem; outline: none; margin-bottom: 10px; }
         .gen-btn { width: 100%; background: linear-gradient(90deg, #00d2ff, #0044ff); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.95rem; transition: 0.2s; text-transform: uppercase; }
         .gen-btn:active { transform: scale(0.98); }
         .gen-btn:disabled { background: #2a334d; color: #8b949e; cursor: not-allowed; }
-        
-        .image-preview { 
-            width: 100%; 
-            min-height: 200px; 
-            margin-top: 15px; 
-            background: #05070c; 
-            border-radius: 8px; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            overflow: hidden; 
-            border: 1px dashed #1e293b; 
-        }
+        .image-preview { width: 100%; min-height: 200px; margin-top: 15px; background: #05070c; border-radius: 8px; display: flex; justify-content: center; align-items: center; overflow: hidden; border: 1px dashed #1e293b; }
         .image-preview img { max-width: 100%; max-height: 100%; border-radius: 8px; display: none; }
-        .image-preview.loading::after { content: '⏳ फोटो बन रही है भाई...'; color: #00d2ff; font-style: italic; font-size: 0.9rem; }
-        
-        /* 📥 इनपुट सेक्शन - जो स्क्रीन पर फिक्स रहेगा */
-        .bottom-section { 
-            background: #0b0f19; 
-            border-top: 1px solid #1e293b; 
-            display: flex; 
-            flex-direction: column; 
-            width: 100%; 
-            position: relative;
-            box-shadow: 0 -4px 15px rgba(0,0,0,0.5);
-            padding-bottom: calc(10px + env(safe-area-inset-bottom));
-        }
-        
+        .bottom-section { background: #0b0f19; border-top: 1px solid #1e293b; display: flex; flex-direction: column; width: 100%; position: relative; box-shadow: 0 -4px 15px rgba(0,0,0,0.5); padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
         .input-area { padding: 10px; display: flex; gap: 8px; align-items: center; }
         .chat-input { flex: 1; background: #05070c; border: 1px solid #0044ff; padding: 12px; border-radius: 8px; color: white; font-size: 0.95rem; outline: none; }
-        .chat-input:focus { border-color: #00d2ff; box-shadow: 0 0 8px rgba(0, 210, 255, 0.3); }
-        
+        .chat-input:focus { border-color: #00d2ff; box-shadow: 0 0 8px rgba(0,210,255,0.3); }
         .send-btn { background: linear-gradient(90deg, #0044ff, #00d2ff); color: white; border: none; padding: 12px 22px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.95rem; transition: 0.2s; }
         .send-btn:active { transform: scale(0.95); }
+        .typing { color: #00d2ff; font-size: 0.85rem; padding: 6px 12px; display: none; }
     </style>
-
-    <script type="importmap">
-      {
-        "imports": {
-          "@google/generative-ai": "https://esm.run/@google/generative-ai"
-        }
-      }
-    </script>
 </head>
 <body>
+<header>
+    <a href="index.html" class="back-btn">←</a>
+    <h1>🤖 SACHIN AI Studio</h1>
+</header>
 
-    <div class="ad-banner-slot" id="ad-slot-1">💰 Adsterra Banner 1 (Top)</div>
-
-    <header>
-        <h1>🤖 SACHIN AI Studio</h1>
-    </header>
-
-    <div class="main-container" id="main-scroller">
-        
-        <div class="chat-container" id="chat-box">
-            <div class="msg ai-msg">
-                <strong>Sachin AI:</strong> नमस्कार भाई! कड़क लेआउट तैयार है। आप यहाँ चैट भी कर सकते हैं और नीचे दिए गए बॉक्स से फोटो भी बनवा सकते हैं! 😎
-            </div>
-        </div>
-
-        <div class="photo-generator">
-            <h3>🖼️ फोटो जनरेटर लैब</h3>
-            <input type="text" id="photo-prompt" class="gen-input" placeholder="जैसी फोटो चाहिए, यहाँ लिखें (उदा: 'लाल कार')">
-            <button id="generate-photo-btn" class="gen-btn">फोटो जनरेट करें</button>
-            <div class="image-preview" id="image-frame">
-                <img src="" alt="AI Generated Image" id="ai-photo">
-            </div>
-        </div>
-
-        <div class="ad-banner-slot" style="border:1px dashed #1e293b; margin:10px 0;">💰 Adsterra Banner 2 (Middle)</div>
-
-    </div>
-
-    <div class="bottom-section">
-        <div class="input-area">
-            <input type="text" id="user-input" class="chat-input" placeholder="यहाँ चैट करें...">
-            <button class="send-btn" id="send-btn">भेजें</button>
+<div class="main-container" id="main-scroller">
+    <div class="chat-container" id="chat-box">
+        <div class="msg ai-msg">
+            <strong>Sachin AI:</strong> नमस्कार! मैं आपका AI असिस्टेंट हूँ। आप मुझसे कुछ भी पूछ सकते हैं और नीचे दिए गए बॉक्स से AI फोटो भी बनवा सकते हैं! 😎
         </div>
     </div>
+    <div class="typing" id="typingIndicator">⏳ AI सोच रहा है...</div>
 
-<script type="module">
-    import { GoogleGenerativeAI } from "@google/generative-ai";
+    <div class="photo-generator">
+        <h3>🖼️ फोटो जनरेटर लैब</h3>
+        <input type="text" id="photo-prompt" class="gen-input" placeholder="जैसी फोटो चाहिए, यहाँ लिखें (उदा: 'सूर्यास्त का दृश्य')">
+        <button id="generate-photo-btn" class="gen-btn">फोटो जनरेट करें</button>
+        <div class="image-preview" id="image-frame">
+            <img src="" alt="AI Generated Image" id="ai-photo">
+        </div>
+    </div>
+</div>
 
-    // 🔑 आपकी वर्किंग जेमिनी API की
-    const API_KEY = "AIzaSyBPWiuNiYNrPxPlcbIT_6ZfHNrIuMio-gI"; 
-    const aiSystem = new GoogleGenerativeAI(API_KEY);
+<div class="bottom-section">
+    <div class="input-area">
+        <input type="text" id="user-input" class="chat-input" placeholder="यहाँ अपना सवाल लिखें...">
+        <button class="send-btn" id="send-btn">भेजें</button>
+    </div>
+</div>
 
-    // चैट वाले एलिमेंट्स
+<script>
     const mainScroller = document.getElementById('main-scroller');
     const chatBox = document.getElementById('chat-box');
     const userInput = document.getElementById('user-input');
     const sendBtn = document.getElementById('send-btn');
+    const typingIndicator = document.getElementById('typingIndicator');
 
-    // फोटो वाले एलिमेंट्स
-    const photoPromptInput = document.getElementById('photo-prompt');
-    const generatePhotoBtn = document.getElementById('generate-photo-btn');
-    const imageFrame = document.getElementById('image-frame');
-    const aiPhotoImg = document.getElementById('ai-photo');
-
-    // 💬 चैट फंक्शनैलिटी
     function appendMessage(text, sender) {
         const msgDiv = document.createElement('div');
         msgDiv.classList.add('msg', sender === 'user' ? 'user-msg' : 'ai-msg');
-        msgDiv.innerHTML = sender === 'user' ? `<strong>आप:</strong> ${text}` : `<strong>AI:</strong> ${text}`;
+        msgDiv.innerHTML = sender === 'user'
+            ? `<strong>आप:</strong> ${text}`
+            : `<strong>AI:</strong> ${text.replace(/\n/g, '<br>')}`;
         chatBox.appendChild(msgDiv);
         mainScroller.scrollTop = mainScroller.scrollHeight;
     }
 
     async function fetchAIResponse(prompt) {
+        typingIndicator.style.display = 'block';
+        mainScroller.scrollTop = mainScroller.scrollHeight;
         try {
-            const model = aiSystem.getGenerativeModel({ model: "gemini-1.5-flash" });
-            const result = await model.generateContent(prompt);
-            const response = await result.response;
-            appendMessage(response.text(), 'ai');
+            const res = await fetch('/ai-chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: prompt })
+            });
+            const data = await res.json();
+            appendMessage(data.reply || 'कोई जवाब नहीं मिला।', 'ai');
         } catch (error) {
-            console.error(error);
-            appendMessage("अरे भाई, सर्वर से जुड़ने में दिक्कत हुई। फिर से अपना सवाल भेजें!", 'ai');
+            appendMessage('सर्वर से जुड़ने में दिक्कत हुई। फिर से कोशिश करें!', 'ai');
+        } finally {
+            typingIndicator.style.display = 'none';
         }
     }
 
     sendBtn.addEventListener('click', () => {
         const text = userInput.value.trim();
-        if (text === "") return;
+        if (!text) return;
         appendMessage(text, 'user');
-        userInput.value = "";
+        userInput.value = '';
         fetchAIResponse(text);
     });
 
@@ -193,46 +110,33 @@
         if (e.key === 'Enter') sendBtn.click();
     });
 
-    // 🖼️ वर्किंग फोटो जनरेशन फंक्शनैलिटी (Pollinations.ai - Latest Approach)
+    const generatePhotoBtn = document.getElementById('generate-photo-btn');
+    const photoPromptInput = document.getElementById('photo-prompt');
+    const imageFrame = document.getElementById('image-frame');
+    const aiPhotoImg = document.getElementById('ai-photo');
+
     generatePhotoBtn.addEventListener('click', () => {
         const promptText = photoPromptInput.value.trim();
-        if (promptText === "") {
-            alert("अरे भाई, पहले लिखें तो सही कि कैसी फोटो चाहिए!");
-            return;
-        }
-
-        // लेआउट सेट करें और बटन डिसेबल करें
+        if (!promptText) { alert('कृपया पहले लिखें कि कैसी फोटो चाहिए!'); return; }
         generatePhotoBtn.disabled = true;
-        generatePhotoBtn.textContent = "⏳ फोटो बन रही है...";
-        imageFrame.classList.add('loading');
+        generatePhotoBtn.textContent = '⏳ फोटो बन रही है...';
         aiPhotoImg.style.display = 'none';
-
-        // एक रैंडम नंबर ताकि हर बार नई फोटो बने
-        const randomNumber = Math.floor(Math.random() * 10000);
-        
-        // पोलिनेशन का १००% वर्किंग URL
-        const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(promptText)}?width=1024&height=1024&nologo=true&seed=${randomNumber}`;
-
-        // इमेज लोड होने का इंतज़ार करें
+        const seed = Math.floor(Math.random() * 99999);
+        const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(promptText)}?width=1024&height=1024&nologo=true&seed=${seed}`;
         aiPhotoImg.src = imageUrl;
-
         aiPhotoImg.onload = () => {
             generatePhotoBtn.disabled = false;
-            generatePhotoBtn.textContent = "फोटो जनरेट करें";
-            imageFrame.classList.remove('loading');
+            generatePhotoBtn.textContent = 'फोटो जनरेट करें';
             aiPhotoImg.style.display = 'block';
-            mainScroller.scrollTop = mainScroller.scrollHeight; // नीचे स्क्रॉल करें
+            mainScroller.scrollTop = mainScroller.scrollHeight;
         };
-
         aiPhotoImg.onerror = () => {
             generatePhotoBtn.disabled = false;
-            generatePhotoBtn.textContent = "फोटो जनरेट करें";
-            imageFrame.classList.remove('loading');
-            alert("अरे भाई, फोटो जनरेट करने में कोई दिक्कत आई है। फिर से कोशिश करें!");
+            generatePhotoBtn.textContent = 'फोटो जनरेट करें';
+            alert('फोटो नहीं बन सकी। दोबारा कोशिश करें!');
         };
     });
 </script>
-
 <script src="/tracker.js"></script>
 <script src="/ads.js"></script>
 </body>

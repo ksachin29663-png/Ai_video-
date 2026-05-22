@@ -160,6 +160,27 @@ app.post('/generate-code', async (req, res) => {
     }
 });
 
+// ---- AI Chat Endpoint ----
+app.post('/ai-chat', async (req, res) => {
+    const { message } = req.body;
+    if (!message) return res.status(400).json({ error: 'Message required' });
+    try {
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+        const payload = { contents: [{ parts: [{ text: message }] }] };
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        if (!response.ok) { const e = await response.text(); return res.status(500).json({ error: e }); }
+        const data = await response.json();
+        const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'कोई जवाब नहीं मिला।';
+        res.json({ reply });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // ---- Serve Static Files ----
 app.use(express.static(path.join(__dirname)));
 
