@@ -75,45 +75,121 @@ app.post('/remove-background', upload.single('image_file'), async (req, res) => 
     }
 });
 
-// ---- Video Generation Endpoint ----
+// ---- Video Generation Endpoint (image upload) ----
 app.post('/generate-video', upload.array('files'), (req, res) => {
     const files = req.files;
     const userCommand = req.body.command || "तितली उड़ रही है";
-
-    if (!files || files.length === 0) {
-        return res.status(400).send('फाइल नहीं मिली।');
-    }
-
+    if (!files || files.length === 0) return res.status(400).send('फाइल नहीं मिली।');
     const inputPath = files[0].path;
-    const audioPath = path.join(__dirname, 'voice.mp3');
-    const outputVideoPath = path.join(__dirname, 'final_output.mp4');
-
-    console.log(`कस्टमर की स्क्रिप्ट: ${userCommand}`);
-    console.log("1. हिंदी वॉइस-ओवर फाइल बन रही है...");
-
+    const audioPath = path.join(__dirname, `voice_${Date.now()}.mp3`);
+    const outputVideoPath = path.join(__dirname, `output_${Date.now()}.mp4`);
     const gtts = new gTTS(userCommand, 'hi');
     gtts.save(audioPath, (err) => {
-        if (err) {
-            console.error("वॉइस जनरेशन फेल:", err);
-            return res.status(500).send('वॉइस फेल।');
-        }
-
-        console.log("2. FFmpeg वीडियो बना रहा है...");
+        if (err) { console.error("Voice error:", err); return res.status(500).send('Voice failed.'); }
         const ffmpegCmd = `ffmpeg -y -loop 1 -i "${inputPath}" -i "${audioPath}" -vf "scale=1280:720,zoompan=z='min(zoom+0.0015,1.2)':d=125:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1280x720" -map 0:v:0 -map 1:a:0 -c:v libx264 -c:a aac -b:a 192k -shortest -pix_fmt yuv420p "${outputVideoPath}"`;
-
         exec(ffmpegCmd, (error) => {
-            if (error) {
-                console.error("FFmpeg एरर:", error);
-                return res.status(500).send('रेंडर फेल।');
-            }
-            console.log("वीडियो रेडी!");
+            if (error) { console.error("FFmpeg error:", error); return res.status(500).send('Render failed.'); }
             res.sendFile(outputVideoPath, () => {
-                if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
-                if (fs.existsSync(audioPath)) fs.unlinkSync(audioPath);
-                if (fs.existsSync(outputVideoPath)) fs.unlinkSync(outputVideoPath);
+                [inputPath, audioPath, outputVideoPath].forEach(f => { try { if (fs.existsSync(f)) fs.unlinkSync(f); } catch(e){} });
             });
         });
     });
+});
+
+// ---- AI 3D Video Generation from Text Prompt ----
+app.post('/generate-ai-video', async (req, res) => {
+    const { prompt, script, style, duration } = req.body;
+    if (!prompt) return res.status(400).json({ error: 'Prompt required' });
+
+    const hindiScript = script || prompt;
+    const vidStyle = style || 'cinematic';
+    const sceneDuration = Math.max(3, Math.min(parseInt(duration) || 5, 8));
+    const numScenes = 3;
+
+    const tmpDir = path.join(__dirname, 'uploads');
+    if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir);
+
+    const ts = Date.now();
+    const audioPath = path.join(tmpDir, `voice_${ts}.mp3`);
+    const outputPath = path.join(tmpDir, `video_${ts}.mp4`);
+    const concatFile = path.join(tmpDir, `concat_${ts}.txt`);
+    const sceneFiles = [];
+
+    const styleMap = {
+        cinematic: 'cinematic photography, dramatic lighting, 8K ultra HD, film grain',
+        anime: 'anime art style, vibrant colors, studio ghibli inspired, detailed',
+        '3d': '3D render, Pixar style, colorful, studio lighting, high quality CGI',
+        realistic: 'photorealistic, DSLR photography, natural lighting, sharp focus',
+        watercolor: 'watercolor painting, artistic, soft brush strokes, dreamy',
+    };
+    const stylePrompt = styleMap[vidStyle] || styleMap.cinematic;
+
+    try {
+        // Step 1: Generate Hindi voiceover
+        await new Promise((resolve, reject) => {
+            const gtts = new gTTS(hindiScript, 'hi');
+            gtts.save(audioPath, (err) => err ? reject(err) : resolve());
+        });
+
+        // Step 2: Download scene images from Pollinations
+        const scenePrompts = [
+            `${prompt}, opening scene, wide shot, ${stylePrompt}`,
+            `${prompt}, main scene, close up, ${stylePrompt}`,
+            `${prompt}, final scene, epic wide angle, ${stylePrompt}`,
+        ];
+
+        for (let i = 0; i < numScenes; i++) {
+            const seed = Math.floor(Math.random() * 999999);
+            const imgUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(scenePrompts[i])}?width=1280&height=720&nologo=true&seed=${seed}`;
+            const imgPath = path.join(tmpDir, `scene_${ts}_${i}.jpg`);
+            const imgRes = await fetch(imgUrl);
+            if (!imgRes.ok) throw new Error('Image fetch failed');
+            const imgBuf = await imgRes.arrayBuffer();
+            fs.writeFileSync(imgPath, Buffer.from(imgBuf));
+            sceneFiles.push(imgPath);
+        }
+
+        // Step 3: Build per-scene clips then concat
+        const clipPaths = [];
+        for (let i = 0; i < numScenes; i++) {
+            const clipPath = path.join(tmpDir, `clip_${ts}_${i}.mp4`);
+            const zoomDir = i % 2 === 0
+                ? `zoompan=z='min(zoom+0.002,1.3)':d=${sceneDuration*25}:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1280x720`
+                : `zoompan=z='min(zoom+0.002,1.3)':d=${sceneDuration*25}:x='iw/2-(iw/zoom/2)+10*on':y='ih/2-(ih/zoom/2)':s=1280x720`;
+            await new Promise((resolve, reject) => {
+                const cmd = `ffmpeg -y -loop 1 -t ${sceneDuration} -i "${sceneFiles[i]}" -vf "scale=1280:720,${zoomDir}" -c:v libx264 -pix_fmt yuv420p -r 25 "${clipPath}"`;
+                exec(cmd, (err) => err ? reject(err) : resolve());
+            });
+            clipPaths.push(clipPath);
+        }
+
+        // Step 4: Concat clips
+        const concatTxt = clipPaths.map(p => `file '${p}'`).join('\n');
+        fs.writeFileSync(concatFile, concatTxt);
+        const silentVideoPath = path.join(tmpDir, `silent_${ts}.mp4`);
+        await new Promise((resolve, reject) => {
+            exec(`ffmpeg -y -f concat -safe 0 -i "${concatFile}" -c copy "${silentVideoPath}"`, (err) => err ? reject(err) : resolve());
+        });
+
+        // Step 5: Mix audio
+        await new Promise((resolve, reject) => {
+            const cmd = `ffmpeg -y -i "${silentVideoPath}" -i "${audioPath}" -map 0:v:0 -map 1:a:0 -c:v copy -c:a aac -b:a 192k -shortest "${outputPath}"`;
+            exec(cmd, (err) => err ? reject(err) : resolve());
+        });
+
+        res.setHeader('Content-Type', 'video/mp4');
+        res.setHeader('Content-Disposition', 'attachment; filename="sachin-ai-video.mp4"');
+        res.sendFile(outputPath, { root: '/' }, () => {
+            const cleanup = [...sceneFiles, ...clipPaths, audioPath, silentVideoPath, outputPath, concatFile];
+            cleanup.forEach(f => { try { if (fs.existsSync(f)) fs.unlinkSync(f); } catch(e){} });
+        });
+
+    } catch (err) {
+        console.error('AI Video error:', err);
+        const cleanup = [...sceneFiles, audioPath, outputPath, concatFile];
+        cleanup.forEach(f => { try { if (fs.existsSync(f)) fs.unlinkSync(f); } catch(e){} });
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // ---- AI Code Generator Endpoint ----
