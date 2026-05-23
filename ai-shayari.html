@@ -1,0 +1,110 @@
+<!DOCTYPE html><html lang="hi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>AI Shayari & Poem - सचिन एआई</title>
+<style>*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',sans-serif}body{background:#060810;color:#e1e7f0;min-height:100vh;display:flex;flex-direction:column}header{background:linear-gradient(135deg,#0a0e1a,#1a0520);border-bottom:1px solid rgba(244,114,182,.4);padding:14px 20px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100}.back{color:#f472b6;text-decoration:none;font-size:1.3rem}.pt{font-size:1.05rem;font-weight:700;color:#f472b6}.ps{font-size:.75rem;color:#64748b}main{flex:1;padding:20px 16px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.card{width:100%;max-width:640px;background:rgba(255,255,255,.04);border:1px solid rgba(244,114,182,.2);border-radius:18px;padding:20px}.ct{font-size:.82rem;font-weight:700;color:#f472b6;margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px}
+label{font-size:.8rem;color:#94a3b8;font-weight:600;display:block;margin-bottom:6px;margin-top:12px}textarea,input,select{width:100%;padding:12px;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#fff;font-size:.88rem;font-family:inherit;outline:none}textarea{resize:vertical;min-height:70px}textarea:focus,input:focus,select:focus{border-color:#f472b6}select option{background:#0a0e1a}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px}.chip{padding:7px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);cursor:pointer;font-size:.78rem;color:#94a3b8;transition:all .2s}.chip.active,.chip:hover{border-color:#f472b6;color:#f472b6;background:rgba(244,114,182,.1)}
+.btn{width:100%;padding:14px;font-size:.95rem;font-weight:700;border:none;border-radius:12px;cursor:pointer;background:linear-gradient(135deg,#f472b6,#db2777);color:#fff;font-family:inherit;transition:all .3s;margin-top:14px}.btn:hover{box-shadow:0 0 24px rgba(244,114,182,.4);transform:translateY(-1px)}.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.result-box{display:none;background:rgba(0,0,0,.4);border:1px solid rgba(244,114,182,.3);border-radius:14px;padding:20px;font-size:.92rem;line-height:1.9;white-space:pre-wrap;word-break:break-word;max-height:450px;overflow-y:auto;font-family:'Segoe UI',sans-serif}
+.row-btns{display:flex;gap:10px;margin-top:10px}.sm-btn{flex:1;padding:10px;border-radius:10px;background:rgba(244,114,182,.1);border:1px solid rgba(244,114,182,.3);color:#f472b6;font-size:.82rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s}.sm-btn:hover{background:rgba(244,114,182,.2)}
+.err{color:#fca5a5;font-size:.82rem;display:none;margin-top:8px;padding:10px;background:rgba(239,68,68,.08);border-radius:8px}
+footer{text-align:center;padding:16px;color:#334155;font-size:.75rem}</style></head>
+<body>
+<header><a href="index.html" class="back">←</a><div><div class="pt">🎭 AI Shayari & Poem Generator</div><div class="ps">Topic दो — AI Hindi Shayari या Poem बनाएगा</div></div></header>
+<main>
+<div class="card">
+  <div class="ct">Step 1 — Type चुनें</div>
+  <div class="chips">
+    <div class="chip active" onclick="pick(this,'type')" data-val="shayari">💕 Shayari</div>
+    <div class="chip" onclick="pick(this,'type')" data-val="ghazal">🌹 Ghazal</div>
+    <div class="chip" onclick="pick(this,'type')" data-val="kavita">📜 Kavita</div>
+    <div class="chip" onclick="pick(this,'type')" data-val="doha">🏺 Doha</div>
+    <div class="chip" onclick="pick(this,'type')" data-val="rap">🎤 Hindi Rap</div>
+  </div>
+  <div class="ct" style="margin-top:14px">Mood चुनें</div>
+  <div class="chips">
+    <div class="chip active" onclick="pick(this,'mood')" data-val="romantic">❤️ Romantic</div>
+    <div class="chip" onclick="pick(this,'mood')" data-val="sad">😢 Sad</div>
+    <div class="chip" onclick="pick(this,'mood')" data-val="inspirational">🔥 Inspirational</div>
+    <div class="chip" onclick="pick(this,'mood')" data-val="funny">😂 Funny</div>
+    <div class="chip" onclick="pick(this,'mood')" data-val="patriotic">🇮🇳 Patriotic</div>
+    <div class="chip" onclick="pick(this,'mood')" data-val="spiritual">🕉️ Spiritual</div>
+  </div>
+  <label>Topic / विषय (optional)</label>
+  <input id="topic" placeholder="जैसे: दोस्ती, माँ, बारिश, दिल्ली...">
+  <label>किसके लिए? (optional)</label>
+  <input id="forWhom" placeholder="जैसे: प्रेमिका, माँ, दोस्त, देश...">
+  <button class="btn" id="btn" onclick="generate()">✨ Shayari बनाओ</button>
+  <div class="err" id="err"></div>
+</div>
+<div class="card" id="resultCard" style="display:none">
+  <div class="ct">✨ आपकी Shayari</div>
+  <div class="result-box" id="result"></div>
+  <div class="row-btns">
+    <button class="sm-btn" onclick="copyText()">📋 Copy करो</button>
+    <button class="sm-btn" onclick="generate()">🔄 नई बनाओ</button>
+  </div>
+</div>
+<!-- Mid-Page Ad -->
+<div style="text-align:center;margin:12px auto;width:100%;min-height:56px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'b1c2005cd8e1095bc458e4c59f785aa9','format':'iframe','height':50,'width':320,'params':{}};</script>
+<script type="text/javascript" src="https://www.highperformanceformat.com/b1c2005cd8e1095bc458e4c59f785aa9/invoke.js"></script>
+</div>
+</main>
+<footer>&copy; 2025 सचिन एआई फोटो स्टूडियो</footer>
+<script>
+const state={type:'shayari',mood:'romantic'};
+function pick(el,key){document.querySelectorAll('[onclick*="pick(this,\''+key+'\'"]').forEach(e=>e.classList.remove('active'));el.classList.add('active');state[key]=el.dataset.val;}
+async function generate(){
+  const btn=document.getElementById('btn');
+  btn.disabled=true;btn.textContent='⏳ बन रही है...';
+  document.getElementById('err').style.display='none';
+  const topic=document.getElementById('topic').value.trim()||'ज़िंदगी';
+  const forW=document.getElementById('forWhom').value.trim();
+  const prompt=`तुम एक मशहूर हिंदी ${state.type} लेखक हो। एक ${state.mood} ${state.type} लिखो जिसका विषय है: "${topic}"${forW?', और यह '+forW+' के लिए है':''}। 
+${state.type==='shayari'?'2-4 शेर (couplets) लिखो, हर शेर 2 पंक्तियों में।':''}
+${state.type==='doha'?'3-4 दोहे लिखो रहीम/कबीर शैली में।':''}
+${state.type==='kavita'?'8-12 पंक्तियों की सुंदर कविता लिखो।':''}
+${state.type==='ghazal'?'4-5 शेर की ग़ज़ल लिखो, radif और qafia के साथ।':''}
+${state.type==='rap'?'16 bars का Hindi rap लिखो, rhyming के साथ।':''}
+सिर्फ ${state.type} लिखो, कोई explanation नहीं।`;
+  try{
+    const r=await fetch('/generate-content',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
+    const d=await r.json();
+    if(!r.ok)throw new Error(d.error||'Error');
+    document.getElementById('result').textContent=d.result;
+    document.getElementById('resultCard').style.display='block';
+    document.getElementById('resultCard').scrollIntoView({behavior:'smooth'});
+  }catch(e){const err=document.getElementById('err');err.textContent='❌ '+e.message;err.style.display='block';}
+  finally{btn.disabled=false;btn.innerHTML='✨ Shayari बनाओ';}
+}
+function copyText(){navigator.clipboard.writeText(document.getElementById('result').textContent).then(()=>alert('Copied! 📋'));}
+</script>
+<script src="tracker.js"></script>
+
+<!-- ===== ADSTERRA ADS START ===== -->
+<!-- Popunder -->
+<script type="text/javascript" src="https://pl29487642.effectivecpmnetwork.com/99/2e/66/992e666bbb3d92cdc222c614640658d00.js"></script>
+<!-- Social Bar -->
+<script type="text/javascript" src="https://pl29470507.effectivecpmnetwork.com/16/a8/85/16a885ab5decd866c8172097a528540e.js"></script>
+<!-- 320x50 Mobile Banner -->
+<div id="sachin-ad-320" style="display:block;text-align:center;background:linear-gradient(90deg,#0a0e1a,#0d1225);border-top:1px solid rgba(99,102,241,0.3);border-bottom:1px solid rgba(99,102,241,0.3);padding:3px 0;width:100%;min-height:56px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'b1c2005cd8e1095bc458e4c59f785aa9','format':'iframe','height':50,'width':320,'params':{}};</script>
+<script type="text/javascript" src="https://www.highperformanceformat.com/b1c2005cd8e1095bc458e4c59f785aa9/invoke.js"></script>
+</div>
+<!-- 728x90 Leaderboard Banner -->
+<div id="sachin-ad-728" style="display:block;text-align:center;background:linear-gradient(90deg,#0a0e1a,#0d1225);padding:3px 0;width:100%;min-height:96px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'5e113b8022609e2135c5e1e265084235','format':'iframe','height':90,'width':728,'params':{}};</script>
+<script type="text/javascript" src="https://www.highperformanceformat.com/5e113b8022609e2135c5e1e265084235/invoke.js"></script>
+</div>
+<!-- Native Banner -->
+<div style="text-align:center;margin:6px auto;max-width:100%;min-height:60px;">
+<script async="async" data-cfasync="false" src="https://pl29470505.effectivecpmnetwork.com/30a2c535b11a237c281ced645d908d88/invoke.js"></script>
+<div id="container-30a2c535b11a237c281ced645d908d88"></div>
+</div>
+<!-- 300x250 Rectangle -->
+<div id="sachin-ad-300" style="display:block;text-align:center;margin:8px auto;width:100%;min-height:254px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'817c9252a9900f63d05a904142664916','format':'iframe','height':250,'width':300,'params':{}};</script>
+<script type="text/javascript" src="https://www.highperformanceformat.com/817c9252a9900f63d05a904142664916/invoke.js"></script>
+</div>
+<!-- ===== ADSTERRA ADS END ===== -->
+</body></html>

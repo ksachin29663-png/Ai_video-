@@ -1,0 +1,115 @@
+<!DOCTYPE html><html lang="hi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>AI Business Idea - सचिन एआई</title>
+<style>*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',sans-serif}body{background:#060810;color:#e1e7f0;min-height:100vh;display:flex;flex-direction:column}header{background:linear-gradient(135deg,#0a0e1a,#041428);border-bottom:1px solid rgba(96,165,250,.4);padding:14px 20px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100}.back{color:#60a5fa;text-decoration:none;font-size:1.3rem}.pt{font-size:1.05rem;font-weight:700;color:#60a5fa}.ps{font-size:.75rem;color:#64748b}main{flex:1;padding:20px 16px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.card{width:100%;max-width:640px;background:rgba(255,255,255,.04);border:1px solid rgba(96,165,250,.2);border-radius:18px;padding:20px}.ct{font-size:.82rem;font-weight:700;color:#60a5fa;margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px}
+label{font-size:.8rem;color:#94a3b8;font-weight:600;display:block;margin-bottom:5px;margin-top:10px}textarea,input,select{width:100%;padding:11px;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#fff;font-size:.87rem;font-family:inherit;outline:none}textarea{resize:vertical;min-height:65px}textarea:focus,input:focus,select:focus{border-color:#60a5fa}select option{background:#0a0e1a}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px}.chip{padding:7px 13px;border-radius:20px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);cursor:pointer;font-size:.78rem;color:#94a3b8;transition:all .2s}.chip.active,.chip:hover{border-color:#60a5fa;color:#60a5fa;background:rgba(96,165,250,.1)}
+.btn{width:100%;padding:14px;font-size:.95rem;font-weight:700;border:none;border-radius:12px;cursor:pointer;background:linear-gradient(135deg,#60a5fa,#2563eb);color:#fff;font-family:inherit;transition:all .3s;margin-top:14px}.btn:hover{box-shadow:0 0 24px rgba(96,165,250,.4);transform:translateY(-1px)}.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.result-box{background:rgba(0,0,0,.4);border:1px solid rgba(96,165,250,.2);border-radius:12px;padding:18px;font-size:.88rem;line-height:1.8;white-space:pre-wrap;word-break:break-word;max-height:500px;overflow-y:auto}
+.row-btns{display:flex;gap:10px;margin-top:10px}.sm-btn{flex:1;padding:10px;border-radius:10px;background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.3);color:#60a5fa;font-size:.82rem;font-weight:700;cursor:pointer;font-family:inherit}.sm-btn:hover{background:rgba(96,165,250,.2)}
+.err{color:#fca5a5;font-size:.82rem;display:none;margin-top:8px;padding:10px;background:rgba(239,68,68,.08);border-radius:8px}
+footer{text-align:center;padding:16px;color:#334155;font-size:.75rem}</style></head>
+<body>
+<header><a href="index.html" class="back">←</a><div><div class="pt">💼 AI Business Idea Generator</div><div class="ps">Budget और Interest दो — AI Business Plan देगा</div></div></header>
+<main>
+<div class="card">
+  <div class="ct">आपकी Details</div>
+  <label>आपकी Skills / Interest</label>
+  <input id="interest" placeholder="जैसे: Cooking, Social Media, Teaching, Programming...">
+  <label>Budget</label>
+  <div class="chips" style="margin-top:6px">
+    <div class="chip active" onclick="pick(this,'budget')" data-val="Zero/Very Low (₹0-5000)">Zero Budget</div>
+    <div class="chip" onclick="pick(this,'budget')" data-val="Low (₹5000-50000)">Low ₹5K-50K</div>
+    <div class="chip" onclick="pick(this,'budget')" data-val="Medium (₹50000-5 Lakh)">Medium ₹50K+</div>
+    <div class="chip" onclick="pick(this,'budget')" data-val="High (₹5 Lakh+)">High ₹5L+</div>
+  </div>
+  <label>Business Type</label>
+  <div class="chips" style="margin-top:6px">
+    <div class="chip active" onclick="pick(this,'btype')" data-val="Online">🌐 Online</div>
+    <div class="chip" onclick="pick(this,'btype')" data-val="Offline/Physical">🏪 Offline</div>
+    <div class="chip" onclick="pick(this,'btype')" data-val="Both Online & Offline">🔄 Both</div>
+    <div class="chip" onclick="pick(this,'btype')" data-val="Freelance">💻 Freelance</div>
+  </div>
+  <label>Location / City</label>
+  <input id="city" placeholder="Delhi, Mumbai, छोटा शहर, Village...">
+  <label>Target Customer</label>
+  <input id="target" placeholder="Students, Women, Farmers, Youth, Businesses...">
+  <button class="btn" id="btn" onclick="generate()">💡 Business Ideas Generate करो</button>
+  <div class="err" id="err"></div>
+</div>
+<div class="card" id="resultCard" style="display:none">
+  <div class="ct">💡 AI Business Plan</div>
+  <div class="result-box" id="result"></div>
+  <div class="row-btns">
+    <button class="sm-btn" onclick="copyText()">📋 Copy करो</button>
+    <button class="sm-btn" onclick="generate()">🔄 नए Ideas</button>
+  </div>
+</div>
+<!-- Mid-Page Ad -->
+<div style="text-align:center;margin:12px auto;width:100%;min-height:56px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'b1c2005cd8e1095bc458e4c59f785aa9','format':'iframe','height':50,'width':320,'params':{}};</script>
+<script type="text/javascript" src="https://www.highperformanceformat.com/b1c2005cd8e1095bc458e4c59f785aa9/invoke.js"></script>
+</div>
+</main>
+<footer>&copy; 2025 सचिन एआई फोटो स्टूडियो</footer>
+<script>
+const state={budget:'Zero/Very Low (₹0-5000)',btype:'Online'};
+function pick(el,key){document.querySelectorAll('[onclick*="pick(this,\''+key+'\'"]').forEach(e=>e.classList.remove('active'));el.classList.add('active');state[key]=el.dataset.val;}
+async function generate(){
+  const btn=document.getElementById('btn');btn.disabled=true;btn.textContent='⏳ Ideas बन रहे हैं...';
+  document.getElementById('err').style.display='none';
+  const prompt=`You are a business consultant. Give 3 detailed business ideas in Hindi for:
+Skills/Interest: ${document.getElementById('interest').value||'General'}
+Budget: ${state.budget}
+Type: ${state.btype}
+Location: ${document.getElementById('city').value||'India'}
+Target Customers: ${document.getElementById('target').value||'General public'}
+
+For each idea include:
+1. Business Name & Description
+2. How to Start (Step by step)
+3. Investment Needed
+4. Expected Monthly Income
+5. Marketing Tips
+6. Challenges & Solutions
+
+Write everything in clear Hindi. Use emojis. Make it practical and actionable.`;
+  try{
+    const r=await fetch('/generate-content',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
+    const d=await r.json();if(!r.ok)throw new Error(d.error||'Error');
+    document.getElementById('result').textContent=d.result;
+    document.getElementById('resultCard').style.display='block';
+    document.getElementById('resultCard').scrollIntoView({behavior:'smooth'});
+  }catch(e){const err=document.getElementById('err');err.textContent='❌ '+e.message;err.style.display='block';}
+  finally{btn.disabled=false;btn.textContent='💡 Business Ideas Generate करो';}
+}
+function copyText(){navigator.clipboard.writeText(document.getElementById('result').textContent).then(()=>alert('Copied! 📋'));}
+</script>
+<script src="tracker.js"></script>
+
+<!-- ===== ADSTERRA ADS START ===== -->
+<!-- Popunder -->
+<script type="text/javascript" src="https://pl29487642.effectivecpmnetwork.com/99/2e/66/992e666bbb3d92cdc222c614640658d00.js"></script>
+<!-- Social Bar -->
+<script type="text/javascript" src="https://pl29470507.effectivecpmnetwork.com/16/a8/85/16a885ab5decd866c8172097a528540e.js"></script>
+<!-- 320x50 Mobile Banner -->
+<div id="sachin-ad-320" style="display:block;text-align:center;background:linear-gradient(90deg,#0a0e1a,#0d1225);border-top:1px solid rgba(99,102,241,0.3);border-bottom:1px solid rgba(99,102,241,0.3);padding:3px 0;width:100%;min-height:56px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'b1c2005cd8e1095bc458e4c59f785aa9','format':'iframe','height':50,'width':320,'params':{}};</script>
+<script type="text/javascript" src="https://www.highperformanceformat.com/b1c2005cd8e1095bc458e4c59f785aa9/invoke.js"></script>
+</div>
+<!-- 728x90 Leaderboard Banner -->
+<div id="sachin-ad-728" style="display:block;text-align:center;background:linear-gradient(90deg,#0a0e1a,#0d1225);padding:3px 0;width:100%;min-height:96px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'5e113b8022609e2135c5e1e265084235','format':'iframe','height':90,'width':728,'params':{}};</script>
+<script type="text/javascript" src="https://www.highperformanceformat.com/5e113b8022609e2135c5e1e265084235/invoke.js"></script>
+</div>
+<!-- Native Banner -->
+<div style="text-align:center;margin:6px auto;max-width:100%;min-height:60px;">
+<script async="async" data-cfasync="false" src="https://pl29470505.effectivecpmnetwork.com/30a2c535b11a237c281ced645d908d88/invoke.js"></script>
+<div id="container-30a2c535b11a237c281ced645d908d88"></div>
+</div>
+<!-- 300x250 Rectangle -->
+<div id="sachin-ad-300" style="display:block;text-align:center;margin:8px auto;width:100%;min-height:254px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'817c9252a9900f63d05a904142664916','format':'iframe','height':250,'width':300,'params':{}};</script>
+<script type="text/javascript" src="https://www.highperformanceformat.com/817c9252a9900f63d05a904142664916/invoke.js"></script>
+</div>
+<!-- ===== ADSTERRA ADS END ===== -->
+</body></html>

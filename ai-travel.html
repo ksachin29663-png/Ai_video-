@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="hi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>AI Travel Planner - सचिन एआई</title>
+<style>*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',sans-serif}body{background:#060810;color:#e1e7f0;min-height:100vh;display:flex;flex-direction:column}header{background:linear-gradient(135deg,#0a0e1a,#1a1400);border-bottom:1px solid rgba(251,191,36,.4);padding:14px 20px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100}.back{color:#fbbf24;text-decoration:none;font-size:1.3rem}.pt{font-size:1.05rem;font-weight:700;color:#fbbf24}.ps{font-size:.75rem;color:#64748b}main{flex:1;padding:20px 16px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.card{width:100%;max-width:640px;background:rgba(255,255,255,.04);border:1px solid rgba(251,191,36,.2);border-radius:18px;padding:20px}.ct{font-size:.82rem;font-weight:700;color:#fbbf24;margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px}
+label{font-size:.8rem;color:#94a3b8;font-weight:600;display:block;margin-bottom:5px;margin-top:10px}textarea,input,select{width:100%;padding:11px;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#fff;font-size:.87rem;font-family:inherit;outline:none}textarea{resize:vertical;min-height:65px}textarea:focus,input:focus,select:focus{border-color:#fbbf24}select option{background:#0a0e1a}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 4px}.chip{padding:7px 13px;border-radius:20px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);cursor:pointer;font-size:.78rem;color:#94a3b8;transition:all .2s}.chip.active,.chip:hover{border-color:#fbbf24;color:#fbbf24;background:rgba(251,191,36,.1)}
+.btn{width:100%;padding:14px;font-size:.95rem;font-weight:700;border:none;border-radius:12px;cursor:pointer;background:linear-gradient(135deg,#fbbf24,#d97706);color:#fff;font-family:inherit;transition:all .3s;margin-top:14px}.btn:hover{box-shadow:0 0 24px rgba(251,191,36,.4);transform:translateY(-1px)}.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.result-box{background:rgba(0,0,0,.4);border:1px solid rgba(251,191,36,.2);border-radius:12px;padding:18px;font-size:.88rem;line-height:1.8;white-space:pre-wrap;word-break:break-word;max-height:500px;overflow-y:auto}
+.row-btns{display:flex;gap:10px;margin-top:10px}.sm-btn{flex:1;padding:10px;border-radius:10px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.3);color:#fbbf24;font-size:.82rem;font-weight:700;cursor:pointer;font-family:inherit}.sm-btn:hover{background:rgba(251,191,36,.2)}
+.err{color:#fca5a5;font-size:.82rem;display:none;margin-top:8px;padding:10px;background:rgba(239,68,68,.08);border-radius:8px}
+footer{text-align:center;padding:16px;color:#334155;font-size:.75rem}</style></head>
+<body>
+<header><a href="index.html" class="back">←</a><div><div class="pt">✈️ AI Travel Planner</div><div class="ps">Destination दो — Day-by-Day Plan मिलेगा</div></div></header>
+<main>
+<div class="card">
+  <div class="ct">Trip Details</div>
+  <div class="grid2">
+    <div><label>From (कहाँ से)</label><input id="from" placeholder="Delhi"></div>
+    <div><label>To (कहाँ जाना है)</label><input id="to" placeholder="Goa, Kerala, Manali..."></div>
+    <div><label>कितने दिन</label><input id="days" type="number" min="1" max="30" value="3" placeholder="3"></div>
+    <div><label>Budget (per person)</label><input id="budget" placeholder="₹5000, ₹20000..."></div>
+  </div>
+  <label>Travel Type</label>
+  <div class="chips">
+    <div class="chip active" onclick="pick(this,'ttype')" data-val="Solo">🧍 Solo</div>
+    <div class="chip" onclick="pick(this,'ttype')" data-val="Couple">👫 Couple</div>
+    <div class="chip" onclick="pick(this,'ttype')" data-val="Family">👨‍👩‍👧 Family</div>
+    <div class="chip" onclick="pick(this,'ttype')" data-val="Friends Group">👥 Friends</div>
+  </div>
+  <label>Interests</label>
+  <div class="chips">
+    <div class="chip active" onclick="pickM(this,'int','Sightseeing')">🏛️ Sightseeing</div>
+    <div class="chip" onclick="pickM(this,'int','Adventure')">🏔️ Adventure</div>
+    <div class="chip" onclick="pickM(this,'int','Food & Culture')">🍛 Food</div>
+    <div class="chip" onclick="pickM(this,'int','Beach & Relaxation')">🏖️ Beach</div>
+    <div class="chip" onclick="pickM(this,'int','Shopping')">🛍️ Shopping</div>
+    <div class="chip" onclick="pickM(this,'int','Spiritual')">🕌 Spiritual</div>
+  </div>
+  <button class="btn" id="btn" onclick="generate()">✈️ Trip Plan बनाओ</button>
+  <div class="err" id="err"></div>
+</div>
+<div class="card" id="resultCard" style="display:none">
+  <div class="ct">🗺️ Your Travel Itinerary</div>
+  <div class="result-box" id="result"></div>
+  <div class="row-btns">
+    <button class="sm-btn" onclick="copyText()">📋 Copy करो</button>
+    <button class="sm-btn" onclick="generate()">🔄 नया Plan</button>
+  </div>
+</div>
+<!-- Mid-Page Ad -->
+<div style="text-align:center;margin:12px auto;width:100%;min-height:56px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'b1c2005cd8e1095bc458e4c59f785aa9','format':'iframe','height':50,'width':320,'params':{}};</script>
+<script type="text/javascript" src="https://www.highperformanceformat.com/b1c2005cd8e1095bc458e4c59f785aa9/invoke.js"></script>
+</div>
+</main>
+<footer>&copy; 2025 सचिन एआई फोटो स्टूडियो</footer>
+<script>
+const state={ttype:'Solo',int:new Set(['Sightseeing'])};
+function pick(el,key){document.querySelectorAll('[onclick*="pick(this,\''+key+'\'"]').forEach(e=>e.classList.remove('active'));el.classList.add('active');state[key]=el.dataset.val;}
+function pickM(el,key,val){el.classList.toggle('active');if(state[key].has(val))state[key].delete(val);else state[key].add(val);}
+async function generate(){
+  const btn=document.getElementById('btn');btn.disabled=true;btn.textContent='⏳ Plan बन रहा है...';
+  document.getElementById('err').style.display='none';
+  const prompt=`You are an expert Indian travel planner. Create a detailed ${document.getElementById('days').value||3}-day trip itinerary in Hindi for:
+From: ${document.getElementById('from').value||'Delhi'}
+Destination: ${document.getElementById('to').value||'Goa'}
+Travel Type: ${state.ttype}
+Budget: ${document.getElementById('budget').value||'Moderate'}
+Interests: ${[...state.int].join(', ')||'General Tourism'}
+
+Include for each day:
+- Morning, Afternoon, Evening activities
+- Best places to visit with timings
+- Local food recommendations
+- Stay options (budget/mid-range)
+- Transportation tips
+- Estimated cost per day
+
+Also include: Packing list, Best time to visit, Important tips.
+Write everything in Hindi. Use emojis for better readability.`;
+  try{
+    const r=await fetch('/generate-content',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
+    const d=await r.json();if(!r.ok)throw new Error(d.error||'Error');
+    document.getElementById('result').textContent=d.result;
+    document.getElementById('resultCard').style.display='block';
+    document.getElementById('resultCard').scrollIntoView({behavior:'smooth'});
+  }catch(e){const err=document.getElementById('err');err.textContent='❌ '+e.message;err.style.display='block';}
+  finally{btn.disabled=false;btn.textContent='✈️ Trip Plan बनाओ';}
+}
+function copyText(){navigator.clipboard.writeText(document.getElementById('result').textContent).then(()=>alert('Copied! 📋'));}
+</script>
+<script src="tracker.js"></script>
+
+<!-- ===== ADSTERRA ADS START ===== -->
+<!-- Popunder -->
+<script type="text/javascript" src="https://pl29487642.effectivecpmnetwork.com/99/2e/66/992e666bbb3d92cdc222c614640658d00.js"></script>
+<!-- Social Bar -->
+<script type="text/javascript" src="https://pl29470507.effectivecpmnetwork.com/16/a8/85/16a885ab5decd866c8172097a528540e.js"></script>
+<!-- 320x50 Mobile Banner -->
+<div id="sachin-ad-320" style="display:block;text-align:center;background:linear-gradient(90deg,#0a0e1a,#0d1225);border-top:1px solid rgba(99,102,241,0.3);border-bottom:1px solid rgba(99,102,241,0.3);padding:3px 0;width:100%;min-height:56px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'b1c2005cd8e1095bc458e4c59f785aa9','format':'iframe','height':50,'width':320,'params':{}};</script>
+<script type="text/javascript" src="https://www.highperformanceformat.com/b1c2005cd8e1095bc458e4c59f785aa9/invoke.js"></script>
+</div>
+<!-- 728x90 Leaderboard Banner -->
+<div id="sachin-ad-728" style="display:block;text-align:center;background:linear-gradient(90deg,#0a0e1a,#0d1225);padding:3px 0;width:100%;min-height:96px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'5e113b8022609e2135c5e1e265084235','format':'iframe','height':90,'width':728,'params':{}};</script>
+<script type="text/javascript" src="https://www.highperformanceformat.com/5e113b8022609e2135c5e1e265084235/invoke.js"></script>
+</div>
+<!-- Native Banner -->
+<div style="text-align:center;margin:6px auto;max-width:100%;min-height:60px;">
+<script async="async" data-cfasync="false" src="https://pl29470505.effectivecpmnetwork.com/30a2c535b11a237c281ced645d908d88/invoke.js"></script>
+<div id="container-30a2c535b11a237c281ced645d908d88"></div>
+</div>
+<!-- 300x250 Rectangle -->
+<div id="sachin-ad-300" style="display:block;text-align:center;margin:8px auto;width:100%;min-height:254px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'817c9252a9900f63d05a904142664916','format':'iframe','height':250,'width':300,'params':{}};</script>
+<script type="text/javascript" src="https://www.highperformanceformat.com/817c9252a9900f63d05a904142664916/invoke.js"></script>
+</div>
+<!-- ===== ADSTERRA ADS END ===== -->
+</body></html>

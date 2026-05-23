@@ -24,7 +24,7 @@ app.post('/analyze-image', async (req, res) => {
         return res.status(400).json({ error: 'Missing imageBase64 or instruction' });
     }
     try {
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
         const payload = {
             contents: [{
                 parts: [
@@ -284,7 +284,7 @@ app.post('/generate-code', async (req, res) => {
     const fullPrompt = `${sysPrompt}\n\nUser request: ${description}\n\nIMPORTANT: Return ONLY the code itself — no explanation, no markdown code fences, no \`\`\` blocks. Just the raw code.`;
 
     try {
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
         const payload = { contents: [{ parts: [{ text: fullPrompt }] }] };
         const response = await fetch(apiUrl, {
             method: 'POST',
@@ -311,7 +311,7 @@ app.post('/ai-chat', async (req, res) => {
     const { message } = req.body;
     if (!message) return res.status(400).json({ error: 'Message required' });
     try {
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
         const payload = { contents: [{ parts: [{ text: message }] }] };
         const response = await fetch(apiUrl, {
             method: 'POST',
@@ -325,6 +325,21 @@ app.post('/ai-chat', async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
+});
+
+// ---- Universal AI Content Generator (Tools 22-36) ----
+app.post('/generate-content', async (req, res) => {
+    const { prompt } = req.body;
+    if (!prompt) return res.status(400).json({ error: 'Prompt required' });
+    try {
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+        const payload = { contents: [{ parts: [{ text: prompt }] }] };
+        const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        if (!response.ok) { const e = await response.text(); return res.status(500).json({ error: 'AI API failed: ' + e.slice(0,200) }); }
+        const data = await response.json();
+        const result = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'कोई result नहीं मिला।';
+        res.json({ result });
+    } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
 // ---- Serve Static Files ----
