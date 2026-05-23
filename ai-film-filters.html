@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3019468976412219" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Film Filters - 50+ Cinematic Looks - सचिन एआई</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background: #080c16; color: #e1e7f0; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: linear-gradient(135deg,#0a0e1a,#1a0a1a); border-bottom: 1px solid rgba(168,85,247,0.3); padding: 14px 20px; display: flex; align-items: center; gap: 14px; }
+        .back-btn { color: #a855f7; text-decoration: none; font-size: 1.3rem; }
+        .page-title { font-size: 1.1rem; font-weight: 700; color: #a855f7; }
+        .page-sub { font-size: 0.75rem; color: #64748b; }
+        main { flex: 1; padding: 20px 16px; display: flex; flex-direction: column; align-items: center; gap: 18px; max-width: 740px; margin: 0 auto; width: 100%; }
+
+        .card { width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(168,85,247,0.18); border-radius: 20px; padding: 22px; }
+        .card-title { font-size: 0.88rem; font-weight: 700; color: #a855f7; margin-bottom: 14px; }
+
+        .upload-zone { border: 2px dashed rgba(168,85,247,0.35); border-radius: 14px; padding: 30px 16px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .upload-zone:hover { border-color: #a855f7; background: rgba(168,85,247,0.04); }
+        .upload-zone input { display: none; }
+        .upload-icon { font-size: 3rem; margin-bottom: 8px; }
+        .upload-text { color: #64748b; font-size: 0.85rem; }
+        .upload-text b { color: #a855f7; }
+
+        .preview-box { width: 100%; border-radius: 14px; overflow: hidden; background: #000; position: relative; max-height: 320px; display: flex; align-items: center; justify-content: center; }
+        .preview-box img { width: 100%; height: 100%; object-fit: contain; max-height: 320px; display: block; transition: filter 0.3s; }
+        .active-filter-badge { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); background: rgba(168,85,247,0.9); padding: 4px 16px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; white-space: nowrap; }
+
+        .search-row { display: flex; gap: 10px; margin-bottom: 14px; }
+        .search-input { flex: 1; padding: 10px 14px; background: rgba(255,255,255,0.05); border: 1px solid rgba(168,85,247,0.25); border-radius: 10px; color: #e1e7f0; font-family: inherit; font-size: 0.85rem; outline: none; }
+        .search-input:focus { border-color: #a855f7; }
+        .search-input::placeholder { color: #475569; }
+
+        .cat-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+        .cat-tab { padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(168,85,247,0.25); background: transparent; color: #94a3b8; font-size: 0.75rem; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+        .cat-tab.active, .cat-tab:hover { border-color: #a855f7; background: rgba(168,85,247,0.15); color: #a855f7; }
+
+        .filters-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; max-height: 480px; overflow-y: auto; padding-right: 2px; }
+        @media(min-width:480px){ .filters-grid { grid-template-columns: repeat(4,1fr); } }
+        .filters-grid::-webkit-scrollbar { width: 4px; }
+        .filters-grid::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); border-radius: 4px; }
+        .filters-grid::-webkit-scrollbar-thumb { background: #a855f7; border-radius: 4px; }
+
+        .filter-card { border-radius: 12px; overflow: hidden; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; background: rgba(255,255,255,0.03); position: relative; }
+        .filter-card:hover { border-color: rgba(168,85,247,0.5); transform: scale(1.02); }
+        .filter-card.selected { border-color: #a855f7; box-shadow: 0 0 16px rgba(168,85,247,0.4); }
+        .filter-thumb { width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; position: relative; overflow: hidden; background: #111; }
+        .filter-thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+        .filter-thumb .emoji-bg { z-index: 2; font-size: 1.4rem; }
+        .filter-name { font-size: 0.65rem; font-weight: 700; color: #cbd5e1; text-align: center; padding: 5px 3px; }
+        .filter-cat-tag { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.75); padding: 2px 5px; border-radius: 6px; font-size: 0.55rem; color: #a855f7; z-index: 3; }
+
+        .intensity-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+        .intensity-row label { font-size: 0.8rem; color: #94a3b8; white-space: nowrap; }
+        .intensity-row input { flex: 1; accent-color: #a855f7; }
+        .intensity-row span { font-size: 0.8rem; color: #a855f7; font-weight: 700; min-width: 36px; text-align: right; }
+
+        .action-row { display: flex; gap: 10px; flex-wrap: wrap; }
+        .apply-btn { flex: 2; padding: 14px; border: none; border-radius: 12px; background: linear-gradient(135deg,#a855f7,#7c3aed); color: #fff; font-size: 0.92rem; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.3s; }
+        .apply-btn:hover { box-shadow: 0 0 24px rgba(168,85,247,0.5); }
+        .apply-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .dl-btn { flex: 1; padding: 14px; border-radius: 12px; border: 1px solid rgba(168,85,247,0.35); background: rgba(168,85,247,0.08); color: #a855f7; font-size: 0.82rem; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+        .dl-btn:hover { background: rgba(168,85,247,0.18); }
+        .reset-btn { padding: 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); color: #64748b; font-size: 0.82rem; cursor: pointer; font-family: inherit; }
+        canvas { display: none; }
+    </style>
+</head>
+<body>
+<header>
+    <a href="index.html" class="back-btn">←</a>
+    <div>
+        <div class="page-title">🎬 AI Film Filters</div>
+        <div class="page-sub">50+ Cinematic Looks — CapCut · Kodak · Fuji · Hollywood Style</div>
+    </div>
+</header>
+<main>
+    <div class="card">
+        <div class="card-title">📸 Step 1 — फोटो अपलोड करें</div>
+        <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileIn').click()">
+            <div class="upload-icon">🎞️</div>
+            <div class="upload-text"><b>फोटो यहाँ Upload करें</b><br>कोई भी Photo — तुरंत Cinematic बनेगी</div>
+            <input type="file" id="fileIn" accept="image/*" onchange="loadImg(event)">
+        </div>
+        <div class="preview-box" id="previewBox" style="display:none; margin-top:14px;">
+            <img id="previewImg" alt="Preview">
+            <div class="active-filter-badge" id="filterBadge">🎞️ Original</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">🎬 Step 2 — 50+ Film Filters में से चुनें</div>
+        <div class="search-row">
+            <input class="search-input" id="searchInput" placeholder="🔍 Filter खोजें... (Kodak, Vintage, B&W...)" oninput="filterSearch()">
+        </div>
+        <div class="cat-tabs" id="catTabs">
+            <button class="cat-tab active" data-cat="all" onclick="setCategory(this)">🌐 All (54)</button>
+            <button class="cat-tab" data-cat="film" onclick="setCategory(this)">🎞️ Film</button>
+            <button class="cat-tab" data-cat="bw" onclick="setCategory(this)">⚫ B&W</button>
+            <button class="cat-tab" data-cat="vintage" onclick="setCategory(this)">📷 Vintage</button>
+            <button class="cat-tab" data-cat="cinematic" onclick="setCategory(this)">🎬 Cinematic</button>
+            <button class="cat-tab" data-cat="mood" onclick="setCategory(this)">🌈 Mood</button>
+            <button class="cat-tab" data-cat="capcut" onclick="setCategory(this)">✂️ CapCut</button>
+        </div>
+        <div class="filters-grid" id="filtersGrid"></div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">⚙️ Step 3 — Intensity & Apply</div>
+        <div class="intensity-row">
+            <label>💧 Filter Intensity</label>
+            <input type="range" id="intensitySlider" min="10" max="100" value="85" oninput="updateIntensity(this.value); livePreview()">
+            <span id="intensityDisp">85%</span>
+        </div>
+        <div class="action-row">
+            <button class="apply-btn" id="applyBtn" onclick="applyFilter()" disabled>🎬 Filter Apply करें</button>
+            <button class="dl-btn" id="dlBtn" onclick="downloadResult()" style="display:none">📥 Download</button>
+            <button class="reset-btn" onclick="resetFilter()">↺</button>
+        </div>
+    </div>
+</main>
+
+<canvas id="workCanvas"></canvas>
+
+<script src="tracker.js"></script>
+<script>
+const FILTERS = [
+    // FILM
+    { id:'portra400',   name:'Kodak Portra 400',  cat:'film',     icon:'🟡', css: 'brightness(104%) contrast(96%) saturate(92%) sepia(12%)', overlay:'rgba(255,220,160,0.08)' },
+    { id:'velvia50',    name:'Fuji Velvia 50',     cat:'film',     icon:'🔵', css: 'brightness(102%) contrast(118%) saturate(148%) hue-rotate(-5deg)', overlay:'rgba(0,30,80,0.06)' },
+    { id:'trix400',     name:'Kodak Tri-X',        cat:'bw',       icon:'⬛', css: 'brightness(105%) contrast(128%) grayscale(100%)', overlay:'rgba(0,0,0,0.05)' },
+    { id:'hp5',         name:'Ilford HP5',         cat:'bw',       icon:'🩶', css: 'brightness(108%) contrast(110%) grayscale(100%) saturate(0%)', overlay:'rgba(255,255,255,0.04)' },
+    { id:'gold200',     name:'Kodak Gold 200',     cat:'film',     icon:'🟠', css: 'brightness(106%) contrast(100%) saturate(108%) sepia(18%) hue-rotate(-10deg)', overlay:'rgba(255,200,100,0.08)' },
+    { id:'pro400h',     name:'Fuji Pro 400H',      cat:'film',     icon:'🩵', css: 'brightness(108%) contrast(93%) saturate(85%) hue-rotate(5deg)', overlay:'rgba(180,220,255,0.07)' },
+    { id:'ektar100',    name:'Kodak Ektar 100',    cat:'film',     icon:'🔴', css: 'brightness(103%) contrast(114%) saturate(140%) hue-rotate(-8deg)', overlay:'rgba(255,60,40,0.05)' },
+    { id:'cinestill',   name:'Cinestill 800T',     cat:'cinematic',icon:'🎆', css: 'brightness(95%) contrast(112%) saturate(80%) hue-rotate(200deg) sepia(20%)', overlay:'rgba(0,0,200,0.08)' },
+    { id:'ultramax',    name:'Kodak Ultramax',     cat:'film',     icon:'🟤', css: 'brightness(105%) contrast(104%) saturate(115%) sepia(10%)', overlay:'rgba(255,170,80,0.06)' },
+    { id:'superia',     name:'Fuji Superia 400',   cat:'film',     icon:'🟢', css: 'brightness(104%) contrast(100%) saturate(100%) hue-rotate(8deg)', overlay:'rgba(0,255,100,0.04)' },
+    { id:'agfavista',   name:'Agfa Vista 400',     cat:'film',     icon:'🟡', css: 'brightness(106%) contrast(98%) saturate(110%) sepia(15%) hue-rotate(-15deg)', overlay:'rgba(255,230,100,0.07)' },
+    { id:'colorplus',   name:'Kodak ColorPlus',    cat:'film',     icon:'🧡', css: 'brightness(104%) contrast(102%) saturate(118%) sepia(8%)', overlay:'rgba(255,180,60,0.06)' },
+
+    // VINTAGE
+    { id:'polaroid',    name:'Polaroid',           cat:'vintage',  icon:'⬜', css: 'brightness(112%) contrast(90%) saturate(85%) sepia(20%)', overlay:'rgba(255,240,200,0.1)' },
+    { id:'lomo',        name:'Lomo LC-A',          cat:'vintage',  icon:'🌈', css: 'brightness(90%) contrast(140%) saturate(150%) hue-rotate(-15deg)', overlay:'rgba(255,0,100,0.06)' },
+    { id:'cross',       name:'Cross Process',      cat:'vintage',  icon:'🔀', css: 'brightness(108%) contrast(130%) saturate(180%) hue-rotate(-30deg)', overlay:'rgba(0,255,200,0.07)' },
+    { id:'instax',      name:'Instax Mini',        cat:'vintage',  icon:'🏷️', css: 'brightness(116%) contrast(88%) saturate(90%) sepia(22%)', overlay:'rgba(255,245,220,0.1)' },
+    { id:'earlybird',   name:'Earlybird',          cat:'vintage',  icon:'🐦', css: 'brightness(95%) contrast(96%) saturate(75%) sepia(35%)', overlay:'rgba(200,150,80,0.1)' },
+    { id:'toaster',     name:'Toaster',            cat:'vintage',  icon:'🍞', css: 'brightness(110%) contrast(120%) saturate(140%) sepia(30%) hue-rotate(-20deg)', overlay:'rgba(255,100,0,0.08)' },
+    { id:'nashville',   name:'Nashville',          cat:'vintage',  icon:'🎸', css: 'brightness(108%) contrast(95%) saturate(80%) sepia(25%) hue-rotate(15deg)', overlay:'rgba(255,180,180,0.08)' },
+    { id:'1977',        name:'1977',               cat:'vintage',  icon:'📺', css: 'brightness(110%) contrast(110%) saturate(130%) sepia(20%) hue-rotate(-20deg)', overlay:'rgba(255,160,100,0.08)' },
+    { id:'lofi',        name:'Lo-Fi',              cat:'vintage',  icon:'📻', css: 'brightness(88%) contrast(145%) saturate(175%) hue-rotate(-10deg)', overlay:'rgba(100,0,200,0.08)' },
+    { id:'kelvin',      name:'Kelvin',             cat:'vintage',  icon:'☀️', css: 'brightness(112%) contrast(106%) saturate(165%) sepia(15%)', overlay:'rgba(255,200,50,0.09)' },
+
+    // B&W
+    { id:'inkwell',     name:'Inkwell',            cat:'bw',       icon:'🖊️', css: 'grayscale(100%) brightness(100%) contrast(120%)', overlay:'rgba(0,0,0,0.0)' },
+    { id:'willow',      name:'Willow',             cat:'bw',       icon:'🌿', css: 'grayscale(100%) brightness(108%) contrast(95%) sepia(10%)', overlay:'rgba(255,255,255,0.03)' },
+    { id:'brannan',     name:'Brannan',            cat:'bw',       icon:'🔩', css: 'grayscale(50%) brightness(96%) contrast(140%) sepia(20%) hue-rotate(180deg)', overlay:'rgba(0,50,100,0.08)' },
+    { id:'moon',        name:'Moon',               cat:'bw',       icon:'🌙', css: 'grayscale(100%) brightness(112%) contrast(96%) blur(0.3px)', overlay:'rgba(200,220,255,0.05)' },
+    { id:'dogpatch',    name:'Dogpatch',           cat:'bw',       icon:'🐕', css: 'grayscale(80%) brightness(103%) contrast(150%)', overlay:'rgba(0,0,0,0.0)' },
+    { id:'silentfilm',  name:'Silent Film',        cat:'bw',       icon:'🎥', css: 'grayscale(100%) brightness(90%) contrast(160%) sepia(5%)', overlay:'rgba(0,0,0,0.08)' },
+    { id:'noir',        name:'Film Noir',          cat:'bw',       icon:'🕵️', css: 'grayscale(100%) brightness(85%) contrast(180%)', overlay:'rgba(0,0,0,0.12)' },
+
+    // CINEMATIC
+    { id:'teal',        name:'Teal & Orange',      cat:'cinematic',icon:'🎬', css: 'brightness(98%) contrast(112%) saturate(115%) hue-rotate(170deg)', overlay:'rgba(0,200,200,0.07)' },
+    { id:'hollywood',   name:'Hollywood',          cat:'cinematic',icon:'🌟', css: 'brightness(102%) contrast(118%) saturate(130%) hue-rotate(-5deg)', overlay:'rgba(255,200,100,0.06)' },
+    { id:'darkmoody',   name:'Dark Moody',         cat:'cinematic',icon:'🌑', css: 'brightness(82%) contrast(130%) saturate(85%) hue-rotate(200deg)', overlay:'rgba(0,0,80,0.12)' },
+    { id:'blockbuster', name:'Blockbuster',        cat:'cinematic',icon:'🎞️', css: 'brightness(100%) contrast(120%) saturate(140%) hue-rotate(-8deg)', overlay:'rgba(255,150,0,0.07)' },
+    { id:'horror',      name:'Horror Red',         cat:'cinematic',icon:'🩸', css: 'brightness(80%) contrast(140%) saturate(60%) hue-rotate(330deg)', overlay:'rgba(180,0,0,0.12)' },
+    { id:'scifi',       name:'Sci-Fi Blue',        cat:'cinematic',icon:'🚀', css: 'brightness(95%) contrast(120%) saturate(80%) hue-rotate(200deg)', overlay:'rgba(0,100,255,0.1)' },
+    { id:'westernfilm', name:'Western',            cat:'cinematic',icon:'🤠', css: 'brightness(105%) contrast(108%) saturate(90%) sepia(40%)', overlay:'rgba(180,120,40,0.1)' },
+
+    // MOOD
+    { id:'golden',      name:'Golden Hour',        cat:'mood',     icon:'🌅', css: 'brightness(112%) contrast(104%) saturate(130%) sepia(25%) hue-rotate(-20deg)', overlay:'rgba(255,180,0,0.1)' },
+    { id:'blueHour',    name:'Blue Hour',          cat:'mood',     icon:'🌆', css: 'brightness(90%) contrast(108%) saturate(90%) hue-rotate(190deg)', overlay:'rgba(0,60,200,0.1)' },
+    { id:'sunset',      name:'Sunset Glow',        cat:'mood',     icon:'🌇', css: 'brightness(108%) contrast(106%) saturate(160%) hue-rotate(-25deg)', overlay:'rgba(255,100,0,0.09)' },
+    { id:'retro',       name:'Retro Wave',         cat:'mood',     icon:'🌊', css: 'brightness(95%) contrast(120%) saturate(140%) hue-rotate(290deg)', overlay:'rgba(255,0,200,0.08)' },
+    { id:'cyberpunk',   name:'Cyberpunk',          cat:'mood',     icon:'🤖', css: 'brightness(92%) contrast(130%) saturate(180%) hue-rotate(160deg)', overlay:'rgba(0,255,200,0.08)' },
+    { id:'dreamy',      name:'Dreamy Pastel',      cat:'mood',     icon:'🌸', css: 'brightness(114%) contrast(88%) saturate(80%) sepia(10%)', overlay:'rgba(255,200,220,0.1)' },
+    { id:'midsummer',   name:'Midsummer',          cat:'mood',     icon:'🌻', css: 'brightness(110%) contrast(100%) saturate(140%) hue-rotate(-15deg)', overlay:'rgba(255,230,50,0.08)' },
+    { id:'arctic',      name:'Arctic Chill',       cat:'mood',     icon:'❄️', css: 'brightness(106%) contrast(105%) saturate(70%) hue-rotate(195deg)', overlay:'rgba(180,220,255,0.1)' },
+
+    // CAPCUT STYLE
+    { id:'cc_vivid',    name:'CapCut Vivid',       cat:'capcut',   icon:'✂️', css: 'brightness(106%) contrast(118%) saturate(175%)', overlay:'rgba(255,255,255,0.03)' },
+    { id:'cc_smooth',   name:'CapCut Smooth',      cat:'capcut',   icon:'🪄', css: 'brightness(112%) contrast(95%) saturate(95%) blur(0.4px)', overlay:'rgba(255,240,220,0.07)' },
+    { id:'cc_pop',      name:'CapCut Pop',         cat:'capcut',   icon:'🎉', css: 'brightness(108%) contrast(120%) saturate(200%) hue-rotate(-5deg)', overlay:'rgba(255,100,200,0.06)' },
+    { id:'cc_fade',     name:'CapCut Fade',        cat:'capcut',   icon:'🌫️', css: 'brightness(110%) contrast(85%) saturate(70%)', overlay:'rgba(200,200,200,0.1)' },
+    { id:'cc_moody',    name:'CapCut Moody',       cat:'capcut',   icon:'🌚', css: 'brightness(85%) contrast(120%) saturate(80%) hue-rotate(200deg)', overlay:'rgba(0,0,100,0.1)' },
+    { id:'cc_warm',     name:'CapCut Warm',        cat:'capcut',   icon:'🔥', css: 'brightness(108%) contrast(104%) saturate(120%) sepia(20%)', overlay:'rgba(255,160,60,0.08)' },
+    { id:'cc_cool',     name:'CapCut Cool',        cat:'capcut',   icon:'💙', css: 'brightness(104%) contrast(106%) saturate(95%) hue-rotate(185deg)', overlay:'rgba(0,100,255,0.07)' },
+    { id:'cc_neon',     name:'CapCut Neon',        cat:'capcut',   icon:'💫', css: 'brightness(100%) contrast(140%) saturate(250%) hue-rotate(290deg)', overlay:'rgba(255,0,255,0.07)' },
+    { id:'cc_natural',  name:'CapCut Natural',     cat:'capcut',   icon:'🍃', css: 'brightness(104%) contrast(100%) saturate(105%) hue-rotate(5deg)', overlay:'rgba(100,200,100,0.05)' },
+    { id:'cc_hdr',      name:'CapCut HDR',         cat:'capcut',   icon:'⚡', css: 'brightness(100%) contrast(130%) saturate(145%)', overlay:'rgba(255,255,255,0.02)' },
+];
+
+let originalSrc = null;
+let selectedFilter = null;
+let currentCategory = 'all';
+let currentSearch = '';
+let intensity = 0.85;
+
+function loadImg(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+        originalSrc = e.target.result;
+        const preview = document.getElementById('previewImg');
+        preview.src = originalSrc;
+        preview.style.filter = '';
+        document.getElementById('previewBox').style.display = 'flex';
+        document.getElementById('filterBadge').textContent = '🎞️ Original';
+        document.getElementById('applyBtn').disabled = false;
+        const zone = document.getElementById('uploadZone');
+        zone.innerHTML = `<img src="${originalSrc}" style="max-height:120px;border-radius:10px;object-fit:contain;"><p style="margin-top:8px;color:#a855f7;font-size:0.8rem;font-weight:700;">✅ फोटो लोड हो गई!</p><input type="file" id="fileIn" accept="image/*" onchange="loadImg(event)">`;
+        zone.onclick = () => document.getElementById('fileIn').click();
+        renderFilters();
+    };
+    reader.readAsDataURL(file);
+}
+
+function renderFilters() {
+    const grid = document.getElementById('filtersGrid');
+    const search = currentSearch.toLowerCase();
+    const filtered = FILTERS.filter(f => {
+        const catMatch = currentCategory === 'all' || f.cat === currentCategory;
+        const searchMatch = !search || f.name.toLowerCase().includes(search) || f.id.includes(search);
+        return catMatch && searchMatch;
+    });
+    grid.innerHTML = filtered.map(f => `
+        <div class="filter-card ${selectedFilter && selectedFilter.id === f.id ? 'selected' : ''}" onclick="selectFilter('${f.id}')">
+            <div class="filter-thumb">
+                ${originalSrc ? `<img src="${originalSrc}" style="filter:${f.css};" alt="${f.name}">` : `<span class="emoji-bg">${f.icon}</span>`}
+                <span class="filter-cat-tag">${f.cat}</span>
+            </div>
+            <div class="filter-name">${f.name}</div>
+        </div>
+    `).join('');
+}
+
+function selectFilter(id) {
+    selectedFilter = FILTERS.find(f => f.id === id);
+    document.querySelectorAll('.filter-card').forEach(c => c.classList.remove('selected'));
+    const cards = document.querySelectorAll('.filter-card');
+    cards.forEach(c => {
+        if (c.querySelector('.filter-name') && c.querySelector('.filter-name').textContent === selectedFilter.name) {
+            c.classList.add('selected');
+        }
+    });
+    livePreview();
+}
+
+function livePreview() {
+    if (!originalSrc || !selectedFilter) return;
+    const img = document.getElementById('previewImg');
+    img.style.filter = selectedFilter.css;
+    document.getElementById('filterBadge').textContent = selectedFilter.icon + ' ' + selectedFilter.name;
+}
+
+function updateIntensity(val) {
+    intensity = val / 100;
+    document.getElementById('intensityDisp').textContent = val + '%';
+}
+
+function setCategory(el) {
+    currentCategory = el.dataset.cat;
+    document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    renderFilters();
+}
+
+function filterSearch() {
+    currentSearch = document.getElementById('searchInput').value;
+    renderFilters();
+}
+
+function applyFilter() {
+    if (!originalSrc || !selectedFilter) {
+        alert('पहले फोटो अपलोड करें और एक filter चुनें!'); return;
+    }
+    const img = new Image();
+    img.onload = () => {
+        const canvas = document.getElementById('workCanvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.filter = selectedFilter.css;
+        ctx.drawImage(img, 0, 0);
+        ctx.filter = 'none';
+        if (selectedFilter.overlay && intensity > 0.3) {
+            const col = selectedFilter.overlay.replace(/[\d.]+\)$/, m => (parseFloat(m) * intensity).toFixed(3) + ')');
+            ctx.fillStyle = col;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        const result = canvas.toDataURL('image/jpeg', 0.95);
+        document.getElementById('previewImg').src = result;
+        document.getElementById('previewImg').style.filter = '';
+        document.getElementById('filterBadge').textContent = '✅ ' + selectedFilter.name + ' Applied!';
+        document.getElementById('dlBtn').style.display = 'block';
+    };
+    img.src = originalSrc;
+}
+
+function downloadResult() {
+    const canvas = document.getElementById('workCanvas');
+    if (canvas.width === 0) { alert('पहले filter Apply करें'); return; }
+    const a = document.createElement('a');
+    a.download = `sachin-ai-${selectedFilter ? selectedFilter.id : 'filter'}.jpg`;
+    a.href = canvas.toDataURL('image/jpeg', 0.95);
+    a.click();
+}
+
+function resetFilter() {
+    if (!originalSrc) return;
+    selectedFilter = null;
+    document.getElementById('previewImg').src = originalSrc;
+    document.getElementById('previewImg').style.filter = '';
+    document.getElementById('filterBadge').textContent = '🎞️ Original';
+    document.getElementById('dlBtn').style.display = 'none';
+    renderFilters();
+}
+
+// Init
+renderFilters();
+</script>
+<!-- ===== ADSTERRA ADS START ===== -->
+<script type="text/javascript" src="https://pl29487642.effectivecpmnetwork.com/99/2e/66/992e666bbb3d92cdc222c614640658d00.js"></script>
+<script type="text/javascript" src="https://pl29470507.effectivecpmnetwork.com/16/a8/85/16a885ab5decd866c8172097a528540e.js"></script>
+<div style="display:block;text-align:center;padding:4px 0;width:100%;min-height:56px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'b1c2005cd8e1095bc458e4c59f785aa9','format':'iframe','height':50,'width':320,'params':{}};</script>
+<script type="text/javascript" src="https://www.highperformanceformat.com/b1c2005cd8e1095bc458e4c59f785aa9/invoke.js"></script>
+</div>
+<div style="display:block;text-align:center;padding:3px 0;width:100%;min-height:96px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'5e113b8022609e2135c5e1e265084235','format':'iframe','height':90,'width':728,'params':{}};</script>
+<script type="text/javascript" src="https://www.highperformanceformat.com/5e113b8022609e2135c5e1e265084235/invoke.js"></script>
+</div>
+<!-- ===== ADSTERRA ADS END ===== -->
+</body>
+</html>

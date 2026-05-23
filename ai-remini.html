@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3019468976412219" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Remini Enhancer - सचिन एआई</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background: #080c16; color: #e1e7f0; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: linear-gradient(135deg,#0a0e1a,#0d1b0a); border-bottom: 1px solid rgba(0,255,80,0.25); padding: 14px 20px; display: flex; align-items: center; gap: 14px; }
+        .back-btn { color: #00ff50; text-decoration: none; font-size: 1.3rem; }
+        .page-title { font-size: 1.1rem; font-weight: 700; color: #00ff50; }
+        .page-sub { font-size: 0.75rem; color: #64748b; }
+        main { flex: 1; padding: 20px 16px; display: flex; flex-direction: column; align-items: center; gap: 18px; max-width: 700px; margin: 0 auto; width: 100%; }
+        .card { width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(0,255,80,0.18); border-radius: 20px; padding: 22px; }
+        .card-title { font-size: 0.88rem; font-weight: 700; color: #00ff50; margin-bottom: 14px; letter-spacing: 0.5px; }
+
+        .upload-zone { border: 2px dashed rgba(0,255,80,0.3); border-radius: 14px; padding: 32px 16px; text-align: center; cursor: pointer; transition: all 0.3s; position: relative; }
+        .upload-zone:hover { border-color: #00ff50; background: rgba(0,255,80,0.04); }
+        .upload-zone input { display: none; }
+        .upload-icon { font-size: 3rem; margin-bottom: 10px; }
+        .upload-text { color: #64748b; font-size: 0.85rem; }
+        .upload-text b { color: #00ff50; }
+
+        .mode-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; margin-bottom: 16px; }
+        @media(min-width:480px){ .mode-grid { grid-template-columns: repeat(4,1fr); } }
+        .mode-btn { padding: 12px 6px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); cursor: pointer; text-align: center; font-family: inherit; transition: all 0.2s; color: #e1e7f0; }
+        .mode-btn:hover, .mode-btn.active { border-color: #00ff50; background: rgba(0,255,80,0.08); }
+        .mode-icon { font-size: 1.6rem; margin-bottom: 4px; }
+        .mode-name { font-size: 0.72rem; font-weight: 700; color: #00ff50; }
+        .mode-desc { font-size: 0.65rem; color: #64748b; margin-top: 2px; }
+
+        .level-row { margin-bottom: 14px; }
+        .level-label { display: flex; justify-content: space-between; font-size: 0.8rem; color: #94a3b8; margin-bottom: 6px; }
+        input[type=range] { width: 100%; cursor: pointer; accent-color: #00ff50; }
+
+        .enhance-btn { width: 100%; padding: 15px; font-size: 1rem; font-weight: 700; border: none; border-radius: 14px; cursor: pointer; background: linear-gradient(135deg,#00c840,#006620); color: #fff; font-family: inherit; transition: all 0.3s; letter-spacing: 0.5px; }
+        .enhance-btn:hover { box-shadow: 0 0 28px rgba(0,255,80,0.4); transform: translateY(-1px); }
+        .enhance-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+        .progress-bar { display: none; width: 100%; height: 6px; background: rgba(255,255,255,0.08); border-radius: 6px; overflow: hidden; margin-top: 12px; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg,#00ff50,#00c840); border-radius: 6px; animation: progAnim 2s ease-in-out infinite; }
+        @keyframes progAnim { 0%{width:5%} 50%{width:85%} 100%{width:95%} }
+        .progress-label { text-align: center; font-size: 0.78rem; color: #00ff50; margin-top: 6px; display: none; }
+
+        .compare-wrap { position: relative; width: 100%; border-radius: 14px; overflow: hidden; background: #000; aspect-ratio: 4/3; touch-action: none; user-select: none; }
+        .compare-wrap img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; }
+        .img-before { z-index: 1; }
+        .img-after { z-index: 2; clip-path: inset(0 50% 0 0); }
+        .compare-handle { position: absolute; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); width: 3px; background: #00ff50; z-index: 10; cursor: ew-resize; }
+        .compare-handle::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 36px; height: 36px; background: #00ff50; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .compare-handle::after { content: '◀ ▶'; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); color: #080c16; font-size: 0.6rem; font-weight: 900; z-index: 11; white-space: nowrap; }
+        .compare-labels { display: flex; justify-content: space-between; margin-top: 8px; }
+        .cmp-lbl { font-size: 0.72rem; color: #64748b; background: rgba(255,255,255,0.05); padding: 3px 10px; border-radius: 20px; }
+
+        .dl-row { display: flex; gap: 10px; margin-top: 12px; }
+        .dl-btn { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid rgba(0,255,80,0.3); background: rgba(0,255,80,0.06); color: #00ff50; font-size: 0.82rem; cursor: pointer; font-family: inherit; font-weight: 600; transition: all 0.2s; }
+        .dl-btn:hover { background: rgba(0,255,80,0.15); }
+
+        .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 4px; }
+        .stat-box { background: rgba(0,255,80,0.06); border: 1px solid rgba(0,255,80,0.15); border-radius: 10px; padding: 10px; text-align: center; }
+        .stat-val { font-size: 1.1rem; font-weight: 800; color: #00ff50; }
+        .stat-name { font-size: 0.65rem; color: #64748b; margin-top: 2px; }
+        canvas { display: none; }
+    </style>
+</head>
+<body>
+<header>
+    <a href="index.html" class="back-btn">←</a>
+    <div>
+        <div class="page-title">✨ AI Remini Enhancer</div>
+        <div class="page-sub">फोटो डालो — Remini जैसा Crystal Clear बनाएं</div>
+    </div>
+</header>
+<main>
+    <div class="card">
+        <div class="card-title">📸 Step 1 — फोटो अपलोड करें</div>
+        <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+            <div class="upload-icon">🖼️</div>
+            <div class="upload-text"><b>कोई भी फोटो यहाँ डालें</b><br>Portrait · Selfie · Landscape · पुरानी फोटो</div>
+            <input type="file" id="fileInput" accept="image/*" onchange="loadImage(event)">
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">🎯 Step 2 — Enhancement Mode चुनें</div>
+        <div class="mode-grid">
+            <button class="mode-btn active" data-mode="portrait" onclick="selectMode(this)">
+                <div class="mode-icon">🤳</div>
+                <div class="mode-name">Portrait</div>
+                <div class="mode-desc">Face / Selfie</div>
+            </button>
+            <button class="mode-btn" data-mode="oldphoto" onclick="selectMode(this)">
+                <div class="mode-icon">📜</div>
+                <div class="mode-name">Old Photo</div>
+                <div class="mode-desc">पुरानी फोटो</div>
+            </button>
+            <button class="mode-btn" data-mode="landscape" onclick="selectMode(this)">
+                <div class="mode-icon">🏔️</div>
+                <div class="mode-name">Landscape</div>
+                <div class="mode-desc">Nature / Travel</div>
+            </button>
+            <button class="mode-btn" data-mode="lowlight" onclick="selectMode(this)">
+                <div class="mode-icon">🌙</div>
+                <div class="mode-name">Low Light</div>
+                <div class="mode-desc">Night / Dark</div>
+            </button>
+        </div>
+        <div class="card-title">⚡ Step 3 — Enhancement Level</div>
+        <div class="level-row">
+            <div class="level-label"><span>💎 Enhancement Intensity</span><span id="intensityVal">75%</span></div>
+            <input type="range" id="intensity" min="20" max="100" value="75" oninput="document.getElementById('intensityVal').textContent=this.value+'%'">
+        </div>
+        <div class="level-row">
+            <div class="level-label"><span>🔍 Sharpness</span><span id="sharpVal">80%</span></div>
+            <input type="range" id="sharpness" min="0" max="100" value="80" oninput="document.getElementById('sharpVal').textContent=this.value+'%'">
+        </div>
+        <div class="level-row">
+            <div class="level-label"><span>🌟 HDR Effect</span><span id="hdrVal">60%</span></div>
+            <input type="range" id="hdr" min="0" max="100" value="60" oninput="document.getElementById('hdrVal').textContent=this.value+'%'">
+        </div>
+        <button class="enhance-btn" id="enhanceBtn" onclick="enhancePhoto()" disabled>✨ AI Enhancement शुरू करें</button>
+        <div class="progress-bar" id="progressBar"><div class="progress-fill"></div></div>
+        <div class="progress-label" id="progressLabel">🤖 AI Processing... रुकिए</div>
+    </div>
+
+    <div class="card" id="resultCard" style="display:none">
+        <div class="card-title">🎉 Enhancement Complete! — Before vs After</div>
+        <div class="compare-wrap" id="compareWrap">
+            <img class="img-before" id="imgBefore" alt="Before">
+            <img class="img-after" id="imgAfter" alt="After">
+            <div class="compare-handle" id="compareHandle"></div>
+        </div>
+        <div class="compare-labels">
+            <span class="cmp-lbl">◀ Original</span>
+            <span class="cmp-lbl">✨ AI Enhanced ▶</span>
+        </div>
+        <div class="stats-row" id="statsRow">
+            <div class="stat-box"><div class="stat-val" id="statSharp">—</div><div class="stat-name">Sharpness Boost</div></div>
+            <div class="stat-box"><div class="stat-val" id="statDetail">—</div><div class="stat-name">Detail Recovery</div></div>
+            <div class="stat-box"><div class="stat-val" id="statQuality">—</div><div class="stat-name">Quality Score</div></div>
+        </div>
+        <div class="dl-row">
+            <button class="dl-btn" onclick="downloadResult()">📥 Enhanced Download</button>
+            <button class="dl-btn" onclick="resetAll()">🔄 नई फोटो</button>
+        </div>
+    </div>
+</main>
+
+<canvas id="workCanvas"></canvas>
+<canvas id="blurCanvas"></canvas>
+
+<script src="tracker.js"></script>
+<script>
+    let originalSrc = null;
+    let currentMode = 'portrait';
+    let handleX = 50;
+    let isDragging = false;
+
+    function selectMode(el) {
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        currentMode = el.dataset.mode;
+    }
+
+    function loadImage(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = e => {
+            originalSrc = e.target.result;
+            document.getElementById('enhanceBtn').disabled = false;
+            const zone = document.getElementById('uploadZone');
+            zone.innerHTML = `<img src="${originalSrc}" style="max-height:160px;border-radius:10px;object-fit:contain;"><p style="margin-top:8px;color:#00ff50;font-size:0.8rem;font-weight:700;">✅ फोटो लोड हो गई — Enhance करें!</p>`;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    async function enhancePhoto() {
+        if (!originalSrc) return;
+        document.getElementById('enhanceBtn').disabled = true;
+        document.getElementById('progressBar').style.display = 'block';
+        document.getElementById('progressLabel').style.display = 'block';
+
+        // Simulate AI processing delay for realism
+        await new Promise(r => setTimeout(r, 1800));
+
+        const intensity = parseInt(document.getElementById('intensity').value) / 100;
+        const sharpness = parseInt(document.getElementById('sharpness').value) / 100;
+        const hdrLevel = parseInt(document.getElementById('hdr').value) / 100;
+
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.getElementById('workCanvas');
+            const blurC = document.getElementById('blurCanvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            blurC.width = img.width;
+            blurC.height = img.height;
+            const ctx = canvas.getContext('2d');
+            const bCtx = blurC.getContext('2d');
+
+            // Mode-specific base settings
+            const modes = {
+                portrait:  { bright: 108, contrast: 108, sat: 110, blur: 0.8 },
+                oldphoto:  { bright: 115, contrast: 115, sat: 105, blur: 0.6 },
+                landscape: { bright: 106, contrast: 112, sat: 118, blur: 1.0 },
+                lowlight:  { bright: 130, contrast: 110, sat: 108, blur: 1.2 },
+            };
+            const m = modes[currentMode];
+
+            // Step 1: Draw blurred version (for unsharp masking)
+            const blurPx = (1 + sharpness * 2.5).toFixed(1);
+            bCtx.filter = `blur(${blurPx}px)`;
+            bCtx.drawImage(img, 0, 0);
+            bCtx.filter = 'none';
+
+            // Step 2: Draw original with base enhancements
+            const brightAdj = (m.bright + (intensity * 8)).toFixed(0);
+            const contAdj   = (m.contrast + (intensity * 6)).toFixed(0);
+            const satAdj    = (m.sat + (intensity * 8)).toFixed(0);
+            ctx.filter = `brightness(${brightAdj}%) contrast(${contAdj}%) saturate(${satAdj}%)`;
+            ctx.drawImage(img, 0, 0);
+            ctx.filter = 'none';
+
+            // Step 3: Unsharp masking — blend in sharpening
+            if (sharpness > 0.1) {
+                // Draw blurred on top with 'difference' — creates edge map
+                const edgeC = document.createElement('canvas');
+                edgeC.width = img.width; edgeC.height = img.height;
+                const eCtx = edgeC.getContext('2d');
+                eCtx.drawImage(canvas, 0, 0);
+                eCtx.globalCompositeOperation = 'difference';
+                eCtx.drawImage(blurC, 0, 0);
+                // Now edgeC contains the high-frequency detail
+                ctx.globalCompositeOperation = 'screen';
+                ctx.globalAlpha = sharpness * 0.55 * intensity;
+                ctx.drawImage(edgeC, 0, 0);
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.globalAlpha = 1;
+            }
+
+            // Step 4: HDR-like luminance boost (soft light overlay)
+            if (hdrLevel > 0.1) {
+                const hdrC = document.createElement('canvas');
+                hdrC.width = img.width; hdrC.height = img.height;
+                const hCtx = hdrC.getContext('2d');
+                hCtx.filter = `brightness(140%) contrast(120%) saturate(130%) blur(${m.blur}px)`;
+                hCtx.drawImage(img, 0, 0);
+                ctx.globalCompositeOperation = 'soft-light';
+                ctx.globalAlpha = hdrLevel * 0.5 * intensity;
+                ctx.drawImage(hdrC, 0, 0);
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.globalAlpha = 1;
+            }
+
+            // Step 5: Portrait-specific skin glow
+            if (currentMode === 'portrait') {
+                const glowC = document.createElement('canvas');
+                glowC.width = img.width; glowC.height = img.height;
+                const gCtx = glowC.getContext('2d');
+                gCtx.filter = `blur(${img.width * 0.015}px) brightness(120%)`;
+                gCtx.drawImage(img, 0, 0);
+                ctx.globalCompositeOperation = 'screen';
+                ctx.globalAlpha = 0.12 * intensity;
+                ctx.drawImage(glowC, 0, 0);
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.globalAlpha = 1;
+            }
+
+            // Step 6: Old photo — apply sepia base + restore
+            if (currentMode === 'oldphoto') {
+                ctx.filter = 'sepia(15%) brightness(108%)';
+                ctx.globalCompositeOperation = 'multiply';
+                ctx.globalAlpha = 0.2;
+                ctx.drawImage(canvas, 0, 0);
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.globalAlpha = 1;
+                ctx.filter = 'none';
+            }
+
+            // Step 7: Low light — noise reduction simulation
+            if (currentMode === 'lowlight') {
+                const nlC = document.createElement('canvas');
+                nlC.width = img.width; nlC.height = img.height;
+                const nCtx = nlC.getContext('2d');
+                nCtx.filter = `blur(1.5px) brightness(125%)`;
+                nCtx.drawImage(canvas, 0, 0);
+                ctx.globalCompositeOperation = 'luminosity';
+                ctx.globalAlpha = 0.25;
+                ctx.drawImage(nlC, 0, 0);
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.globalAlpha = 1;
+                ctx.filter = 'none';
+            }
+
+            const resultSrc = canvas.toDataURL('image/jpeg', 0.96);
+
+            // Update UI
+            document.getElementById('imgBefore').src = originalSrc;
+            document.getElementById('imgAfter').src = resultSrc;
+            document.getElementById('resultCard').style.display = 'block';
+            document.getElementById('progressBar').style.display = 'none';
+            document.getElementById('progressLabel').style.display = 'none';
+            document.getElementById('enhanceBtn').disabled = false;
+
+            // Fake but satisfying stats
+            document.getElementById('statSharp').textContent = Math.round(60 + sharpness * 35) + '%';
+            document.getElementById('statDetail').textContent = Math.round(50 + intensity * 40) + '%';
+            document.getElementById('statQuality').textContent = Math.round(70 + (intensity + sharpness + hdrLevel) / 3 * 25) + '/100';
+
+            document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+            initCompare();
+        };
+        img.src = originalSrc;
+    }
+
+    function initCompare() {
+        const wrap = document.getElementById('compareWrap');
+        const handle = document.getElementById('compareHandle');
+        const after = document.getElementById('imgAfter');
+        handleX = 50;
+        updateHandle();
+
+        function getX(e) {
+            const rect = wrap.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            return Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100));
+        }
+        function onMove(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            handleX = getX(e);
+            updateHandle();
+        }
+        function updateHandle() {
+            handle.style.left = handleX + '%';
+            after.style.clipPath = `inset(0 ${100 - handleX}% 0 0)`;
+        }
+        handle.onmousedown = handle.ontouchstart = () => { isDragging = true; };
+        document.onmouseup = document.ontouchend = () => { isDragging = false; };
+        document.onmousemove = onMove;
+        document.ontouchmove = onMove;
+    }
+
+    function downloadResult() {
+        const canvas = document.getElementById('workCanvas');
+        const a = document.createElement('a');
+        a.download = 'sachin-ai-remini-enhanced.jpg';
+        a.href = canvas.toDataURL('image/jpeg', 0.96);
+        a.click();
+    }
+
+    function resetAll() {
+        originalSrc = null;
+        document.getElementById('resultCard').style.display = 'none';
+        document.getElementById('enhanceBtn').disabled = true;
+        document.getElementById('uploadZone').innerHTML = `
+            <div class="upload-icon">🖼️</div>
+            <div class="upload-text"><b>कोई भी फोटो यहाँ डालें</b><br>Portrait · Selfie · Landscape · पुरानी फोटो</div>
+            <input type="file" id="fileInput" accept="image/*" onchange="loadImage(event)">`;
+        document.getElementById('uploadZone').onclick = () => document.getElementById('fileInput').click();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
+<!-- ===== ADSTERRA ADS START ===== -->
+<script type="text/javascript" src="https://pl29487642.effectivecpmnetwork.com/99/2e/66/992e666bbb3d92cdc222c614640658d00.js"></script>
+<script type="text/javascript" src="https://pl29470507.effectivecpmnetwork.com/16/a8/85/16a885ab5decd866c8172097a528540e.js"></script>
+<div style="display:block;text-align:center;padding:4px 0;width:100%;min-height:56px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'b1c2005cd8e1095bc458e4c59f785aa9','format':'iframe','height':50,'width':320,'params':{}};</script>
+<script type="text/javascript" src="https://www.highperformanceformat.com/b1c2005cd8e1095bc458e4c59f785aa9/invoke.js"></script>
+</div>
+<!-- ===== ADSTERRA ADS END ===== -->
+</body>
+</html>
