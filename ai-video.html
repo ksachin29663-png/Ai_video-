@@ -12,10 +12,14 @@
         .back-btn { color: #818cf8; text-decoration: none; font-size: 1.3rem; }
         .page-title { font-size: 1.1rem; font-weight: 700; color: #818cf8; }
         .page-sub { font-size: 0.75rem; color: #64748b; }
-
         main { flex: 1; padding: 24px 16px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
         .card { width: 100%; max-width: 660px; background: rgba(255,255,255,0.04); border: 1px solid rgba(99,102,241,0.2); border-radius: 20px; padding: 24px; }
         .card-title { font-size: 0.88rem; font-weight: 700; color: #818cf8; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* Mode Toggle */
+        .mode-toggle { display: flex; gap: 0; background: rgba(0,0,0,0.3); border-radius: 14px; padding: 4px; margin-bottom: 20px; border: 1px solid rgba(99,102,241,0.2); }
+        .mode-btn { flex: 1; padding: 11px 10px; border-radius: 11px; border: none; background: transparent; color: #64748b; font-size: 0.85rem; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.25s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .mode-btn.active { background: linear-gradient(135deg,#818cf8,#6366f1); color: #fff; box-shadow: 0 4px 14px rgba(99,102,241,0.4); }
 
         .input-group { margin-bottom: 16px; }
         .input-label { font-size: 0.8rem; color: #94a3b8; margin-bottom: 7px; font-weight: 600; display: flex; align-items: center; gap: 5px; }
@@ -25,11 +29,29 @@
             color: #fff; font-size: 0.88rem; font-family: inherit; outline: none; transition: border 0.2s;
         }
         textarea.vi-input { resize: vertical; height: 80px; line-height: 1.5; min-height: 60px; }
-        .char-counter { font-size: 0.7rem; text-align: right; margin-top: 4px; color: #475569; }
-        .char-counter.warn { color: #f59e0b; }
-        .char-counter.over { color: #ef4444; }
         textarea.vi-input:focus, input.vi-input:focus { border-color: #818cf8; box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
         textarea.vi-input::placeholder, input.vi-input::placeholder { color: #334155; }
+        .char-counter { font-size: 0.7rem; text-align: right; margin-top: 4px; color: #475569; }
+
+        /* Upload Area */
+        .upload-section { display: none; }
+        .upload-section.visible { display: block; }
+        .upload-info { background: rgba(99,102,241,0.07); border: 1px solid rgba(99,102,241,0.2); border-radius: 12px; padding: 12px 14px; margin-bottom: 16px; font-size: 0.82rem; color: #94a3b8; line-height: 1.6; }
+        .upload-info b { color: #818cf8; }
+        .scene-uploads { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+        .scene-upload-row { display: flex; align-items: center; gap: 12px; background: rgba(0,0,0,0.3); border: 1px dashed rgba(99,102,241,0.3); border-radius: 14px; padding: 14px; cursor: pointer; transition: all 0.2s; position: relative; }
+        .scene-upload-row:hover { border-color: #818cf8; background: rgba(99,102,241,0.06); }
+        .scene-upload-row input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+        .scene-icon { width: 48px; height: 48px; border-radius: 10px; background: rgba(99,102,241,0.15); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; overflow: hidden; }
+        .scene-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; display: none; }
+        .scene-info .scene-name { font-size: 0.82rem; font-weight: 700; color: #c7d2fe; }
+        .scene-info .scene-hint { font-size: 0.72rem; color: #475569; margin-top: 2px; }
+        .scene-status { margin-left: auto; font-size: 0.72rem; color: #475569; flex-shrink: 0; }
+        .scene-status.done { color: #10b981; }
+
+        /* AI Generate Section */
+        .ai-section { display: block; }
+        .ai-section.hidden { display: none; }
 
         .style-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 16px; }
         .style-card { padding: 12px 6px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); cursor: pointer; text-align: center; transition: all 0.2s; }
@@ -41,11 +63,6 @@
         .dur-btn { flex: 1; padding: 10px 6px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); cursor: pointer; text-align: center; font-size: 0.8rem; font-family: inherit; color: #94a3b8; transition: all 0.2s; }
         .dur-btn:hover, .dur-btn.active { border-color: #818cf8; color: #818cf8; background: rgba(99,102,241,0.1); font-weight: 700; }
 
-        .info-strip { background: rgba(99,102,241,0.07); border: 1px solid rgba(99,102,241,0.15); border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; }
-        .info-row { display: flex; align-items: flex-start; gap: 10px; font-size: 0.82rem; color: #64748b; line-height: 1.5; }
-        .info-row .icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
-        .info-row b { color: #818cf8; }
-
         .gen-btn {
             width: 100%; padding: 16px; font-size: 1rem; font-weight: 700;
             border: none; border-radius: 14px; cursor: pointer;
@@ -56,7 +73,6 @@
         .gen-btn:hover { box-shadow: 0 0 28px rgba(99,102,241,0.5); transform: translateY(-1px); }
         .gen-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        /* Progress */
         .progress-wrap { display: none; margin-top: 14px; }
         .progress-bar-bg { background: rgba(255,255,255,0.06); border-radius: 20px; height: 8px; overflow: hidden; }
         .progress-bar { height: 100%; border-radius: 20px; background: linear-gradient(90deg,#818cf8,#6366f1); transition: width 0.4s; width: 0%; }
@@ -69,7 +85,6 @@
         .step-row.done .step-dot { border-color: #10b981; background: rgba(16,185,129,0.2); }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
 
-        /* Video result */
         .result-card { display: none; }
         .video-wrap { width: 100%; border-radius: 14px; overflow: hidden; background: #000; border: 1px solid rgba(99,102,241,0.3); }
         video { width: 100%; display: block; max-height: 380px; }
@@ -78,12 +93,10 @@
         .dl-btn { background: linear-gradient(135deg,#818cf8,#6366f1); color: #fff; border: none; }
         .dl-btn:hover { box-shadow: 0 0 20px rgba(99,102,241,0.4); }
         .retry-btn { background: rgba(255,255,255,0.05); color: #e1e7f0; border: 1px solid rgba(255,255,255,0.15); }
-        .retry-btn:hover { background: rgba(255,255,255,0.1); }
 
-        .error-box { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: 12px; padding: 14px; color: #fca5a5; font-size: 0.85rem; line-height: 1.5; display: none; margin-top: 14px; }
+        .error-box { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: 12px; padding: 14px; color: #fca5a5; font-size: 0.85rem; line-height: 1.6; display: none; margin-top: 14px; }
 
-        /* Scene preview strip */
-        .scene-strip { display: none; gap: 8px; margin-top: 14px; }
+        .scene-strip { display: flex; gap: 8px; margin-top: 14px; }
         .scene-thumb { flex: 1; aspect-ratio: 16/9; border-radius: 10px; overflow: hidden; background: rgba(255,255,255,0.04); border: 1px solid rgba(99,102,241,0.2); position: relative; }
         .scene-thumb img { width: 100%; height: 100%; object-fit: cover; display: none; }
         .scene-thumb .scene-loading { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #475569; }
@@ -97,52 +110,85 @@
     <a href="index.html" class="back-btn">←</a>
     <div>
         <div class="page-title">🎬 AI 3D Video Generator</div>
-        <div class="page-sub">Text से Hindi Voiceover वाला 3-Scene Video बनाओ</div>
+        <div class="page-sub">Photo Upload या AI Generate — Hindi Voiceover वाला Video बनाओ</div>
     </div>
 </header>
 
 <main>
     <div class="card">
-        <div class="info-strip">
-            <div class="info-row">
-                <span class="icon">✨</span>
-                <span>Text Prompt दो — AI <b>3 Scenes</b> generate करेगा, उन्हें <b>Ken Burns effect</b> से animate करेगा, और आपकी <b>Hindi Script</b> का voiceover add करेगा।</span>
-            </div>
+
+        <!-- Mode Toggle -->
+        <div class="card-title">Step 1 — तरीका चुनें</div>
+        <div class="mode-toggle">
+            <button class="mode-btn active" id="modeAI" onclick="setMode('ai')">🤖 AI खुद बनाएगा</button>
+            <button class="mode-btn" id="modeUpload" onclick="setMode('upload')">📸 अपनी Photos अपलोड करें</button>
         </div>
 
-        <div class="card-title">Step 1 — Video का विषय बताएं</div>
+        <!-- Common: Prompt & Script -->
+        <div class="card-title">Step 2 — Video की जानकारी दें</div>
         <div class="input-group">
-            <div class="input-label">🖼️ Visual Prompt (क्या दिखाना है?)</div>
+            <div class="input-label">🎬 Video का Topic (क्या दिखाना है?)</div>
             <textarea class="vi-input" id="promptInput" placeholder="जैसे: एक भारतीय किसान खेत में काम कर रहा है, सुनहरी धूप, शांत वातावरण..."></textarea>
         </div>
-
         <div class="input-group">
-            <div class="input-label">🎙️ Hindi Script (Voiceover के लिए — optional) <span style="color:#475569;font-weight:400;font-size:0.7rem;">max 1500 अक्षर</span></div>
-            <textarea class="vi-input" id="scriptInput" maxlength="1500" oninput="updateCounter(this,'scriptCounter',1500)" placeholder="जैसे: भारत की मिट्टी में जादू है। हर किसान की मेहनत इस देश की ताकत है। यही है असली भारत।" style="height:110px;"></textarea>
+            <div class="input-label">🎙️ Hindi Script — Voiceover के लिए <span style="color:#475569;font-size:0.7rem;">(optional, max 1500)</span></div>
+            <textarea class="vi-input" id="scriptInput" maxlength="1500" oninput="updateCounter(this,'scriptCounter',1500)" placeholder="जैसे: भारत की मिट्टी में जादू है। हर किसान की मेहनत इस देश की ताकत है।" style="height:100px;"></textarea>
             <div class="char-counter" id="scriptCounter">0 / 1500</div>
-            <div style="font-size:0.72rem;color:#334155;margin-top:3px;">खाली छोड़ें तो Visual Prompt ही बोला जाएगा</div>
         </div>
 
-        <div class="card-title">Step 2 — Video Style चुनें</div>
-        <div class="style-grid">
-            <div class="style-card active" data-style="cinematic" onclick="selectStyle(this)">
-                <div class="si">🎬</div><div class="sn">Cinematic</div>
+        <!-- Upload Section -->
+        <div class="upload-section" id="uploadSection">
+            <div class="card-title">Step 3 — अपनी 3 Photos चुनें</div>
+            <div class="upload-info">
+                📌 <b>3 photos अपलोड करें</b> — ये तीनों scenes बनेंगे।<br>
+                अगर कम photos हैं तो बाकी AI बना देगा।<br>
+                JPG, PNG, WEBP — कोई भी format चलेगा।
             </div>
-            <div class="style-card" data-style="3d" onclick="selectStyle(this)">
-                <div class="si">🔮</div><div class="sn">3D CGI</div>
-            </div>
-            <div class="style-card" data-style="anime" onclick="selectStyle(this)">
-                <div class="si">⛩️</div><div class="sn">Anime</div>
-            </div>
-            <div class="style-card" data-style="realistic" onclick="selectStyle(this)">
-                <div class="si">📷</div><div class="sn">Realistic</div>
-            </div>
-            <div class="style-card" data-style="watercolor" onclick="selectStyle(this)">
-                <div class="si">🎨</div><div class="sn">Watercolor</div>
+            <div class="scene-uploads">
+                <div class="scene-upload-row" id="uploadRow0">
+                    <input type="file" id="photo0" accept="image/*" onchange="previewUpload(0,this)">
+                    <div class="scene-icon" id="icon0"><span id="iconEmoji0">🖼️</span><img id="iconImg0"></div>
+                    <div class="scene-info">
+                        <div class="scene-name">Scene 1 — Opening Shot</div>
+                        <div class="scene-hint" id="hint0">Click करके photo चुनें</div>
+                    </div>
+                    <div class="scene-status" id="status0">⬜ खाली</div>
+                </div>
+                <div class="scene-upload-row" id="uploadRow1">
+                    <input type="file" id="photo1" accept="image/*" onchange="previewUpload(1,this)">
+                    <div class="scene-icon" id="icon1"><span id="iconEmoji1">🖼️</span><img id="iconImg1"></div>
+                    <div class="scene-info">
+                        <div class="scene-name">Scene 2 — Main Scene</div>
+                        <div class="scene-hint" id="hint1">Click करके photo चुनें</div>
+                    </div>
+                    <div class="scene-status" id="status1">⬜ खाली</div>
+                </div>
+                <div class="scene-upload-row" id="uploadRow2">
+                    <input type="file" id="photo2" accept="image/*" onchange="previewUpload(2,this)">
+                    <div class="scene-icon" id="icon2"><span id="iconEmoji2">🖼️</span><img id="iconImg2"></div>
+                    <div class="scene-info">
+                        <div class="scene-name">Scene 3 — Final Shot</div>
+                        <div class="scene-hint" id="hint2">Click करके photo चुनें</div>
+                    </div>
+                    <div class="scene-status" id="status2">⬜ खाली</div>
+                </div>
             </div>
         </div>
 
-        <div class="card-title">Step 3 — Scene Duration</div>
+        <!-- AI Section -->
+        <div class="ai-section" id="aiSection">
+            <div class="card-title">Step 3 — Video Style चुनें</div>
+            <div class="style-grid">
+                <div class="style-card active" data-style="cinematic" onclick="selectStyle(this)"><div class="si">🎬</div><div class="sn">Cinematic</div></div>
+                <div class="style-card" data-style="3d" onclick="selectStyle(this)"><div class="si">🔮</div><div class="sn">3D CGI</div></div>
+                <div class="style-card" data-style="anime" onclick="selectStyle(this)"><div class="si">⛩️</div><div class="sn">Anime</div></div>
+                <div class="style-card" data-style="realistic" onclick="selectStyle(this)"><div class="si">📷</div><div class="sn">Realistic</div></div>
+                <div class="style-card" data-style="watercolor" onclick="selectStyle(this)"><div class="si">🎨</div><div class="sn">Watercolor</div></div>
+            </div>
+        </div>
+
+        <!-- Duration (always visible) -->
+        <div class="card-title">Step 4 — Scene Duration</div>
         <div class="dur-row">
             <button class="dur-btn" data-dur="3" onclick="selectDur(this)">3 sec</button>
             <button class="dur-btn active" data-dur="5" onclick="selectDur(this)">5 sec ⭐</button>
@@ -158,55 +204,90 @@
             <div class="progress-bar-bg"><div class="progress-bar" id="progressBar"></div></div>
             <div class="progress-steps" id="progressSteps">
                 <div class="step-row" id="step1"><div class="step-dot">1</div><span>Hindi Voiceover generate हो रही है...</span></div>
-                <div class="step-row" id="step2"><div class="step-dot">2</div><span>3 AI Scenes बन रहे हैं...</span></div>
+                <div class="step-row" id="step2"><div class="step-dot">2</div><span id="step2Text">3 AI Scenes बन रहे हैं...</span></div>
                 <div class="step-row" id="step3"><div class="step-dot">3</div><span>Ken Burns animation apply हो रहा है...</span></div>
                 <div class="step-row" id="step4"><div class="step-dot">4</div><span>Scenes + Audio mix होकर Video तैयार हो रही है...</span></div>
             </div>
         </div>
-
         <div class="error-box" id="errorBox"></div>
     </div>
 
-    <!-- Scene preview strip -->
+    <!-- Scene Preview (AI mode only) -->
     <div class="card" id="sceneCard" style="display:none">
-        <div class="card-title">🖼️ Generated Scenes</div>
-        <div style="display:flex;gap:8px;" id="sceneStrip">
-            <div class="scene-thumb" id="scene0"><div class="scene-loading">⏳</div><img id="sceneImg0" alt="Scene 1"><div class="scene-label">Scene 1</div></div>
-            <div class="scene-thumb" id="scene1"><div class="scene-loading">⏳</div><img id="sceneImg1" alt="Scene 2"><div class="scene-label">Scene 2</div></div>
-            <div class="scene-thumb" id="scene2"><div class="scene-loading">⏳</div><img id="sceneImg2" alt="Scene 3"><div class="scene-label">Scene 3</div></div>
+        <div class="card-title">🖼️ Generated Scenes Preview</div>
+        <div class="scene-strip">
+            <div class="scene-thumb" id="sct0"><div class="scene-loading">⏳</div><img id="sci0" alt="Scene 1"><div class="scene-label">Scene 1</div></div>
+            <div class="scene-thumb" id="sct1"><div class="scene-loading">⏳</div><img id="sci1" alt="Scene 2"><div class="scene-label">Scene 2</div></div>
+            <div class="scene-thumb" id="sct2"><div class="scene-loading">⏳</div><img id="sci2" alt="Scene 3"><div class="scene-label">Scene 3</div></div>
         </div>
     </div>
 
-    <!-- Video Result -->
+    <!-- Result -->
     <div class="card result-card" id="resultCard">
         <div class="card-title">🎉 आपका AI Video तैयार है!</div>
         <div class="video-wrap">
             <video id="resultVideo" controls playsinline></video>
         </div>
         <div class="video-actions">
-            <button class="action-btn dl-btn" id="downloadBtn" onclick="downloadVideo()">📥 Download MP4</button>
-            <button class="action-btn retry-btn" onclick="generateVideo()">🔄 नया Video बनाएं</button>
+            <button class="action-btn dl-btn" onclick="downloadVideo()">📥 Download MP4</button>
+            <button class="action-btn retry-btn" onclick="resetForm()">🔄 नया Video बनाएं</button>
         </div>
-    </div><!-- Mid-Page Ad -->
-<div style="text-align:center;margin:12px auto;width:100%;min-height:56px;overflow:hidden;">
-<script type="text/javascript">atOptions={'key':'b1c2005cd8e1095bc458e4c59f785aa9','format':'iframe','height':50,'width':320,'params':{}};</script>
-<script type="text/javascript" src="https://www.highperformanceformat.com/b1c2005cd8e1095bc458e4c59f785aa9/invoke.js"></script>
-</div>
+    </div>
+
+    <div style="text-align:center;margin:12px auto;width:100%;min-height:56px;overflow:hidden;">
+        <script type="text/javascript">atOptions={'key':'b1c2005cd8e1095bc458e4c59f785aa9','format':'iframe','height':50,'width':320,'params':{}};</script>
+        <script type="text/javascript" src="https://www.highperformanceformat.com/b1c2005cd8e1095bc458e4c59f785aa9/invoke.js"></script>
+    </div>
 </main>
 
 <footer>&copy; 2025 सचिन एआई फोटो स्टूडियो — AI Video Generation</footer>
 
 <script>
+    // ---- API Base URL ----
+    // Automatically use Replit server when on GitHub Pages or custom domain
+    const REPLIT_SERVER = 'https://e1e1c5db-0aa4-429c-a28f-bf188342449e-00-22wkonulgrqax.sisko.replit.dev';
+    const isOnReplit = window.location.hostname.includes('replit') || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const API_BASE = isOnReplit ? '' : REPLIT_SERVER;
+
+    let currentMode = 'ai';
     let selectedStyle = 'cinematic';
     let selectedDur = 5;
     let videoBlob = null;
     let stepTimers = [];
 
-    function updateCounter(el, counterId, max) {
+    function setMode(mode) {
+        currentMode = mode;
+        document.getElementById('modeAI').classList.toggle('active', mode === 'ai');
+        document.getElementById('modeUpload').classList.toggle('active', mode === 'upload');
+        document.getElementById('uploadSection').classList.toggle('visible', mode === 'upload');
+        document.getElementById('aiSection').classList.toggle('hidden', mode === 'upload');
+        document.getElementById('step2Text').textContent = mode === 'upload' ? 'Photos से Scenes तैयार हो रहे हैं...' : '3 AI Scenes बन रहे हैं...';
+        document.getElementById('sceneCard').style.display = 'none';
+        document.getElementById('promptInput').placeholder = mode === 'upload'
+            ? 'जैसे: मेरी Photos पर एक motivational video बनाओ...'
+            : 'जैसे: एक भारतीय किसान खेत में काम कर रहा है, सुनहरी धूप...';
+    }
+
+    function previewUpload(idx, input) {
+        const file = input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = document.getElementById('iconImg' + idx);
+            const emoji = document.getElementById('iconEmoji' + idx);
+            img.src = e.target.result;
+            img.style.display = 'block';
+            emoji.style.display = 'none';
+            document.getElementById('hint' + idx).textContent = file.name.slice(0, 22) + (file.name.length > 22 ? '...' : '');
+            document.getElementById('status' + idx).textContent = '✅ Ready';
+            document.getElementById('status' + idx).className = 'scene-status done';
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function updateCounter(el, cid, max) {
         const len = el.value.length;
-        const counter = document.getElementById(counterId);
-        counter.textContent = len + ' / ' + max;
-        counter.className = 'char-counter' + (len > max * 0.9 ? (len >= max ? ' over' : ' warn') : '');
+        document.getElementById(cid).textContent = len + ' / ' + max;
     }
 
     function selectStyle(el) {
@@ -234,22 +315,15 @@
 
     function clearStepTimers() { stepTimers.forEach(t => clearTimeout(t)); stepTimers = []; }
 
-    function previewScenes(prompt, style) {
-        const styleMap = {
-            cinematic: 'cinematic photography, dramatic lighting, 8K',
-            '3d': '3D render, Pixar style, CGI, colorful',
-            anime: 'anime art, studio ghibli, vibrant colors',
-            realistic: 'photorealistic, DSLR, natural lighting',
-            watercolor: 'watercolor painting, artistic, soft colors',
-        };
-        const sp = styleMap[style] || styleMap.cinematic;
-        const labels = ['opening scene, wide shot', 'main scene, close up', 'final scene, epic wide angle'];
+    function previewAIScenes(prompt) {
         document.getElementById('sceneCard').style.display = 'block';
-        labels.forEach((label, i) => {
-            const seed = Math.floor(Math.random() * 999999);
-            const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt.slice(0,300) + ', ' + label + ', ' + sp)}?width=640&height=360&nologo=true&seed=${seed}`;
-            const img = document.getElementById('sceneImg' + i);
-            const loading = document.querySelector('#scene' + i + ' .scene-loading');
+        const styleMap = { cinematic:'cinematic photography,8K', '3d':'3D CGI,Pixar', anime:'anime,ghibli', realistic:'photorealistic,DSLR', watercolor:'watercolor,artistic' };
+        const sp = styleMap[selectedStyle] || styleMap.cinematic;
+        ['opening wide shot','main close-up','final epic wide angle'].forEach((label,i) => {
+            const seed = Math.floor(Math.random()*999999);
+            const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt.slice(0,250)+', '+label+', '+sp)}?width=640&height=360&nologo=true&seed=${seed}`;
+            const img = document.getElementById('sci' + i);
+            const loading = document.querySelector('#sct' + i + ' .scene-loading');
             img.onload = () => { img.style.display = 'block'; if(loading) loading.style.display = 'none'; };
             img.src = url;
         });
@@ -260,40 +334,64 @@
         const script = document.getElementById('scriptInput').value.trim();
         if (!prompt) { alert('कृपया Video का Topic लिखें!'); return; }
 
-        clearStepTimers();
+        if (currentMode === 'upload') {
+            const photos = [document.getElementById('photo0').files[0], document.getElementById('photo1').files[0], document.getElementById('photo2').files[0]];
+            if (!photos[0] && !photos[1] && !photos[2]) {
+                alert('कम से कम 1 photo upload करें, या AI Generate mode चुनें।'); return;
+            }
+        }
 
-        // Reset UI
+        clearStepTimers();
         const btn = document.getElementById('genBtn');
         btn.disabled = true;
-        btn.innerHTML = '<span>⏳</span><span>Video बन रही है... (2-4 मिनट)</span>';
+        btn.innerHTML = '<span>⏳</span><span>Video बन रही है... (1-3 मिनट)</span>';
         document.getElementById('progressWrap').style.display = 'block';
         document.getElementById('errorBox').style.display = 'none';
         document.getElementById('resultCard').style.display = 'none';
         document.getElementById('progressBar').style.width = '5%';
         for (let i = 1; i <= 4; i++) {
             const el = document.getElementById('step' + i);
-            el.classList.remove('active', 'done');
+            el.classList.remove('active','done');
             el.querySelector('.step-dot').textContent = i;
         }
 
-        // Show scene previews
-        previewScenes(prompt, selectedStyle);
+        if (currentMode === 'ai') previewAIScenes(prompt);
         setStep(1);
 
-        // Simulate step progress (video gen takes 2-4 min total)
-        const delays = [0, 15000, 60000, 140000];
+        const delays = [0, 10000, 50000, 110000];
         delays.forEach((d, i) => { stepTimers.push(setTimeout(() => setStep(i + 1), d)); });
 
         try {
             const controller = new AbortController();
-            const fetchTimeout = setTimeout(() => controller.abort(), 290000); // 4.8 min timeout
+            const fetchTimeout = setTimeout(() => controller.abort(), 290000);
 
-            const res = await fetch('/generate-ai-video', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt, script, style: selectedStyle, duration: selectedDur }),
-                signal: controller.signal
-            });
+            let res;
+            if (currentMode === 'upload') {
+                // Upload mode — use FormData
+                const formData = new FormData();
+                formData.append('prompt', prompt);
+                formData.append('script', script || prompt);
+                formData.append('style', selectedStyle);
+                formData.append('duration', selectedDur);
+                for (let i = 0; i < 3; i++) {
+                    const file = document.getElementById('photo' + i).files[0];
+                    if (file) formData.append('photos', file);
+                }
+                res = await fetch(API_BASE + '/generate-ai-video', {
+                    method: 'POST',
+                    body: formData,
+                    signal: controller.signal
+                });
+            } else {
+                // AI mode — use JSON
+                res = await fetch(API_BASE + '/generate-ai-video', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt, script, style: selectedStyle, duration: selectedDur }),
+                    signal: controller.signal
+                });
+            }
+
             clearTimeout(fetchTimeout);
 
             if (!res.ok) {
@@ -311,7 +409,7 @@
             }
 
             videoBlob = await res.blob();
-            if (videoBlob.size < 5000) throw new Error('Video file is empty — please retry');
+            if (videoBlob.size < 5000) throw new Error('Video file empty — please retry');
 
             const videoUrl = URL.createObjectURL(videoBlob);
             const videoEl = document.getElementById('resultVideo');
@@ -325,12 +423,12 @@
             const errBox = document.getElementById('errorBox');
             errBox.style.display = 'block';
             let msg = err.message || 'Unknown error';
-            if (err.name === 'AbortError') msg = 'Request timeout — video took too long. Please try with shorter duration (3 sec).';
+            if (err.name === 'AbortError') msg = 'Timeout — video बनने में बहुत समय लगा। Duration 3 sec करके retry करें।';
             errBox.innerHTML = `❌ <b>Video नहीं बनी:</b> ${msg}<br><br>
             💡 <b>Solutions:</b><br>
-            • Duration कम करें (3 sec try करें)<br>
+            • Duration 3 sec try करें<br>
             • Script छोटी करें<br>
-            • दोबारा try करें — images server कभी-कभी slow होता है`;
+            • दोबारा try करें`;
             document.getElementById('progressWrap').style.display = 'none';
         } finally {
             btn.disabled = false;
@@ -345,36 +443,36 @@
         a.download = 'sachin-ai-video.mp4';
         a.click();
     }
+
+    function resetForm() {
+        document.getElementById('promptInput').value = '';
+        document.getElementById('scriptInput').value = '';
+        document.getElementById('progressWrap').style.display = 'none';
+        document.getElementById('resultCard').style.display = 'none';
+        document.getElementById('errorBox').style.display = 'none';
+        document.getElementById('sceneCard').style.display = 'none';
+        for (let i = 0; i < 3; i++) {
+            document.getElementById('photo' + i).value = '';
+            document.getElementById('iconImg' + i).style.display = 'none';
+            document.getElementById('iconEmoji' + i).style.display = '';
+            document.getElementById('hint' + i).textContent = 'Click करके photo चुनें';
+            document.getElementById('status' + i).textContent = '⬜ खाली';
+            document.getElementById('status' + i).className = 'scene-status';
+        }
+        videoBlob = null;
+    }
 </script>
 <script src="adsterra-gate.js"></script>
 <script src="tracker.js"></script>
 <script src="share-unlock.js"></script>
-
-<!-- ===== ADSTERRA ADS START ===== -->
-<!-- Popunder -->
+<!-- Adsterra Popunder -->
 <script type="text/javascript" src="https://pl29487642.effectivecpmnetwork.com/99/2e/66/992e666bbb3d92cdc222c614640658d00.js"></script>
 <!-- Social Bar -->
 <script type="text/javascript" src="https://pl29470507.effectivecpmnetwork.com/16/a8/85/16a885ab5decd866c8172097a528540e.js"></script>
-<!-- 320x50 Mobile Banner -->
-<div id="sachin-ad-320" style="display:block;text-align:center;background:linear-gradient(90deg,#0a0e1a,#0d1225);border-top:1px solid rgba(99,102,241,0.3);border-bottom:1px solid rgba(99,102,241,0.3);padding:3px 0;width:100%;min-height:56px;overflow:hidden;">
+<!-- 320x50 Banner -->
+<div style="display:block;text-align:center;background:linear-gradient(90deg,#0a0e1a,#0d1225);border-top:1px solid rgba(99,102,241,0.3);padding:3px 0;width:100%;min-height:56px;overflow:hidden;">
 <script type="text/javascript">atOptions={'key':'b1c2005cd8e1095bc458e4c59f785aa9','format':'iframe','height':50,'width':320,'params':{}};</script>
 <script type="text/javascript" src="https://www.highperformanceformat.com/b1c2005cd8e1095bc458e4c59f785aa9/invoke.js"></script>
 </div>
-<!-- 728x90 Leaderboard Banner -->
-<div id="sachin-ad-728" style="display:block;text-align:center;background:linear-gradient(90deg,#0a0e1a,#0d1225);padding:3px 0;width:100%;min-height:96px;overflow:hidden;">
-<script type="text/javascript">atOptions={'key':'5e113b8022609e2135c5e1e265084235','format':'iframe','height':90,'width':728,'params':{}};</script>
-<script type="text/javascript" src="https://www.highperformanceformat.com/5e113b8022609e2135c5e1e265084235/invoke.js"></script>
-</div>
-<!-- Native Banner -->
-<div style="text-align:center;margin:6px auto;max-width:100%;min-height:60px;">
-<script async="async" data-cfasync="false" src="https://pl29470505.effectivecpmnetwork.com/30a2c535b11a237c281ced645d908d88/invoke.js"></script>
-<div id="container-30a2c535b11a237c281ced645d908d88"></div>
-</div>
-<!-- 300x250 Rectangle -->
-<div id="sachin-ad-300" style="display:block;text-align:center;margin:8px auto;width:100%;min-height:254px;overflow:hidden;">
-<script type="text/javascript">atOptions={'key':'817c9252a9900f63d05a904142664916','format':'iframe','height':250,'width':300,'params':{}};</script>
-<script type="text/javascript" src="https://www.highperformanceformat.com/817c9252a9900f63d05a904142664916/invoke.js"></script>
-</div>
-<!-- ===== ADSTERRA ADS END ===== -->
 </body>
 </html>
