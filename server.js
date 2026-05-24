@@ -9,8 +9,8 @@ const gTTS = require('gtts');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
-app.use(express.json({ limit: '20mb' }));
+app.use(cors({ origin: '*' }));
+app.use(express.json({ limit: '50mb' }));
 
 if (!fs.existsSync('uploads')) { fs.mkdirSync('uploads'); }
 const upload = multer({ dest: 'uploads/' });
@@ -96,14 +96,16 @@ app.post('/generate-video', upload.array('files'), (req, res) => {
     });
 });
 
-// ---- AI 3D Video Generation from Text Prompt (Robust) ----
-app.post('/generate-ai-video', async (req, res) => {
+// ---- AI 3D Video Generation from Text Prompt + Optional Photo Upload ----
+app.post('/generate-ai-video', upload.array('photos', 3), async (req, res) => {
     // Set long timeout for this heavy endpoint (5 minutes)
     req.setTimeout(300000);
     res.setTimeout(300000);
 
     const { prompt, script, style, duration } = req.body;
     if (!prompt) return res.status(400).json({ error: 'Prompt required' });
+
+    const uploadedPhotos = req.files || [];
 
     // Limit text to 1500 chars, clean special chars that break shell commands
     const rawScript = (script || prompt).slice(0, 1500).replace(/['"\\`$]/g, ' ');
@@ -220,8 +222,8 @@ app.post('/generate-ai-video', async (req, res) => {
             throw new Error('Voice file is empty or missing');
         }
 
-        // STEP 2: Generate 3 scene images from Pollinations
-        console.log('[Video] Step 2: Downloading scene images...');
+        // STEP 2: Use uploaded photos OR generate 3 scene images from AI
+        console.log(`[Video] Step 2: Preparing scene images (${uploadedPhotos.length} uploaded)...`);
         const scenePrompts = [
             `${rawPrompt}, opening wide establishing shot, ${stylePrompt}`,
             `${rawPrompt}, main subject close-up, dramatic, ${stylePrompt}`,
@@ -229,10 +231,18 @@ app.post('/generate-ai-video', async (req, res) => {
         ];
         for (let i = 0; i < 3; i++) {
             const imgPath = path.join(tmpDir, `scene_${ts}_${i}.jpg`);
-            await fetchImage(scenePrompts[i], imgPath);
+            if (uploadedPhotos[i]) {
+                // Use the uploaded photo directly — resize to 1280x720
+                const srcPath = uploadedPhotos[i].path;
+                await runFFmpeg(`ffmpeg -y -i "${srcPath}" -vf "scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2,setsar=1" "${imgPath}"`, 30000);
+                allTempFiles.push(srcPath);
+                console.log(`[Video] Scene ${i+1} from uploaded photo`);
+            } else {
+                await fetchImage(scenePrompts[i], imgPath);
+                console.log(`[Video] Scene ${i+1}/3 AI generated`);
+            }
             sceneFiles.push(imgPath);
             allTempFiles.push(imgPath);
-            console.log(`[Video] Scene ${i+1}/3 downloaded`);
         }
 
         // STEP 3: Build per-scene video clips (simple scale + slow zoom)
