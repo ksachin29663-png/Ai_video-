@@ -150,6 +150,7 @@ function answer(qi,optIdx){
 function shareScore(){const txt=`मैंने AI GK Quiz में ${score}/${total} score किया! 🧠🎯\nCategory: ${state.cat}\n\nतुम try करो: ${window.location.href}`;navigator.share?navigator.share({text:txt}):navigator.clipboard.writeText(txt).then(()=>alert('Score copied! Share करो 📲'));}
 function restartQuiz(){document.getElementById('setupCard').style.display='block';document.getElementById('quizWrap').style.display='none';document.getElementById('quizContainer').innerHTML='';document.getElementById('resultSummary').style.display='none';}
 </script>
+<script src="adsterra-gate.js"></script>
 <script src="tracker.js"></script>
 <script src="share-unlock.js"></script>
 
