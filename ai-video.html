@@ -103,6 +103,33 @@
         .scene-label { position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); padding: 2px 8px; border-radius: 10px; font-size: 0.65rem; color: #94a3b8; white-space: nowrap; }
 
         footer { text-align: center; padding: 20px; color: #334155; font-size: 0.78rem; }
+
+        /* Usage Badge */
+        .usage-badge { display: flex; align-items: center; justify-content: space-between; background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.2); border-radius: 12px; padding: 10px 14px; margin-bottom: 18px; font-size: 0.82rem; }
+        .usage-dots { display: flex; gap: 6px; }
+        .usage-dot { width: 14px; height: 14px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid rgba(99,102,241,0.3); transition: all 0.3s; }
+        .usage-dot.used { background: #818cf8; border-color: #818cf8; }
+        .usage-dot.empty { background: rgba(255,255,255,0.05); }
+        .usage-text { color: #94a3b8; }
+        .usage-text b { color: #818cf8; }
+
+        /* Limit Modal */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal-overlay.show { display: flex; }
+        .modal-box { background: #0d1225; border: 1px solid rgba(99,102,241,0.4); border-radius: 24px; padding: 28px 24px; max-width: 380px; width: 100%; text-align: center; }
+        .modal-icon { font-size: 3rem; margin-bottom: 12px; }
+        .modal-title { font-size: 1.2rem; font-weight: 800; color: #e1e7f0; margin-bottom: 8px; }
+        .modal-sub { font-size: 0.85rem; color: #64748b; line-height: 1.6; margin-bottom: 20px; }
+        .modal-options { display: flex; flex-direction: column; gap: 10px; }
+        .modal-btn { width: 100%; padding: 14px; border-radius: 14px; border: none; font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .share-btn { background: linear-gradient(135deg,#25d366,#128c7e); color: #fff; }
+        .share-btn:hover { box-shadow: 0 0 20px rgba(37,211,102,0.4); transform: translateY(-1px); }
+        .wait-btn { background: rgba(255,255,255,0.05); color: #94a3b8; border: 1px solid rgba(255,255,255,0.1) !important; }
+        .countdown-text { font-size: 0.78rem; color: #475569; margin-top: 8px; }
+        .share-progress { margin-top: 12px; }
+        .share-bar-bg { background: rgba(255,255,255,0.06); border-radius: 20px; height: 6px; overflow: hidden; margin: 8px 0; }
+        .share-bar { height: 100%; border-radius: 20px; background: linear-gradient(90deg,#25d366,#128c7e); transition: width 0.4s; }
+        .share-hint { font-size: 0.72rem; color: #475569; }
     </style>
 </head>
 <body>
@@ -114,8 +141,42 @@
     </div>
 </header>
 
+<!-- Limit Modal -->
+<div class="modal-overlay" id="limitModal">
+    <div class="modal-box">
+        <div class="modal-icon">🔒</div>
+        <div class="modal-title">Daily Limit पूरा हुआ!</div>
+        <div class="modal-sub">आज के 4 Free Videos बन गए।<br>नीचे दो options हैं — unlock करें:</div>
+        <div class="modal-options">
+            <button class="modal-btn share-btn" onclick="doShare()">
+                <span>📲</span><span>WhatsApp पर Share करें — Unlock हो जाएगा</span>
+            </button>
+            <div class="share-progress" id="shareProgress" style="display:none">
+                <div class="share-bar-bg"><div class="share-bar" id="shareBar" style="width:0%"></div></div>
+                <div class="share-hint" id="shareHint">5 बार share करें — <span id="shareCount">0</span>/5 हो गया</div>
+            </div>
+            <div style="text-align:center;color:#475569;font-size:0.78rem;margin:4px 0;">— या —</div>
+            <button class="modal-btn wait-btn" onclick="showWaitOption()">
+                ⏳ 24 घंटे बाद खुद unlock हो जाएगा
+            </button>
+            <div class="countdown-text" id="countdownText"></div>
+        </div>
+    </div>
+</div>
+
 <main>
     <div class="card">
+
+        <!-- Usage Badge -->
+        <div class="usage-badge" id="usageBadge">
+            <div class="usage-text">आज के Free Videos: <b id="usageLeft">4</b>/4 बचे</div>
+            <div class="usage-dots" id="usageDots">
+                <div class="usage-dot" id="dot0"></div>
+                <div class="usage-dot" id="dot1"></div>
+                <div class="usage-dot" id="dot2"></div>
+                <div class="usage-dot" id="dot3"></div>
+            </div>
+        </div>
 
         <!-- Mode Toggle -->
         <div class="card-title">Step 1 — तरीका चुनें</div>
@@ -188,11 +249,11 @@
         </div>
 
         <!-- Duration (always visible) -->
-        <div class="card-title">Step 4 — Scene Duration</div>
+        <div class="card-title">Step 4 — Scene Duration <span style="color:#475569;font-weight:400;font-size:0.75rem;">(7sec = ~21sec video)</span></div>
         <div class="dur-row">
             <button class="dur-btn" data-dur="3" onclick="selectDur(this)">3 sec</button>
-            <button class="dur-btn active" data-dur="5" onclick="selectDur(this)">5 sec ⭐</button>
-            <button class="dur-btn" data-dur="7" onclick="selectDur(this)">7 sec</button>
+            <button class="dur-btn" data-dur="5" onclick="selectDur(this)">5 sec</button>
+            <button class="dur-btn active" data-dur="7" onclick="selectDur(this)">7 sec ⭐</button>
             <button class="dur-btn" data-dur="8" onclick="selectDur(this)">8 sec</button>
         </div>
 
@@ -244,14 +305,111 @@
 
 <script>
     // ---- API Base URL ----
-    // Automatically use Replit server when on GitHub Pages or custom domain
     const REPLIT_SERVER = 'https://e1e1c5db-0aa4-429c-a28f-bf188342449e-00-22wkonulgrqax.sisko.replit.dev';
     const isOnReplit = window.location.hostname.includes('replit') || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
     const API_BASE = isOnReplit ? '' : REPLIT_SERVER;
 
+    // ---- Rate Limit System ----
+    const DAILY_LIMIT = 4;
+    const SHARE_NEEDED = 5;
+
+    function getRLData() {
+        try {
+            const d = JSON.parse(localStorage.getItem('vid_rl') || '{}');
+            const now = Date.now();
+            // Reset if new day (24h passed)
+            if (!d.date || now - d.date > 86400000) {
+                return { count: 0, date: now, shares: 0, shareUnlocked: false };
+            }
+            return d;
+        } catch(e) { return { count: 0, date: Date.now(), shares: 0, shareUnlocked: false }; }
+    }
+
+    function saveRLData(d) {
+        localStorage.setItem('vid_rl', JSON.stringify(d));
+    }
+
+    function canGenerate() {
+        const d = getRLData();
+        if (d.shareUnlocked) return true;
+        return d.count < DAILY_LIMIT;
+    }
+
+    function incrementCount() {
+        const d = getRLData();
+        d.count = (d.count || 0) + 1;
+        saveRLData(d);
+        updateUsageBadge();
+    }
+
+    function updateUsageBadge() {
+        const d = getRLData();
+        const used = d.shareUnlocked ? 0 : Math.min(d.count, DAILY_LIMIT);
+        const left = d.shareUnlocked ? '∞' : Math.max(0, DAILY_LIMIT - d.count);
+        document.getElementById('usageLeft').textContent = left;
+        for (let i = 0; i < DAILY_LIMIT; i++) {
+            const dot = document.getElementById('dot' + i);
+            if (dot) dot.className = 'usage-dot ' + (i < used ? 'used' : 'empty');
+        }
+        if (d.shareUnlocked) {
+            document.getElementById('usageBadge').style.background = 'rgba(16,185,129,0.08)';
+            document.getElementById('usageBadge').style.borderColor = 'rgba(16,185,129,0.3)';
+            document.querySelector('.usage-text').innerHTML = '✅ <b style="color:#10b981">Share किया!</b> Unlimited Videos Unlocked';
+        }
+    }
+
+    // Share to unlock
+    let shareClickCount = 0;
+    function doShare() {
+        const shareUrl = 'https://aiwebsite36tootcreatephoto.online/ai-video.html';
+        const msg = encodeURIComponent(`🎬 AI से फ्री में Video बनाओ! 42+ AI Tools — बिल्कुल फ्री!\n${shareUrl}`);
+        window.open(`https://wa.me/?text=${msg}`, '_blank');
+        shareClickCount++;
+        document.getElementById('shareProgress').style.display = 'block';
+        document.getElementById('shareCount').textContent = shareClickCount;
+        document.getElementById('shareBar').style.width = Math.min(100, (shareClickCount / SHARE_NEEDED) * 100) + '%';
+        document.getElementById('shareHint').innerHTML = `${shareClickCount}/${SHARE_NEEDED} बार share हुआ — ${shareClickCount < SHARE_NEEDED ? (SHARE_NEEDED - shareClickCount) + ' और करें' : '✅ Done!'}`;
+        if (shareClickCount >= SHARE_NEEDED) {
+            const d = getRLData();
+            d.shareUnlocked = true;
+            d.count = 0;
+            saveRLData(d);
+            setTimeout(() => {
+                document.getElementById('limitModal').classList.remove('show');
+                updateUsageBadge();
+                shareClickCount = 0;
+                alert('🎉 Unlock हो गया! अब आप Unlimited Videos बना सकते हैं!');
+            }, 800);
+        }
+    }
+
+    let countdownInterval = null;
+    function showWaitOption() {
+        const d = getRLData();
+        const resetTime = d.date + 86400000;
+        if (countdownInterval) clearInterval(countdownInterval);
+        function tick() {
+            const left = resetTime - Date.now();
+            if (left <= 0) {
+                clearInterval(countdownInterval);
+                document.getElementById('countdownText').textContent = '✅ Limit reset हो गई! Page reload करें।';
+                const nd = getRLData(); nd.count = 0; nd.date = Date.now(); saveRLData(nd);
+                setTimeout(() => location.reload(), 1500);
+                return;
+            }
+            const h = Math.floor(left / 3600000);
+            const m = Math.floor((left % 3600000) / 60000);
+            const s = Math.floor((left % 60000) / 1000);
+            document.getElementById('countdownText').textContent =
+                `⏳ Reset होने में: ${h}घंटे ${m}मिनट ${s}सेकंड बाकी`;
+        }
+        tick();
+        countdownInterval = setInterval(tick, 1000);
+    }
+
     let currentMode = 'ai';
     let selectedStyle = 'cinematic';
-    let selectedDur = 5;
+    let selectedDur = 7;
     let videoBlob = null;
     let stepTimers = [];
 
@@ -329,10 +487,29 @@
         });
     }
 
+    // Init on load
+    window.addEventListener('DOMContentLoaded', () => {
+        updateUsageBadge();
+        // Check if already locked
+        if (!canGenerate()) {
+            document.getElementById('genBtn').disabled = true;
+            document.getElementById('genBtn').innerHTML = '<span>🔒</span><span>Daily Limit — Share करें या कल आएं</span>';
+        }
+    });
+
     async function generateVideo() {
         const prompt = document.getElementById('promptInput').value.trim();
         const script = document.getElementById('scriptInput').value.trim();
         if (!prompt) { alert('कृपया Video का Topic लिखें!'); return; }
+
+        // ---- Rate Limit Check ----
+        if (!canGenerate()) {
+            shareClickCount = 0;
+            document.getElementById('shareProgress').style.display = 'none';
+            document.getElementById('countdownText').textContent = '';
+            document.getElementById('limitModal').classList.add('show');
+            return;
+        }
 
         if (currentMode === 'upload') {
             const photos = [document.getElementById('photo0').files[0], document.getElementById('photo1').files[0], document.getElementById('photo2').files[0]];
@@ -410,6 +587,13 @@
 
             videoBlob = await res.blob();
             if (videoBlob.size < 5000) throw new Error('Video file empty — please retry');
+
+            // ---- Count this successful generation ----
+            incrementCount();
+            if (!canGenerate()) {
+                document.getElementById('genBtn').disabled = true;
+                document.getElementById('genBtn').innerHTML = '<span>🔒</span><span>Daily Limit — Share करें या कल आएं</span>';
+            }
 
             const videoUrl = URL.createObjectURL(videoBlob);
             const videoEl = document.getElementById('resultVideo');
