@@ -132,53 +132,95 @@ app.post('/generate-ai-video', upload.array('photos', 3), async (req, res) => {
     };
     const stylePrompt = styleMap[vidStyle] || styleMap.cinematic;
 
+    // Helper: download any image URL to destPath
+    async function downloadUrl(url, destPath, timeoutMs = 40000) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), timeoutMs);
+        const r = await fetch(url, { signal: controller.signal });
+        clearTimeout(timer);
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        const buf = await r.arrayBuffer();
+        if (buf.byteLength < 5000) throw new Error('Too small');
+        fs.writeFileSync(destPath, Buffer.from(buf));
+        return buf.byteLength;
+    }
+
     // Helper: fetch image from multiple sources with fallback
     async function fetchImage(imgPrompt, destPath, attempt = 0) {
-        const shortPrompt = encodeURIComponent(imgPrompt.slice(0, 350));
         const seed = Math.floor(Math.random() * 999999);
+        const enc = encodeURIComponent(imgPrompt.slice(0, 300));
 
-        // Try multiple Pollinations endpoints
-        const urls = [
-            `https://image.pollinations.ai/prompt/${shortPrompt}?width=1280&height=720&nologo=true&seed=${seed}&model=flux`,
-            `https://image.pollinations.ai/prompt/${shortPrompt}?width=1280&height=720&nologo=true&seed=${seed + 1}`,
-            `https://image.pollinations.ai/prompt/${shortPrompt}?width=640&height=360&nologo=true&seed=${seed + 2}`,
+        // SOURCE 1: Pollinations flux model
+        try {
+            console.log(`[Image] Pollinations flux...`);
+            const bytes = await downloadUrl(
+                `https://image.pollinations.ai/prompt/${enc}?width=1280&height=720&nologo=true&seed=${seed}&model=flux`,
+                destPath, 40000);
+            console.log(`[Image] Pollinations OK (${bytes}b)`); return true;
+        } catch(e) { console.log(`[Image] Pollinations flux fail: ${e.message}`); }
+
+        // SOURCE 2: Pollinations default model
+        try {
+            const bytes = await downloadUrl(
+                `https://image.pollinations.ai/prompt/${enc}?width=1280&height=720&nologo=true&seed=${seed+1}`,
+                destPath, 40000);
+            console.log(`[Image] Pollinations default OK (${bytes}b)`); return true;
+        } catch(e) { console.log(`[Image] Pollinations default fail: ${e.message}`); }
+
+        // SOURCE 3: Lexica.art (free AI image search — no key needed)
+        try {
+            console.log(`[Image] Lexica.art...`);
+            const searchUrl = `https://lexica.art/api/v0/search?q=${encodeURIComponent(imgPrompt.slice(0,150))}&n=5`;
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), 20000);
+            const r = await fetch(searchUrl, { signal: controller.signal });
+            clearTimeout(timer);
+            if (r.ok) {
+                const data = await r.json();
+                const imgs = data.images || [];
+                for (const img of imgs) {
+                    const imgUrl = img.srcSmall || img.src;
+                    if (!imgUrl) continue;
+                    try {
+                        const bytes = await downloadUrl(imgUrl, destPath, 25000);
+                        // Resize to 1280x720
+                        const resized = destPath + '_resized.jpg';
+                        await new Promise((res, rej) => {
+                            exec(`ffmpeg -y -i "${destPath}" -vf "scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2" "${resized}"`,
+                                { timeout: 20000 }, (err) => err ? rej(err) : res());
+                        });
+                        fs.renameSync(resized, destPath);
+                        console.log(`[Image] Lexica OK (${bytes}b)`); return true;
+                    } catch(e2) { console.log(`[Image] Lexica img fail: ${e2.message}`); }
+                }
+            }
+        } catch(e) { console.log(`[Image] Lexica fail: ${e.message}`); }
+
+        // SOURCE 4: Picsum (random beautiful photos as last resort before placeholder)
+        try {
+            const picId = (seed % 500) + 1;
+            const bytes = await downloadUrl(`https://picsum.photos/seed/${picId}/1280/720`, destPath, 20000);
+            console.log(`[Image] Picsum OK (${bytes}b)`); return true;
+        } catch(e) { console.log(`[Image] Picsum fail: ${e.message}`); }
+
+        // LAST RESORT: gradient placeholder via FFmpeg
+        console.log(`[Image] Creating gradient placeholder...`);
+        const gradients = [
+            `color=c=#1a0533:s=1280x720,drawtext=fontsize=48:fontcolor=white:text='Scene ${attempt+1}':x=(w-text_w)/2:y=(h-text_h)/2`,
+            `color=c=#0a1628:s=1280x720`,
+            `color=c=#0d1f3c:s=1280x720`,
         ];
-
-        for (let u = 0; u < urls.length; u++) {
-            try {
-                console.log(`[Image] Trying source ${u + 1}...`);
-                const controller = new AbortController();
-                const timer = setTimeout(() => controller.abort(), 45000);
-                const r = await fetch(urls[u], { signal: controller.signal });
-                clearTimeout(timer);
-                if (!r.ok) { console.log(`[Image] Source ${u+1} HTTP ${r.status}`); continue; }
-                const buf = await r.arrayBuffer();
-                if (buf.byteLength < 5000) { console.log(`[Image] Source ${u+1} too small`); continue; }
-                fs.writeFileSync(destPath, Buffer.from(buf));
-                console.log(`[Image] Downloaded from source ${u + 1} (${buf.byteLength} bytes)`);
-                return true;
-            } catch(e) {
-                console.log(`[Image] Source ${u+1} error: ${e.message}`);
-            }
-        }
-
-        // Last resort: generate a solid color placeholder image using FFmpeg
-        if (attempt === 0) {
-            console.log(`[Image] All sources failed, creating placeholder...`);
-            const colors = ['#1a1a2e', '#16213e', '#0f3460'];
-            const color = colors[Math.floor(Math.random() * colors.length)].replace('#', '');
-            await new Promise((resolve) => {
-                exec(`ffmpeg -y -f lavfi -i color=color=${color}:size=1280x720:rate=1 -frames:v 1 "${destPath}"`,
-                    { timeout: 15000 }, (err) => resolve());
-            });
-            if (fs.existsSync(destPath) && fs.statSync(destPath).size > 100) {
-                console.log(`[Image] Placeholder created`);
-                return true;
-            }
+        const grad = gradients[Math.floor(Math.random() * gradients.length)];
+        await new Promise((resolve) => {
+            exec(`ffmpeg -y -f lavfi -i "${grad}" -frames:v 1 "${destPath}"`,
+                { timeout: 15000 }, () => resolve());
+        });
+        if (fs.existsSync(destPath) && fs.statSync(destPath).size > 100) {
+            console.log(`[Image] Placeholder created`); return true;
         }
 
         if (attempt < 1) {
-            await new Promise(r => setTimeout(r, 5000));
+            await new Promise(r => setTimeout(r, 3000));
             return fetchImage(imgPrompt, destPath, attempt + 1);
         }
         throw new Error(`All image sources failed`);
