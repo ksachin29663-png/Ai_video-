@@ -7,7 +7,7 @@ const fs = require('fs');
 const gTTS = require('gtts');
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json({ limit: '20mb' }));
@@ -340,6 +340,11 @@ app.post('/generate-content', async (req, res) => {
         const result = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'कोई result नहीं मिला।';
         res.json({ result });
     } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// ---- Health Check ----
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
 // ---- Serve Static Files ----
