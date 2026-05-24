@@ -130,29 +130,56 @@ app.post('/generate-ai-video', async (req, res) => {
     };
     const stylePrompt = styleMap[vidStyle] || styleMap.cinematic;
 
-    // Helper: fetch image from Pollinations with retry
+    // Helper: fetch image from multiple sources with fallback
     async function fetchImage(imgPrompt, destPath, attempt = 0) {
+        const shortPrompt = encodeURIComponent(imgPrompt.slice(0, 350));
         const seed = Math.floor(Math.random() * 999999);
-        const url  = `https://image.pollinations.ai/prompt/${encodeURIComponent(imgPrompt.slice(0, 400))}?width=1280&height=720&nologo=true&seed=${seed}`;
-        const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), 90000); // 90s per image
-        try {
-            const r = await fetch(url, { signal: controller.signal });
-            clearTimeout(timer);
-            if (!r.ok) throw new Error(`HTTP ${r.status}`);
-            const buf = await r.arrayBuffer();
-            if (buf.byteLength < 5000) throw new Error('Image too small (possible error page)');
-            fs.writeFileSync(destPath, Buffer.from(buf));
-            return true;
-        } catch(e) {
-            clearTimeout(timer);
-            if (attempt < 2) {
-                console.log(`Image retry ${attempt+1}: ${e.message}`);
-                await new Promise(r => setTimeout(r, 3000));
-                return fetchImage(imgPrompt, destPath, attempt + 1);
+
+        // Try multiple Pollinations endpoints
+        const urls = [
+            `https://image.pollinations.ai/prompt/${shortPrompt}?width=1280&height=720&nologo=true&seed=${seed}&model=flux`,
+            `https://image.pollinations.ai/prompt/${shortPrompt}?width=1280&height=720&nologo=true&seed=${seed + 1}`,
+            `https://image.pollinations.ai/prompt/${shortPrompt}?width=640&height=360&nologo=true&seed=${seed + 2}`,
+        ];
+
+        for (let u = 0; u < urls.length; u++) {
+            try {
+                console.log(`[Image] Trying source ${u + 1}...`);
+                const controller = new AbortController();
+                const timer = setTimeout(() => controller.abort(), 45000);
+                const r = await fetch(urls[u], { signal: controller.signal });
+                clearTimeout(timer);
+                if (!r.ok) { console.log(`[Image] Source ${u+1} HTTP ${r.status}`); continue; }
+                const buf = await r.arrayBuffer();
+                if (buf.byteLength < 5000) { console.log(`[Image] Source ${u+1} too small`); continue; }
+                fs.writeFileSync(destPath, Buffer.from(buf));
+                console.log(`[Image] Downloaded from source ${u + 1} (${buf.byteLength} bytes)`);
+                return true;
+            } catch(e) {
+                console.log(`[Image] Source ${u+1} error: ${e.message}`);
             }
-            throw new Error(`Image download failed after 3 attempts: ${e.message}`);
         }
+
+        // Last resort: generate a solid color placeholder image using FFmpeg
+        if (attempt === 0) {
+            console.log(`[Image] All sources failed, creating placeholder...`);
+            const colors = ['#1a1a2e', '#16213e', '#0f3460'];
+            const color = colors[Math.floor(Math.random() * colors.length)].replace('#', '');
+            await new Promise((resolve) => {
+                exec(`ffmpeg -y -f lavfi -i color=color=${color}:size=1280x720:rate=1 -frames:v 1 "${destPath}"`,
+                    { timeout: 15000 }, (err) => resolve());
+            });
+            if (fs.existsSync(destPath) && fs.statSync(destPath).size > 100) {
+                console.log(`[Image] Placeholder created`);
+                return true;
+            }
+        }
+
+        if (attempt < 1) {
+            await new Promise(r => setTimeout(r, 5000));
+            return fetchImage(imgPrompt, destPath, attempt + 1);
+        }
+        throw new Error(`All image sources failed`);
     }
 
     // Helper: run FFmpeg command with timeout
