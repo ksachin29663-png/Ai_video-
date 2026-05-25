@@ -497,6 +497,8 @@
         }
     });
 
+    let pollInterval = null;
+
     async function generateVideo() {
         const prompt = document.getElementById('promptInput').value.trim();
         const script = document.getElementById('scriptInput').value.trim();
@@ -519,9 +521,11 @@
         }
 
         clearStepTimers();
+        if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
+
         const btn = document.getElementById('genBtn');
         btn.disabled = true;
-        btn.innerHTML = '<span>⏳</span><span>Video बन रही है... (1-3 मिनट)</span>';
+        btn.innerHTML = '<span>⏳</span><span>Video बन रही है... रुकें</span>';
         document.getElementById('progressWrap').style.display = 'block';
         document.getElementById('errorBox').style.display = 'none';
         document.getElementById('resultCard').style.display = 'none';
@@ -535,16 +539,21 @@
         if (currentMode === 'ai') previewAIScenes(prompt);
         setStep(1);
 
-        const delays = [0, 10000, 50000, 110000];
-        delays.forEach((d, i) => { stepTimers.push(setTimeout(() => setStep(i + 1), d)); });
+        function showError(msg) {
+            clearStepTimers();
+            if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
+            const errBox = document.getElementById('errorBox');
+            errBox.style.display = 'block';
+            errBox.innerHTML = `❌ <b>Video नहीं बनी:</b> ${msg}<br><br>💡 <b>Solutions:</b><br>• Duration 3 sec try करें<br>• Script छोटी करें<br>• दोबारा try करें`;
+            document.getElementById('progressWrap').style.display = 'none';
+            btn.disabled = false;
+            btn.innerHTML = '<span>🎬</span><span>AI Video बनाएं</span>';
+        }
 
         try {
-            const controller = new AbortController();
-            const fetchTimeout = setTimeout(() => controller.abort(), 290000);
-
-            let res;
+            // STEP 1: Submit job — server responds immediately with jobId
+            let startRes;
             if (currentMode === 'upload') {
-                // Upload mode — use FormData
                 const formData = new FormData();
                 formData.append('prompt', prompt);
                 formData.append('script', script || prompt);
@@ -554,69 +563,104 @@
                     const file = document.getElementById('photo' + i).files[0];
                     if (file) formData.append('photos', file);
                 }
-                res = await fetch(API_BASE + '/generate-ai-video', {
-                    method: 'POST',
-                    body: formData,
-                    signal: controller.signal
-                });
+                startRes = await fetch(API_BASE + '/generate-ai-video', { method: 'POST', body: formData });
             } else {
-                // AI mode — use JSON
-                res = await fetch(API_BASE + '/generate-ai-video', {
+                startRes = await fetch(API_BASE + '/generate-ai-video', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt, script, style: selectedStyle, duration: selectedDur }),
-                    signal: controller.signal
+                    body: JSON.stringify({ prompt, script, style: selectedStyle, duration: String(selectedDur) })
                 });
             }
 
-            clearTimeout(fetchTimeout);
-
-            if (!res.ok) {
-                let errMsg = 'Server error ' + res.status;
-                try { const j = await res.json(); errMsg = j.error || errMsg; } catch(e) {}
+            if (!startRes.ok) {
+                let errMsg = 'Server error ' + startRes.status;
+                try { const j = await startRes.json(); errMsg = j.error || errMsg; } catch(e) {}
                 throw new Error(errMsg);
             }
 
-            clearStepTimers();
-            document.getElementById('progressBar').style.width = '100%';
-            for (let i = 1; i <= 4; i++) {
-                const el = document.getElementById('step' + i);
-                el.classList.add('done'); el.classList.remove('active');
-                el.querySelector('.step-dot').textContent = '✓';
-            }
+            const { jobId } = await startRes.json();
+            if (!jobId) throw new Error('Job ID नहीं मिला');
 
-            videoBlob = await res.blob();
-            if (videoBlob.size < 5000) throw new Error('Video file empty — please retry');
+            // STEP 2: Poll job status every 3 seconds
+            let pollCount = 0;
+            const MAX_POLLS = 120; // 6 minutes max
 
-            // ---- Count this successful generation ----
-            incrementCount();
-            if (!canGenerate()) {
-                document.getElementById('genBtn').disabled = true;
-                document.getElementById('genBtn').innerHTML = '<span>🔒</span><span>Daily Limit — Share करें या कल आएं</span>';
-            }
+            pollInterval = setInterval(async () => {
+                pollCount++;
+                if (pollCount > MAX_POLLS) {
+                    clearInterval(pollInterval); pollInterval = null;
+                    showError('Timeout — 6 मिनट में video नहीं बनी। Duration 3 sec करके retry करें।');
+                    return;
+                }
 
-            const videoUrl = URL.createObjectURL(videoBlob);
-            const videoEl = document.getElementById('resultVideo');
-            videoEl.src = videoUrl;
-            videoEl.load();
-            document.getElementById('resultCard').style.display = 'block';
-            document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+                try {
+                    const statusRes = await fetch(API_BASE + `/video-job/${jobId}`);
+                    if (!statusRes.ok) { return; }
+                    const data = await statusRes.json();
+
+                    // Update progress bar and step text
+                    if (data.progress) {
+                        document.getElementById('progressBar').style.width = data.progress + '%';
+                    }
+                    if (data.step) {
+                        // Map server steps to UI steps
+                        const s = data.step;
+                        if (s.includes('voiceover') || s.includes('शुरू')) { setStep(1); }
+                        else if (s.includes('Scene') && s.includes('image')) { setStep(2); }
+                        else if (s.includes('clip') || s.includes('encode') || s.includes('Concat') || s.includes('Audio')) { setStep(3); }
+                        else if (s.includes('✅') || s.includes('Done') || s.includes('तैयार')) { setStep(4); }
+                        // Show step text in button
+                        btn.innerHTML = `<span>⏳</span><span>${s}</span>`;
+                    }
+
+                    if (data.status === 'error') {
+                        clearInterval(pollInterval); pollInterval = null;
+                        showError(data.error || 'Video generation failed');
+                        return;
+                    }
+
+                    if (data.status === 'done' && data.downloadUrl) {
+                        clearInterval(pollInterval); pollInterval = null;
+                        clearStepTimers();
+
+                        // Mark all steps done
+                        document.getElementById('progressBar').style.width = '100%';
+                        for (let i = 1; i <= 4; i++) {
+                            const el = document.getElementById('step' + i);
+                            el.classList.add('done'); el.classList.remove('active');
+                            el.querySelector('.step-dot').textContent = '✓';
+                        }
+
+                        // Download video blob
+                        const dlRes = await fetch(API_BASE + data.downloadUrl);
+                        if (!dlRes.ok) throw new Error('Download failed: ' + dlRes.status);
+                        videoBlob = await dlRes.blob();
+                        if (videoBlob.size < 5000) throw new Error('Video file empty');
+
+                        // Count usage
+                        incrementCount();
+                        if (!canGenerate()) {
+                            btn.disabled = true;
+                            btn.innerHTML = '<span>🔒</span><span>Daily Limit — Share करें या कल आएं</span>';
+                        } else {
+                            btn.disabled = false;
+                            btn.innerHTML = '<span>🎬</span><span>AI Video बनाएं</span>';
+                        }
+
+                        const videoUrl = URL.createObjectURL(videoBlob);
+                        const videoEl = document.getElementById('resultVideo');
+                        videoEl.src = videoUrl;
+                        videoEl.load();
+                        document.getElementById('resultCard').style.display = 'block';
+                        document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+                    }
+                } catch(pollErr) {
+                    console.warn('Poll error:', pollErr.message);
+                }
+            }, 3000);
 
         } catch (err) {
-            clearStepTimers();
-            const errBox = document.getElementById('errorBox');
-            errBox.style.display = 'block';
-            let msg = err.message || 'Unknown error';
-            if (err.name === 'AbortError') msg = 'Timeout — video बनने में बहुत समय लगा। Duration 3 sec करके retry करें।';
-            errBox.innerHTML = `❌ <b>Video नहीं बनी:</b> ${msg}<br><br>
-            💡 <b>Solutions:</b><br>
-            • Duration 3 sec try करें<br>
-            • Script छोटी करें<br>
-            • दोबारा try करें`;
-            document.getElementById('progressWrap').style.display = 'none';
-        } finally {
-            btn.disabled = false;
-            btn.innerHTML = '<span>🎬</span><span>AI Video बनाएं</span>';
+            showError(err.message || 'Unknown error');
         }
     }
 
