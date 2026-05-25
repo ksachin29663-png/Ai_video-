@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+
+# Important pages - high priority
+Allow: /index.html
+Allow: /text-to-image.html
+Allow: /bg-remove.html
+Allow: /bg-changer.html
+Allow: /photo-restore.html
+Allow: /ai-remini.html
+Allow: /ai-video.html
+Allow: /ai-avatar.html
+Allow: /ai-sketch.html
+Allow: /ai-upscaler.html
+Allow: /ai-film-filters.html
+
+# Do not index auth or internal pages
+Disallow: /auth.html
+
+# Sitemap location
+Sitemap: https://aiwebsite36tootcreatephoto.online/sitemap.xml
