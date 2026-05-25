@@ -303,6 +303,7 @@
 
 <footer>&copy; 2025 सचिन एआई फोटो स्टूडियो — AI Video Generation</footer>
 
+<script src="auth-widget.js"></script>
 <script>
     // ---- API Base URL ----
     const REPLIT_SERVER = 'https://e1e1c5db-0aa4-429c-a28f-bf188342449e-00-22wkonulgrqax.sisko.replit.dev';
@@ -504,13 +505,25 @@
         const script = document.getElementById('scriptInput').value.trim();
         if (!prompt) { alert('कृपया Video का Topic लिखें!'); return; }
 
-        // ---- Rate Limit Check ----
-        if (!canGenerate()) {
-            shareClickCount = 0;
-            document.getElementById('shareProgress').style.display = 'none';
-            document.getElementById('countdownText').textContent = '';
-            document.getElementById('limitModal').classList.add('show');
-            return;
+        // ---- Firebase Auth Activity Check (primary) ----
+        if (window.SachinAuth) {
+            const result = await window.SachinAuth.checkActivity('video');
+            if (!result.allowed) {
+                if (result.needLogin) {
+                    window.SachinAuth.showLoginModal('आपकी Free video limit खत्म हो गई।\nLogin करके ज्यादा videos बनाओ — बिल्कुल फ्री!');
+                }
+                // blocked modal shown automatically by checkActivity
+                return;
+            }
+        } else {
+            // ---- Fallback: localStorage Rate Limit ----
+            if (!canGenerate()) {
+                shareClickCount = 0;
+                document.getElementById('shareProgress').style.display = 'none';
+                document.getElementById('countdownText').textContent = '';
+                document.getElementById('limitModal').classList.add('show');
+                return;
+            }
         }
 
         if (currentMode === 'upload') {
