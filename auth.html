@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Sign Up — सचिन एआई फोटो स्टूडियो</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background: #080c16; color: #e1e7f0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+
+        .back-btn { position: fixed; top: 16px; left: 16px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; border-radius: 10px; padding: 8px 14px; font-size: 0.85rem; text-decoration: none; transition: all 0.2s; z-index: 10; }
+        .back-btn:hover { background: rgba(255,255,255,0.12); color: #e1e7f0; }
+
+        .logo { font-size: 1.4rem; font-weight: 900; color: #00ffcc; text-align: center; margin-bottom: 6px; text-shadow: 0 0 20px rgba(0,255,204,0.3); }
+        .logo span { color: #7c3aed; }
+        .sub { font-size: 0.78rem; color: #475569; text-align: center; margin-bottom: 28px; }
+
+        .card { background: #0d1225; border: 1px solid rgba(99,102,241,0.25); border-radius: 24px; padding: 28px 24px; width: 100%; max-width: 400px; }
+
+        .tabs { display: flex; gap: 6px; background: rgba(255,255,255,0.04); border-radius: 14px; padding: 4px; margin-bottom: 24px; }
+        .tab { flex: 1; padding: 10px; border: none; border-radius: 10px; background: transparent; color: #64748b; font-size: 0.88rem; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+        .tab.active { background: rgba(99,102,241,0.2); color: #818cf8; }
+
+        .panel { display: none; }
+        .panel.active { display: block; }
+
+        .google-btn { width: 100%; padding: 14px; border-radius: 14px; border: 1.5px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.05); color: #e1e7f0; font-size: 0.95rem; font-weight: 600; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.2s; margin-bottom: 18px; }
+        .google-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.25); transform: translateY(-1px); }
+        .google-btn img { width: 20px; height: 20px; }
+
+        .divider { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+        .divider span { font-size: 0.75rem; color: #334155; white-space: nowrap; }
+        .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.07); }
+
+        .field { margin-bottom: 14px; }
+        .field label { display: block; font-size: 0.78rem; color: #64748b; margin-bottom: 6px; font-weight: 600; letter-spacing: 0.3px; }
+        .field input { width: 100%; padding: 12px 14px; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.08); border-radius: 12px; color: #e1e7f0; font-size: 0.92rem; font-family: inherit; outline: none; transition: border-color 0.2s; }
+        .field input:focus { border-color: rgba(99,102,241,0.5); background: rgba(99,102,241,0.05); }
+        .field input::placeholder { color: #334155; }
+
+        .phone-row { display: flex; gap: 8px; }
+        .phone-row .cc { width: 72px; flex-shrink: 0; }
+        .phone-row .num { flex: 1; }
+
+        .submit-btn { width: 100%; padding: 14px; border-radius: 14px; border: none; background: linear-gradient(135deg, #6366f1, #7c3aed); color: #fff; font-size: 1rem; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.2s; margin-top: 6px; }
+        .submit-btn:hover { box-shadow: 0 0 24px rgba(99,102,241,0.4); transform: translateY(-1px); }
+        .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        .otp-section { display: none; margin-top: 14px; }
+        .otp-section .field input { letter-spacing: 6px; text-align: center; font-size: 1.3rem; }
+
+        .msg { font-size: 0.82rem; text-align: center; margin-top: 14px; padding: 10px 14px; border-radius: 10px; display: none; }
+        .msg.error { background: rgba(239,68,68,0.1); color: #fca5a5; border: 1px solid rgba(239,68,68,0.2); }
+        .msg.success { background: rgba(16,185,129,0.1); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.2); }
+
+        .plan-row { display: flex; gap: 8px; margin-top: 20px; }
+        .plan-card { flex: 1; padding: 12px; border-radius: 14px; border: 1.5px solid rgba(255,255,255,0.08); text-align: center; cursor: pointer; transition: all 0.2s; background: rgba(255,255,255,0.02); }
+        .plan-card:hover { border-color: rgba(99,102,241,0.4); }
+        .plan-card.highlight { border-color: #6366f1; background: rgba(99,102,241,0.08); }
+        .plan-name { font-size: 0.85rem; font-weight: 700; color: #e1e7f0; }
+        .plan-price { font-size: 0.75rem; color: #64748b; margin-top: 3px; }
+        .plan-price b { color: #818cf8; }
+
+        #recaptcha-container { margin-top: 12px; }
+
+        .user-box { display: none; text-align: center; padding: 10px 0; }
+        .user-box .avatar { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg,#6366f1,#7c3aed); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 700; margin: 0 auto 10px; overflow: hidden; }
+        .user-box .avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .user-box .uname { font-size: 1.1rem; font-weight: 700; color: #e1e7f0; }
+        .user-box .uemail { font-size: 0.8rem; color: #64748b; margin-top: 3px; }
+        .user-box .plan-badge { display: inline-block; margin-top: 8px; padding: 4px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+        .plan-badge.free { background: rgba(99,102,241,0.15); color: #818cf8; }
+        .plan-badge.pro { background: linear-gradient(135deg,#a78bfa,#7c3aed); color: #fff; }
+        .logout-btn { margin-top: 16px; width: 100%; padding: 12px; border-radius: 12px; border: 1.5px solid rgba(239,68,68,0.3); background: rgba(239,68,68,0.08); color: #fca5a5; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+        .logout-btn:hover { background: rgba(239,68,68,0.15); }
+
+        .redirect-msg { font-size: 0.78rem; color: #475569; text-align: center; margin-top: 14px; }
+    </style>
+</head>
+<body>
+
+<a href="index.html" class="back-btn">← Home</a>
+
+<div class="logo">🎨 सचिन <span>एआई</span> फोटो स्टूडियो</div>
+<div class="sub">Login करो — Unlimited AI Tools Unlock करो</div>
+
+<div class="card">
+
+    <!-- Logged-in View -->
+    <div class="user-box" id="userBox">
+        <div class="avatar" id="userAvatar">👤</div>
+        <div class="uname" id="userName">—</div>
+        <div class="uemail" id="userEmail">—</div>
+        <div class="plan-badge free" id="userPlanBadge">Free Plan</div>
+        <div style="margin-top:14px;padding:12px;background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.2);border-radius:12px;font-size:0.8rem;color:#6ee7b7;line-height:1.6;">
+            ✅ आप logged in हैं!<br>
+            अब ज्यादा tools use कर सकते हो।<br>
+            <span style="color:#475569;">Pro Plan जल्द आएगा — ₹99/month</span>
+        </div>
+        <button class="logout-btn" onclick="handleLogout()">🚪 Logout करें</button>
+    </div>
+
+    <!-- Auth Tabs -->
+    <div id="authTabs">
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('login')">🔑 Login</button>
+            <button class="tab" onclick="switchTab('signup')">✨ Sign Up</button>
+            <button class="tab" onclick="switchTab('phone')">📱 OTP</button>
+        </div>
+
+        <!-- Google Button (shared) -->
+        <button class="google-btn" onclick="handleGoogle()">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G">
+            Google से Login करें
+        </button>
+
+        <div class="divider"><span>या Email से</span></div>
+
+        <!-- LOGIN Panel -->
+        <div class="panel active" id="panel-login">
+            <div class="field">
+                <label>Email</label>
+                <input type="email" id="li-email" placeholder="your@email.com">
+            </div>
+            <div class="field">
+                <label>Password</label>
+                <input type="password" id="li-pass" placeholder="••••••••">
+            </div>
+            <button class="submit-btn" onclick="handleLogin()">🔑 Login करें</button>
+        </div>
+
+        <!-- SIGN UP Panel -->
+        <div class="panel" id="panel-signup">
+            <div class="field">
+                <label>नाम</label>
+                <input type="text" id="su-name" placeholder="आपका नाम">
+            </div>
+            <div class="field">
+                <label>Email</label>
+                <input type="email" id="su-email" placeholder="your@email.com">
+            </div>
+            <div class="field">
+                <label>Password (6+ characters)</label>
+                <input type="password" id="su-pass" placeholder="••••••••">
+            </div>
+            <button class="submit-btn" onclick="handleSignUp()">✨ Account बनाएं</button>
+        </div>
+
+        <!-- PHONE OTP Panel -->
+        <div class="panel" id="panel-phone">
+            <div class="field">
+                <label>Phone Number</label>
+                <div class="phone-row">
+                    <input class="cc" type="text" id="ph-cc" value="+91" placeholder="+91">
+                    <input class="num" type="tel" id="ph-num" placeholder="10-digit number" maxlength="10">
+                </div>
+            </div>
+            <div id="recaptcha-container"></div>
+            <button class="submit-btn" id="sendOtpBtn" onclick="handleSendOTP()">📱 OTP भेजें</button>
+
+            <div class="otp-section" id="otpSection">
+                <div class="field" style="margin-top:14px;">
+                    <label>OTP दर्ज करें</label>
+                    <input type="number" id="otp-code" placeholder="6-digit OTP" maxlength="6">
+                </div>
+                <button class="submit-btn" onclick="handleVerifyOTP()">✅ Verify करें</button>
+            </div>
+        </div>
+
+        <div class="msg" id="authMsg"></div>
+
+        <div class="plan-row">
+            <div class="plan-card highlight">
+                <div class="plan-name">🆓 Free</div>
+                <div class="plan-price">हमेशा फ्री</div>
+            </div>
+            <div class="plan-card">
+                <div class="plan-name">⭐ Pro</div>
+                <div class="plan-price"><b>₹99</b>/month</div>
+            </div>
+        </div>
+        <div class="redirect-msg" id="redirectMsg"></div>
+    </div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    sendEmailVerification,
+    signOut,
+    onAuthStateChanged,
+    RecaptchaVerifier,
+    signInWithPhoneNumber,
+    updateProfile
+} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import {
+    getDatabase, ref, get, set, serverTimestamp
+} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+
+const firebaseConfig = {
+    apiKey: "AIzaSyCglO0vHutINDOWaIWMsv4N9_54dpbPvIo",
+    authDomain: "project-8621d575-e2f7-45a2-963.firebaseapp.com",
+    databaseURL: "https://project-8621d575-e2f7-45a2-963-default-rtdb.firebaseio.com",
+    projectId: "project-8621d575-e2f7-45a2-963",
+    storageBucket: "project-8621d575-e2f7-45a2-963.firebasestorage.app",
+    messagingSenderId: "756626829965",
+    appId: "1:756626829965:web:8350120f4308ba5c11a8c4"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+let confirmResult = null;
+
+// Check redirect param
+const returnTo = new URLSearchParams(window.location.search).get('from') || 'index.html';
+
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        showUserBox(user);
+        // Check if we should redirect back
+        const shouldRedirect = new URLSearchParams(window.location.search).get('redirect');
+        if (shouldRedirect === '1') {
+            document.getElementById('redirectMsg').textContent = '✅ Login हो गया! Redirect हो रहा है...';
+            setTimeout(() => { window.location.href = returnTo; }, 1200);
+        }
+    } else {
+        document.getElementById('userBox').style.display = 'none';
+        document.getElementById('authTabs').style.display = 'block';
+    }
+});
+
+async function showUserBox(user) {
+    document.getElementById('authTabs').style.display = 'none';
+    const box = document.getElementById('userBox');
+    box.style.display = 'block';
+    document.getElementById('userName').textContent = user.displayName || user.email?.split('@')[0] || 'User';
+    document.getElementById('userEmail').textContent = user.email || user.phoneNumber || '';
+
+    const av = document.getElementById('userAvatar');
+    if (user.photoURL) {
+        av.innerHTML = `<img src="${user.photoURL}" alt="avatar">`;
+    } else {
+        av.textContent = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
+    }
+
+    try {
+        const snap = await get(ref(db, `users/${user.uid}/plan`));
+        const plan = snap.exists() ? snap.val() : 'free';
+        const badge = document.getElementById('userPlanBadge');
+        badge.textContent = plan === 'pro' ? '⭐ Pro Plan' : '🆓 Free Plan';
+        badge.className = 'plan-badge ' + plan;
+    } catch(e) {}
+}
+
+// Tab switching
+window.switchTab = function(tab) {
+    document.querySelectorAll('.tab').forEach((t,i) => {
+        t.classList.toggle('active', ['login','signup','phone'][i] === tab);
+    });
+    ['login','signup','phone'].forEach(p => {
+        document.getElementById('panel-' + p).classList.toggle('active', p === tab);
+    });
+    clearMsg();
+};
+
+function showMsg(text, type) {
+    const el = document.getElementById('authMsg');
+    el.textContent = text;
+    el.className = 'msg ' + type;
+    el.style.display = 'block';
+}
+function clearMsg() {
+    document.getElementById('authMsg').style.display = 'none';
+}
+
+async function saveUserToDB(user, extra = {}) {
+    try {
+        const snap = await get(ref(db, `users/${user.uid}`));
+        if (!snap.exists()) {
+            await set(ref(db, `users/${user.uid}`), {
+                name: user.displayName || extra.name || '',
+                email: user.email || '',
+                phone: user.phoneNumber || '',
+                plan: 'free',
+                createdAt: serverTimestamp(),
+                activity: {}
+            });
+        }
+    } catch(e) {}
+}
+
+// Google Sign-In
+window.handleGoogle = async function() {
+    clearMsg();
+    const provider = new GoogleAuthProvider();
+    try {
+        const result = await signInWithPopup(auth, provider);
+        await saveUserToDB(result.user);
+        showMsg('✅ Google से Login हो गया!', 'success');
+    } catch(e) {
+        showMsg('❌ Google Login failed: ' + e.message, 'error');
+    }
+};
+
+// Email Login
+window.handleLogin = async function() {
+    const email = document.getElementById('li-email').value.trim();
+    const pass = document.getElementById('li-pass').value;
+    if (!email || !pass) { showMsg('Email और Password दोनों भरें।', 'error'); return; }
+    clearMsg();
+    const btn = document.querySelector('#panel-login .submit-btn');
+    btn.disabled = true; btn.textContent = 'Loading...';
+    try {
+        const cred = await signInWithEmailAndPassword(auth, email, pass);
+        await saveUserToDB(cred.user);
+        showMsg('✅ Login हो गया!', 'success');
+    } catch(e) {
+        let msg = 'Email या Password गलत है।';
+        if (e.code === 'auth/too-many-requests') msg = 'बहुत ज्यादा attempts। थोड़ी देर बाद try करें।';
+        showMsg('❌ ' + msg, 'error');
+    }
+    btn.disabled = false; btn.textContent = '🔑 Login करें';
+};
+
+// Email Sign Up
+window.handleSignUp = async function() {
+    const name = document.getElementById('su-name').value.trim();
+    const email = document.getElementById('su-email').value.trim();
+    const pass = document.getElementById('su-pass').value;
+    if (!name || !email || !pass) { showMsg('सभी fields भरें।', 'error'); return; }
+    if (pass.length < 6) { showMsg('Password कम से कम 6 characters का होना चाहिए।', 'error'); return; }
+    clearMsg();
+    const btn = document.querySelector('#panel-signup .submit-btn');
+    btn.disabled = true; btn.textContent = 'Account बन रहा है...';
+    try {
+        const cred = await createUserWithEmailAndPassword(auth, email, pass);
+        await updateProfile(cred.user, { displayName: name });
+        await sendEmailVerification(cred.user);
+        await saveUserToDB(cred.user, { name });
+        showMsg('✅ Account बन गया! Email verify करें (inbox check करो)।', 'success');
+    } catch(e) {
+        let msg = e.message;
+        if (e.code === 'auth/email-already-in-use') msg = 'यह Email पहले से registered है।';
+        if (e.code === 'auth/invalid-email') msg = 'Valid Email address डालें।';
+        showMsg('❌ ' + msg, 'error');
+    }
+    btn.disabled = false; btn.textContent = '✨ Account बनाएं';
+};
+
+// Phone OTP
+window.handleSendOTP = async function() {
+    const cc = document.getElementById('ph-cc').value.trim() || '+91';
+    const num = document.getElementById('ph-num').value.trim();
+    if (!num || num.length < 10) { showMsg('Valid 10-digit number डालें।', 'error'); return; }
+    clearMsg();
+    const btn = document.getElementById('sendOtpBtn');
+    btn.disabled = true; btn.textContent = 'OTP भेजा जा रहा है...';
+    try {
+        if (!window.recaptchaVerifier) {
+            window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', { size: 'normal' });
+        }
+        confirmResult = await signInWithPhoneNumber(auth, cc + num, window.recaptchaVerifier);
+        document.getElementById('otpSection').style.display = 'block';
+        showMsg('✅ OTP भेजा गया! Check करें।', 'success');
+    } catch(e) {
+        showMsg('❌ OTP भेजने में error: ' + e.message, 'error');
+        btn.disabled = false; btn.textContent = '📱 OTP भेजें';
+    }
+};
+
+window.handleVerifyOTP = async function() {
+    const code = document.getElementById('otp-code').value.trim();
+    if (!code || code.length < 6) { showMsg('6-digit OTP डालें।', 'error'); return; }
+    if (!confirmResult) { showMsg('पहले OTP भेजें।', 'error'); return; }
+    clearMsg();
+    try {
+        const result = await confirmResult.confirm(code);
+        await saveUserToDB(result.user);
+        showMsg('✅ Phone verify हो गया! Login हो गए।', 'success');
+    } catch(e) {
+        showMsg('❌ OTP गलत है। दोबारा check करें।', 'error');
+    }
+};
+
+window.handleLogout = async function() {
+    await signOut(auth);
+    document.getElementById('userBox').style.display = 'none';
+    document.getElementById('authTabs').style.display = 'block';
+    showMsg('✅ Logout हो गए।', 'success');
+};
+</script>
+</body>
+</html>
