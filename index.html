@@ -89,28 +89,99 @@
         .menu-btn:hover { background: rgba(0,255,204,0.15); border-color: rgba(0,255,204,0.5); }
         .dot { width: 4px; height: 4px; border-radius: 50%; background: #00ffcc; }
         .menu-dropdown {
-            position: fixed; top: 68px; right: 12px; width: 240px; z-index: 500;
-            background: #0d1425; border: 1px solid rgba(0,255,204,0.2);
-            border-radius: 16px; box-shadow: 0 16px 48px rgba(0,0,0,0.6);
-            overflow: hidden; display: none; animation: menuFade 0.18s ease;
+            position: fixed; top: 64px; right: 10px; width: 288px; z-index: 9000;
+            background: #0d1425; border: 1px solid rgba(0,255,204,0.18);
+            border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.75), 0 0 0 1px rgba(0,255,204,0.04);
+            overflow: hidden; display: none; animation: menuFade 0.2s cubic-bezier(.2,.8,.4,1);
+            max-height: 92vh; overflow-y: auto;
         }
-        @keyframes menuFade { from { opacity:0; transform: translateY(-8px) scale(0.97); } to { opacity:1; transform: translateY(0) scale(1); } }
+        .menu-dropdown::-webkit-scrollbar { width: 3px; }
+        .menu-dropdown::-webkit-scrollbar-thumb { background: rgba(0,255,204,0.2); border-radius: 4px; }
+        @keyframes menuFade { from { opacity:0; transform: translateY(-10px) scale(0.96); } to { opacity:1; transform: translateY(0) scale(1); } }
         .menu-dropdown.open { display: block; }
-        .menu-header { padding: 14px 16px 10px; border-bottom: 1px solid rgba(255,255,255,0.06); }
-        .menu-header .mh-name { font-size: 0.88rem; font-weight: 800; color: #00ffcc; }
-        .menu-header .mh-url { font-size: 0.68rem; color: #475569; margin-top: 2px; }
+
+        /* User Profile Section */
+        .menu-user-section { padding: 16px 16px 14px; }
+        .menu-user-row { display: flex; align-items: center; gap: 12px; }
+        .menu-user-avatar {
+            width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; overflow: hidden;
+            background: linear-gradient(135deg,#7c3aed,#00ffcc);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; font-weight: 800; color: #fff;
+            border: 2px solid rgba(0,255,204,0.3);
+        }
+        .menu-user-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .menu-user-info { flex: 1; min-width: 0; }
+        .menu-user-name { font-size: 0.92rem; font-weight: 800; color: #e1e7f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .menu-user-email { font-size: 0.68rem; color: #475569; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .menu-plan-badge {
+            display: inline-block; font-size: 0.6rem; font-weight: 800; padding: 2px 8px;
+            border-radius: 10px; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .menu-plan-badge.free { background: rgba(0,255,204,0.12); color: #00ffcc; }
+        .menu-plan-badge.pro { background: linear-gradient(90deg,#7c3aed,#a78bfa); color: #fff; }
+        .menu-logout-btn {
+            width: 34px; height: 34px; border-radius: 10px; border: 1px solid rgba(239,68,68,0.3);
+            background: rgba(239,68,68,0.08); color: #f87171; cursor: pointer; font-size: 0.85rem;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+            transition: all 0.2s; font-family: inherit;
+        }
+        .menu-logout-btn:hover { background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.5); }
+
+        /* Auth Buttons (not logged in) */
+        .menu-auth-area { display: flex; flex-direction: column; gap: 8px; }
+        .menu-welcome { font-size: 0.82rem; color: #94a3b8; margin-bottom: 2px; line-height: 1.4; }
+        .menu-welcome strong { color: #e1e7f0; }
+        .menu-signup-btn {
+            display: block; text-align: center; padding: 10px 14px;
+            background: linear-gradient(135deg, #7c3aed, #00ffcc);
+            color: #0a0e1a; font-size: 0.85rem; font-weight: 800; border-radius: 12px;
+            text-decoration: none; transition: all 0.2s; letter-spacing: 0.3px;
+        }
+        .menu-signup-btn:hover { box-shadow: 0 4px 20px rgba(0,255,204,0.35); transform: translateY(-1px); }
+        .menu-login-link {
+            display: block; text-align: center; padding: 8px; color: #64748b;
+            font-size: 0.8rem; text-decoration: none; border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px; transition: all 0.2s;
+        }
+        .menu-login-link:hover { color: #00ffcc; border-color: rgba(0,255,204,0.25); background: rgba(0,255,204,0.04); }
+        .menu-login-link span { color: #00ffcc; font-weight: 700; }
+
+        /* Menu Items */
         .menu-item {
-            display: flex; align-items: center; gap: 12px; padding: 12px 16px;
-            color: #94a3b8; font-size: 0.85rem; text-decoration: none; cursor: pointer;
+            display: flex; align-items: center; gap: 12px; padding: 11px 16px;
+            color: #94a3b8; font-size: 0.84rem; text-decoration: none; cursor: pointer;
             border: none; background: none; width: 100%; font-family: inherit;
             transition: background 0.15s, color 0.15s;
         }
         .menu-item:hover { background: rgba(0,255,204,0.07); color: #e1e7f0; }
-        .menu-item .mi { font-size: 1.1rem; width: 22px; text-align: center; }
+        .menu-item .mi { font-size: 1rem; width: 22px; text-align: center; }
         .menu-item .mi-label { flex: 1; text-align: left; }
         .menu-item .mi-badge { font-size: 0.6rem; background: rgba(0,255,204,0.15); color: #00ffcc; padding: 2px 7px; border-radius: 10px; font-weight: 700; }
-        .menu-divider { height: 1px; background: rgba(255,255,255,0.06); margin: 4px 0; }
-        .menu-section-label { padding: 8px 16px 4px; font-size: 0.65rem; color: #475569; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; }
+        .menu-item .mi-badge.hot { background: rgba(239,68,68,0.15); color: #f87171; }
+        .menu-item .mi-right { font-size: 0.68rem; color: #334155; }
+        .menu-divider { height: 1px; background: rgba(255,255,255,0.05); margin: 2px 0; }
+        .menu-section-label { padding: 8px 16px 4px; font-size: 0.62rem; color: #334155; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; }
+
+        /* Stats Row */
+        .menu-stats { display: flex; padding: 10px 14px 12px; gap: 6px; }
+        .menu-stat { flex: 1; text-align: center; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 8px 4px; }
+        .menu-stat-val { font-size: 0.95rem; font-weight: 900; color: #00ffcc; }
+        .menu-stat-lbl { font-size: 0.58rem; color: #475569; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* Toggle Switch */
+        .menu-toggle-row { display: flex; align-items: center; gap: 12px; padding: 10px 16px; }
+        .menu-toggle-row .mi { font-size: 1rem; width: 22px; text-align: center; }
+        .menu-toggle-row .mi-label { flex: 1; font-size: 0.84rem; color: #94a3b8; }
+        .toggle-sw { position: relative; width: 36px; height: 20px; flex-shrink: 0; }
+        .toggle-sw input { opacity: 0; width: 0; height: 0; }
+        .toggle-sw .slider { position: absolute; inset: 0; background: #1e293b; border-radius: 20px; cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,255,255,0.1); }
+        .toggle-sw .slider:before { content:''; position: absolute; height: 14px; width: 14px; left: 3px; top: 2px; background: #475569; border-radius: 50%; transition: 0.3s; }
+        .toggle-sw input:checked + .slider { background: rgba(0,255,204,0.2); border-color: rgba(0,255,204,0.4); }
+        .toggle-sw input:checked + .slider:before { transform: translateX(15px); background: #00ffcc; }
+
+        /* App version tag */
+        .menu-version { text-align: center; padding: 8px; font-size: 0.62rem; color: #1e293b; }
 
         .search-wrap {
             max-width: 560px; margin: 20px auto 0; position: relative;
@@ -259,28 +330,89 @@
 </header>
 
 <div class="menu-dropdown" id="mainMenu">
-    <div class="menu-header">
-        <div class="mh-name">🎨 सचिन एआई फोटो स्टूडियो</div>
-        <div class="mh-url">aiwebsite36tootcreatephoto.online</div>
+
+    <!-- ===== USER PROFILE / AUTH SECTION ===== -->
+    <div class="menu-user-section">
+
+        <!-- NOT LOGGED IN -->
+        <div id="menuNotLoggedIn" class="menu-auth-area">
+            <p class="menu-welcome"><strong>👋 नमस्ते!</strong> Free account बनाएं और सभी 38 AI Tools unlock करें।</p>
+            <a href="auth.html?mode=signup" class="menu-signup-btn" onclick="closeMenu()">🚀 Free Sign Up करें</a>
+            <a href="auth.html?mode=login" class="menu-login-link" onclick="closeMenu()">Already account है? <span>Login करें →</span></a>
+        </div>
+
+        <!-- LOGGED IN (hidden by default) -->
+        <div id="menuLoggedIn" style="display:none">
+            <div class="menu-user-row">
+                <div class="menu-user-avatar" id="menuAvatar">👤</div>
+                <div class="menu-user-info">
+                    <div class="menu-user-name" id="menuUserName">User</div>
+                    <div class="menu-user-email" id="menuUserEmail"></div>
+                    <span class="menu-plan-badge free" id="menuPlanBadge">FREE</span>
+                </div>
+                <button class="menu-logout-btn" onclick="menuLogout()" title="Logout">↩️</button>
+            </div>
+        </div>
+
     </div>
-    <div class="menu-section-label">📌 Pages</div>
-    <a href="index.html" class="menu-item"><span class="mi">🏠</span><span class="mi-label">होम पेज</span></a>
-    <a href="analytics.html" class="menu-item"><span class="mi">📊</span><span class="mi-label">Analytics Dashboard</span></a>
-    <a href="premium.html" class="menu-item"><span class="mi">💎</span><span class="mi-label">Premium Plans</span><span class="mi-badge">NEW</span></a>
-    <a href="privacy-policy.html" class="menu-item"><span class="mi">🔒</span><span class="mi-label">Privacy Policy</span></a>
+
     <div class="menu-divider"></div>
+
+    <!-- ===== SITE STATS ===== -->
+    <div class="menu-stats">
+        <div class="menu-stat"><div class="menu-stat-val">38</div><div class="menu-stat-lbl">AI Tools</div></div>
+        <div class="menu-stat"><div class="menu-stat-val">500+</div><div class="menu-stat-lbl">Filters</div></div>
+        <div class="menu-stat"><div class="menu-stat-val">100%</div><div class="menu-stat-lbl">Free</div></div>
+        <div class="menu-stat"><div class="menu-stat-val">🇮🇳</div><div class="menu-stat-lbl">Made in India</div></div>
+    </div>
+
+    <div class="menu-divider"></div>
+
+    <!-- ===== NAVIGATION ===== -->
+    <div class="menu-section-label">📌 Navigation</div>
+    <a href="index.html" class="menu-item"><span class="mi">🏠</span><span class="mi-label">होम — सभी Tools</span></a>
+    <a href="premium.html" class="menu-item"><span class="mi">💎</span><span class="mi-label">Premium Plans</span><span class="mi-badge">PRO</span></a>
+    <a href="analytics.html" class="menu-item"><span class="mi">📊</span><span class="mi-label">Analytics</span></a>
+    <a href="privacy-policy.html" class="menu-item"><span class="mi">🔒</span><span class="mi-label">Privacy Policy</span></a>
+
+    <div class="menu-divider"></div>
+
+    <!-- ===== POPULAR TOOLS ===== -->
     <div class="menu-section-label">🔥 Popular Tools</div>
-    <a href="text-to-image.html" class="menu-item"><span class="mi">✨</span><span class="mi-label">Text-to-Image</span></a>
+    <a href="text-to-image.html" class="menu-item"><span class="mi">✨</span><span class="mi-label">Text → Image</span><span class="mi-badge hot">HOT</span></a>
     <a href="ai-video.html" class="menu-item"><span class="mi">🎬</span><span class="mi-label">AI Video Generator</span></a>
     <a href="bg-remove.html" class="menu-item"><span class="mi">🖼️</span><span class="mi-label">BG Remover</span></a>
     <a href="ai-remini.html" class="menu-item"><span class="mi">🔮</span><span class="mi-label">Remini Enhancer</span><span class="mi-badge">500+</span></a>
-    <a href="ai-film-filters.html" class="menu-item"><span class="mi">🎞️</span><span class="mi-label">Film Filters</span></a>
-    <a href="ai-chat.html" class="menu-item"><span class="mi">🤖</span><span class="mi-label">AI Chat</span></a>
+    <a href="ai-avatar.html" class="menu-item"><span class="mi">🤳</span><span class="mi-label">AI Avatar Maker</span></a>
+    <a href="ai-sketch.html" class="menu-item"><span class="mi">✏️</span><span class="mi-label">AI Sketch</span></a>
+    <a href="ai-chat.html" class="menu-item"><span class="mi">🤖</span><span class="mi-label">AI Chat Assistant</span></a>
+    <a href="ai-shayari.html" class="menu-item"><span class="mi">📝</span><span class="mi-label">Shayari Generator</span></a>
+
     <div class="menu-divider"></div>
-    <div class="menu-section-label">⚙️ More</div>
-    <button class="menu-item" onclick="shareApp()"><span class="mi">📤</span><span class="mi-label">Share This App</span></button>
-    <button class="menu-item" onclick="rateApp()"><span class="mi">⭐</span><span class="mi-label">Rate करें — 5 Stars</span></button>
+
+    <!-- ===== SETTINGS ===== -->
+    <div class="menu-section-label">⚙️ Settings</div>
+    <div class="menu-toggle-row">
+        <span class="mi">🌙</span>
+        <span class="mi-label">Dark Mode</span>
+        <label class="toggle-sw">
+            <input type="checkbox" id="darkModeToggle" checked onchange="toggleDarkMode(this.checked)">
+            <span class="slider"></span>
+        </label>
+    </div>
+    <button class="menu-item" onclick="changeLanguage()"><span class="mi">🌐</span><span class="mi-label">Language</span><span class="mi-right" id="currentLang">हिंदी</span></button>
+    <button class="menu-item" onclick="clearCache()"><span class="mi">🧹</span><span class="mi-label">Cache Clear करें</span></button>
+
+    <div class="menu-divider"></div>
+
+    <!-- ===== MORE ===== -->
+    <div class="menu-section-label">💬 More</div>
+    <button class="menu-item" onclick="shareApp()"><span class="mi">📤</span><span class="mi-label">WhatsApp पर Share करें</span></button>
+    <button class="menu-item" onclick="rateApp()"><span class="mi">⭐</span><span class="mi-label">5 Stars दें — Google</span></button>
+    <a href="https://github.com/ksachin29663-png/Ai_video-" target="_blank" class="menu-item"><span class="mi">💻</span><span class="mi-label">Source Code — GitHub</span></a>
     <button class="menu-item" onclick="scrollToTop()"><span class="mi">⬆️</span><span class="mi-label">ऊपर जाएं</span></button>
+
+    <div class="menu-version">v2.0 · Sachin AI Studio · Made with ❤️ in India</div>
 </div>
 
 <div class="hero">
@@ -607,6 +739,7 @@
     <br><a href="/privacy-policy.html" style="color:#00ffcc;text-decoration:none;font-size:0.8rem;">🔒 Privacy Policy</a>
 </footer>
 
+<script>window.SACHIN_HIDE_FLOAT = true;</script>
 <script src="auth-widget.js"></script>
 <script src="adsterra-gate.js"></script>
 <script src="tracker.js"></script>
@@ -657,31 +790,97 @@ function searchTools(q) {
     if (noRes) noRes.style.display = found === 0 ? 'block' : 'none';
 }
 
+// ===== MENU FUNCTIONS =====
+function closeMenu() { document.getElementById('mainMenu').classList.remove('open'); }
+
 function toggleMenu(e) {
     e.stopPropagation();
-    var m = document.getElementById('mainMenu');
-    m.classList.toggle('open');
+    document.getElementById('mainMenu').classList.toggle('open');
 }
 document.addEventListener('click', function(e) {
-    if (!e.target.closest('.menu-btn') && !e.target.closest('.menu-dropdown')) {
-        var m = document.getElementById('mainMenu');
-        if (m) m.classList.remove('open');
-    }
+    if (!e.target.closest('.menu-btn') && !e.target.closest('.menu-dropdown')) closeMenu();
 });
-function shareApp() {
-    document.getElementById('mainMenu').classList.remove('open');
-    if (navigator.share) {
-        navigator.share({ title: 'सचिन एआई फोटो स्टूडियो — 38 Free AI Tools', text: 'देखो यह धांसू AI tool website!', url: 'https://aiwebsite36tootcreatephoto.online/' });
+
+// ===== AUTH STATE → MENU UPDATE =====
+window.updateMenuAuth = function(user, plan) {
+    var notLoggedIn = document.getElementById('menuNotLoggedIn');
+    var loggedIn    = document.getElementById('menuLoggedIn');
+    var avatar      = document.getElementById('menuAvatar');
+    var nameEl      = document.getElementById('menuUserName');
+    var emailEl     = document.getElementById('menuUserEmail');
+    var planBadge   = document.getElementById('menuPlanBadge');
+    if (!notLoggedIn) return;
+    if (user) {
+        notLoggedIn.style.display = 'none';
+        loggedIn.style.display = 'block';
+        var displayName = user.displayName || user.email?.split('@')[0] || 'User';
+        nameEl.textContent = displayName;
+        emailEl.textContent = user.email || '';
+        if (user.photoURL) {
+            avatar.innerHTML = '<img src="' + user.photoURL + '" alt="' + displayName.charAt(0) + '" onerror="this.parentNode.textContent=\'' + displayName.charAt(0).toUpperCase() + '\'">';
+        } else {
+            avatar.textContent = displayName.charAt(0).toUpperCase();
+        }
+        planBadge.textContent = plan === 'pro' ? '⭐ PRO' : '✅ FREE';
+        planBadge.className = 'menu-plan-badge ' + (plan === 'pro' ? 'pro' : 'free');
     } else {
-        navigator.clipboard.writeText('https://aiwebsite36tootcreatephoto.online/').then(function(){ alert('✅ Link Copy हो गया! अब share करो।'); });
+        notLoggedIn.style.display = 'block';
+        loggedIn.style.display = 'none';
+    }
+};
+
+function menuLogout() {
+    if (typeof window._sachinSignOut === 'function') {
+        window._sachinSignOut();
+        setTimeout(function() { location.reload(); }, 500);
+    } else {
+        window.location.href = 'auth.html';
+    }
+    closeMenu();
+}
+
+// ===== SETTINGS =====
+function toggleDarkMode(on) {
+    document.body.style.background = on ? '' : '#f8fafc';
+    document.body.style.color = on ? '' : '#0f172a';
+}
+var langs = ['हिंदी', 'English', 'Español', 'Français', '中文'];
+var langIdx = 0;
+function changeLanguage() {
+    langIdx = (langIdx + 1) % langs.length;
+    document.getElementById('currentLang').textContent = langs[langIdx];
+}
+function clearCache() {
+    try {
+        localStorage.clear();
+        sessionStorage.clear();
+    } catch(e) {}
+    closeMenu();
+    var el = document.createElement('div');
+    el.style.cssText = 'position:fixed;top:80px;right:12px;background:#065f46;color:#6ee7b7;padding:10px 16px;border-radius:10px;font-size:0.82rem;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.4)';
+    el.textContent = '✅ Cache Clear हो गया!';
+    document.body.appendChild(el);
+    setTimeout(function(){ el.remove(); }, 2500);
+}
+
+// ===== SHARE / RATE / SCROLL =====
+function shareApp() {
+    closeMenu();
+    var url = 'https://aiwebsite36tootcreatephoto.online/';
+    var text = '🎨 यह AI tool website देखो! 38 Free AI Tools — Background हटाओ, फोटो बनाओ, Remini Enhance, 500+ Filters — सब FREE!\n' + url;
+    if (navigator.share) {
+        navigator.share({ title: 'सचिन एआई फोटो स्टूडियो', text: text, url: url });
+    } else {
+        var wa = 'https://wa.me/?text=' + encodeURIComponent(text);
+        window.open(wa, '_blank');
     }
 }
 function rateApp() {
-    document.getElementById('mainMenu').classList.remove('open');
-    window.open('https://aiwebsite36tootcreatephoto.online/', '_blank');
+    closeMenu();
+    window.open('https://search.google.com/search-console', '_blank');
 }
 function scrollToTop() {
-    document.getElementById('mainMenu').classList.remove('open');
+    closeMenu();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 </script>

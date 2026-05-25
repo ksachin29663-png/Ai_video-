@@ -99,16 +99,18 @@
     `;
     document.head.appendChild(style);
 
-    // ---- Inject Floating Button ----
-    const floatWrap = document.createElement('div');
-    floatWrap.id = 'sachin-auth-float';
-    floatWrap.innerHTML = `
-        <a id="authFloatBtn" href="auth.html" title="Login / Sign Up">
-            <div id="authAvatar">👤</div>
-            <span id="authName">Login</span>
-        </a>
-    `;
-    document.body.appendChild(floatWrap);
+    // ---- Inject Floating Button (only if not suppressed) ----
+    if (!window.SACHIN_HIDE_FLOAT) {
+        const floatWrap = document.createElement('div');
+        floatWrap.id = 'sachin-auth-float';
+        floatWrap.innerHTML = `
+            <a id="authFloatBtn" href="auth.html" title="Login / Sign Up">
+                <div id="authAvatar">👤</div>
+                <span id="authName">Login</span>
+            </a>
+        `;
+        document.body.appendChild(floatWrap);
+    }
 
     // ---- Inject Block Modal ----
     const blockModal = document.createElement('div');
@@ -191,30 +193,36 @@
         });
 
         function updateUI(user) {
+            // Update floating button if present
             const btn = document.getElementById('authFloatBtn');
-            const avatar = document.getElementById('authAvatar');
-            const name = document.getElementById('authName');
-            if (!btn) return;
-
-            if (user) {
-                const photoUrl = user.photoURL;
-                const displayName = user.displayName || user.email?.split('@')[0] || user.phoneNumber || 'User';
-                if (photoUrl) {
-                    avatar.innerHTML = `<img src="${photoUrl}" alt="avatar" onerror="this.parentNode.textContent='${displayName.charAt(0).toUpperCase()}'">`;
+            if (btn) {
+                const avatar = document.getElementById('authAvatar');
+                const name = document.getElementById('authName');
+                if (user) {
+                    const photoUrl = user.photoURL;
+                    const displayName = user.displayName || user.email?.split('@')[0] || user.phoneNumber || 'User';
+                    if (photoUrl) {
+                        avatar.innerHTML = `<img src="${photoUrl}" alt="avatar" onerror="this.parentNode.textContent='${displayName.charAt(0).toUpperCase()}'">`;
+                    } else {
+                        avatar.textContent = displayName.charAt(0).toUpperCase();
+                    }
+                    name.textContent = displayName.split(' ')[0].slice(0, 10);
+                    btn.classList.add('logged-in');
+                    btn.title = displayName + (userPlan === 'pro' ? ' ⭐ PRO' : ' · Free');
                 } else {
-                    avatar.textContent = displayName.charAt(0).toUpperCase();
+                    avatar.textContent = '👤';
+                    name.textContent = 'Login';
+                    btn.classList.remove('logged-in');
                 }
-                name.textContent = displayName.split(' ')[0].slice(0, 10);
-                btn.href = 'auth.html';
-                btn.classList.add('logged-in');
-                btn.title = displayName + (userPlan === 'pro' ? ' ⭐ PRO' : ' · Free');
-            } else {
-                avatar.textContent = '👤';
-                name.textContent = 'Login';
-                btn.href = 'auth.html';
-                btn.classList.remove('logged-in');
+            }
+            // Update 3-dot menu auth section if present
+            if (typeof window.updateMenuAuth === 'function') {
+                window.updateMenuAuth(user, userPlan);
             }
         }
+
+        // Expose signOut for menu logout button
+        window._sachinSignOut = () => signOut(auth).catch(() => {});
 
         // ---- Activity Check + Track ----
         const GUEST_LIMITS = { video: 2, image: 5, tool: 10 };
