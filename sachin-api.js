@@ -4,7 +4,7 @@
  */
 (function () {
     var GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
-    var FALLBACK_KEY = 'AIzaSyCMtdlhrJqcg-GyoGsIcEz5T0-1FsEjiBA';
+    var FALLBACK_KEY = 'AIzaSyCCtVmQmmm3DS-fXeWllhRpBRhbh_bXjok';
     var _key = null;
     var _keyReady = false;
     var _keyCallbacks = [];
