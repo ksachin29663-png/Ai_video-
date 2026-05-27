@@ -480,6 +480,12 @@ app.post('/generate-content', async (req, res) => {
     } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
+// ---- API Key endpoint (for GitHub Pages fallback) ----
+app.get('/api/key', (req, res) => {
+    if (!GEMINI_API_KEY) return res.status(503).json({ error: 'Key not configured' });
+    res.json({ key: GEMINI_API_KEY });
+});
+
 // ---- Health Check ----
 app.get('/health', (req, res) => {
     res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
