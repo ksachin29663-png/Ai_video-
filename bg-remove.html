@@ -77,13 +77,12 @@
             formData.append('image_file', file);
 
             try {
-                // 🚀 फ्री और सुपर फास्ट बैकग्राउंड रिमूवल API क्लाइंट रेंडरर
-                const response = await fetch('https://api.bria.ai/v1/background/remove', {
+                const response = await fetch('/remove-background', {
                     method: 'POST',
                     body: formData
                 });
 
-                if (!response.ok) throw new Error('Server Busy');
+                if (!response.ok) throw new Error('Server error');
 
                 const blob = await response.blob();
                 const imageObjectURL = URL.createObjectURL(blob);
@@ -94,15 +93,7 @@
                 resBox.style.display = "block";
 
             } catch (error) {
-                // 🌟 फॉलबैक रेंडरर: अगर सर्वर लोड ले तो तुरंत लोकल कैनवास रेंडर जनरेट होगा
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    outputImg.src = e.target.result;
-                    downloadLink.href = e.target.result;
-                    statusText.style.display = "none";
-                    resBox.style.display = "block";
-                }
-                reader.readAsDataURL(file);
+                statusText.textContent = "❌ Background remove नहीं हुआ। REMOVE_BG_API_KEY secrets में add करें।";
             }
         });
     </script>
