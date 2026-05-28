@@ -152,7 +152,7 @@
     }
 
     // ── Monkey-patch window.fetch ─────────────────────────────────────────────
-    var API_PATHS = ['/generate-content', '/ai-chat', '/generate-code', '/analyze-image', '/remove-background', '/generate-video', '/generate-ai-video', '/video-job/', '/video-download/'];
+    var API_PATHS = ['/generate-content', '/ai-chat', '/generate-code', '/analyze-image'];
 
     window.fetch = function (url, opts) {
         if (typeof url !== 'string') return _origFetch(url, opts);
