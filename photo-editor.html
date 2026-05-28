@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Photo Editor — 50+ Filters | Sachin AI Studio</title>
+<meta name="description" content="Free online photo editor with 50+ Instagram filters, brightness, contrast, crop, text overlay and download. No install needed.">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0d1117;color:#e6edf3;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;padding-bottom:80px}
+/* ── Header ── */
+.header{background:linear-gradient(135deg,#161b22,#1c2128);border-bottom:1px solid #30363d;padding:12px 16px;display:flex;align-items:center;gap:12px}
+.back-btn{background:#21262d;border:1px solid #30363d;color:#e6edf3;width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:18px;cursor:pointer;flex-shrink:0}
+.header-text h1{font-size:18px;font-weight:700;color:#fff}
+.header-text p{font-size:12px;color:#8b949e}
+/* ── Upload Zone ── */
+.upload-zone{border:2px dashed #30363d;border-radius:16px;padding:40px;text-align:center;cursor:pointer;transition:.2s;margin:16px;background:#161b22}
+.upload-zone:hover,.upload-zone.drag{border-color:#f78166;background:#1c2128}
+.upload-zone .icon{font-size:48px;margin-bottom:12px}
+.upload-zone h3{font-size:18px;color:#fff;margin-bottom:6px}
+.upload-zone p{font-size:13px;color:#8b949e}
+.upload-btn{display:inline-block;background:linear-gradient(135deg,#f78166,#ff6b35);color:#fff;padding:10px 24px;border-radius:8px;font-weight:600;cursor:pointer;margin-top:12px;border:none;font-size:14px}
+/* ── Editor Layout ── */
+.editor-container{display:none;flex-direction:column;gap:0;padding:0 12px 12px}
+.editor-container.show{display:flex}
+/* ── Canvas Area ── */
+.canvas-wrap{background:#161b22;border-radius:12px;overflow:hidden;position:relative;text-align:center;padding:12px}
+canvas{max-width:100%;border-radius:8px;display:block;margin:0 auto;cursor:crosshair}
+.canvas-tools{display:flex;gap:8px;padding:10px 0;flex-wrap:wrap;justify-content:center}
+.ctool{background:#21262d;border:1px solid #30363d;color:#e6edf3;padding:7px 14px;border-radius:8px;cursor:pointer;font-size:13px;transition:.15s;white-space:nowrap}
+.ctool:hover{background:#30363d;border-color:#58a6ff}
+.ctool.danger{border-color:#f85149}
+.ctool.danger:hover{background:#f85149;color:#fff}
+.ctool.success{background:linear-gradient(135deg,#238636,#2ea043);border-color:#2ea043;font-weight:600}
+.ctool.success:hover{filter:brightness(1.1)}
+/* ── Tabs ── */
+.tabs{display:flex;gap:4px;padding:4px;background:#161b22;border-radius:10px;margin:10px 0;overflow-x:auto}
+.tab{padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;color:#8b949e;white-space:nowrap;transition:.15s;border:none;background:none}
+.tab.active{background:#21262d;color:#fff;box-shadow:0 1px 4px rgba(0,0,0,.4)}
+/* ── Filters Grid ── */
+.filters-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px;padding:4px 0;max-height:340px;overflow-y:auto}
+.filter-thumb{cursor:pointer;border-radius:10px;overflow:hidden;border:2px solid #21262d;transition:.15s;position:relative}
+.filter-thumb.active{border-color:#f78166;box-shadow:0 0 0 2px #f7816640}
+.filter-thumb canvas{width:100%;height:70px;display:block;object-fit:cover}
+.filter-thumb .filter-name{font-size:10px;text-align:center;padding:4px;background:#161b22;color:#8b949e;font-weight:500}
+.filter-thumb.active .filter-name{color:#f78166}
+/* ── Adjustments ── */
+.adjustments{display:flex;flex-direction:column;gap:10px;padding:4px 0}
+.adj-row{display:flex;flex-direction:column;gap:4px}
+.adj-label{display:flex;justify-content:space-between;font-size:12px;color:#8b949e}
+.adj-label span:last-child{color:#58a6ff;font-weight:600;min-width:36px;text-align:right}
+input[type=range]{width:100%;accent-color:#f78166;height:4px;cursor:pointer}
+.adj-reset{font-size:10px;color:#f78166;cursor:pointer;margin-left:6px}
+/* ── Text Overlay ── */
+.text-panel{display:flex;flex-direction:column;gap:10px}
+.text-panel input,.text-panel select{background:#21262d;border:1px solid #30363d;color:#e6edf3;padding:8px 12px;border-radius:8px;font-size:13px;width:100%}
+.text-panel textarea{background:#21262d;border:1px solid #30363d;color:#e6edf3;padding:8px 12px;border-radius:8px;font-size:13px;width:100%;resize:vertical;min-height:60px}
+.color-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.color-row label{font-size:12px;color:#8b949e}
+.color-row input[type=color]{width:40px;height:32px;border:none;border-radius:6px;cursor:pointer;background:none}
+/* ── Frames ── */
+.frames-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px}
+.frame-btn{background:#21262d;border:2px solid #30363d;color:#e6edf3;padding:10px 6px;border-radius:10px;cursor:pointer;font-size:20px;text-align:center;transition:.15s}
+.frame-btn:hover,.frame-btn.active{border-color:#f78166;background:#1c2128}
+.frame-btn span{display:block;font-size:10px;color:#8b949e;margin-top:2px}
+/* ── Panel ── */
+.panel{background:#161b22;border-radius:12px;padding:14px;margin-top:8px}
+.panel-title{font-size:13px;font-weight:600;color:#8b949e;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+/* ── Action Bar ── */
+.action-bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.action-bar button{flex:1;min-width:120px;padding:11px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:.15s}
+.btn-download{background:linear-gradient(135deg,#238636,#2ea043);color:#fff}
+.btn-download:hover{filter:brightness(1.1)}
+.btn-share{background:#21262d;border:1px solid #30363d;color:#e6edf3}
+.btn-share:hover{background:#30363d}
+.btn-reset{background:#21262d;border:1px solid #f85149;color:#f85149}
+.btn-reset:hover{background:#f85149;color:#fff}
+/* ── Section title ── */
+.sec-title{font-size:11px;font-weight:700;color:#8b949e;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+/* ── Loading ── */
+.loading-overlay{position:fixed;inset:0;background:#0d111799;display:flex;align-items:center;justify-content:center;z-index:9999;display:none}
+.loading-overlay.show{display:flex}
+.loader-box{background:#161b22;border:1px solid #30363d;border-radius:16px;padding:24px;text-align:center}
+/* ── Responsive ── */
+@media(min-width:768px){
+  .editor-container{flex-direction:row;gap:12px;padding:12px}
+  .left-col{flex:1;min-width:0}
+  .right-col{width:320px;flex-shrink:0;max-height:calc(100vh - 120px);overflow-y:auto}
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <a href="index.html" class="back-btn">←</a>
+  <div class="header-text">
+    <h1>🎨 AI Photo Editor</h1>
+    <p>50+ Filters • Adjustments • Text • Download</p>
+  </div>
+</div>
+
+<!-- Ad: Top Banner -->
+<div style="text-align:center;padding:6px 0;background:#0d1117">
+<script type="text/javascript">atOptions={'key':'b1c2005cd8e1095bc458e4c59f785aa9','format':'iframe','height':50,'width':320,'params':{}}</script>
+<script type="text/javascript" src="https://www.highperformanceformat.com/b1c2005cd8e1095bc458e4c59f785aa9/invoke.js"></script>
+</div>
+
+<!-- Upload Zone -->
+<div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleDrop(event)">
+  <div class="icon">🖼️</div>
+  <h3>Photo Upload करें</h3>
+  <p>Click करें या Photo यहाँ Drag करें</p>
+  <p style="margin-top:6px;font-size:12px;color:#58a6ff">JPG, PNG, WebP — Max 20MB</p>
+  <button class="upload-btn" onclick="event.stopPropagation();document.getElementById('fileInput').click()">📁 Photo Choose करें</button>
+</div>
+<input type="file" id="fileInput" accept="image/*" style="display:none" onchange="loadImage(event)">
+
+<!-- Editor -->
+<div class="editor-container" id="editorContainer">
+  <!-- Left: Canvas -->
+  <div class="left-col">
+    <div class="canvas-wrap">
+      <canvas id="mainCanvas"></canvas>
+      <div class="canvas-tools">
+        <button class="ctool" onclick="rotate(-90)">↺ घुमाओ</button>
+        <button class="ctool" onclick="rotate(90)">↻ घुमाओ</button>
+        <button class="ctool" onclick="flip('h')">⇆ Flip H</button>
+        <button class="ctool" onclick="flip('v')">⇅ Flip V</button>
+        <button class="ctool" onclick="undo()">↩ Undo</button>
+        <button class="ctool" onclick="redo()">↪ Redo</button>
+        <button class="ctool danger" onclick="resetAll()">✕ Reset</button>
+      </div>
+    </div>
+    <!-- Actions -->
+    <div class="action-bar">
+      <button class="action-bar btn-download" onclick="downloadImage('png')" style="background:linear-gradient(135deg,#238636,#2ea043);color:#fff;flex:1;min-width:120px;padding:11px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:none">⬇️ PNG Download</button>
+      <button class="action-bar btn-download" onclick="downloadImage('jpg')" style="background:linear-gradient(135deg,#1f6feb,#388bfd);color:#fff;flex:1;min-width:120px;padding:11px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:none">⬇️ JPG Download</button>
+      <button class="action-bar btn-reset" onclick="changeImage()" style="background:#21262d;border:1px solid #30363d;color:#e6edf3;flex:1;min-width:80px;padding:11px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer">📷 नई Photo</button>
+    </div>
+
+    <!-- Ad: Rectangle -->
+    <div style="text-align:center;margin-top:10px">
+    <script type="text/javascript">atOptions={'key':'817c9252a9900f63d05a904142664916','format':'iframe','height':250,'width':300,'params':{}}</script>
+    <script type="text/javascript" src="https://www.highperformanceformat.com/817c9252a9900f63d05a904142664916/invoke.js"></script>
+    </div>
+  </div>
+
+  <!-- Right: Controls -->
+  <div class="right-col">
+    <!-- Tabs -->
+    <div class="tabs" id="tabBar">
+      <button class="tab active" onclick="switchTab('filters',this)">✨ Filters</button>
+      <button class="tab" onclick="switchTab('adjust',this)">🎛️ Adjust</button>
+      <button class="tab" onclick="switchTab('text',this)">✏️ Text</button>
+      <button class="tab" onclick="switchTab('frames',this)">🖼 Frames</button>
+    </div>
+
+    <!-- FILTERS TAB -->
+    <div id="tab-filters" class="panel">
+      <div class="panel-title">50+ Instagram Filters</div>
+      <div class="filters-grid" id="filtersGrid"></div>
+    </div>
+
+    <!-- ADJUST TAB -->
+    <div id="tab-adjust" class="panel" style="display:none">
+      <div class="panel-title">Manual Adjustments</div>
+      <div class="adjustments" id="adjustmentsPanel"></div>
+    </div>
+
+    <!-- TEXT TAB -->
+    <div id="tab-text" class="panel" style="display:none">
+      <div class="panel-title">Text Overlay</div>
+      <div class="text-panel">
+        <textarea id="textInput" placeholder="Text लिखें..."></textarea>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div>
+            <div class="sec-title" style="margin-bottom:4px">Font</div>
+            <select id="fontFamily">
+              <option>Arial</option>
+              <option>Georgia</option>
+              <option>Impact</option>
+              <option>Courier New</option>
+              <option>Times New Roman</option>
+              <option>Trebuchet MS</option>
+              <option>Comic Sans MS</option>
+              <option>Palatino</option>
+            </select>
+          </div>
+          <div>
+            <div class="sec-title" style="margin-bottom:4px">Size</div>
+            <input type="number" id="fontSize" value="32" min="10" max="200">
+          </div>
+        </div>
+        <div class="color-row">
+          <label>Color:</label><input type="color" id="textColor" value="#ffffff">
+          <label>Shadow:</label><input type="color" id="shadowColor" value="#000000">
+          <label>Bold:</label><input type="checkbox" id="boldText" style="width:18px;height:18px">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div>
+            <div class="sec-title" style="margin-bottom:4px">Position X (%)</div>
+            <input type="range" id="textX" min="0" max="100" value="50" oninput="renderCanvas()">
+          </div>
+          <div>
+            <div class="sec-title" style="margin-bottom:4px">Position Y (%)</div>
+            <input type="range" id="textY" min="0" max="100" value="90" oninput="renderCanvas()">
+          </div>
+        </div>
+        <div>
+          <div class="sec-title" style="margin-bottom:4px">Align</div>
+          <div style="display:flex;gap:6px">
+            <button class="ctool" onclick="document.getElementById('textAlign').value='left';renderCanvas()">⬅</button>
+            <button class="ctool" onclick="document.getElementById('textAlign').value='center';renderCanvas()">⬛</button>
+            <button class="ctool" onclick="document.getElementById('textAlign').value='right';renderCanvas()">➡</button>
+          </div>
+          <input type="hidden" id="textAlign" value="center">
+        </div>
+        <button class="ctool success" onclick="renderCanvas()" style="width:100%;margin-top:4px">✅ Text Apply करें</button>
+        <button class="ctool danger" onclick="clearText()" style="width:100%">✕ Text हटाएं</button>
+      </div>
+    </div>
+
+    <!-- FRAMES TAB -->
+    <div id="tab-frames" class="panel" style="display:none">
+      <div class="panel-title">Borders & Frames</div>
+      <div class="frames-grid" id="framesGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Bottom bar ad -->
+<script src="adsterra-gate.js"></script>
+<script src="tracker.js"></script>
+
+<!-- Ad: Native -->
+<script async="async" data-cfasync="false" src="https://pl29470505.effectivecpmnetwork.com/30a2c535b11a237c281ced645d908d88/invoke.js"></script>
+<div id="container-30a2c535b11a237c281ced645d908d88"></div>
+
+<script>
+// ════════════════════════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════════════════════════
+let origImg = null;
+let baseCanvas = document.createElement('canvas'); // original transformed base
+let historyStack = [];
+let redoStack = [];
+let activeFilter = 'Normal';
+let activeFrame = 'none';
+let rotation = 0;
+let flipH = false, flipV = false;
+
+const ADJS = {
+  brightness:  { label:'Brightness',  min:-100, max:100, val:0, unit:'' },
+  contrast:    { label:'Contrast',     min:-100, max:100, val:0, unit:'' },
+  saturation:  { label:'Saturation',   min:-100, max:100, val:0, unit:'' },
+  hue:         { label:'Hue Rotate',   min:-180, max:180, val:0, unit:'°' },
+  warmth:      { label:'Warmth',       min:-100, max:100, val:0, unit:'' },
+  fade:        { label:'Fade',         min:0,    max:100, val:0, unit:'%' },
+  blur:        { label:'Blur',         min:0,    max:20,  val:0, unit:'px' },
+  sharpen:     { label:'Sharpen',      min:0,    max:100, val:0, unit:'' },
+  vignette:    { label:'Vignette',     min:0,    max:100, val:0, unit:'%' },
+  grayscale:   { label:'Grayscale',    min:0,    max:100, val:0, unit:'%' },
+  sepia:       { label:'Sepia',        min:0,    max:100, val:0, unit:'%' },
+  invert:      { label:'Invert',       min:0,    max:100, val:0, unit:'%' },
+  exposure:    { label:'Exposure',     min:-100, max:100, val:0, unit:'' },
+  highlights:  { label:'Highlights',  min:-100, max:100, val:0, unit:'' },
+  shadows:     { label:'Shadows',     min:-100, max:100, val:0, unit:'' },
+  grain:       { label:'Film Grain',   min:0,    max:100, val:0, unit:'' },
+};
+
+// 50+ filters: [name, {brightness,contrast,saturate,hue,sepia,grayscale,invert,fade}]
+const FILTERS = [
+  ['Normal',    {}],
+  ['Clarendon', {brightness:1.1,contrast:1.2,saturate:1.35}],
+  ['Gingham',   {brightness:1.05,hue:'-350deg',sepia:0.04}],
+  ['Moon',      {grayscale:1,brightness:1.1,contrast:1.1}],
+  ['Lark',      {brightness:1.15,saturate:0.8,contrast:0.9}],
+  ['Reyes',     {sepia:0.22,brightness:1.1,contrast:0.85,saturate:0.75}],
+  ['Juno',      {saturate:1.4,brightness:1.05,contrast:1.1}],
+  ['Slumber',   {saturate:0.66,brightness:1.05}],
+  ['Crema',     {saturate:0.5,brightness:1.1,contrast:0.9,sepia:0.15}],
+  ['Ludwig',    {brightness:1.05,contrast:1.0,saturate:1.3}],
+  ['Aden',      {saturate:0.85,brightness:1.2,contrast:0.9,hue:'20deg'}],
+  ['Perpetua',  {saturate:1.1,brightness:1.1,contrast:1.1}],
+  ['Amaro',     {brightness:1.1,contrast:0.9,saturate:1.5}],
+  ['Mayfair',   {contrast:1.1,saturate:1.1,brightness:1.1}],
+  ['Rise',      {brightness:1.1,sepia:0.15,contrast:0.85,saturate:0.9}],
+  ['Hudson',    {brightness:1.2,contrast:0.85,sepia:0.25}],
+  ['Valencia',  {contrast:1.08,saturate:1.08,brightness:1.08,sepia:0.15}],
+  ['Xpro2',     {sepia:0.3,contrast:1.3,brightness:1.0,saturate:1.3}],
+  ['Sierra',    {contrast:0.8,saturate:1.1,sepia:0.15}],
+  ['Willow',    {grayscale:0.5,contrast:0.95,brightness:0.9}],
+  ['Lo-Fi',     {saturate:1.5,contrast:1.3}],
+  ['Earlybird', {contrast:0.9,sepia:0.25,brightness:0.9}],
+  ['Brannan',   {contrast:1.4,sepia:0.5}],
+  ['Inkwell',   {grayscale:1,sepia:0.3,contrast:1.1}],
+  ['Hefe',      {contrast:1.4,saturate:1.5}],
+  ['Nashville', {sepia:0.2,contrast:1.2,brightness:1.05,saturate:1.2}],
+  ['1977',      {brightness:1.1,contrast:1.1,saturate:1.3}],
+  ['Kelvin',    {brightness:1.1,contrast:1.2,sepia:0.2,saturate:1.4}],
+  ['Vintage',   {sepia:0.6,contrast:0.9,brightness:1.0,saturate:0.85}],
+  ['Faded',     {brightness:1.05,contrast:0.85,saturate:0.8,sepia:0.15}],
+  ['Dramatic',  {contrast:1.5,saturate:1.2,brightness:0.9}],
+  ['Matte',     {contrast:0.8,brightness:1.1,saturate:0.9}],
+  ['Chrome',    {saturate:0,contrast:1.2,brightness:1.05}],
+  ['Vivid',     {saturate:1.8,contrast:1.3,brightness:1.1}],
+  ['Charcoal',  {grayscale:0.8,contrast:1.4,brightness:0.9}],
+  ['Sunset',    {sepia:0.3,hue:'15deg',brightness:1.1,saturate:1.3}],
+  ['Ocean',     {hue:'-10deg',saturate:1.2,brightness:1.05,contrast:1.1}],
+  ['Forest',    {hue:'30deg',saturate:1.1,brightness:0.9,contrast:1.1}],
+  ['Twilight',  {hue:'-20deg',brightness:0.9,contrast:1.2,saturate:1.2}],
+  ['Rose',      {hue:'-30deg',saturate:1.3,brightness:1.05}],
+  ['Mint',      {hue:'90deg',saturate:0.9,brightness:1.05,contrast:0.95}],
+  ['Retro',     {sepia:0.4,contrast:1.1,brightness:0.95,saturate:0.9}],
+  ['Dark',      {brightness:0.7,contrast:1.3,saturate:1.2}],
+  ['Bright',    {brightness:1.3,contrast:0.9,saturate:1.1}],
+  ['Crisp',     {contrast:1.3,sharpness:50}],
+  ['Soft',      {contrast:0.85,brightness:1.05,blur:0.8}],
+  ['Bold',      {contrast:1.5,saturate:1.5,brightness:1.0}],
+  ['Pastel',    {saturate:0.6,brightness:1.15,contrast:0.85}],
+  ['Noir',      {grayscale:1,contrast:1.5,brightness:0.8}],
+  ['Golden',    {sepia:0.5,hue:'10deg',brightness:1.1,saturate:1.2}],
+  ['Copper',    {sepia:0.4,hue:'-10deg',contrast:1.1,saturate:1.1}],
+  ['Steel',     {hue:'200deg',saturate:0.5,contrast:1.2,brightness:1.0}],
+  ['Plum',      {hue:'-40deg',saturate:1.4,brightness:0.95,contrast:1.1}],
+  ['Teal',      {hue:'150deg',saturate:1.2,brightness:1.0,contrast:1.1}],
+];
+
+const FRAMES = [
+  {id:'none',   icon:'◻',  label:'None'},
+  {id:'white',  icon:'⬜', label:'White'},
+  {id:'black',  icon:'⬛', label:'Black'},
+  {id:'gold',   icon:'🟨', label:'Gold'},
+  {id:'round',  icon:'🔵', label:'Round'},
+  {id:'shadow', icon:'🌑', label:'Shadow'},
+  {id:'double', icon:'🔲', label:'Double'},
+  {id:'neon',   icon:'💡', label:'Neon'},
+  {id:'film',   icon:'🎞', label:'Film'},
+  {id:'polaroid',icon:'📷',label:'Polaroid'},
+];
+
+// ════════════════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════════════════
+function init() {
+  buildFilters();
+  buildAdjustments();
+  buildFrames();
+}
+
+function buildAdjustments() {
+  const panel = document.getElementById('adjustmentsPanel');
+  panel.innerHTML = '';
+  for (const [key, cfg] of Object.entries(ADJS)) {
+    panel.innerHTML += `
+      <div class="adj-row">
+        <div class="adj-label">
+          <span>${cfg.label}</span>
+          <span id="val-${key}">${cfg.val}${cfg.unit} <span class="adj-reset" onclick="resetAdj('${key}')">↺</span></span>
+        </div>
+        <input type="range" min="${cfg.min}" max="${cfg.max}" value="${cfg.val}" id="adj-${key}"
+          oninput="ADJS['${key}'].val=+this.value;document.getElementById('val-${key}').innerHTML='${cfg.val}${cfg.unit} <span class=\"adj-reset\" onclick=\"resetAdj(\\\'${key}\\\')\">↺</span>';document.getElementById('val-${key}').childNodes[0].textContent=this.value+'${cfg.unit} ';renderCanvas()">
+      </div>`;
+  }
+}
+
+function buildFrames() {
+  const g = document.getElementById('framesGrid');
+  g.innerHTML = FRAMES.map(f => `
+    <div class="frame-btn${f.id===activeFrame?' active':''}" onclick="setFrame('${f.id}',this)">
+      ${f.icon}<span>${f.label}</span>
+    </div>`).join('');
+}
+
+function buildFilters() {
+  const grid = document.getElementById('filtersGrid');
+  grid.innerHTML = '';
+  FILTERS.forEach(([name]) => {
+    const div = document.createElement('div');
+    div.className = 'filter-thumb' + (name===activeFilter?' active':'');
+    div.id = 'ft-' + name;
+    const c = document.createElement('canvas');
+    c.width = 90; c.height = 70;
+    const label = document.createElement('div');
+    label.className = 'filter-name';
+    label.textContent = name;
+    div.appendChild(c);
+    div.appendChild(label);
+    div.onclick = () => applyFilter(name);
+    grid.appendChild(div);
+  });
+}
+
+// ════════════════════════════════════════════════════════════════════
+// LOAD IMAGE
+// ════════════════════════════════════════════════════════════════════
+function loadImage(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      origImg = img;
+      rotation = 0; flipH = false; flipV = false;
+      activeFilter = 'Normal'; activeFrame = 'none';
+      resetAllAdjs();
+      rebuildBase();
+      document.getElementById('uploadZone').style.display = 'none';
+      document.getElementById('editorContainer').classList.add('show');
+      updateFilterThumbs();
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('uploadZone').classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) loadImage({ target: { files: [file] } });
+}
+
+function changeImage() {
+  document.getElementById('uploadZone').style.display = 'block';
+  document.getElementById('editorContainer').classList.remove('show');
+  document.getElementById('fileInput').value = '';
+}
+
+// ════════════════════════════════════════════════════════════════════
+// CANVAS OPERATIONS
+// ════════════════════════════════════════════════════════════════════
+function rebuildBase() {
+  const maxW = Math.min(origImg.width, 1400);
+  const scale = maxW / origImg.width;
+  let w = Math.round(origImg.width * scale);
+  let h = Math.round(origImg.height * scale);
+  // Apply rotation dimensions
+  const isOdd = (rotation / 90) % 2 !== 0;
+  baseCanvas.width  = isOdd ? h : w;
+  baseCanvas.height = isOdd ? w : h;
+  const bc = baseCanvas.getContext('2d');
+  bc.save();
+  bc.translate(baseCanvas.width / 2, baseCanvas.height / 2);
+  bc.rotate(rotation * Math.PI / 180);
+  if (flipH) bc.scale(-1, 1);
+  if (flipV) bc.scale(1, -1);
+  bc.drawImage(origImg, -w/2, -h/2, w, h);
+  bc.restore();
+  renderCanvas();
+}
+
+function getFilterCSS(name, adjs) {
+  const f = Object.fromEntries(FILTERS.filter(([n])=>n===name).map(([,v])=>[name,v]))[name] || {};
+  const b  = (1 + (adjs.brightness.val + (adjs.exposure.val * 0.5)) / 100) * (f.brightness||1);
+  const c  = (1 + adjs.contrast.val / 100) * (f.contrast||1);
+  const s  = (1 + adjs.saturation.val / 100) * (f.saturate||1);
+  const h  = (adjs.hue.val) + (typeof f.hue === 'string' ? parseInt(f.hue)||0 : 0);
+  const se = Math.min(1, (adjs.sepia.val / 100) + (f.sepia||0));
+  const g  = Math.min(1, (adjs.grayscale.val / 100) + (f.grayscale||0));
+  const iv = adjs.invert.val / 100;
+  const bl = adjs.blur.val + (f.blur||0);
+  const fa = adjs.fade.val / 100;
+  const op = 1 - fa * 0.3;
+  return `brightness(${b}) contrast(${c}) saturate(${s}) hue-rotate(${h}deg) sepia(${se}) grayscale(${g}) invert(${iv}) blur(${bl}px) opacity(${op})`;
+}
+
+function renderCanvas() {
+  const mc = document.getElementById('mainCanvas');
+  const bw = baseCanvas.width, bh = baseCanvas.height;
+
+  // Frame padding
+  const fp = getFramePad();
+  mc.width  = bw + fp.l + fp.r;
+  mc.height = bh + fp.t + fp.b;
+
+  const ctx = mc.getContext('2d');
+  ctx.clearRect(0, 0, mc.width, mc.height);
+
+  // Draw frame bg
+  drawFrameBg(ctx, mc.width, mc.height, fp);
+
+  // Apply CSS filter via offscreen canvas
+  const off = document.createElement('canvas');
+  off.width = bw; off.height = bh;
+  const oc = off.getContext('2d');
+  oc.drawImage(baseCanvas, 0, 0);
+
+  // Apply warmth as color tint
+  const wt = ADJS.warmth.val;
+  if (wt !== 0) {
+    oc.globalCompositeOperation = 'multiply';
+    oc.fillStyle = wt > 0
+      ? `rgba(${Math.round(wt*1.5)},${Math.round(wt*0.5)},0,${Math.abs(wt)/300})`
+      : `rgba(0,${Math.round(-wt*0.5)},${Math.round(-wt*1.5)},${Math.abs(wt)/300})`;
+    oc.fillRect(0, 0, bw, bh);
+    oc.globalCompositeOperation = 'source-over';
+  }
+
+  // Highlights / Shadows tint
+  const hl = ADJS.highlights.val, sh = ADJS.shadows.val;
+  if (hl !== 0) {
+    oc.globalCompositeOperation = 'screen';
+    oc.fillStyle = `rgba(255,255,255,${Math.abs(hl)/500})`;
+    oc.fillRect(0, 0, bw, bh);
+    oc.globalCompositeOperation = 'source-over';
+  }
+
+  // Draw with CSS filter
+  ctx.filter = getFilterCSS(activeFilter, ADJS);
+  ctx.drawImage(off, fp.l, fp.t);
+  ctx.filter = 'none';
+
+  // Vignette
+  const vig = ADJS.vignette.val;
+  if (vig > 0) {
+    const grad = ctx.createRadialGradient(mc.width/2, mc.height/2, mc.width*0.3, mc.width/2, mc.height/2, mc.width*0.8);
+    grad.addColorStop(0, 'rgba(0,0,0,0)');
+    grad.addColorStop(1, `rgba(0,0,0,${vig/100})`);
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, mc.width, mc.height);
+  }
+
+  // Film grain
+  const grain = ADJS.grain.val;
+  if (grain > 0) {
+    const imgd = ctx.getImageData(fp.l, fp.t, bw, bh);
+    const d = imgd.data;
+    const intensity = grain * 0.8;
+    for (let i = 0; i < d.length; i += 4) {
+      const n = (Math.random() - 0.5) * intensity;
+      d[i] += n; d[i+1] += n; d[i+2] += n;
+    }
+    ctx.putImageData(imgd, fp.l, fp.t);
+  }
+
+  // Frame border decoration
+  drawFrameDeco(ctx, mc.width, mc.height, fp);
+
+  // Text overlay
+  const txt = document.getElementById('textInput')?.value;
+  if (txt) {
+    const fs = +document.getElementById('fontSize').value || 32;
+    const ff = document.getElementById('fontFamily').value || 'Arial';
+    const fc = document.getElementById('textColor').value;
+    const sc = document.getElementById('shadowColor').value;
+    const bold = document.getElementById('boldText').checked;
+    const tx = (+document.getElementById('textX').value / 100) * mc.width;
+    const ty = (+document.getElementById('textY').value / 100) * mc.height;
+    const align = document.getElementById('textAlign').value || 'center';
+    ctx.font = `${bold?'bold ':''} ${fs}px ${ff}`;
+    ctx.textAlign = align;
+    ctx.shadowColor = sc;
+    ctx.shadowBlur = 6;
+    ctx.fillStyle = fc;
+    txt.split('\n').forEach((line, i) => ctx.fillText(line, tx, ty + i * (fs + 4)));
+    ctx.shadowBlur = 0;
+  }
+
+  saveHistory();
+  updateFilterThumbs();
+}
+
+// ════════════════════════════════════════════════════════════════════
+// FRAMES
+// ════════════════════════════════════════════════════════════════════
+function getFramePad() {
+  const pads = {
+    none:     { l:0,r:0,t:0,b:0 },
+    white:    { l:20,r:20,t:20,b:20 },
+    black:    { l:20,r:20,t:20,b:20 },
+    gold:     { l:16,r:16,t:16,b:16 },
+    round:    { l:16,r:16,t:16,b:16 },
+    shadow:   { l:12,r:12,t:12,b:12 },
+    double:   { l:24,r:24,t:24,b:24 },
+    neon:     { l:20,r:20,t:20,b:20 },
+    film:     { l:30,r:30,t:60,b:60 },
+    polaroid: { l:20,r:20,t:20,b:80 },
+  };
+  return pads[activeFrame] || pads.none;
+}
+
+function drawFrameBg(ctx, w, h, fp) {
+  switch (activeFrame) {
+    case 'white':    ctx.fillStyle='#fff'; ctx.fillRect(0,0,w,h); break;
+    case 'black':    ctx.fillStyle='#111'; ctx.fillRect(0,0,w,h); break;
+    case 'gold':     ctx.fillStyle='#c9a84c'; ctx.fillRect(0,0,w,h); break;
+    case 'neon':     ctx.fillStyle='#0d0d0d'; ctx.fillRect(0,0,w,h); break;
+    case 'film':     ctx.fillStyle='#1a1a1a'; ctx.fillRect(0,0,w,h); break;
+    case 'polaroid': ctx.fillStyle='#f8f5f0'; ctx.fillRect(0,0,w,h); break;
+    case 'double':   ctx.fillStyle='#fff'; ctx.fillRect(0,0,w,h); break;
+    case 'shadow':   ctx.fillStyle='#fff'; ctx.fillRect(0,0,w,h); break;
+    default: ctx.fillStyle='#0d1117'; ctx.fillRect(0,0,w,h);
+  }
+}
+
+function drawFrameDeco(ctx, w, h, fp) {
+  switch (activeFrame) {
+    case 'gold':
+      ctx.strokeStyle='#8a6a00'; ctx.lineWidth=3;
+      ctx.strokeRect(4,4,w-8,h-8);
+      ctx.strokeStyle='#ffd700'; ctx.lineWidth=1;
+      ctx.strokeRect(8,8,w-16,h-16);
+      break;
+    case 'double':
+      ctx.strokeStyle='#333'; ctx.lineWidth=2; ctx.strokeRect(4,4,w-8,h-8);
+      ctx.strokeStyle='#333'; ctx.lineWidth=1; ctx.strokeRect(10,10,w-20,h-20);
+      break;
+    case 'neon':
+      ctx.shadowColor='#00ffff'; ctx.shadowBlur=12;
+      ctx.strokeStyle='#00ffff'; ctx.lineWidth=2;
+      ctx.strokeRect(6,6,w-12,h-12);
+      ctx.shadowColor='#ff00ff'; ctx.shadowBlur=12;
+      ctx.strokeStyle='#ff00ff'; ctx.lineWidth=1;
+      ctx.strokeRect(10,10,w-20,h-20);
+      ctx.shadowBlur=0;
+      break;
+    case 'film':
+      ctx.fillStyle='#fff'; ctx.font='bold 14px monospace';
+      ctx.textAlign='center';
+      ctx.fillText('📷 SACHIN AI STUDIO', w/2, 35);
+      ctx.fillStyle='#555'; ctx.font='11px monospace';
+      ctx.fillText('KODAK GOLD 200', w/2, h-15);
+      // Sprocket holes
+      for (let i = 20; i < h-30; i += 28) {
+        ctx.fillStyle='#333'; ctx.fillRect(6, i, 14, 18); ctx.fillRect(w-20, i, 14, 18);
+      }
+      break;
+    case 'polaroid':
+      ctx.fillStyle='#888'; ctx.font='bold 16px Arial';
+      ctx.textAlign='center';
+      ctx.fillText(document.getElementById('textInput')?.value.split('\n')[0] || 'Sachin AI', w/2, h-20);
+      break;
+    case 'round':
+      ctx.save();
+      ctx.beginPath(); ctx.roundRect(fp.l-2,fp.t-2,w-fp.l-fp.r+4,h-fp.t-fp.b+4, 20);
+      ctx.strokeStyle='rgba(255,255,255,0.3)'; ctx.lineWidth=2; ctx.stroke();
+      ctx.restore();
+      break;
+    case 'shadow':
+      ctx.shadowColor='rgba(0,0,0,0.5)'; ctx.shadowBlur=20;
+      ctx.strokeStyle='rgba(255,255,255,0.6)'; ctx.lineWidth=2;
+      ctx.strokeRect(fp.l,fp.t,w-fp.l-fp.r,h-fp.t-fp.b);
+      ctx.shadowBlur=0;
+      break;
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════
+// FILTER THUMBNAILS
+// ════════════════════════════════════════════════════════════════════
+function updateFilterThumbs() {
+  if (!origImg) return;
+  FILTERS.forEach(([name]) => {
+    const fc = document.getElementById('ft-' + name);
+    if (!fc) return;
+    const c = fc.querySelector('canvas');
+    if (!c) return;
+    c.width = 90; c.height = 70;
+    const ctx = c.getContext('2d');
+    ctx.filter = getFilterCSS(name, Object.fromEntries(
+      Object.entries(ADJS).map(([k,v]) => [k, {...v, val: k==='blur'?0:v.val}])
+    ));
+    const sw = origImg.width, sh = origImg.height;
+    const scale = Math.min(90/sw, 70/sh);
+    const tw = sw*scale, th = sh*scale;
+    ctx.drawImage(origImg, (90-tw)/2, (70-th)/2, tw, th);
+    ctx.filter = 'none';
+    fc.className = 'filter-thumb' + (name===activeFilter?' active':'');
+  });
+}
+
+// ════════════════════════════════════════════════════════════════════
+// ACTIONS
+// ════════════════════════════════════════════════════════════════════
+function applyFilter(name) {
+  activeFilter = name;
+  renderCanvas();
+}
+
+function setFrame(id, el) {
+  activeFrame = id;
+  document.querySelectorAll('.frame-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  renderCanvas();
+}
+
+function rotate(deg) {
+  rotation = (rotation + deg + 360) % 360;
+  rebuildBase();
+}
+
+function flip(dir) {
+  if (dir==='h') flipH=!flipH;
+  else flipV=!flipV;
+  rebuildBase();
+}
+
+function clearText() {
+  document.getElementById('textInput').value = '';
+  renderCanvas();
+}
+
+function resetAdj(key) {
+  const cfg = ADJS[key];
+  cfg.val = 0;
+  document.getElementById('adj-' + key).value = 0;
+  document.getElementById('val-' + key).childNodes[0].textContent = '0' + cfg.unit + ' ';
+  renderCanvas();
+}
+
+function resetAllAdjs() {
+  for (const [key, cfg] of Object.entries(ADJS)) {
+    cfg.val = 0;
+    const el = document.getElementById('adj-' + key);
+    if (el) el.value = 0;
+    const vl = document.getElementById('val-' + key);
+    if (vl && vl.childNodes[0]) vl.childNodes[0].textContent = '0' + cfg.unit + ' ';
+  }
+}
+
+function resetAll() {
+  activeFilter = 'Normal';
+  activeFrame = 'none';
+  rotation = 0; flipH = false; flipV = false;
+  resetAllAdjs();
+  document.getElementById('textInput').value = '';
+  buildFrames();
+  rebuildBase();
+}
+
+function switchTab(tab, el) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  ['filters','adjust','text','frames'].forEach(t => {
+    document.getElementById('tab-' + t).style.display = t===tab ? '' : 'none';
+  });
+}
+
+// ════════════════════════════════════════════════════════════════════
+// DOWNLOAD
+// ════════════════════════════════════════════════════════════════════
+function downloadImage(fmt) {
+  const mc = document.getElementById('mainCanvas');
+  const link = document.createElement('a');
+  link.download = `sachin-ai-photo-${Date.now()}.${fmt}`;
+  link.href = mc.toDataURL(fmt==='jpg' ? 'image/jpeg' : 'image/png', 0.95);
+  link.click();
+}
+
+// ════════════════════════════════════════════════════════════════════
+// HISTORY
+// ════════════════════════════════════════════════════════════════════
+let _historyPause = false;
+function saveHistory() {
+  if (_historyPause) return;
+  _historyPause = true;
+  const mc = document.getElementById('mainCanvas');
+  historyStack.push(mc.toDataURL());
+  if (historyStack.length > 20) historyStack.shift();
+  redoStack = [];
+  setTimeout(() => _historyPause = false, 100);
+}
+
+function undo() {
+  if (historyStack.length < 2) return;
+  const mc = document.getElementById('mainCanvas');
+  redoStack.push(historyStack.pop());
+  const prev = historyStack[historyStack.length-1];
+  const img = new Image();
+  img.onload = () => { mc.getContext('2d').drawImage(img, 0, 0); };
+  img.src = prev;
+}
+
+function redo() {
+  if (!redoStack.length) return;
+  const mc = document.getElementById('mainCanvas');
+  const next = redoStack.pop();
+  historyStack.push(next);
+  const img = new Image();
+  img.onload = () => { mc.getContext('2d').drawImage(img, 0, 0); };
+  img.src = next;
+}
+
+// ════════════════════════════════════════════════════════════════════
+// START
+// ════════════════════════════════════════════════════════════════════
+init();
+</script>
+</body>
+</html>
