@@ -5,11 +5,12 @@ const { exec } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 const gTTS = require('gtts');
-const { generateAI, analyzeImageAI } = require('./ai-core');
+const { generateAI, analyzeImageAI, tryOpenAI, tryLlama } = require('./ai-core');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 const GEMINI_KEY = process.env.GEMINI_API_KEY || null;
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN || null;
 
 app.use(cors({ origin: '*' }));
 app.use(express.json({ limit: '50mb' }));
@@ -33,12 +34,21 @@ app.post('/generate-content', async (req, res) => {
     }
 });
 
-// AI Chat
+// AI Chat (Universal with fallback)
 app.post('/ai-chat', async (req, res) => {
-    const { message } = req.body;
+    const { message, provider } = req.body; // User can choose provider: 'openai', 'llama', or 'auto'
     if (!message) return res.status(400).json({ error: 'Message required' });
+    
     try {
-        const reply = await generateAI(message, GEMINI_KEY);
+        let reply;
+        if (provider === 'openai') {
+            reply = await tryOpenAI(message);
+        } else if (provider === 'llama') {
+            reply = await tryLlama(message);
+        } else {
+            // Default to the existing multi-provider fallback logic
+            reply = await generateAI(message, GEMINI_KEY);
+        }
         res.json({ reply });
     } catch (err) {
         res.status(500).json({ error: err.message });

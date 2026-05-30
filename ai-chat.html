@@ -62,9 +62,16 @@
 </div>
 
 <div class="bottom-section">
-    <div class="input-area">
-        <input type="text" id="user-input" class="chat-input" placeholder="यहाँ अपना सवाल लिखें...">
-        <button class="send-btn" id="send-btn">भेजें</button>
+    <div class="input-area" style="flex-direction: column; gap: 5px;">
+        <select id="ai-provider" style="width: 100%; background: #05070c; border: 1px solid #0044ff; padding: 5px; border-radius: 8px; color: #00d2ff; font-size: 0.8rem; outline: none;">
+            <option value="auto">Auto (Default)</option>
+            <option value="openai">ChatGPT (OpenAI)</option>
+            <option value="llama">Llama (Meta)</option>
+        </select>
+        <div style="display: flex; width: 100%; gap: 8px;">
+            <input type="text" id="user-input" class="chat-input" placeholder="यहाँ अपना सवाल लिखें...">
+            <button class="send-btn" id="send-btn">भेजें</button>
+        </div>
     </div>
 </div>
 
@@ -86,13 +93,14 @@
     }
 
     async function fetchAIResponse(prompt) {
+        const provider = document.getElementById('ai-provider').value;
         typingIndicator.style.display = 'block';
         mainScroller.scrollTop = mainScroller.scrollHeight;
         try {
             const res = await fetch('/ai-chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: prompt })
+                body: JSON.stringify({ message: prompt, provider: provider })
             });
             const data = await res.json();
             appendMessage(data.reply || 'कोई जवाब नहीं मिला।', 'ai');

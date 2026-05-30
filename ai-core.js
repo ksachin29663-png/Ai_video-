@@ -1,3 +1,5 @@
+const { tryOpenAI, tryLlama } = require('./ai-handlers');
+
 /**
  * Sachin AI Studio — Multi-Provider AI Core
  * Provider 1: Pollinations.ai  (FREE, NO KEY, unlimited)
@@ -150,4 +152,4 @@ async function analyzeImageAI(imageBase64, mimeType, instruction, geminiKey) {
     return d?.candidates?.[0]?.content?.parts?.[0]?.text || 'Image analysis failed.';
 }
 
-module.exports = { generateAI, analyzeImageAI, tryPollinations, tryGemini };
+module.exports = { generateAI, analyzeImageAI, tryPollinations, tryGemini, tryOpenAI, tryLlama };
