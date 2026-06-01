@@ -310,9 +310,8 @@
 <script src="auth-widget.js"></script>
 <script>
     // ---- API Base URL ----
-    const REPLIT_SERVER = 'https://e1e1c5db-0aa4-429c-a28f-bf188342449e-00-22wkonulgrqax.sisko.replit.dev';
-    const isOnReplit = window.location.hostname.includes('replit') || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    const API_BASE = isOnReplit ? '' : REPLIT_SERVER;
+    // Always use relative URLs — server handles both static files and API
+    const API_BASE = '';
 
     // ---- Rate Limit System ----
     const DAILY_LIMIT = 4;
