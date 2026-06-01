@@ -16,6 +16,34 @@ if (!fs.existsSync('uploads')) { fs.mkdirSync('uploads'); }
 const upload = multer({ dest: 'uploads/' });
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
+// ---- OpenAI TTS Helper ----
+async function generateOpenAIVoiceover(text, outputPath) {
+    if (!OPENAI_API_KEY) throw new Error('No OpenAI key');
+    const shortText = text.slice(0, 4096);
+    const response = await fetch('https://api.openai.com/v1/audio/speech', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${OPENAI_API_KEY}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            model: 'tts-1',
+            input: shortText,
+            voice: 'nova',
+            response_format: 'mp3',
+            speed: 0.95
+        })
+    });
+    if (!response.ok) {
+        const err = await response.text();
+        throw new Error('OpenAI TTS failed: ' + err.slice(0, 200));
+    }
+    const buf = await response.arrayBuffer();
+    fs.writeFileSync(outputPath, Buffer.from(buf));
+    if (fs.statSync(outputPath).size < 100) throw new Error('OpenAI TTS: empty audio');
+}
 
 // ---- Gemini Image-to-Prompt Endpoint ----
 app.post('/analyze-image', async (req, res) => {
@@ -311,17 +339,28 @@ async function runVideoJob(jobId, uploadedPhotos, { prompt, script, style, durat
     }
 
     try {
-        // STEP 1: Hindi voiceover
+        // STEP 1: Hindi voiceover — OpenAI TTS (primary) → gTTS (fallback)
         setStep('🎙️ Hindi voiceover बन रहा है...', 5);
-        await new Promise((resolve, reject) => {
-            try {
-                const gtts = new gTTS(rawScript, 'hi');
-                gtts.save(audioPath, (err) => err ? reject(new Error('gTTS: ' + err.message)) : resolve());
-            } catch(e) { reject(new Error('gTTS init: ' + e.message)); }
-        });
+        let voiceSource = 'unknown';
+        try {
+            await generateOpenAIVoiceover(rawScript, audioPath);
+            voiceSource = 'OpenAI TTS (nova)';
+            console.log(`[Job] Voiceover: OpenAI TTS OK`);
+        } catch (openaiErr) {
+            console.warn(`[Job] OpenAI TTS failed (${openaiErr.message}), falling back to gTTS`);
+            await new Promise((resolve, reject) => {
+                try {
+                    const gtts = new gTTS(rawScript, 'hi');
+                    gtts.save(audioPath, (err) => err ? reject(new Error('gTTS: ' + err.message)) : resolve());
+                } catch(e) { reject(new Error('gTTS init: ' + e.message)); }
+            });
+            voiceSource = 'gTTS (fallback)';
+            console.log(`[Job] Voiceover: gTTS fallback OK`);
+        }
         if (!fs.existsSync(audioPath) || fs.statSync(audioPath).size < 100) {
             throw new Error('Voice file empty or missing');
         }
+        console.log(`[Job] Voiceover source: ${voiceSource}`);
 
         // STEP 2: Scene images
         const scenePrompts = [
