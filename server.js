@@ -195,6 +195,75 @@ app.post('/generate-ai-video', upload.array('photos', 3), (req, res) => {
 });
 
 // =============================================================================
+// ---- AI SCRIPT WRITER ENDPOINT ----
+// =============================================================================
+app.post('/generate-video-script', async (req, res) => {
+    const { topic, style, duration } = req.body;
+    if (!topic) return res.status(400).json({ error: 'Topic required' });
+    if (!OPENAI_API_KEY) return res.status(500).json({ error: 'OpenAI API key not configured' });
+
+    const styleNames = {
+        cinematic: 'Cinematic / Filmic',
+        anime: 'Anime / Animated',
+        '3d': '3D CGI / Pixar Style',
+        realistic: 'Realistic / Documentary',
+        watercolor: 'Watercolor / Artistic'
+    };
+    const styleName = styleNames[style] || 'Cinematic';
+    const sceneDur = Math.max(3, Math.min(parseInt(duration) || 7, 8));
+    const totalSec = sceneDur * 3;
+    const wordCount = Math.floor(totalSec * 2.2);
+
+    const systemPrompt = `You are a professional Hindi video script writer. Write engaging, emotional, and cinematic Hindi scripts for short videos. Use simple, clear Hindi that sounds natural when spoken aloud. No English words unless essential. Write in Devanagari script only.`;
+
+    const userPrompt = `Topic: "${topic}"
+Video Style: ${styleName}
+Video Duration: ~${totalSec} seconds (3 scenes × ${sceneDur} sec each)
+Target Word Count: ~${wordCount} words
+
+Write a complete Hindi voiceover script for this video. The script should:
+- Be exactly ~${wordCount} words (not more, not less)
+- Flow naturally as spoken narration
+- Have an emotional opening, powerful middle, and memorable ending
+- Match the ${styleName} visual style
+- Be engaging and cinematic
+
+Return ONLY the Hindi script text. No headings, no scene markers, no English, no explanations.`;
+
+    try {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${OPENAI_API_KEY}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                model: 'gpt-4o-mini',
+                messages: [
+                    { role: 'system', content: systemPrompt },
+                    { role: 'user', content: userPrompt }
+                ],
+                max_tokens: 600,
+                temperature: 0.8
+            })
+        });
+
+        if (!response.ok) {
+            const err = await response.text();
+            return res.status(500).json({ error: 'OpenAI failed: ' + err.slice(0, 150) });
+        }
+
+        const data = await response.json();
+        const script = data?.choices?.[0]?.message?.content?.trim();
+        if (!script) return res.status(500).json({ error: 'Empty script from AI' });
+
+        res.json({ script });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// =============================================================================
 // ---- BACKGROUND VIDEO WORKER ----
 // =============================================================================
 

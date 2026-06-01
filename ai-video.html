@@ -100,6 +100,23 @@
 
         .error-box { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: 12px; padding: 14px; color: #fca5a5; font-size: 0.85rem; line-height: 1.6; display: none; margin-top: 14px; }
 
+        /* AI Script Writer */
+        .script-ai-btn {
+            width: 100%; padding: 11px 16px; margin-top: 8px;
+            border-radius: 12px; border: 1px dashed rgba(99,102,241,0.5);
+            background: rgba(99,102,241,0.07); color: #818cf8;
+            font-size: 0.85rem; font-weight: 700; cursor: pointer;
+            font-family: inherit; display: flex; align-items: center;
+            justify-content: center; gap: 8px; transition: all 0.25s;
+        }
+        .script-ai-btn:hover { background: rgba(99,102,241,0.15); border-color: #818cf8; }
+        .script-ai-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .script-typing { display: none; background: rgba(99,102,241,0.05); border: 1px solid rgba(99,102,241,0.15); border-radius: 10px; padding: 10px 14px; font-size: 0.78rem; color: #64748b; margin-top: 6px; }
+        .script-typing span { display: inline-block; animation: blink 1.2s infinite; }
+        .script-typing span:nth-child(2) { animation-delay: 0.2s; }
+        .script-typing span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes blink { 0%,80%,100%{opacity:0} 40%{opacity:1} }
+
         .scene-strip { display: flex; gap: 8px; margin-top: 14px; }
         .scene-thumb { flex: 1; aspect-ratio: 16/9; border-radius: 10px; overflow: hidden; background: rgba(255,255,255,0.04); border: 1px solid rgba(99,102,241,0.2); position: relative; }
         .scene-thumb img { width: 100%; height: 100%; object-fit: cover; display: none; }
@@ -197,8 +214,14 @@
         </div>
         <div class="input-group">
             <div class="input-label">🎙️ Hindi Script — Voiceover के लिए <span style="color:#475569;font-size:0.7rem;">(optional, max 1500)</span></div>
-            <textarea class="vi-input" id="scriptInput" maxlength="1500" oninput="updateCounter(this,'scriptCounter',1500)" placeholder="जैसे: भारत की मिट्टी में जादू है। हर किसान की मेहनत इस देश की ताकत है।" style="height:100px;"></textarea>
+            <textarea class="vi-input" id="scriptInput" maxlength="1500" oninput="updateCounter(this,'scriptCounter',1500)" placeholder="जैसे: भारत की मिट्टी में जादू है। हर किसान की मेहनत इस देश की ताकत है।&#10;&#10;👇 नीचे बटन दबाओ — AI खुद Script लिख देगा!" style="height:100px;"></textarea>
             <div class="char-counter" id="scriptCounter">0 / 1500</div>
+            <button class="script-ai-btn" id="scriptAiBtn" onclick="generateScript()">
+                ✨ AI Script लिखो — Topic डालो, Script तैयार!
+            </button>
+            <div class="script-typing" id="scriptTyping">
+                🤖 ChatGPT Script लिख रहा है<span>.</span><span>.</span><span>.</span>
+            </div>
         </div>
 
         <!-- Upload Section -->
@@ -450,6 +473,59 @@
     function updateCounter(el, cid, max) {
         const len = el.value.length;
         document.getElementById(cid).textContent = len + ' / ' + max;
+    }
+
+    async function generateScript() {
+        const topic = document.getElementById('promptInput').value.trim();
+        if (!topic) {
+            alert('पहले ऊपर Video का Topic लिखो!');
+            document.getElementById('promptInput').focus();
+            return;
+        }
+        const btn = document.getElementById('scriptAiBtn');
+        const typing = document.getElementById('scriptTyping');
+        const scriptEl = document.getElementById('scriptInput');
+
+        btn.disabled = true;
+        btn.innerHTML = '⏳ Script बन रही है...';
+        typing.style.display = 'block';
+
+        try {
+            const res = await fetch(API_BASE + '/generate-video-script', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    topic,
+                    style: selectedStyle,
+                    duration: String(selectedDur)
+                })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Script generation failed');
+
+            scriptEl.value = data.script;
+            updateCounter(scriptEl, 'scriptCounter', 1500);
+
+            btn.innerHTML = '✅ Script तैयार! बदलना हो तो दोबारा दबाओ';
+            typing.style.display = 'none';
+            scriptEl.style.border = '1px solid rgba(99,102,241,0.6)';
+            scriptEl.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.12)';
+            setTimeout(() => {
+                scriptEl.style.border = '';
+                scriptEl.style.boxShadow = '';
+            }, 2500);
+        } catch (err) {
+            btn.innerHTML = '❌ Error — दोबारा try करें';
+            typing.style.display = 'none';
+            console.error('Script gen error:', err.message);
+        } finally {
+            setTimeout(() => {
+                btn.disabled = false;
+                if (!btn.innerHTML.includes('तैयार')) {
+                    btn.innerHTML = '✨ AI Script लिखो — Topic डालो, Script तैयार!';
+                }
+            }, 3000);
+        }
     }
 
     function selectStyle(el) {
