@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="shortcut icon" href="/favicon.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/logo192.png">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3019468976412219" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>हमारे बारे में — सचिन एआई फोटो स्टूडियो</title>
+    <meta name="description" content="सचिन एआई फोटो स्टूडियो के बारे में जानें — 38 Free AI Tools, Made in India, बिल्कुल मुफ्त।">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background: #080c16; color: #e1e7f0; min-height: 100vh; }
+
+        header {
+            background: linear-gradient(135deg, #0a0e1a, #0d1b2e);
+            border-bottom: 1px solid rgba(0,255,204,0.2);
+            padding: 14px 20px;
+            display: flex; align-items: center; gap: 14px;
+            position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        .back { color: #00ffcc; text-decoration: none; font-size: 1.3rem; }
+        .header-text { display: flex; flex-direction: column; }
+        .header-title { font-size: 1.05rem; font-weight: 700; color: #00ffcc; }
+        .header-sub { font-size: 0.75rem; color: #64748b; }
+
+        .hero-banner {
+            background: linear-gradient(135deg, #0a0e1a 0%, #0f1f35 50%, #100a1f 100%);
+            padding: 50px 20px 40px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            position: relative; overflow: hidden;
+        }
+        .hero-banner::before {
+            content: '🎨';
+            position: absolute;
+            font-size: 12rem; opacity: 0.03;
+            top: -20px; right: -20px;
+        }
+        .hero-banner h1 { font-size: 2rem; font-weight: 800; line-height: 1.3; margin-bottom: 12px; }
+        .hero-banner h1 span { color: #00ffcc; }
+        .hero-banner p { color: #64748b; font-size: 0.9rem; max-width: 520px; margin: 0 auto; line-height: 1.6; }
+        .badge {
+            display: inline-block; margin-top: 16px;
+            background: rgba(0,255,204,0.1); border: 1px solid rgba(0,255,204,0.25);
+            color: #00ffcc; font-size: 0.75rem; font-weight: 700;
+            padding: 5px 16px; border-radius: 20px; letter-spacing: 0.5px;
+        }
+
+        .container { max-width: 860px; margin: 0 auto; padding: 40px 16px 60px; }
+
+        .section-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px; padding: 28px;
+            margin-bottom: 20px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .section-card:hover {
+            border-color: rgba(0,255,204,0.2);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+        .section-icon { font-size: 2rem; margin-bottom: 14px; display: block; }
+        .section-title { font-size: 1.1rem; font-weight: 800; color: #00ffcc; margin-bottom: 12px; }
+        .section-text { font-size: 0.88rem; color: #94a3b8; line-height: 1.9; }
+        .section-text strong { color: #e1e7f0; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 14px; margin-top: 20px;
+        }
+        .stat-box {
+            background: rgba(0,255,204,0.05);
+            border: 1px solid rgba(0,255,204,0.15);
+            border-radius: 14px; padding: 20px;
+            text-align: center;
+        }
+        .stat-val { font-size: 2rem; font-weight: 900; color: #00ffcc; }
+        .stat-lbl { font-size: 0.78rem; color: #64748b; margin-top: 4px; }
+
+        .tools-list {
+            display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px;
+        }
+        .tool-tag {
+            background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.25);
+            color: #a78bfa; font-size: 0.75rem; font-weight: 600;
+            padding: 5px 12px; border-radius: 20px;
+        }
+
+        .team-card {
+            display: flex; align-items: center; gap: 18px;
+            background: rgba(0,255,204,0.04);
+            border: 1px solid rgba(0,255,204,0.12);
+            border-radius: 14px; padding: 20px; margin-top: 14px;
+        }
+        .team-avatar {
+            width: 60px; height: 60px; border-radius: 50%;
+            background: linear-gradient(135deg, #00ffcc, #7c3aed);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem; flex-shrink: 0;
+        }
+        .team-name { font-size: 1rem; font-weight: 700; color: #e1e7f0; }
+        .team-role { font-size: 0.78rem; color: #00ffcc; margin-top: 2px; }
+        .team-bio { font-size: 0.8rem; color: #64748b; margin-top: 6px; line-height: 1.6; }
+
+        footer {
+            text-align: center; padding: 24px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            color: #334155; font-size: 0.8rem;
+        }
+        footer a { color: #00ffcc; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="back">←</a>
+    <div class="header-text">
+        <div class="header-title">ℹ️ हमारे बारे में</div>
+        <div class="header-sub">About Sachin AI Photo Studio</div>
+    </div>
+</header>
+
+<div class="hero-banner">
+    <h1>सचिन <span>एआई</span> फोटो स्टूडियो</h1>
+    <p>भारत का सबसे बड़ा Free AI Tools Platform — 38 Tools, एक ही जगह, बिल्कुल मुफ्त।</p>
+    <div class="badge">🇮🇳 Made in India · 100% Free</div>
+</div>
+
+<div class="container">
+
+    <div class="section-card">
+        <span class="section-icon">🚀</span>
+        <div class="section-title">हमारा मिशन</div>
+        <div class="section-text">
+            <strong>सचिन एआई फोटो स्टूडियो</strong> का मिशन है — AI की ताकत को हर भारतीय तक पहुंचाना, बिल्कुल मुफ्त।<br><br>
+            हम चाहते हैं कि छोटे शहरों और गांवों के लोग भी latest AI technology का फायदा उठा सकें — चाहे वो फोटो edit करनी हो, AI से video बनानी हो, या अपना resume तैयार करना हो।<br><br>
+            <strong>"Technology सबके लिए — कोई login नहीं, कोई charge नहीं।"</strong>
+        </div>
+    </div>
+
+    <div class="section-card">
+        <span class="section-icon">📊</span>
+        <div class="section-title">हमारे Numbers</div>
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-val">38</div>
+                <div class="stat-lbl">AI Tools</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-val">500+</div>
+                <div class="stat-lbl">Photo Filters</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-val">100%</div>
+                <div class="stat-lbl">Free Forever</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-val">🇮🇳</div>
+                <div class="stat-lbl">Made in India</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-card">
+        <span class="section-icon">🛠️</span>
+        <div class="section-title">हमारे 38 AI Tools</div>
+        <div class="section-text">हम इन categories में tools provide करते हैं:</div>
+        <div class="tools-list">
+            <span class="tool-tag">✨ Text to Image</span>
+            <span class="tool-tag">🖼️ BG Remover</span>
+            <span class="tool-tag">🔮 Photo Restore</span>
+            <span class="tool-tag">🧹 Object Eraser</span>
+            <span class="tool-tag">🤖 AI Avatar</span>
+            <span class="tool-tag">🎬 AI Video</span>
+            <span class="tool-tag">✏️ AI Sketch</span>
+            <span class="tool-tag">💄 Beauty Enhancer</span>
+            <span class="tool-tag">💻 AI Code</span>
+            <span class="tool-tag">📝 Caption Generator</span>
+            <span class="tool-tag">😂 Meme Creator</span>
+            <span class="tool-tag">🎨 Color Palette</span>
+            <span class="tool-tag">💬 Quote Cards</span>
+            <span class="tool-tag">🎭 AI Shayari</span>
+            <span class="tool-tag">📄 Resume Builder</span>
+            <span class="tool-tag">💼 Business Ideas</span>
+            <span class="tool-tag">✈️ Travel Planner</span>
+            <span class="tool-tag">😂 Joke Generator</span>
+            <span class="tool-tag">🔮 Horoscope</span>
+            <span class="tool-tag">🍳 Recipe Generator</span>
+            <span class="tool-tag">📚 Study Notes</span>
+            <span class="tool-tag">📰 News Analyzer</span>
+            <span class="tool-tag">🌐 Translator</span>
+            <span class="tool-tag">📖 Story Writer</span>
+            <span class="tool-tag">✉️ Letter Writer</span>
+            <span class="tool-tag">🎯 Interview Prep</span>
+            <span class="tool-tag">🏥 Health Advisor</span>
+            <span class="tool-tag">🧠 GK Quiz</span>
+            <span class="tool-tag">✨ Remini Enhancer</span>
+            <span class="tool-tag">🎬 Film Filters</span>
+        </div>
+    </div>
+
+    <div class="section-card">
+        <span class="section-icon">👤</span>
+        <div class="section-title">Founder & Developer</div>
+        <div class="team-card">
+            <div class="team-avatar">👨‍💻</div>
+            <div>
+                <div class="team-name">Sachin</div>
+                <div class="team-role">Founder · Developer · Creator</div>
+                <div class="team-bio">
+                    एक passionate developer जो चाहते हैं कि भारत के हर इंसान तक AI technology मुफ्त में पहुंचे। 
+                    यह पूरा platform उन्होंने अकेले design, develop और deploy किया है।
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-card">
+        <span class="section-icon">🔗</span>
+        <div class="section-title">Quick Links</div>
+        <div class="section-text">
+            <a href="index.html" style="color:#00ffcc;">🏠 होम — सभी 38 AI Tools</a><br><br>
+            <a href="contact.html" style="color:#00ffcc;">📧 Contact Us — हमसे संपर्क करें</a><br><br>
+            <a href="terms.html" style="color:#00ffcc;">📋 Terms & Conditions</a><br><br>
+            <a href="privacy-policy.html" style="color:#00ffcc;">🔒 Privacy Policy</a>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    &copy; 2025 सचिन एआई फोटो स्टूडियो — सभी अधिकार सुरक्षित<br>
+    <a href="/privacy-policy.html">🔒 Privacy Policy</a> ·
+    <a href="/contact.html">📧 Contact</a> ·
+    <a href="/terms.html">📋 Terms</a>
+</footer>
+
+</body>
+</html>
