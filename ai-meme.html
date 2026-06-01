@@ -5,5 +5,225 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="shortcut icon" href="/favicon.png">
     <link rel="apple-touch-icon" sizes="192x192" href="/logo192.png">
-    </body>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3019468976412219" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Meme Creator - सचिन एआई</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background: #080c16; color: #e1e7f0; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: linear-gradient(135deg,#0a0e1a,#1a0a0a); border-bottom: 1px solid rgba(251,113,133,0.3); padding: 14px 20px; display: flex; align-items: center; gap: 14px; }
+        .back-btn { color: #fb7185; text-decoration: none; font-size: 1.3rem; }
+        .page-title { font-size: 1.1rem; font-weight: 700; color: #fb7185; }
+        .page-sub { font-size: 0.75rem; color: #64748b; }
+        main { flex: 1; padding: 24px 16px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+        .card { width: 100%; max-width: 620px; background: rgba(255,255,255,0.04); border: 1px solid rgba(251,113,133,0.2); border-radius: 20px; padding: 24px; }
+        .card-title { font-size: 0.9rem; font-weight: 700; color: #fb7185; margin-bottom: 14px; }
+        .template-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
+        .template-btn { padding: 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); cursor: pointer; text-align: center; transition: all 0.2s; }
+        .template-btn:hover, .template-btn.active { border-color: #fb7185; background: rgba(251,113,133,0.1); }
+        .tmpl-icon { font-size: 1.8rem; margin-bottom: 6px; }
+        .tmpl-name { font-size: 0.8rem; font-weight: 700; color: #fb7185; }
+        .tmpl-desc { font-size: 0.7rem; color: #64748b; margin-top: 2px; }
+        .input-group { margin-bottom: 14px; }
+        .input-label { font-size: 0.8rem; color: #94a3b8; margin-bottom: 6px; font-weight: 600; }
+        input.meme-input, textarea.meme-input {
+            width: 100%; padding: 12px; background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+            color: #fff; font-size: 0.88rem; font-family: inherit; outline: none;
+        }
+        textarea.meme-input { resize: none; height: 60px; }
+        input.meme-input:focus, textarea.meme-input:focus { border-color: #fb7185; }
+        .gen-btn { width: 100%; padding: 14px; font-size: 0.95rem; font-weight: 700; border: none; border-radius: 12px; cursor: pointer; background: linear-gradient(135deg,#fb7185,#e11d48); color: #fff; font-family: inherit; transition: all 0.3s; }
+        .gen-btn:hover { box-shadow: 0 0 20px rgba(251,113,133,0.4); }
+        .gen-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .meme-canvas-wrap { position: relative; width: 100%; max-width: 500px; margin: 0 auto; border-radius: 14px; overflow: hidden; display: none; }
+        canvas#memeCanvas { width: 100%; border-radius: 14px; display: block; }
+        .dl-btn { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: #e1e7f0; font-size: 0.85rem; cursor: pointer; font-family: inherit; margin-top: 10px; transition: all 0.2s; }
+        .dl-btn:hover { background: rgba(255,255,255,0.1); }
+        .spinner-txt { text-align: center; color: #fb7185; font-size: 0.85rem; padding: 10px; display: none; }
+        footer { text-align: center; padding: 20px; color: #334155; font-size: 0.78rem; }
+    </style>
+</head>
+<body>
+<header>
+    <a href="index.html" class="back-btn">←</a>
+    <div>
+        <div class="page-title">😂 AI Meme Creator</div>
+        <div class="page-sub">मज़ेदार मीम बनाओ AI से — एक क्लिक में!</div>
+    </div>
+</header>
+<main>
+    <div class="card">
+        <div class="card-title">Step 1 — Meme Template चुनें</div>
+        <div class="template-grid">
+            <div class="template-btn active" data-style="funny indian meme, bollywood style, colorful" onclick="selectTemplate(this)">
+                <div class="tmpl-icon">🎬</div><div class="tmpl-name">Bollywood</div><div class="tmpl-desc">फिल्मी Style</div>
+            </div>
+            <div class="template-btn" data-style="doge meme, shiba inu dog, wow such meme, internet meme" onclick="selectTemplate(this)">
+                <div class="tmpl-icon">🐕</div><div class="tmpl-name">Doge</div><div class="tmpl-desc">Such Wow</div>
+            </div>
+            <div class="template-btn" data-style="drake meme, pointing approval disapproval, viral meme format" onclick="selectTemplate(this)">
+                <div class="tmpl-icon">🧑‍🎤</div><div class="tmpl-name">Drake</div><div class="tmpl-desc">Yes/No Format</div>
+            </div>
+            <div class="template-btn" data-style="distracted boyfriend meme, funny street photo style" onclick="selectTemplate(this)">
+                <div class="tmpl-icon">👀</div><div class="tmpl-name">Distracted</div><div class="tmpl-desc">Boyfriend Meme</div>
+            </div>
+            <div class="template-btn" data-style="cartoon meme, funny anime face reaction, exaggerated expression" onclick="selectTemplate(this)">
+                <div class="tmpl-icon">😤</div><div class="tmpl-name">Anime React</div><div class="tmpl-desc">Cartoon Reaction</div>
+            </div>
+            <div class="template-btn" data-style="galaxy brain meme, expanding brain levels, glowing, meme" onclick="selectTemplate(this)">
+                <div class="tmpl-icon">🧠</div><div class="tmpl-name">Big Brain</div><div class="tmpl-desc">Galaxy Brain</div>
+            </div>
+        </div>
+
+        <div class="card-title">Step 2 — Meme Text लिखें</div>
+        <div class="input-group">
+            <div class="input-label">Top Text (ऊपर का टेक्स्ट)</div>
+            <input class="meme-input" id="topText" placeholder="जैसे: जब exam नजदीक हो...">
+        </div>
+        <div class="input-group">
+            <div class="input-label">Bottom Text (नीचे का टेक्स्ट)</div>
+            <input class="meme-input" id="bottomText" placeholder="जैसे: ...और नींद भी आ रही हो 😴">
+        </div>
+        <div class="input-group">
+            <div class="input-label">Meme Context (optional — AI के लिए)</div>
+            <textarea class="meme-input" id="context" placeholder="जैसे: Indian student meme about exams and sleep"></textarea>
+        </div>
+
+        <button class="gen-btn" id="genBtn" onclick="generateMeme()">😂 Meme बनाएं</button>
+        <div class="spinner-txt" id="spinnerTxt">⏳ AI Meme बना रहा है...</div>
+    </div>
+
+    <div class="card" id="resultCard" style="display:none">
+        <div class="card-title">✅ आपका Meme तैयार है!</div>
+        <div class="meme-canvas-wrap" id="canvasWrap">
+            <canvas id="memeCanvas"></canvas>
+        </div>
+        <button class="dl-btn" onclick="downloadMeme()">📥 Meme डाउनलोड करें</button>
+        <button class="gen-btn" style="margin-top:10px;background:rgba(251,113,133,0.15);color:#fb7185;border:1px solid rgba(251,113,133,0.3);" onclick="generateMeme()">🔄 नया Meme बनाएं</button>
+    </div><!-- Mid-Page Ad -->
+<div style="text-align:center;margin:12px auto;width:100%;min-height:56px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'b1c2005cd8e1095bc458e4c59f785aa9','format':'iframe','height':50,'width':320,'params':{}};</script>
+
+</div>
+</main>
+<footer>&copy; 2025 सचिन एआई फोटो स्टूडियो</footer>
+
+<script>
+    let selectedStyle = 'funny indian meme, bollywood style, colorful';
+    let memeImageUrl = null;
+
+    function selectTemplate(el) {
+        document.querySelectorAll('.template-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        selectedStyle = el.dataset.style;
+    }
+
+    async function generateMeme() {
+        const topText = document.getElementById('topText').value.trim();
+        const bottomText = document.getElementById('bottomText').value.trim();
+        const context = document.getElementById('context').value.trim();
+        if (!topText && !bottomText) { alert('कृपया कम से कम एक Text लिखें!'); return; }
+
+        document.getElementById('genBtn').disabled = true;
+        document.getElementById('spinnerTxt').style.display = 'block';
+        document.getElementById('resultCard').style.display = 'none';
+
+        const promptParts = [selectedStyle, context || 'funny viral meme image', 'high quality, meme format, no text in image'];
+        const seed = Math.floor(Math.random() * 999999);
+        const imgUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(promptParts.join(', '))}?width=768&height=768&nologo=true&seed=${seed}`;
+
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+            memeImageUrl = imgUrl;
+            renderMeme(img, topText, bottomText);
+            document.getElementById('genBtn').disabled = false;
+            document.getElementById('spinnerTxt').style.display = 'none';
+            document.getElementById('resultCard').style.display = 'block';
+            document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+        };
+        img.onerror = () => {
+            document.getElementById('spinnerTxt').textContent = '❌ Image नहीं बनी। दोबारा कोशिश करें।';
+            document.getElementById('genBtn').disabled = false;
+        };
+        img.src = imgUrl;
+    }
+
+    function renderMeme(img, topText, bottomText) {
+        const canvas = document.getElementById('memeCanvas');
+        const size = 768;
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, size, size);
+
+        // Semi-transparent banner at top and bottom
+        const bannerH = 90;
+        if (topText) {
+            ctx.fillStyle = 'rgba(0,0,0,0.65)';
+            ctx.fillRect(0, 0, size, bannerH);
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 42px Impact, Arial Black, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 6;
+            ctx.strokeText(topText.toUpperCase(), size/2, 58);
+            ctx.fillText(topText.toUpperCase(), size/2, 58);
+        }
+        if (bottomText) {
+            ctx.fillStyle = 'rgba(0,0,0,0.65)';
+            ctx.fillRect(0, size - bannerH, size, bannerH);
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 42px Impact, Arial Black, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 6;
+            ctx.strokeText(bottomText.toUpperCase(), size/2, size - 30);
+            ctx.fillText(bottomText.toUpperCase(), size/2, size - 30);
+        }
+        document.getElementById('canvasWrap').style.display = 'block';
+    }
+
+    function downloadMeme() {
+        const canvas = document.getElementById('memeCanvas');
+        const a = document.createElement('a');
+        a.download = 'sachin-ai-meme.png';
+        a.href = canvas.toDataURL('image/png');
+        a.click();
+    }
+</script>
+
+<script src="tracker.js"></script>
+<script src="share-unlock.js"></script>
+
+<!-- ===== ADSTERRA ADS START ===== -->
+<!-- Popunder -->
+
+<!-- Social Bar -->
+
+<!-- 320x50 Mobile Banner -->
+<div id="sachin-ad-320" style="display:block;text-align:center;background:linear-gradient(90deg,#0a0e1a,#0d1225);border-top:1px solid rgba(99,102,241,0.3);border-bottom:1px solid rgba(99,102,241,0.3);padding:3px 0;width:100%;min-height:56px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'b1c2005cd8e1095bc458e4c59f785aa9','format':'iframe','height':50,'width':320,'params':{}};</script>
+
+</div>
+<!-- 728x90 Leaderboard Banner -->
+<div id="sachin-ad-728" style="display:block;text-align:center;background:linear-gradient(90deg,#0a0e1a,#0d1225);padding:3px 0;width:100%;min-height:96px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'5e113b8022609e2135c5e1e265084235','format':'iframe','height':90,'width':728,'params':{}};</script>
+
+</div>
+<!-- Native Banner -->
+<div style="text-align:center;margin:6px auto;max-width:100%;min-height:60px;">
+
+<div id="container-30a2c535b11a237c281ced645d908d88"></div>
+</div>
+<!-- 300x250 Rectangle -->
+<div id="sachin-ad-300" style="display:block;text-align:center;margin:8px auto;width:100%;min-height:254px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'817c9252a9900f63d05a904142664916','format':'iframe','height':250,'width':300,'params':{}};</script>
+
+</div>
+<!-- ===== ADSTERRA ADS END ===== -->
+<script src="auth-widget.js"></script>
+</body>
 </html>
