@@ -5,5 +5,194 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="shortcut icon" href="/favicon.png">
     <link rel="apple-touch-icon" sizes="192x192" href="/logo192.png">
-    </body>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3019468976412219" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>एआई अवतार - सचिन एआई</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background: #080c16; color: #e1e7f0; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: linear-gradient(135deg,#0a0e1a,#050d1a); border-bottom: 1px solid rgba(6,182,212,0.3); padding: 14px 20px; display: flex; align-items: center; gap: 14px; }
+        .back-btn { color: #06b6d4; text-decoration: none; font-size: 1.3rem; }
+        .page-title { font-size: 1.1rem; font-weight: 700; color: #06b6d4; }
+        .page-sub { font-size: 0.75rem; color: #64748b; }
+        main { flex: 1; padding: 24px 16px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+        .card { width: 100%; max-width: 580px; background: rgba(255,255,255,0.04); border: 1px solid rgba(6,182,212,0.2); border-radius: 20px; padding: 24px; }
+        .card-title { font-size: 0.9rem; font-weight: 700; color: #06b6d4; margin-bottom: 14px; }
+        .upload-zone { border: 2px dashed rgba(6,182,212,0.3); border-radius: 14px; padding: 24px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .upload-zone:hover { border-color: #06b6d4; background: rgba(6,182,212,0.04); }
+        .upload-zone input { display: none; }
+        .preview-img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #06b6d4; margin: 12px auto 0; display: none; }
+        .upload-icon { font-size: 2.5rem; margin-bottom: 8px; }
+        .upload-text { color: #64748b; font-size: 0.85rem; }
+        .upload-text b { color: #06b6d4; }
+        .style-label { font-size: 0.82rem; color: #94a3b8; margin: 16px 0 10px; font-weight: 600; }
+        .style-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .style-card { padding: 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); cursor: pointer; text-align: center; transition: all 0.25s; }
+        .style-card:hover, .style-card.active { border-color: #06b6d4; background: rgba(6,182,212,0.08); }
+        .style-card .si { font-size: 1.8rem; margin-bottom: 6px; }
+        .style-card .sn { font-size: 0.8rem; font-weight: 700; color: #06b6d4; }
+        .style-card .sd { font-size: 0.72rem; color: #64748b; margin-top: 2px; }
+        .desc-input { width: 100%; margin-top: 14px; padding: 12px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: #fff; font-size: 0.85rem; resize: none; height: 60px; font-family: inherit; outline: none; }
+        .desc-input:focus { border-color: #06b6d4; }
+        .gen-btn { width: 100%; margin-top: 14px; padding: 15px; font-size: 0.95rem; font-weight: 700; border: none; border-radius: 12px; cursor: pointer; background: linear-gradient(135deg,#06b6d4,#0284c7); color: #fff; font-family: inherit; transition: all 0.3s; }
+        .gen-btn:hover { box-shadow: 0 0 20px rgba(6,182,212,0.4); }
+        .gen-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .result-area { display: none; margin-top: 16px; }
+        .result-img-wrap { aspect-ratio: 1; border-radius: 14px; overflow: hidden; border: 2px solid rgba(6,182,212,0.3); background: #000; }
+        .result-img-wrap img { width: 100%; height: 100%; object-fit: contain; }
+        .dl-btn { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: #e1e7f0; font-size: 0.85rem; cursor: pointer; font-family: inherit; margin-top: 10px; }
+        .dl-btn:hover { background: rgba(255,255,255,0.1); }
+        .spinner-txt { text-align: center; color: #06b6d4; font-size: 0.85rem; padding: 12px; display: none; }
+    </style>
+</head>
+<body>
+<header>
+    <a href="index.html" class="back-btn">←</a>
+    <div>
+        <div class="page-title">🤖 एआई अवतार & पोर्ट्रेट</div>
+        <div class="page-sub">सेल्फी को Anime, 3D या Pro लुक दो</div>
+    </div>
+</header>
+<main>
+    <div class="card">
+        <div class="card-title">Step 1 — अपनी फोटो / चेहरे का विवरण दें</div>
+        <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+            <div class="upload-icon">🤳</div>
+            <div class="upload-text"><b>सेल्फी अपलोड करें</b> (विवरण के लिए)</div>
+            <input type="file" id="fileInput" accept="image/*" onchange="loadSelfie(event)">
+        </div>
+        <img id="previewImg" class="preview-img" alt="Selfie Preview">
+
+        <div class="card-title" style="margin-top:18px;">Step 2 — अपना चेहरा बताएं</div>
+        <textarea class="desc-input" id="descInput" placeholder="जैसे: young Indian man, sharp features, black short hair, brown skin, confident smile..."></textarea>
+
+        <div class="style-label">Step 3 — अवतार स्टाइल चुनें</div>
+        <div class="style-grid">
+            <div class="style-card active" data-prompt="3D Pixar cartoon avatar, colorful, high quality render, studio lighting" onclick="selectStyle(this)">
+                <div class="si">🎭</div><div class="sn">3D Cartoon</div><div class="sd">Pixar जैसा</div>
+            </div>
+            <div class="style-card" data-prompt="anime style portrait, detailed, vibrant colors, manga aesthetic, dramatic lighting" onclick="selectStyle(this)">
+                <div class="si">⛩️</div><div class="sn">Anime</div><div class="sd">Japanese Manga</div>
+            </div>
+            <div class="style-card" data-prompt="cyberpunk portrait, neon lights, futuristic, dark city background, dramatic" onclick="selectStyle(this)">
+                <div class="si">🌃</div><div class="sn">Cyberpunk</div><div class="sd">Neon Future</div>
+            </div>
+            <div class="style-card" data-prompt="professional LinkedIn profile photo, business attire, clean studio background, confident pose, sharp" onclick="selectStyle(this)">
+                <div class="si">💼</div><div class="sn">LinkedIn Pro</div><div class="sd">Corporate Look</div>
+            </div>
+            <div class="style-card" data-prompt="fantasy warrior portrait, armor, epic background, cinematic lighting, detailed" onclick="selectStyle(this)">
+                <div class="si">⚔️</div><div class="sn">Fantasy</div><div class="sd">Epic Warrior</div>
+            </div>
+            <div class="style-card" data-prompt="oil painting portrait, impressionist, museum quality artwork, soft warm colors" onclick="selectStyle(this)">
+                <div class="si">🎨</div><div class="sn">Oil Painting</div><div class="sd">Classic Art</div>
+            </div>
+        </div>
+
+        <button class="gen-btn" id="genBtn" onclick="generateAvatar()">🤖 अवतार बनाएं</button>
+        <div class="spinner-txt" id="spinnerTxt">⏳ AI आपका अवतार बना रहा है...</div>
+
+        <div class="result-area" id="resultArea">
+            <div style="font-size:0.85rem;color:#06b6d4;font-weight:700;margin-bottom:10px;">✅ आपका अवतार तैयार है!</div>
+            <div class="result-img-wrap"><img id="resultImg" alt="Avatar"></div>
+            <button class="dl-btn" onclick="downloadAvatar()">📥 अवतार डाउनलोड करें</button>
+            <button class="gen-btn" style="margin-top:10px;background:rgba(6,182,212,0.15);color:#06b6d4;border:1px solid rgba(6,182,212,0.3);" onclick="generateAvatar()">🔄 नया अवतार बनाएं</button>
+        </div>
+    </div><!-- Mid-Page Ad -->
+<div style="text-align:center;margin:12px auto;width:100%;min-height:56px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'b1c2005cd8e1095bc458e4c59f785aa9','format':'iframe','height':50,'width':320,'params':{}};</script>
+
+</div>
+</main>
+
+<script>
+    let selectedStylePrompt = '3D Pixar cartoon avatar, colorful, high quality render, studio lighting';
+    let avatarUrl = null;
+
+    function selectStyle(el) {
+        document.querySelectorAll('.style-card').forEach(c => c.classList.remove('active'));
+        el.classList.add('active');
+        selectedStylePrompt = el.dataset.prompt;
+    }
+
+    function loadSelfie(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = e => {
+            const img = document.getElementById('previewImg');
+            img.src = e.target.result;
+            img.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function generateAvatar() {
+        const desc = document.getElementById('descInput').value.trim();
+        if (!desc) { alert('कृपया अपने चेहरे का थोड़ा विवरण लिखें!'); return; }
+        const fullPrompt = `Portrait of ${desc}, ${selectedStylePrompt}, highly detailed, 4K quality`;
+        const seed = Math.floor(Math.random() * 999999);
+        const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(fullPrompt)}?width=768&height=768&nologo=true&seed=${seed}`;
+        avatarUrl = url;
+
+        document.getElementById('genBtn').disabled = true;
+        document.getElementById('spinnerTxt').style.display = 'block';
+
+        const tempImg = new Image();
+        tempImg.crossOrigin = 'anonymous';
+        tempImg.onload = () => {
+            document.getElementById('resultImg').src = url;
+            document.getElementById('resultArea').style.display = 'block';
+            document.getElementById('spinnerTxt').style.display = 'none';
+            document.getElementById('genBtn').disabled = false;
+            document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
+        };
+        tempImg.onerror = () => {
+            document.getElementById('spinnerTxt').textContent = '❌ सर्वर व्यस्त है, दोबारा कोशिश करें।';
+            document.getElementById('genBtn').disabled = false;
+        };
+        tempImg.src = url;
+    }
+
+    function downloadAvatar() {
+        if (!avatarUrl) return;
+        const a = document.createElement('a');
+        a.download = 'sachin-ai-avatar.png';
+        a.href = avatarUrl;
+        a.target = '_blank';
+        a.click();
+    }
+</script>
+
+<script src="tracker.js"></script>
+<script src="share-unlock.js"></script>
+
+<!-- ===== ADSTERRA ADS START ===== -->
+<!-- Popunder -->
+
+<!-- Social Bar -->
+
+<!-- 320x50 Mobile Banner -->
+<div id="sachin-ad-320" style="display:block;text-align:center;background:linear-gradient(90deg,#0a0e1a,#0d1225);border-top:1px solid rgba(99,102,241,0.3);border-bottom:1px solid rgba(99,102,241,0.3);padding:3px 0;width:100%;min-height:56px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'b1c2005cd8e1095bc458e4c59f785aa9','format':'iframe','height':50,'width':320,'params':{}};</script>
+
+</div>
+<!-- 728x90 Leaderboard Banner -->
+<div id="sachin-ad-728" style="display:block;text-align:center;background:linear-gradient(90deg,#0a0e1a,#0d1225);padding:3px 0;width:100%;min-height:96px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'5e113b8022609e2135c5e1e265084235','format':'iframe','height':90,'width':728,'params':{}};</script>
+
+</div>
+<!-- Native Banner -->
+<div style="text-align:center;margin:6px auto;max-width:100%;min-height:60px;">
+
+<div id="container-30a2c535b11a237c281ced645d908d88"></div>
+</div>
+<!-- 300x250 Rectangle -->
+<div id="sachin-ad-300" style="display:block;text-align:center;margin:8px auto;width:100%;min-height:254px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'817c9252a9900f63d05a904142664916','format':'iframe','height':250,'width':300,'params':{}};</script>
+
+</div>
+<!-- ===== ADSTERRA ADS END ===== -->
+<script src="auth-widget.js"></script>
+</body>
 </html>
