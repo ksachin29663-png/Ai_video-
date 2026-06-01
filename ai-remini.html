@@ -5,5 +5,1051 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="shortcut icon" href="/favicon.png">
     <link rel="apple-touch-icon" sizes="192x192" href="/logo192.png">
-    </body>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3019468976412219" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Remini Enhancer - सचिन एआई</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background: #080c16; color: #e1e7f0; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: linear-gradient(135deg,#0a0e1a,#0d1b0a); border-bottom: 1px solid rgba(0,255,80,0.25); padding: 14px 20px; display: flex; align-items: center; gap: 14px; }
+        .back-btn { color: #00ff50; text-decoration: none; font-size: 1.3rem; }
+        .page-title { font-size: 1.1rem; font-weight: 700; color: #00ff50; }
+        .page-sub { font-size: 0.75rem; color: #64748b; }
+        main { flex: 1; padding: 20px 16px; display: flex; flex-direction: column; align-items: center; gap: 18px; max-width: 700px; margin: 0 auto; width: 100%; }
+        .card { width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(0,255,80,0.18); border-radius: 20px; padding: 22px; }
+        .card-title { font-size: 0.88rem; font-weight: 700; color: #00ff50; margin-bottom: 14px; letter-spacing: 0.5px; }
+
+        .upload-zone { border: 2px dashed rgba(0,255,80,0.3); border-radius: 14px; padding: 32px 16px; text-align: center; cursor: pointer; transition: all 0.3s; position: relative; }
+        .upload-zone:hover { border-color: #00ff50; background: rgba(0,255,80,0.04); }
+        .upload-zone input { display: none; }
+        .upload-icon { font-size: 3rem; margin-bottom: 10px; }
+        .upload-text { color: #64748b; font-size: 0.85rem; }
+        .upload-text b { color: #00ff50; }
+
+        .mode-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; margin-bottom: 16px; }
+        @media(min-width:480px){ .mode-grid { grid-template-columns: repeat(4,1fr); } }
+        .mode-btn { padding: 12px 6px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); cursor: pointer; text-align: center; font-family: inherit; transition: all 0.2s; color: #e1e7f0; }
+        .mode-btn:hover, .mode-btn.active { border-color: #00ff50; background: rgba(0,255,80,0.08); }
+        .mode-icon { font-size: 1.6rem; margin-bottom: 4px; }
+        .mode-name { font-size: 0.72rem; font-weight: 700; color: #00ff50; }
+        .mode-desc { font-size: 0.65rem; color: #64748b; margin-top: 2px; }
+
+        .level-row { margin-bottom: 14px; }
+        .level-label { display: flex; justify-content: space-between; font-size: 0.8rem; color: #94a3b8; margin-bottom: 6px; }
+        input[type=range] { width: 100%; cursor: pointer; accent-color: #00ff50; }
+
+        .enhance-btn { width: 100%; padding: 15px; font-size: 1rem; font-weight: 700; border: none; border-radius: 14px; cursor: pointer; background: linear-gradient(135deg,#00c840,#006620); color: #fff; font-family: inherit; transition: all 0.3s; letter-spacing: 0.5px; }
+        .enhance-btn:hover { box-shadow: 0 0 28px rgba(0,255,80,0.4); transform: translateY(-1px); }
+        .enhance-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+        .progress-bar { display: none; width: 100%; height: 6px; background: rgba(255,255,255,0.08); border-radius: 6px; overflow: hidden; margin-top: 12px; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg,#00ff50,#00c840); border-radius: 6px; animation: progAnim 2s ease-in-out infinite; }
+        @keyframes progAnim { 0%{width:5%} 50%{width:85%} 100%{width:95%} }
+        .progress-label { text-align: center; font-size: 0.78rem; color: #00ff50; margin-top: 6px; display: none; }
+
+        .compare-wrap { position: relative; width: 100%; border-radius: 14px; overflow: hidden; background: #000; aspect-ratio: 4/3; touch-action: none; user-select: none; }
+        .compare-wrap img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; }
+        .img-before { z-index: 1; }
+        .img-after { z-index: 2; clip-path: inset(0 50% 0 0); }
+        .compare-handle { position: absolute; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); width: 3px; background: #00ff50; z-index: 10; cursor: ew-resize; }
+        .compare-handle::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 36px; height: 36px; background: #00ff50; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .compare-handle::after { content: '◀ ▶'; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); color: #080c16; font-size: 0.6rem; font-weight: 900; z-index: 11; white-space: nowrap; }
+        .compare-labels { display: flex; justify-content: space-between; margin-top: 8px; }
+        .cmp-lbl { font-size: 0.72rem; color: #64748b; background: rgba(255,255,255,0.05); padding: 3px 10px; border-radius: 20px; }
+
+        .dl-row { display: flex; gap: 10px; margin-top: 12px; }
+        .dl-btn { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid rgba(0,255,80,0.3); background: rgba(0,255,80,0.06); color: #00ff50; font-size: 0.82rem; cursor: pointer; font-family: inherit; font-weight: 600; transition: all 0.2s; }
+        .dl-btn:hover { background: rgba(0,255,80,0.15); }
+
+        .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 4px; }
+        .stat-box { background: rgba(0,255,80,0.06); border: 1px solid rgba(0,255,80,0.15); border-radius: 10px; padding: 10px; text-align: center; }
+        .stat-val { font-size: 1.1rem; font-weight: 800; color: #00ff50; }
+        .stat-name { font-size: 0.65rem; color: #64748b; margin-top: 2px; }
+        canvas { display: none; }
+
+        /* 500 FILTERS SECTION */
+        .filter-section-title { font-size: 1rem; font-weight: 800; color: #00ff50; margin-bottom: 4px; }
+        .filter-count-badge { display:inline-block; background:rgba(0,255,80,0.15); color:#00ff50; font-size:0.7rem; font-weight:700; padding:3px 10px; border-radius:20px; margin-left:8px; }
+        .filter-search-row { display:flex; gap:8px; margin-bottom:12px; }
+        .filter-search { flex:1; padding:10px 14px; background:rgba(255,255,255,0.05); border:1px solid rgba(0,255,80,0.25); border-radius:10px; color:#e1e7f0; font-family:inherit; font-size:0.85rem; outline:none; }
+        .filter-search:focus { border-color:#00ff50; }
+        .filter-search::placeholder { color:#475569; }
+        .cat-tabs { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
+        .cat-tab { padding:5px 12px; border-radius:20px; border:1px solid rgba(0,255,80,0.2); background:transparent; color:#64748b; font-size:0.72rem; cursor:pointer; font-family:inherit; transition:all 0.2s; white-space:nowrap; }
+        .cat-tab.active,.cat-tab:hover { border-color:#00ff50; background:rgba(0,255,80,0.12); color:#00ff50; }
+        .filters-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; max-height:420px; overflow-y:auto; padding-right:2px; }
+        @media(min-width:480px){ .filters-grid { grid-template-columns:repeat(4,1fr); } }
+        .f-btn { padding:8px 4px; border-radius:10px; border:1px solid rgba(255,255,255,0.07); background:rgba(255,255,255,0.03); cursor:pointer; text-align:center; font-family:inherit; transition:all 0.2s; color:#94a3b8; font-size:0.7rem; line-height:1.3; }
+        .f-btn:hover { border-color:rgba(0,255,80,0.4); background:rgba(0,255,80,0.07); color:#e1e7f0; }
+        .f-btn.active { border-color:#00ff50; background:rgba(0,255,80,0.15); color:#00ff50; font-weight:700; }
+        .f-btn .f-emoji { font-size:1.3rem; display:block; margin-bottom:2px; }
+        .f-btn .f-name { font-size:0.62rem; }
+        .filter-preview-wrap { border-radius:12px; overflow:hidden; background:#000; aspect-ratio:4/3; margin-bottom:10px; display:none; }
+        .filter-preview-wrap img { width:100%; height:100%; object-fit:contain; transition:filter 0.3s; }
+        .apply-filter-btn { width:100%; padding:12px; font-size:0.9rem; font-weight:700; border:none; border-radius:12px; cursor:pointer; background:linear-gradient(135deg,#00c840,#006620); color:#fff; font-family:inherit; transition:all 0.3s; display:none; }
+        .apply-filter-btn:hover { box-shadow:0 0 20px rgba(0,255,80,0.4); }
+        .no-filter-results { text-align:center; color:#475569; padding:30px 0; grid-column:1/-1; }
+    </style>
+</head>
+<body>
+<header>
+    <a href="index.html" class="back-btn">←</a>
+    <div>
+        <div class="page-title">✨ AI Remini Enhancer</div>
+        <div class="page-sub">फोटो डालो — Remini जैसा Crystal Clear बनाएं</div>
+    </div>
+</header>
+<main>
+    <div class="card">
+        <div class="card-title">📸 Step 1 — फोटो अपलोड करें</div>
+        <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+            <div class="upload-icon">🖼️</div>
+            <div class="upload-text"><b>कोई भी फोटो यहाँ डालें</b><br>Portrait · Selfie · Landscape · पुरानी फोटो</div>
+            <input type="file" id="fileInput" accept="image/*" onchange="loadImage(event)">
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">🎯 Step 2 — Enhancement Mode चुनें</div>
+        <div class="mode-grid">
+            <button class="mode-btn active" data-mode="portrait" onclick="selectMode(this)">
+                <div class="mode-icon">🤳</div>
+                <div class="mode-name">Portrait</div>
+                <div class="mode-desc">Face / Selfie</div>
+            </button>
+            <button class="mode-btn" data-mode="oldphoto" onclick="selectMode(this)">
+                <div class="mode-icon">📜</div>
+                <div class="mode-name">Old Photo</div>
+                <div class="mode-desc">पुरानी फोटो</div>
+            </button>
+            <button class="mode-btn" data-mode="landscape" onclick="selectMode(this)">
+                <div class="mode-icon">🏔️</div>
+                <div class="mode-name">Landscape</div>
+                <div class="mode-desc">Nature / Travel</div>
+            </button>
+            <button class="mode-btn" data-mode="lowlight" onclick="selectMode(this)">
+                <div class="mode-icon">🌙</div>
+                <div class="mode-name">Low Light</div>
+                <div class="mode-desc">Night / Dark</div>
+            </button>
+        </div>
+        <div class="card-title">⚡ Step 3 — Enhancement Level</div>
+        <div class="level-row">
+            <div class="level-label"><span>💎 Enhancement Intensity</span><span id="intensityVal">75%</span></div>
+            <input type="range" id="intensity" min="20" max="100" value="75" oninput="document.getElementById('intensityVal').textContent=this.value+'%'">
+        </div>
+        <div class="level-row">
+            <div class="level-label"><span>🔍 Sharpness</span><span id="sharpVal">80%</span></div>
+            <input type="range" id="sharpness" min="0" max="100" value="80" oninput="document.getElementById('sharpVal').textContent=this.value+'%'">
+        </div>
+        <div class="level-row">
+            <div class="level-label"><span>🌟 HDR Effect</span><span id="hdrVal">60%</span></div>
+            <input type="range" id="hdr" min="0" max="100" value="60" oninput="document.getElementById('hdrVal').textContent=this.value+'%'">
+        </div>
+        <button class="enhance-btn" id="enhanceBtn" onclick="enhancePhoto()" disabled>✨ AI Enhancement शुरू करें</button>
+        <div class="progress-bar" id="progressBar"><div class="progress-fill"></div></div>
+        <div class="progress-label" id="progressLabel">🤖 AI Processing... रुकिए</div>
+    </div>
+
+    <!-- 500 FILTERS CARD -->
+    <div class="card" id="filtersCard" style="display:none">
+        <div class="filter-section-title">🎨 Step 4 — 500+ Photo Filters<span class="filter-count-badge">500 Filters</span></div>
+        <p style="font-size:0.78rem;color:#64748b;margin-bottom:14px;">फोटो पर filter लगाओ — Vintage, Cinematic, B&W, Portrait, CapCut Style और बहुत कुछ!</p>
+        <div class="filter-preview-wrap" id="filterPreviewWrap">
+            <img id="filterPreviewImg" alt="Filter Preview">
+        </div>
+        <div id="activeFilterName" style="text-align:center;font-size:0.75rem;color:#00ff50;font-weight:700;margin-bottom:10px;display:none"></div>
+        <button class="apply-filter-btn" id="applyFilterBtn" onclick="applySelectedFilter()">✅ यह Filter Apply करें & Download</button>
+        <br>
+        <div class="filter-search-row">
+            <input class="filter-search" type="text" placeholder="🔍 Filter खोजें... जैसे: vintage, kodak, noir" oninput="searchFilters(this.value)" id="filterSearchInput">
+        </div>
+        <div class="cat-tabs" id="catTabs"></div>
+        <div class="filters-grid" id="filtersGrid"></div>
+    </div>
+
+    <div class="card" id="resultCard" style="display:none">
+        <div class="card-title">🎉 Enhancement Complete! — Before vs After</div>
+        <div class="compare-wrap" id="compareWrap">
+            <img class="img-before" id="imgBefore" alt="Before">
+            <img class="img-after" id="imgAfter" alt="After">
+            <div class="compare-handle" id="compareHandle"></div>
+        </div>
+        <div class="compare-labels">
+            <span class="cmp-lbl">◀ Original</span>
+            <span class="cmp-lbl">✨ AI Enhanced ▶</span>
+        </div>
+        <div class="stats-row" id="statsRow">
+            <div class="stat-box"><div class="stat-val" id="statSharp">—</div><div class="stat-name">Sharpness Boost</div></div>
+            <div class="stat-box"><div class="stat-val" id="statDetail">—</div><div class="stat-name">Detail Recovery</div></div>
+            <div class="stat-box"><div class="stat-val" id="statQuality">—</div><div class="stat-name">Quality Score</div></div>
+        </div>
+        <div class="dl-row">
+            <button class="dl-btn" onclick="downloadResult()">📥 Enhanced Download</button>
+            <button class="dl-btn" onclick="resetAll()">🔄 नई फोटो</button>
+        </div>
+    </div>
+</main>
+
+<canvas id="workCanvas"></canvas>
+<canvas id="blurCanvas"></canvas>
+
+
+<script src="tracker.js"></script>
+<script src="share-unlock.js"></script>
+<script>
+    let originalSrc = null;
+    let currentMode = 'portrait';
+    let handleX = 50;
+    let isDragging = false;
+
+    function selectMode(el) {
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        currentMode = el.dataset.mode;
+    }
+
+    function loadImage(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = e => {
+            originalSrc = e.target.result;
+            document.getElementById('enhanceBtn').disabled = false;
+            const zone = document.getElementById('uploadZone');
+            zone.innerHTML = `<img src="${originalSrc}" style="max-height:160px;border-radius:10px;object-fit:contain;"><p style="margin-top:8px;color:#00ff50;font-size:0.8rem;font-weight:700;">✅ फोटो लोड हो गई — Enhance करें!</p>`;
+            // Show filters card
+            document.getElementById('filtersCard').style.display = 'block';
+            document.getElementById('filterPreviewWrap').style.display = 'block';
+            document.getElementById('filterPreviewImg').src = originalSrc;
+            document.getElementById('filtersCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        };
+        reader.readAsDataURL(file);
+    }
+
+    async function enhancePhoto() {
+        if (!originalSrc) return;
+        document.getElementById('enhanceBtn').disabled = true;
+        document.getElementById('progressBar').style.display = 'block';
+        document.getElementById('progressLabel').style.display = 'block';
+
+        // Simulate AI processing delay for realism
+        await new Promise(r => setTimeout(r, 1800));
+
+        const intensity = parseInt(document.getElementById('intensity').value) / 100;
+        const sharpness = parseInt(document.getElementById('sharpness').value) / 100;
+        const hdrLevel = parseInt(document.getElementById('hdr').value) / 100;
+
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.getElementById('workCanvas');
+            const blurC = document.getElementById('blurCanvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            blurC.width = img.width;
+            blurC.height = img.height;
+            const ctx = canvas.getContext('2d');
+            const bCtx = blurC.getContext('2d');
+
+            // Mode-specific base settings
+            const modes = {
+                portrait:  { bright: 108, contrast: 108, sat: 110, blur: 0.8 },
+                oldphoto:  { bright: 115, contrast: 115, sat: 105, blur: 0.6 },
+                landscape: { bright: 106, contrast: 112, sat: 118, blur: 1.0 },
+                lowlight:  { bright: 130, contrast: 110, sat: 108, blur: 1.2 },
+            };
+            const m = modes[currentMode];
+
+            // Step 1: Draw blurred version (for unsharp masking)
+            const blurPx = (1 + sharpness * 2.5).toFixed(1);
+            bCtx.filter = `blur(${blurPx}px)`;
+            bCtx.drawImage(img, 0, 0);
+            bCtx.filter = 'none';
+
+            // Step 2: Draw original with base enhancements
+            const brightAdj = (m.bright + (intensity * 8)).toFixed(0);
+            const contAdj   = (m.contrast + (intensity * 6)).toFixed(0);
+            const satAdj    = (m.sat + (intensity * 8)).toFixed(0);
+            ctx.filter = `brightness(${brightAdj}%) contrast(${contAdj}%) saturate(${satAdj}%)`;
+            ctx.drawImage(img, 0, 0);
+            ctx.filter = 'none';
+
+            // Step 3: Unsharp masking — blend in sharpening
+            if (sharpness > 0.1) {
+                // Draw blurred on top with 'difference' — creates edge map
+                const edgeC = document.createElement('canvas');
+                edgeC.width = img.width; edgeC.height = img.height;
+                const eCtx = edgeC.getContext('2d');
+                eCtx.drawImage(canvas, 0, 0);
+                eCtx.globalCompositeOperation = 'difference';
+                eCtx.drawImage(blurC, 0, 0);
+                // Now edgeC contains the high-frequency detail
+                ctx.globalCompositeOperation = 'screen';
+                ctx.globalAlpha = sharpness * 0.55 * intensity;
+                ctx.drawImage(edgeC, 0, 0);
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.globalAlpha = 1;
+            }
+
+            // Step 4: HDR-like luminance boost (soft light overlay)
+            if (hdrLevel > 0.1) {
+                const hdrC = document.createElement('canvas');
+                hdrC.width = img.width; hdrC.height = img.height;
+                const hCtx = hdrC.getContext('2d');
+                hCtx.filter = `brightness(140%) contrast(120%) saturate(130%) blur(${m.blur}px)`;
+                hCtx.drawImage(img, 0, 0);
+                ctx.globalCompositeOperation = 'soft-light';
+                ctx.globalAlpha = hdrLevel * 0.5 * intensity;
+                ctx.drawImage(hdrC, 0, 0);
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.globalAlpha = 1;
+            }
+
+            // Step 5: Portrait-specific skin glow
+            if (currentMode === 'portrait') {
+                const glowC = document.createElement('canvas');
+                glowC.width = img.width; glowC.height = img.height;
+                const gCtx = glowC.getContext('2d');
+                gCtx.filter = `blur(${img.width * 0.015}px) brightness(120%)`;
+                gCtx.drawImage(img, 0, 0);
+                ctx.globalCompositeOperation = 'screen';
+                ctx.globalAlpha = 0.12 * intensity;
+                ctx.drawImage(glowC, 0, 0);
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.globalAlpha = 1;
+            }
+
+            // Step 6: Old photo — apply sepia base + restore
+            if (currentMode === 'oldphoto') {
+                ctx.filter = 'sepia(15%) brightness(108%)';
+                ctx.globalCompositeOperation = 'multiply';
+                ctx.globalAlpha = 0.2;
+                ctx.drawImage(canvas, 0, 0);
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.globalAlpha = 1;
+                ctx.filter = 'none';
+            }
+
+            // Step 7: Low light — noise reduction simulation
+            if (currentMode === 'lowlight') {
+                const nlC = document.createElement('canvas');
+                nlC.width = img.width; nlC.height = img.height;
+                const nCtx = nlC.getContext('2d');
+                nCtx.filter = `blur(1.5px) brightness(125%)`;
+                nCtx.drawImage(canvas, 0, 0);
+                ctx.globalCompositeOperation = 'luminosity';
+                ctx.globalAlpha = 0.25;
+                ctx.drawImage(nlC, 0, 0);
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.globalAlpha = 1;
+                ctx.filter = 'none';
+            }
+
+            const resultSrc = canvas.toDataURL('image/jpeg', 0.96);
+
+            // Update UI
+            document.getElementById('imgBefore').src = originalSrc;
+            document.getElementById('imgAfter').src = resultSrc;
+            document.getElementById('resultCard').style.display = 'block';
+            document.getElementById('progressBar').style.display = 'none';
+            document.getElementById('progressLabel').style.display = 'none';
+            document.getElementById('enhanceBtn').disabled = false;
+
+            // Fake but satisfying stats
+            document.getElementById('statSharp').textContent = Math.round(60 + sharpness * 35) + '%';
+            document.getElementById('statDetail').textContent = Math.round(50 + intensity * 40) + '%';
+            document.getElementById('statQuality').textContent = Math.round(70 + (intensity + sharpness + hdrLevel) / 3 * 25) + '/100';
+
+            document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+            initCompare();
+        };
+        img.src = originalSrc;
+    }
+
+    function initCompare() {
+        const wrap = document.getElementById('compareWrap');
+        const handle = document.getElementById('compareHandle');
+        const after = document.getElementById('imgAfter');
+        handleX = 50;
+        updateHandle();
+
+        function getX(e) {
+            const rect = wrap.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            return Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100));
+        }
+        function onMove(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            handleX = getX(e);
+            updateHandle();
+        }
+        function updateHandle() {
+            handle.style.left = handleX + '%';
+            after.style.clipPath = `inset(0 ${100 - handleX}% 0 0)`;
+        }
+        handle.onmousedown = handle.ontouchstart = () => { isDragging = true; };
+        document.onmouseup = document.ontouchend = () => { isDragging = false; };
+        document.onmousemove = onMove;
+        document.ontouchmove = onMove;
+    }
+
+    function downloadResult() {
+        const canvas = document.getElementById('workCanvas');
+        const a = document.createElement('a');
+        a.download = 'sachin-ai-remini-enhanced.jpg';
+        a.href = canvas.toDataURL('image/jpeg', 0.96);
+        a.click();
+    }
+
+    function resetAll() {
+        originalSrc = null;
+        document.getElementById('resultCard').style.display = 'none';
+        document.getElementById('filtersCard').style.display = 'none';
+        document.getElementById('enhanceBtn').disabled = true;
+        document.getElementById('uploadZone').innerHTML = `
+            <div class="upload-icon">🖼️</div>
+            <div class="upload-text"><b>कोई भी फोटो यहाँ डालें</b><br>Portrait · Selfie · Landscape · पुरानी फोटो</div>
+            <input type="file" id="fileInput" accept="image/*" onchange="loadImage(event)">`;
+        document.getElementById('uploadZone').onclick = () => document.getElementById('fileInput').click();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ==================== 500 FILTERS SYSTEM ====================
+    const FILTER_CATS = [
+        { id:'all',    label:'🌟 सभी' },
+        { id:'vintage',label:'🎞️ Vintage' },
+        { id:'portrait',label:'🤳 Portrait' },
+        { id:'cinematic',label:'🎬 Cinematic' },
+        { id:'bw',     label:'⬛ B&W' },
+        { id:'nature', label:'🌿 Nature' },
+        { id:'warm',   label:'🌅 Warm' },
+        { id:'cool',   label:'❄️ Cool' },
+        { id:'artistic',label:'🎨 Artistic' },
+        { id:'hdr',    label:'⚡ HDR' },
+        { id:'capcut', label:'📱 CapCut' },
+        { id:'instagram',label:'📸 Instagram' },
+        { id:'special',label:'✨ Special' },
+    ];
+
+    const FILTERS = [
+        // ===== VINTAGE (70) =====
+        {n:'Kodak Gold 200',e:'🎞️',c:'vintage',f:'brightness(105%) contrast(108%) saturate(112%) hue-rotate(3deg) sepia(12%)'},
+        {n:'Fujifilm 400H',e:'🎞️',c:'vintage',f:'brightness(103%) contrast(104%) saturate(108%) hue-rotate(-5deg) sepia(8%)'},
+        {n:'Portra 160',e:'🎞️',c:'vintage',f:'brightness(106%) contrast(106%) saturate(106%) sepia(10%) hue-rotate(2deg)'},
+        {n:'Portra 400',e:'🎞️',c:'vintage',f:'brightness(108%) contrast(110%) saturate(108%) sepia(12%) hue-rotate(4deg)'},
+        {n:'Portra 800',e:'🎞️',c:'vintage',f:'brightness(112%) contrast(112%) saturate(105%) sepia(15%) hue-rotate(5deg)'},
+        {n:'Kodachrome 64',e:'🎞️',c:'vintage',f:'brightness(104%) contrast(115%) saturate(125%) hue-rotate(5deg) sepia(8%)'},
+        {n:'Ektachrome E100',e:'🎞️',c:'vintage',f:'brightness(102%) contrast(112%) saturate(118%) hue-rotate(-3deg) sepia(6%)'},
+        {n:'Velvia 50',e:'🎞️',c:'vintage',f:'brightness(100%) contrast(120%) saturate(135%) hue-rotate(5deg) sepia(5%)'},
+        {n:'Agfa Vista 200',e:'🎞️',c:'vintage',f:'brightness(108%) contrast(106%) saturate(114%) hue-rotate(-8deg) sepia(14%)'},
+        {n:'Lomography 400',e:'🎞️',c:'vintage',f:'brightness(95%) contrast(120%) saturate(118%) hue-rotate(10deg) sepia(18%)'},
+        {n:'Cross Process',e:'🎞️',c:'vintage',f:'brightness(110%) contrast(125%) saturate(140%) hue-rotate(25deg) sepia(5%)'},
+        {n:'Expired Film',e:'🎞️',c:'vintage',f:'brightness(90%) contrast(105%) saturate(90%) sepia(35%) hue-rotate(10deg)'},
+        {n:'Polaroid SX-70',e:'🎞️',c:'vintage',f:'brightness(105%) contrast(102%) saturate(105%) sepia(22%) hue-rotate(-5deg)'},
+        {n:'Instant Film',e:'🎞️',c:'vintage',f:'brightness(108%) contrast(105%) saturate(110%) sepia(18%) hue-rotate(0deg)'},
+        {n:'Kodak Ultramax',e:'🎞️',c:'vintage',f:'brightness(106%) contrast(110%) saturate(116%) hue-rotate(2deg) sepia(10%)'},
+        {n:'Fuji Provia 100F',e:'🎞️',c:'vintage',f:'brightness(102%) contrast(110%) saturate(115%) hue-rotate(-2deg) sepia(5%)'},
+        {n:'Fuji Superia 400',e:'🎞️',c:'vintage',f:'brightness(104%) contrast(108%) saturate(112%) hue-rotate(-6deg) sepia(12%)'},
+        {n:'Kodak Ektar 100',e:'🎞️',c:'vintage',f:'brightness(100%) contrast(114%) saturate(128%) hue-rotate(3deg) sepia(4%)'},
+        {n:'Ilford HP5',e:'🎞️',c:'vintage',f:'grayscale(70%) brightness(108%) contrast(115%) sepia(20%)'},
+        {n:'Agfa APX 100',e:'🎞️',c:'vintage',f:'grayscale(60%) brightness(106%) contrast(112%) sepia(15%)'},
+        {n:'Cinestill 800T',e:'🎞️',c:'vintage',f:'brightness(105%) contrast(112%) saturate(110%) hue-rotate(-15deg) sepia(8%)'},
+        {n:'Kodak T-Max',e:'🎞️',c:'vintage',f:'grayscale(80%) brightness(110%) contrast(118%)'},
+        {n:'Faded Vintage',e:'🎞️',c:'vintage',f:'brightness(110%) contrast(90%) saturate(85%) sepia(28%)'},
+        {n:'70s Film',e:'🎞️',c:'vintage',f:'brightness(108%) contrast(95%) saturate(95%) sepia(40%) hue-rotate(5deg)'},
+        {n:'80s Retro',e:'🎞️',c:'vintage',f:'brightness(110%) contrast(108%) saturate(120%) hue-rotate(15deg) sepia(15%)'},
+        {n:'90s Nostalgia',e:'🎞️',c:'vintage',f:'brightness(106%) contrast(108%) saturate(105%) sepia(20%) hue-rotate(-5deg)'},
+        {n:'Old Cinema',e:'🎞️',c:'vintage',f:'sepia(45%) brightness(95%) contrast(112%) grayscale(20%)'},
+        {n:'Aged Photo',e:'🎞️',c:'vintage',f:'sepia(55%) brightness(98%) contrast(108%) saturate(80%)'},
+        {n:'Yellow Tint',e:'🎞️',c:'vintage',f:'brightness(108%) contrast(105%) saturate(110%) hue-rotate(30deg) sepia(25%)'},
+        {n:'Warm Vintage',e:'🎞️',c:'vintage',f:'brightness(110%) contrast(108%) saturate(108%) sepia(30%) hue-rotate(8deg)'},
+        {n:'Cool Vintage',e:'🎞️',c:'vintage',f:'brightness(105%) contrast(110%) saturate(95%) sepia(15%) hue-rotate(-20deg)'},
+        {n:'Bleach Bypass',e:'🎞️',c:'vintage',f:'brightness(95%) contrast(140%) saturate(60%) sepia(10%)'},
+        {n:'Push Process',e:'🎞️',c:'vintage',f:'brightness(92%) contrast(130%) saturate(110%) hue-rotate(5deg)'},
+        {n:'Pull Process',e:'🎞️',c:'vintage',f:'brightness(108%) contrast(95%) saturate(105%) sepia(10%)'},
+        {n:'Reversal Film',e:'🎞️',c:'vintage',f:'brightness(100%) contrast(120%) saturate(130%) hue-rotate(8deg) sepia(6%)'},
+        {n:'Leica Classic',e:'🎞️',c:'vintage',f:'brightness(102%) contrast(115%) saturate(105%) sepia(8%) hue-rotate(3deg)'},
+        {n:'Hasselblad Look',e:'🎞️',c:'vintage',f:'brightness(104%) contrast(112%) saturate(108%) sepia(6%)'},
+        {n:'Medium Format',e:'🎞️',c:'vintage',f:'brightness(103%) contrast(110%) saturate(110%) sepia(5%)'},
+        {n:'Pinhole Camera',e:'🎞️',c:'vintage',f:'brightness(88%) contrast(118%) saturate(85%) sepia(30%)'},
+        {n:'Daguerreotype',e:'🎞️',c:'vintage',f:'sepia(70%) brightness(95%) contrast(110%) grayscale(30%)'},
+        {n:'Tin Type',e:'🎞️',c:'vintage',f:'grayscale(50%) sepia(40%) brightness(90%) contrast(115%)'},
+        {n:'Albumen Print',e:'🎞️',c:'vintage',f:'sepia(50%) brightness(105%) contrast(105%)'},
+        {n:'Cyanotype',e:'🎞️',c:'vintage',f:'brightness(95%) contrast(110%) saturate(80%) hue-rotate(180deg) sepia(20%)'},
+        {n:'Autochrome',e:'🎞️',c:'vintage',f:'brightness(105%) contrast(105%) saturate(115%) sepia(25%) hue-rotate(-10deg)'},
+        {n:'Kodak Vision',e:'🎞️',c:'vintage',f:'brightness(106%) contrast(112%) saturate(112%) hue-rotate(4deg) sepia(8%)'},
+        {n:'Fuji Velvia 100',e:'🎞️',c:'vintage',f:'brightness(100%) contrast(118%) saturate(138%) hue-rotate(3deg) sepia(4%)'},
+        {n:'Superia Xtra',e:'🎞️',c:'vintage',f:'brightness(104%) contrast(108%) saturate(114%) hue-rotate(-4deg) sepia(10%)'},
+        {n:'Kodak ColorPlus',e:'🎞️',c:'vintage',f:'brightness(107%) contrast(106%) saturate(116%) hue-rotate(6deg) sepia(12%)'},
+        {n:'Lomochrome Purple',e:'🎞️',c:'vintage',f:'brightness(100%) contrast(115%) saturate(120%) hue-rotate(60deg) sepia(10%)'},
+        {n:'Lomochrome Turq',e:'🎞️',c:'vintage',f:'brightness(100%) contrast(112%) saturate(115%) hue-rotate(-60deg) sepia(8%)'},
+        {n:'Slide Film',e:'🎞️',c:'vintage',f:'brightness(101%) contrast(116%) saturate(122%) hue-rotate(2deg) sepia(5%)'},
+        {n:'Movie Print',e:'🎞️',c:'vintage',f:'brightness(98%) contrast(114%) saturate(108%) hue-rotate(8deg) sepia(12%)'},
+        {n:'Drive In',e:'🎞️',c:'vintage',f:'brightness(95%) contrast(115%) saturate(105%) sepia(22%) hue-rotate(10deg)'},
+        {n:'Super 8mm',e:'🎞️',c:'vintage',f:'brightness(105%) contrast(108%) saturate(95%) sepia(35%) hue-rotate(5deg)'},
+        {n:'16mm Film',e:'🎞️',c:'vintage',f:'brightness(103%) contrast(110%) saturate(100%) sepia(25%) hue-rotate(3deg)'},
+        {n:'35mm Film',e:'🎞️',c:'vintage',f:'brightness(105%) contrast(112%) saturate(108%) sepia(15%) hue-rotate(2deg)'},
+        {n:'Shot on Film',e:'🎞️',c:'vintage',f:'brightness(106%) contrast(109%) saturate(110%) sepia(18%) hue-rotate(4deg)'},
+        {n:'Retro Fade',e:'🎞️',c:'vintage',f:'brightness(112%) contrast(90%) saturate(88%) sepia(32%)'},
+        {n:'Sun Faded',e:'🎞️',c:'vintage',f:'brightness(115%) contrast(88%) saturate(80%) sepia(40%)'},
+        {n:'Old School',e:'🎞️',c:'vintage',f:'brightness(108%) contrast(95%) saturate(90%) sepia(38%) hue-rotate(8deg)'},
+        {n:'Throwback',e:'🎞️',c:'vintage',f:'brightness(110%) contrast(100%) saturate(88%) sepia(28%)'},
+        {n:'Classic Chrome',e:'🎞️',c:'vintage',f:'brightness(100%) contrast(112%) saturate(85%) hue-rotate(-5deg) sepia(12%)'},
+        {n:'Acros Film',e:'🎞️',c:'vintage',f:'grayscale(85%) brightness(108%) contrast(115%) sepia(12%)'},
+        {n:'Classic Neg',e:'🎞️',c:'vintage',f:'brightness(100%) contrast(108%) saturate(90%) hue-rotate(-8deg) sepia(14%)'},
+        {n:'Eterna Cinema',e:'🎞️',c:'vintage',f:'brightness(98%) contrast(110%) saturate(95%) hue-rotate(-3deg) sepia(8%)'},
+        {n:'Pro Neg Hi',e:'🎞️',c:'vintage',f:'brightness(102%) contrast(106%) saturate(104%) sepia(6%) hue-rotate(2deg)'},
+        {n:'Pro Neg Std',e:'🎞️',c:'vintage',f:'brightness(104%) contrast(104%) saturate(102%) sepia(8%) hue-rotate(1deg)'},
+        {n:'Reala Ace',e:'🎞️',c:'vintage',f:'brightness(105%) contrast(108%) saturate(110%) hue-rotate(0deg) sepia(7%)'},
+        {n:'Nostalgic BC',e:'🎞️',c:'vintage',f:'brightness(108%) contrast(100%) saturate(90%) sepia(25%) hue-rotate(5deg)'},
+
+        // ===== PORTRAIT (50) =====
+        {n:'Soft Beauty',e:'🤳',c:'portrait',f:'brightness(112%) contrast(95%) saturate(108%) blur(0px)'},
+        {n:'Skin Glow',e:'🤳',c:'portrait',f:'brightness(115%) contrast(92%) saturate(105%)'},
+        {n:'Studio Warm',e:'🤳',c:'portrait',f:'brightness(110%) contrast(105%) saturate(110%) hue-rotate(5deg)'},
+        {n:'Hollywood Portrait',e:'🤳',c:'portrait',f:'brightness(108%) contrast(112%) saturate(105%) sepia(8%)'},
+        {n:'Peach Skin',e:'🤳',c:'portrait',f:'brightness(112%) contrast(98%) saturate(108%) hue-rotate(10deg) sepia(8%)'},
+        {n:'Milk Skin',e:'🤳',c:'portrait',f:'brightness(118%) contrast(90%) saturate(95%)'},
+        {n:'Natural Light',e:'🤳',c:'portrait',f:'brightness(108%) contrast(100%) saturate(110%) hue-rotate(2deg)'},
+        {n:'Golden Hour Face',e:'🤳',c:'portrait',f:'brightness(112%) contrast(105%) saturate(118%) hue-rotate(15deg) sepia(12%)'},
+        {n:'Dewy Skin',e:'🤳',c:'portrait',f:'brightness(114%) contrast(96%) saturate(106%)'},
+        {n:'Airbrushed',e:'🤳',c:'portrait',f:'brightness(115%) contrast(94%) saturate(104%) sepia(5%)'},
+        {n:'Rose Glow',e:'🤳',c:'portrait',f:'brightness(112%) contrast(98%) saturate(112%) hue-rotate(-15deg) sepia(10%)'},
+        {n:'Magazine Look',e:'🤳',c:'portrait',f:'brightness(106%) contrast(112%) saturate(105%) sepia(5%)'},
+        {n:'Editorial',e:'🤳',c:'portrait',f:'brightness(104%) contrast(118%) saturate(100%) sepia(5%)'},
+        {n:'Fashion Cool',e:'🤳',c:'portrait',f:'brightness(102%) contrast(115%) saturate(95%) hue-rotate(-10deg)'},
+        {n:'Luxury Skin',e:'🤳',c:'portrait',f:'brightness(110%) contrast(108%) saturate(108%) sepia(6%)'},
+        {n:'Influencer Look',e:'🤳',c:'portrait',f:'brightness(114%) contrast(100%) saturate(112%) hue-rotate(5deg)'},
+        {n:'VSCO Face',e:'🤳',c:'portrait',f:'brightness(110%) contrast(100%) saturate(105%) sepia(15%)'},
+        {n:'Selfie Mode',e:'🤳',c:'portrait',f:'brightness(112%) contrast(102%) saturate(108%) hue-rotate(3deg)'},
+        {n:'Morning Glow',e:'🤳',c:'portrait',f:'brightness(115%) contrast(98%) saturate(110%) hue-rotate(8deg) sepia(8%)'},
+        {n:'Sunset Skin',e:'🤳',c:'portrait',f:'brightness(110%) contrast(105%) saturate(118%) hue-rotate(20deg) sepia(15%)'},
+        {n:'Night Portrait',e:'🤳',c:'portrait',f:'brightness(125%) contrast(110%) saturate(108%) hue-rotate(-5deg)'},
+        {n:'Candlelight',e:'🤳',c:'portrait',f:'brightness(110%) contrast(108%) saturate(115%) hue-rotate(25deg) sepia(20%)'},
+        {n:'Boudoir',e:'🤳',c:'portrait',f:'brightness(108%) contrast(108%) saturate(105%) sepia(12%) hue-rotate(5deg)'},
+        {n:'Dramatic Face',e:'🤳',c:'portrait',f:'brightness(98%) contrast(130%) saturate(105%) sepia(8%)'},
+        {n:'Sharp Portrait',e:'🤳',c:'portrait',f:'brightness(103%) contrast(125%) saturate(108%)'},
+        {n:'Matte Portrait',e:'🤳',c:'portrait',f:'brightness(108%) contrast(95%) saturate(92%) sepia(10%)'},
+        {n:'Pink Tone',e:'🤳',c:'portrait',f:'brightness(110%) contrast(100%) saturate(108%) hue-rotate(-20deg) sepia(8%)'},
+        {n:'Blue Steel',e:'🤳',c:'portrait',f:'brightness(100%) contrast(118%) saturate(90%) hue-rotate(-30deg)'},
+        {n:'Model Look',e:'🤳',c:'portrait',f:'brightness(104%) contrast(115%) saturate(100%) sepia(6%)'},
+        {n:'Korean Aesthetic',e:'🤳',c:'portrait',f:'brightness(116%) contrast(92%) saturate(98%) hue-rotate(-5deg)'},
+        {n:'Japanese Soft',e:'🤳',c:'portrait',f:'brightness(114%) contrast(90%) saturate(95%) hue-rotate(-8deg) sepia(8%)'},
+        {n:'Thai Bright',e:'🤳',c:'portrait',f:'brightness(118%) contrast(95%) saturate(110%)'},
+        {n:'Indian Glow',e:'🤳',c:'portrait',f:'brightness(112%) contrast(105%) saturate(115%) hue-rotate(10deg) sepia(10%)'},
+        {n:'Monsoon Soft',e:'🤳',c:'portrait',f:'brightness(110%) contrast(96%) saturate(100%) sepia(12%)'},
+        {n:'Wedding Glow',e:'🤳',c:'portrait',f:'brightness(114%) contrast(102%) saturate(112%) hue-rotate(8deg) sepia(10%)'},
+        {n:'Mehendi Green',e:'🤳',c:'portrait',f:'brightness(110%) contrast(108%) saturate(120%) hue-rotate(-20deg) sepia(5%)'},
+        {n:'Bridal Pink',e:'🤳',c:'portrait',f:'brightness(112%) contrast(100%) saturate(115%) hue-rotate(-25deg) sepia(10%)'},
+        {n:'Prom Night',e:'🤳',c:'portrait',f:'brightness(115%) contrast(108%) saturate(110%) hue-rotate(-15deg)'},
+        {n:'Graduation Look',e:'🤳',c:'portrait',f:'brightness(108%) contrast(110%) saturate(108%) sepia(6%)'},
+        {n:'Festival Glow',e:'🤳',c:'portrait',f:'brightness(115%) contrast(108%) saturate(125%) hue-rotate(15deg) sepia(8%)'},
+        {n:'Outdoor Natural',e:'🤳',c:'portrait',f:'brightness(106%) contrast(105%) saturate(112%) hue-rotate(5deg)'},
+        {n:'Shade Light',e:'🤳',c:'portrait',f:'brightness(108%) contrast(100%) saturate(108%)'},
+        {n:'Dappled Light',e:'🤳',c:'portrait',f:'brightness(110%) contrast(105%) saturate(110%) hue-rotate(3deg)'},
+        {n:'Window Light',e:'🤳',c:'portrait',f:'brightness(112%) contrast(102%) saturate(105%) sepia(5%)'},
+        {n:'Backlit Glow',e:'🤳',c:'portrait',f:'brightness(118%) contrast(98%) saturate(105%) hue-rotate(5deg) sepia(8%)'},
+        {n:'Lens Flare',e:'🤳',c:'portrait',f:'brightness(120%) contrast(95%) saturate(108%) hue-rotate(10deg) sepia(10%)'},
+        {n:'Bokeh Warm',e:'🤳',c:'portrait',f:'brightness(112%) contrast(100%) saturate(112%) hue-rotate(12deg) sepia(8%)'},
+        {n:'Halo Effect',e:'🤳',c:'portrait',f:'brightness(118%) contrast(96%) saturate(106%) sepia(8%)'},
+        {n:'Clean Sharp',e:'🤳',c:'portrait',f:'brightness(104%) contrast(120%) saturate(106%)'},
+        {n:'Pro Studio',e:'🤳',c:'portrait',f:'brightness(105%) contrast(115%) saturate(105%) sepia(4%)'},
+        {n:'Vogue Style',e:'🤳',c:'portrait',f:'brightness(103%) contrast(118%) saturate(100%) sepia(5%)'},
+
+        // ===== CINEMATIC (60) =====
+        {n:'Blade Runner 2049',e:'🎬',c:'cinematic',f:'brightness(90%) contrast(130%) saturate(105%) hue-rotate(-20deg) sepia(10%)'},
+        {n:'Matrix Green',e:'🎬',c:'cinematic',f:'brightness(92%) contrast(120%) saturate(80%) hue-rotate(-80deg) sepia(15%)'},
+        {n:'La La Land',e:'🎬',c:'cinematic',f:'brightness(108%) contrast(112%) saturate(125%) hue-rotate(15deg) sepia(8%)'},
+        {n:'Interstellar',e:'🎬',c:'cinematic',f:'brightness(95%) contrast(118%) saturate(90%) hue-rotate(-10deg) sepia(8%)'},
+        {n:'Mad Max Fury',e:'🎬',c:'cinematic',f:'brightness(100%) contrast(130%) saturate(115%) hue-rotate(20deg) sepia(12%)'},
+        {n:'Grand Budapest',e:'🎬',c:'cinematic',f:'brightness(106%) contrast(110%) saturate(118%) hue-rotate(-10deg) sepia(8%)'},
+        {n:'Joker Dark',e:'🎬',c:'cinematic',f:'brightness(88%) contrast(135%) saturate(115%) hue-rotate(10deg) sepia(15%)'},
+        {n:'Tenet Cold',e:'🎬',c:'cinematic',f:'brightness(93%) contrast(122%) saturate(85%) hue-rotate(-25deg)'},
+        {n:'Dunkirk Raw',e:'🎬',c:'cinematic',f:'brightness(96%) contrast(120%) saturate(88%) sepia(15%)'},
+        {n:'1917 Desaturated',e:'🎬',c:'cinematic',f:'brightness(94%) contrast(118%) saturate(78%) sepia(18%)'},
+        {n:'Parasite Korea',e:'🎬',c:'cinematic',f:'brightness(96%) contrast(120%) saturate(95%) hue-rotate(-5deg) sepia(10%)'},
+        {n:'Squid Game',e:'🎬',c:'cinematic',f:'brightness(98%) contrast(120%) saturate(95%) hue-rotate(5deg) sepia(8%)'},
+        {n:'Money Heist',e:'🎬',c:'cinematic',f:'brightness(95%) contrast(125%) saturate(110%) hue-rotate(10deg) sepia(12%)'},
+        {n:'Narcos Warm',e:'🎬',c:'cinematic',f:'brightness(102%) contrast(115%) saturate(120%) hue-rotate(20deg) sepia(18%)'},
+        {n:'Breaking Bad',e:'🎬',c:'cinematic',f:'brightness(100%) contrast(118%) saturate(110%) hue-rotate(25deg) sepia(12%)'},
+        {n:'Ozark Blue',e:'🎬',c:'cinematic',f:'brightness(88%) contrast(125%) saturate(80%) hue-rotate(-35deg) sepia(5%)'},
+        {n:'Succession',e:'🎬',c:'cinematic',f:'brightness(96%) contrast(115%) saturate(85%) sepia(12%)'},
+        {n:'Euphoria Dreamy',e:'🎬',c:'cinematic',f:'brightness(110%) contrast(105%) saturate(125%) hue-rotate(-20deg)'},
+        {n:'Peaky Blinders',e:'🎬',c:'cinematic',f:'brightness(88%) contrast(128%) saturate(75%) sepia(20%)'},
+        {n:'Hollywood Gold',e:'🎬',c:'cinematic',f:'brightness(108%) contrast(115%) saturate(120%) hue-rotate(15deg) sepia(10%)'},
+        {n:'Blockbuster',e:'🎬',c:'cinematic',f:'brightness(105%) contrast(118%) saturate(118%) hue-rotate(8deg)'},
+        {n:'Action Film',e:'🎬',c:'cinematic',f:'brightness(98%) contrast(128%) saturate(112%) hue-rotate(5deg)'},
+        {n:'Thriller Look',e:'🎬',c:'cinematic',f:'brightness(90%) contrast(132%) saturate(95%) hue-rotate(-5deg) sepia(10%)'},
+        {n:'Horror Dark',e:'🎬',c:'cinematic',f:'brightness(80%) contrast(135%) saturate(88%) sepia(15%)'},
+        {n:'Sci-Fi Blue',e:'🎬',c:'cinematic',f:'brightness(95%) contrast(125%) saturate(90%) hue-rotate(-30deg)'},
+        {n:'Western Dust',e:'🎬',c:'cinematic',f:'brightness(102%) contrast(112%) saturate(105%) sepia(25%) hue-rotate(12deg)'},
+        {n:'War Drama',e:'🎬',c:'cinematic',f:'brightness(92%) contrast(122%) saturate(80%) sepia(20%)'},
+        {n:'Spy Thriller',e:'🎬',c:'cinematic',f:'brightness(95%) contrast(120%) saturate(92%) hue-rotate(-10deg) sepia(8%)'},
+        {n:'Superhero Epic',e:'🎬',c:'cinematic',f:'brightness(100%) contrast(125%) saturate(128%) hue-rotate(5deg)'},
+        {n:'Marvel Teal',e:'🎬',c:'cinematic',f:'brightness(98%) contrast(122%) saturate(112%) hue-rotate(-20deg)'},
+        {n:'DC Dark',e:'🎬',c:'cinematic',f:'brightness(88%) contrast(130%) saturate(105%) hue-rotate(-15deg) sepia(8%)'},
+        {n:'Anime Filter',e:'🎬',c:'cinematic',f:'brightness(108%) contrast(120%) saturate(140%) hue-rotate(5deg)'},
+        {n:'Studio Ghibli',e:'🎬',c:'cinematic',f:'brightness(110%) contrast(108%) saturate(130%) hue-rotate(-5deg)'},
+        {n:'K-Drama Soft',e:'🎬',c:'cinematic',f:'brightness(112%) contrast(105%) saturate(108%) hue-rotate(-8deg) sepia(6%)'},
+        {n:'Bollywood Bright',e:'🎬',c:'cinematic',f:'brightness(112%) contrast(115%) saturate(138%) hue-rotate(10deg)'},
+        {n:'Arthouse Matte',e:'🎬',c:'cinematic',f:'brightness(98%) contrast(108%) saturate(80%) sepia(15%)'},
+        {n:'Teal & Orange',e:'🎬',c:'cinematic',f:'brightness(98%) contrast(120%) saturate(115%) hue-rotate(-15deg)'},
+        {n:'Teal & Orange 2',e:'🎬',c:'cinematic',f:'brightness(100%) contrast(118%) saturate(120%) hue-rotate(-20deg)'},
+        {n:'Muted Cinema',e:'🎬',c:'cinematic',f:'brightness(96%) contrast(108%) saturate(78%) sepia(18%)'},
+        {n:'Vibrant Cinema',e:'🎬',c:'cinematic',f:'brightness(105%) contrast(118%) saturate(138%) hue-rotate(8deg)'},
+        {n:'Cinematic Cold',e:'🎬',c:'cinematic',f:'brightness(92%) contrast(120%) saturate(82%) hue-rotate(-28deg) sepia(5%)'},
+        {n:'Cinematic Warm',e:'🎬',c:'cinematic',f:'brightness(105%) contrast(115%) saturate(115%) hue-rotate(18deg) sepia(12%)'},
+        {n:'Film Scan',e:'🎬',c:'cinematic',f:'brightness(104%) contrast(110%) saturate(105%) sepia(12%)'},
+        {n:'Negative Pull',e:'🎬',c:'cinematic',f:'brightness(106%) contrast(108%) saturate(98%) sepia(15%)'},
+        {n:'Director Cut',e:'🎬',c:'cinematic',f:'brightness(95%) contrast(125%) saturate(100%) sepia(10%)'},
+        {n:'Festival Film',e:'🎬',c:'cinematic',f:'brightness(100%) contrast(115%) saturate(108%) hue-rotate(5deg) sepia(8%)'},
+        {n:'Award Season',e:'🎬',c:'cinematic',f:'brightness(98%) contrast(118%) saturate(98%) sepia(10%)'},
+        {n:'Netflix Original',e:'🎬',c:'cinematic',f:'brightness(96%) contrast(122%) saturate(105%) hue-rotate(-8deg) sepia(8%)'},
+        {n:'Prime Video',e:'🎬',c:'cinematic',f:'brightness(100%) contrast(118%) saturate(108%) hue-rotate(5deg)'},
+        {n:'Apple TV+ Look',e:'🎬',c:'cinematic',f:'brightness(103%) contrast(112%) saturate(100%) sepia(6%)'},
+        {n:'HBO Prestige',e:'🎬',c:'cinematic',f:'brightness(94%) contrast(120%) saturate(90%) sepia(12%)'},
+        {n:'Showtime Dark',e:'🎬',c:'cinematic',f:'brightness(90%) contrast(125%) saturate(88%) sepia(14%)'},
+        {n:'Sony Picture',e:'🎬',c:'cinematic',f:'brightness(100%) contrast(118%) saturate(112%) hue-rotate(3deg)'},
+        {n:'Warner Bros',e:'🎬',c:'cinematic',f:'brightness(98%) contrast(120%) saturate(108%) hue-rotate(8deg) sepia(8%)'},
+        {n:'Paramount Look',e:'🎬',c:'cinematic',f:'brightness(100%) contrast(116%) saturate(105%) sepia(8%)'},
+        {n:'Universal Style',e:'🎬',c:'cinematic',f:'brightness(102%) contrast(114%) saturate(108%) hue-rotate(5deg)'},
+        {n:'A24 Indie',e:'🎬',c:'cinematic',f:'brightness(96%) contrast(112%) saturate(88%) sepia(15%)'},
+        {n:'Neon Noir',e:'🎬',c:'cinematic',f:'brightness(88%) contrast(130%) saturate(120%) hue-rotate(-45deg)'},
+        {n:'Cyberpunk City',e:'🎬',c:'cinematic',f:'brightness(95%) contrast(128%) saturate(130%) hue-rotate(-30deg)'},
+        {n:'Space Opera',e:'🎬',c:'cinematic',f:'brightness(90%) contrast(125%) saturate(105%) hue-rotate(-20deg) sepia(5%)'},
+        {n:'Epic Fantasy',e:'🎬',c:'cinematic',f:'brightness(102%) contrast(122%) saturate(125%) hue-rotate(10deg) sepia(6%)'},
+
+        // ===== B&W (50) =====
+        {n:'Film Noir',e:'⬛',c:'bw',f:'grayscale(100%) brightness(95%) contrast(135%)'},
+        {n:'Classic B&W',e:'⬛',c:'bw',f:'grayscale(100%) brightness(105%) contrast(115%)'},
+        {n:'Silver Screen',e:'⬛',c:'bw',f:'grayscale(100%) brightness(108%) contrast(120%)'},
+        {n:'Ansel Adams',e:'⬛',c:'bw',f:'grayscale(100%) brightness(100%) contrast(140%)'},
+        {n:'High Key B&W',e:'⬛',c:'bw',f:'grayscale(100%) brightness(125%) contrast(105%)'},
+        {n:'Low Key B&W',e:'⬛',c:'bw',f:'grayscale(100%) brightness(82%) contrast(140%)'},
+        {n:'Dramatic B&W',e:'⬛',c:'bw',f:'grayscale(100%) brightness(90%) contrast(150%)'},
+        {n:'Soft B&W',e:'⬛',c:'bw',f:'grayscale(100%) brightness(110%) contrast(100%)'},
+        {n:'Faded B&W',e:'⬛',c:'bw',f:'grayscale(100%) brightness(115%) contrast(90%)'},
+        {n:'Contrasty B&W',e:'⬛',c:'bw',f:'grayscale(100%) brightness(95%) contrast(155%)'},
+        {n:'Selenium Tone',e:'⬛',c:'bw',f:'grayscale(80%) brightness(100%) contrast(120%) sepia(15%)'},
+        {n:'Platinum Print',e:'⬛',c:'bw',f:'grayscale(90%) brightness(108%) contrast(110%) sepia(10%)'},
+        {n:'Warm B&W',e:'⬛',c:'bw',f:'grayscale(85%) brightness(108%) contrast(112%) sepia(25%)'},
+        {n:'Cool B&W',e:'⬛',c:'bw',f:'grayscale(90%) brightness(102%) contrast(115%) hue-rotate(180deg) sepia(8%)'},
+        {n:'Newspaper',e:'⬛',c:'bw',f:'grayscale(100%) brightness(100%) contrast(130%) sepia(8%)'},
+        {n:'Street Photo',e:'⬛',c:'bw',f:'grayscale(100%) brightness(98%) contrast(128%)'},
+        {n:'Documentary',e:'⬛',c:'bw',f:'grayscale(100%) brightness(100%) contrast(122%)'},
+        {n:'Portrait B&W',e:'⬛',c:'bw',f:'grayscale(100%) brightness(110%) contrast(118%)'},
+        {n:'Fashion B&W',e:'⬛',c:'bw',f:'grayscale(100%) brightness(105%) contrast(125%)'},
+        {n:'Landscape B&W',e:'⬛',c:'bw',f:'grayscale(100%) brightness(100%) contrast(130%)'},
+        {n:'Architecture B&W',e:'⬛',c:'bw',f:'grayscale(100%) brightness(98%) contrast(135%)'},
+        {n:'Night B&W',e:'⬛',c:'bw',f:'grayscale(100%) brightness(88%) contrast(138%)'},
+        {n:'Moonlight',e:'⬛',c:'bw',f:'grayscale(90%) brightness(92%) contrast(125%) hue-rotate(200deg) sepia(12%)'},
+        {n:'Infrared Sim',e:'⬛',c:'bw',f:'grayscale(80%) brightness(118%) contrast(130%) sepia(20%)'},
+        {n:'Ortho Film',e:'⬛',c:'bw',f:'grayscale(100%) brightness(95%) contrast(145%) sepia(5%)'},
+        {n:'Pan F+',e:'⬛',c:'bw',f:'grayscale(100%) brightness(105%) contrast(140%)'},
+        {n:'Delta 3200',e:'⬛',c:'bw',f:'grayscale(100%) brightness(92%) contrast(132%)'},
+        {n:'HP5 Plus',e:'⬛',c:'bw',f:'grayscale(100%) brightness(108%) contrast(120%)'},
+        {n:'FP4 Plus',e:'⬛',c:'bw',f:'grayscale(100%) brightness(106%) contrast(118%)'},
+        {n:'XP2 Super',e:'⬛',c:'bw',f:'grayscale(100%) brightness(110%) contrast(115%)'},
+        {n:'Double-X',e:'⬛',c:'bw',f:'grayscale(100%) brightness(97%) contrast(138%)'},
+        {n:'T-Max 400',e:'⬛',c:'bw',f:'grayscale(100%) brightness(103%) contrast(128%)'},
+        {n:'T-Max 100',e:'⬛',c:'bw',f:'grayscale(100%) brightness(106%) contrast(122%)'},
+        {n:'APX 25',e:'⬛',c:'bw',f:'grayscale(100%) brightness(108%) contrast(116%)'},
+        {n:'Rollei RPX',e:'⬛',c:'bw',f:'grayscale(100%) brightness(104%) contrast(126%)'},
+        {n:'Fomapan 200',e:'⬛',c:'bw',f:'grayscale(100%) brightness(105%) contrast(124%)'},
+        {n:'Bergger Pancro',e:'⬛',c:'bw',f:'grayscale(100%) brightness(100%) contrast(130%)'},
+        {n:'Cinestill BWXX',e:'⬛',c:'bw',f:'grayscale(100%) brightness(96%) contrast(136%)'},
+        {n:'Spur Acurol',e:'⬛',c:'bw',f:'grayscale(100%) brightness(102%) contrast(132%)'},
+        {n:'Zone System V',e:'⬛',c:'bw',f:'grayscale(100%) brightness(100%) contrast(148%)'},
+        {n:'High Contrast',e:'⬛',c:'bw',f:'grayscale(100%) brightness(92%) contrast(160%)'},
+        {n:'Low Contrast',e:'⬛',c:'bw',f:'grayscale(100%) brightness(108%) contrast(95%)'},
+        {n:'Matte B&W',e:'⬛',c:'bw',f:'grayscale(100%) brightness(112%) contrast(88%)'},
+        {n:'Gritty B&W',e:'⬛',c:'bw',f:'grayscale(100%) brightness(88%) contrast(145%)'},
+        {n:'Punchy B&W',e:'⬛',c:'bw',f:'grayscale(100%) brightness(94%) contrast(152%)'},
+        {n:'Smooth B&W',e:'⬛',c:'bw',f:'grayscale(100%) brightness(110%) contrast(108%)'},
+        {n:'Flat B&W',e:'⬛',c:'bw',f:'grayscale(100%) brightness(115%) contrast(85%)'},
+        {n:'Vintage B&W',e:'⬛',c:'bw',f:'grayscale(90%) brightness(105%) contrast(115%) sepia(20%)'},
+        {n:'Timeless',e:'⬛',c:'bw',f:'grayscale(95%) brightness(108%) contrast(112%) sepia(12%)'},
+        {n:'Minimalist',e:'⬛',c:'bw',f:'grayscale(100%) brightness(118%) contrast(100%)'},
+        {n:'Bold B&W',e:'⬛',c:'bw',f:'grayscale(100%) brightness(90%) contrast(158%)'},
+
+        // ===== NATURE (40) =====
+        {n:'Forest Green',e:'🌿',c:'nature',f:'brightness(98%) contrast(112%) saturate(130%) hue-rotate(-25deg)'},
+        {n:'Ocean Blue',e:'🌿',c:'nature',f:'brightness(98%) contrast(112%) saturate(120%) hue-rotate(-40deg)'},
+        {n:'Sunset Gold',e:'🌿',c:'nature',f:'brightness(108%) contrast(112%) saturate(130%) hue-rotate(25deg) sepia(15%)'},
+        {n:'Golden Hour',e:'🌿',c:'nature',f:'brightness(112%) contrast(108%) saturate(128%) hue-rotate(20deg) sepia(12%)'},
+        {n:'Blue Hour',e:'🌿',c:'nature',f:'brightness(90%) contrast(118%) saturate(108%) hue-rotate(-35deg)'},
+        {n:'Mountain Mist',e:'🌿',c:'nature',f:'brightness(102%) contrast(108%) saturate(95%) sepia(10%)'},
+        {n:'Desert Dune',e:'🌿',c:'nature',f:'brightness(108%) contrast(108%) saturate(105%) hue-rotate(25deg) sepia(22%)'},
+        {n:'Snow White',e:'🌿',c:'nature',f:'brightness(118%) contrast(102%) saturate(88%) hue-rotate(-10deg)'},
+        {n:'Spring Bloom',e:'🌿',c:'nature',f:'brightness(110%) contrast(108%) saturate(130%) hue-rotate(-15deg)'},
+        {n:'Summer Bright',e:'🌿',c:'nature',f:'brightness(112%) contrast(110%) saturate(135%) hue-rotate(5deg)'},
+        {n:'Autumn Fall',e:'🌿',c:'nature',f:'brightness(106%) contrast(112%) saturate(125%) hue-rotate(20deg) sepia(15%)'},
+        {n:'Winter Blue',e:'🌿',c:'nature',f:'brightness(96%) contrast(112%) saturate(88%) hue-rotate(-30deg)'},
+        {n:'Tropical',e:'🌿',c:'nature',f:'brightness(108%) contrast(115%) saturate(140%) hue-rotate(-10deg)'},
+        {n:'Rainforest',e:'🌿',c:'nature',f:'brightness(96%) contrast(118%) saturate(135%) hue-rotate(-30deg)'},
+        {n:'Savanna',e:'🌿',c:'nature',f:'brightness(108%) contrast(110%) saturate(118%) hue-rotate(20deg) sepia(18%)'},
+        {n:'Arctic Tundra',e:'🌿',c:'nature',f:'brightness(100%) contrast(115%) saturate(80%) hue-rotate(-20deg)'},
+        {n:'Cherry Blossom',e:'🌿',c:'nature',f:'brightness(112%) contrast(100%) saturate(115%) hue-rotate(-25deg) sepia(8%)'},
+        {n:'Lavender Field',e:'🌿',c:'nature',f:'brightness(108%) contrast(105%) saturate(120%) hue-rotate(40deg)'},
+        {n:'Sunflower',e:'🌿',c:'nature',f:'brightness(112%) contrast(112%) saturate(130%) hue-rotate(30deg)'},
+        {n:'Rose Garden',e:'🌿',c:'nature',f:'brightness(108%) contrast(108%) saturate(125%) hue-rotate(-20deg)'},
+        {n:'Waterfall',e:'🌿',c:'nature',f:'brightness(100%) contrast(115%) saturate(115%) hue-rotate(-35deg)'},
+        {n:'Lake Calm',e:'🌿',c:'nature',f:'brightness(98%) contrast(110%) saturate(110%) hue-rotate(-30deg) sepia(8%)'},
+        {n:'River Flow',e:'🌿',c:'nature',f:'brightness(100%) contrast(112%) saturate(112%) hue-rotate(-25deg)'},
+        {n:'Cliff Edge',e:'🌿',c:'nature',f:'brightness(96%) contrast(118%) saturate(105%) sepia(10%)'},
+        {n:'Valley Green',e:'🌿',c:'nature',f:'brightness(100%) contrast(115%) saturate(128%) hue-rotate(-22deg)'},
+        {n:'Meadow Fresh',e:'🌿',c:'nature',f:'brightness(106%) contrast(110%) saturate(128%) hue-rotate(-18deg)'},
+        {n:'Foggy Morning',e:'🌿',c:'nature',f:'brightness(108%) contrast(100%) saturate(85%) sepia(15%)'},
+        {n:'Stormy Sky',e:'🌿',c:'nature',f:'brightness(88%) contrast(125%) saturate(90%) hue-rotate(-10deg) sepia(8%)'},
+        {n:'Rainbow',e:'🌿',c:'nature',f:'brightness(108%) contrast(112%) saturate(145%) hue-rotate(5deg)'},
+        {n:'Northern Lights',e:'🌿',c:'nature',f:'brightness(96%) contrast(120%) saturate(130%) hue-rotate(-50deg)'},
+        {n:'Milky Way',e:'🌿',c:'nature',f:'brightness(85%) contrast(130%) saturate(110%) hue-rotate(-40deg)'},
+        {n:'Star Trail',e:'🌿',c:'nature',f:'brightness(82%) contrast(135%) saturate(105%) hue-rotate(-30deg)'},
+        {n:'Dew Drop',e:'🌿',c:'nature',f:'brightness(108%) contrast(106%) saturate(118%) hue-rotate(-15deg)'},
+        {n:'Monsoon',e:'🌿',c:'nature',f:'brightness(95%) contrast(115%) saturate(108%) hue-rotate(-25deg) sepia(8%)'},
+        {n:'Himalaya',e:'🌿',c:'nature',f:'brightness(100%) contrast(118%) saturate(95%) sepia(12%)'},
+        {n:'Goa Beach',e:'🌿',c:'nature',f:'brightness(110%) contrast(110%) saturate(130%) hue-rotate(-15deg)'},
+        {n:'Kerala Green',e:'🌿',c:'nature',f:'brightness(100%) contrast(115%) saturate(138%) hue-rotate(-28deg)'},
+        {n:'Rajasthan',e:'🌿',c:'nature',f:'brightness(108%) contrast(115%) saturate(115%) hue-rotate(22deg) sepia(20%)'},
+        {n:'Mangrove',e:'🌿',c:'nature',f:'brightness(96%) contrast(118%) saturate(128%) hue-rotate(-32deg)'},
+        {n:'Coral Reef',e:'🌿',c:'nature',f:'brightness(100%) contrast(115%) saturate(130%) hue-rotate(-45deg)'},
+
+        // ===== WARM (40) =====
+        {n:'Golden Glow',e:'🌅',c:'warm',f:'brightness(110%) contrast(108%) saturate(118%) hue-rotate(18deg) sepia(15%)'},
+        {n:'Amber Light',e:'🌅',c:'warm',f:'brightness(112%) contrast(105%) saturate(115%) hue-rotate(25deg) sepia(20%)'},
+        {n:'Honey Tone',e:'🌅',c:'warm',f:'brightness(110%) contrast(106%) saturate(118%) hue-rotate(22deg) sepia(18%)'},
+        {n:'Caramel',e:'🌅',c:'warm',f:'brightness(108%) contrast(110%) saturate(112%) hue-rotate(20deg) sepia(22%)'},
+        {n:'Peach Fuzz',e:'🌅',c:'warm',f:'brightness(112%) contrast(100%) saturate(112%) hue-rotate(15deg) sepia(14%)'},
+        {n:'Desert Heat',e:'🌅',c:'warm',f:'brightness(110%) contrast(112%) saturate(115%) hue-rotate(28deg) sepia(20%)'},
+        {n:'Sunrise Pink',e:'🌅',c:'warm',f:'brightness(112%) contrast(105%) saturate(118%) hue-rotate(-10deg) sepia(10%)'},
+        {n:'Campfire',e:'🌅',c:'warm',f:'brightness(106%) contrast(115%) saturate(120%) hue-rotate(30deg) sepia(18%)'},
+        {n:'Terracotta',e:'🌅',c:'warm',f:'brightness(104%) contrast(112%) saturate(115%) hue-rotate(18deg) sepia(25%)'},
+        {n:'Rust & Gold',e:'🌅',c:'warm',f:'brightness(106%) contrast(115%) saturate(118%) hue-rotate(22deg) sepia(20%)'},
+        {n:'Warm Film',e:'🌅',c:'warm',f:'brightness(108%) contrast(108%) saturate(110%) hue-rotate(15deg) sepia(22%)'},
+        {n:'VSCO A4',e:'🌅',c:'warm',f:'brightness(110%) contrast(104%) saturate(112%) hue-rotate(12deg) sepia(16%)'},
+        {n:'VSCO A6',e:'🌅',c:'warm',f:'brightness(112%) contrast(102%) saturate(108%) hue-rotate(18deg) sepia(14%)'},
+        {n:'VSCO C1',e:'🌅',c:'warm',f:'brightness(108%) contrast(108%) saturate(110%) hue-rotate(14deg) sepia(12%)'},
+        {n:'Warm Fade',e:'🌅',c:'warm',f:'brightness(114%) contrast(94%) saturate(95%) hue-rotate(15deg) sepia(20%)'},
+        {n:'Summer Haze',e:'🌅',c:'warm',f:'brightness(115%) contrast(92%) saturate(108%) hue-rotate(12deg) sepia(16%)'},
+        {n:'Lemon Drop',e:'🌅',c:'warm',f:'brightness(118%) contrast(95%) saturate(112%) hue-rotate(28deg) sepia(12%)'},
+        {n:'Saffron',e:'🌅',c:'warm',f:'brightness(108%) contrast(110%) saturate(120%) hue-rotate(25deg) sepia(18%)'},
+        {n:'Turmeric',e:'🌅',c:'warm',f:'brightness(108%) contrast(108%) saturate(115%) hue-rotate(30deg) sepia(22%)'},
+        {n:'Ginger Warm',e:'🌅',c:'warm',f:'brightness(106%) contrast(112%) saturate(118%) hue-rotate(20deg) sepia(20%)'},
+        {n:'Cinnamon',e:'🌅',c:'warm',f:'brightness(104%) contrast(115%) saturate(112%) hue-rotate(18deg) sepia(28%)'},
+        {n:'Bonfire',e:'🌅',c:'warm',f:'brightness(100%) contrast(120%) saturate(120%) hue-rotate(30deg) sepia(15%)'},
+        {n:'Warm Drama',e:'🌅',c:'warm',f:'brightness(98%) contrast(125%) saturate(120%) hue-rotate(22deg) sepia(12%)'},
+        {n:'Indian Summer',e:'🌅',c:'warm',f:'brightness(108%) contrast(110%) saturate(125%) hue-rotate(20deg) sepia(16%)'},
+        {n:'Diwali Glow',e:'🌅',c:'warm',f:'brightness(112%) contrast(112%) saturate(128%) hue-rotate(25deg) sepia(14%)'},
+        {n:'Holi Warm',e:'🌅',c:'warm',f:'brightness(110%) contrast(112%) saturate(135%) hue-rotate(15deg) sepia(10%)'},
+        {n:'Butter Soft',e:'🌅',c:'warm',f:'brightness(115%) contrast(95%) saturate(105%) hue-rotate(20deg) sepia(12%)'},
+        {n:'Vanilla Cream',e:'🌅',c:'warm',f:'brightness(116%) contrast(92%) saturate(98%) hue-rotate(18deg) sepia(14%)'},
+        {n:'Chai Latte',e:'🌅',c:'warm',f:'brightness(106%) contrast(108%) saturate(100%) hue-rotate(20deg) sepia(30%)'},
+        {n:'Kashmiri Kesar',e:'🌅',c:'warm',f:'brightness(108%) contrast(112%) saturate(118%) hue-rotate(28deg) sepia(18%)'},
+        {n:'Rajasthani Red',e:'🌅',c:'warm',f:'brightness(100%) contrast(120%) saturate(128%) hue-rotate(8deg) sepia(15%)'},
+        {n:'Goa Sun',e:'🌅',c:'warm',f:'brightness(112%) contrast(108%) saturate(128%) hue-rotate(20deg) sepia(12%)'},
+        {n:'Mumbai Magic',e:'🌅',c:'warm',f:'brightness(106%) contrast(115%) saturate(122%) hue-rotate(18deg) sepia(14%)'},
+        {n:'Delhi Dust',e:'🌅',c:'warm',f:'brightness(104%) contrast(110%) saturate(108%) hue-rotate(22deg) sepia(22%)'},
+        {n:'Tiger Warm',e:'🌅',c:'warm',f:'brightness(106%) contrast(118%) saturate(125%) hue-rotate(20deg) sepia(15%)'},
+        {n:'Mango Lassi',e:'🌅',c:'warm',f:'brightness(112%) contrast(102%) saturate(120%) hue-rotate(25deg) sepia(14%)'},
+        {n:'Papaya',e:'🌅',c:'warm',f:'brightness(110%) contrast(108%) saturate(122%) hue-rotate(18deg) sepia(16%)'},
+        {n:'Sunrise Fade',e:'🌅',c:'warm',f:'brightness(116%) contrast(95%) saturate(110%) hue-rotate(15deg) sepia(18%)'},
+        {n:'Warm Glow',e:'🌅',c:'warm',f:'brightness(114%) contrast(100%) saturate(115%) hue-rotate(20deg) sepia(15%)'},
+        {n:'Firelight',e:'🌅',c:'warm',f:'brightness(105%) contrast(118%) saturate(125%) hue-rotate(28deg) sepia(15%)'},
+
+        // ===== COOL (40) =====
+        {n:'Ice Blue',e:'❄️',c:'cool',f:'brightness(96%) contrast(115%) saturate(90%) hue-rotate(-35deg)'},
+        {n:'Arctic Frost',e:'❄️',c:'cool',f:'brightness(98%) contrast(112%) saturate(82%) hue-rotate(-40deg)'},
+        {n:'Moonlight Cool',e:'❄️',c:'cool',f:'brightness(92%) contrast(118%) saturate(85%) hue-rotate(-30deg)'},
+        {n:'Steel Blue',e:'❄️',c:'cool',f:'brightness(94%) contrast(120%) saturate(88%) hue-rotate(-28deg)'},
+        {n:'Cyan Breeze',e:'❄️',c:'cool',f:'brightness(100%) contrast(112%) saturate(105%) hue-rotate(-50deg)'},
+        {n:'Winter Sky',e:'❄️',c:'cool',f:'brightness(96%) contrast(115%) saturate(88%) hue-rotate(-38deg)'},
+        {n:'Glacier',e:'❄️',c:'cool',f:'brightness(102%) contrast(110%) saturate(80%) hue-rotate(-42deg)'},
+        {n:'Teal Mood',e:'❄️',c:'cool',f:'brightness(94%) contrast(118%) saturate(95%) hue-rotate(-55deg)'},
+        {n:'Cyberpunk Blue',e:'❄️',c:'cool',f:'brightness(90%) contrast(128%) saturate(115%) hue-rotate(-45deg)'},
+        {n:'Midnight City',e:'❄️',c:'cool',f:'brightness(85%) contrast(130%) saturate(105%) hue-rotate(-35deg)'},
+        {n:'Neon Blue',e:'❄️',c:'cool',f:'brightness(92%) contrast(125%) saturate(120%) hue-rotate(-40deg)'},
+        {n:'Mint Fresh',e:'❄️',c:'cool',f:'brightness(104%) contrast(108%) saturate(105%) hue-rotate(-60deg)'},
+        {n:'Turquoise',e:'❄️',c:'cool',f:'brightness(100%) contrast(112%) saturate(110%) hue-rotate(-55deg)'},
+        {n:'Nordic Blue',e:'❄️',c:'cool',f:'brightness(96%) contrast(115%) saturate(85%) hue-rotate(-32deg)'},
+        {n:'Tokyo Night',e:'❄️',c:'cool',f:'brightness(88%) contrast(125%) saturate(108%) hue-rotate(-38deg)'},
+        {n:'Seoul Blue',e:'❄️',c:'cool',f:'brightness(95%) contrast(118%) saturate(95%) hue-rotate(-30deg)'},
+        {n:'Shanghai Cool',e:'❄️',c:'cool',f:'brightness(93%) contrast(120%) saturate(90%) hue-rotate(-35deg)'},
+        {n:'Rain Mood',e:'❄️',c:'cool',f:'brightness(90%) contrast(115%) saturate(82%) hue-rotate(-28deg) sepia(8%)'},
+        {n:'Cool Matte',e:'❄️',c:'cool',f:'brightness(98%) contrast(105%) saturate(80%) hue-rotate(-25deg)'},
+        {n:'Pastel Blue',e:'❄️',c:'cool',f:'brightness(110%) contrast(98%) saturate(88%) hue-rotate(-30deg)'},
+        {n:'Cool Drama',e:'❄️',c:'cool',f:'brightness(88%) contrast(128%) saturate(90%) hue-rotate(-40deg)'},
+        {n:'Ocean Deep',e:'❄️',c:'cool',f:'brightness(85%) contrast(125%) saturate(110%) hue-rotate(-50deg)'},
+        {n:'Blue Lagoon',e:'❄️',c:'cool',f:'brightness(96%) contrast(115%) saturate(115%) hue-rotate(-48deg)'},
+        {n:'Periwinkle',e:'❄️',c:'cool',f:'brightness(104%) contrast(108%) saturate(105%) hue-rotate(-20deg)'},
+        {n:'Cool Fade',e:'❄️',c:'cool',f:'brightness(108%) contrast(95%) saturate(75%) hue-rotate(-25deg)'},
+        {n:'Winter Haze',e:'❄️',c:'cool',f:'brightness(106%) contrast(98%) saturate(78%) hue-rotate(-30deg)'},
+        {n:'Blue Smoke',e:'❄️',c:'cool',f:'brightness(95%) contrast(112%) saturate(80%) hue-rotate(-35deg) sepia(8%)'},
+        {n:'Indigo',e:'❄️',c:'cool',f:'brightness(90%) contrast(120%) saturate(100%) hue-rotate(-25deg)'},
+        {n:'Violet Haze',e:'❄️',c:'cool',f:'brightness(96%) contrast(115%) saturate(108%) hue-rotate(-15deg)'},
+        {n:'Purple Rain',e:'❄️',c:'cool',f:'brightness(92%) contrast(120%) saturate(115%) hue-rotate(-10deg)'},
+        {n:'Cold Film',e:'❄️',c:'cool',f:'brightness(95%) contrast(112%) saturate(80%) hue-rotate(-32deg) sepia(5%)'},
+        {n:'Desaturated Cool',e:'❄️',c:'cool',f:'brightness(98%) contrast(115%) saturate(70%) hue-rotate(-28deg)'},
+        {n:'Blue Tint',e:'❄️',c:'cool',f:'brightness(100%) contrast(110%) saturate(88%) hue-rotate(-38deg)'},
+        {n:'Aquamarine',e:'❄️',c:'cool',f:'brightness(100%) contrast(112%) saturate(112%) hue-rotate(-52deg)'},
+        {n:'Sapphire',e:'❄️',c:'cool',f:'brightness(88%) contrast(125%) saturate(110%) hue-rotate(-42deg)'},
+        {n:'Diamond Cool',e:'❄️',c:'cool',f:'brightness(102%) contrast(118%) saturate(82%) hue-rotate(-35deg)'},
+        {n:'Powder Blue',e:'❄️',c:'cool',f:'brightness(108%) contrast(100%) saturate(85%) hue-rotate(-32deg)'},
+        {n:'Cobalt',e:'❄️',c:'cool',f:'brightness(90%) contrast(122%) saturate(108%) hue-rotate(-40deg)'},
+        {n:'Slate',e:'❄️',c:'cool',f:'brightness(94%) contrast(118%) saturate(78%) hue-rotate(-20deg)'},
+        {n:'Stormy Ocean',e:'❄️',c:'cool',f:'brightness(86%) contrast(128%) saturate(95%) hue-rotate(-45deg)'},
+
+        // ===== ARTISTIC (40) =====
+        {n:'Dreamy Soft',e:'🎨',c:'artistic',f:'brightness(112%) contrast(92%) saturate(108%) sepia(8%)'},
+        {n:'Matte Art',e:'🎨',c:'artistic',f:'brightness(108%) contrast(90%) saturate(85%) sepia(12%)'},
+        {n:'Faded Dream',e:'🎨',c:'artistic',f:'brightness(116%) contrast(85%) saturate(80%) sepia(18%)'},
+        {n:'Hazy Memory',e:'🎨',c:'artistic',f:'brightness(115%) contrast(88%) saturate(78%) sepia(20%)'},
+        {n:'Fairy Tale',e:'🎨',c:'artistic',f:'brightness(114%) contrast(94%) saturate(118%) hue-rotate(-15deg) sepia(8%)'},
+        {n:'Fantasy World',e:'🎨',c:'artistic',f:'brightness(108%) contrast(105%) saturate(130%) hue-rotate(-20deg)'},
+        {n:'Surreal',e:'🎨',c:'artistic',f:'brightness(100%) contrast(118%) saturate(140%) hue-rotate(30deg)'},
+        {n:'Oil Painting',e:'🎨',c:'artistic',f:'brightness(98%) contrast(120%) saturate(125%) hue-rotate(5deg)'},
+        {n:'Watercolor',e:'🎨',c:'artistic',f:'brightness(112%) contrast(95%) saturate(112%) hue-rotate(5deg) sepia(8%)'},
+        {n:'Sketch Lite',e:'🎨',c:'artistic',f:'grayscale(40%) brightness(115%) contrast(118%)'},
+        {n:'Comic Bold',e:'🎨',c:'artistic',f:'brightness(100%) contrast(145%) saturate(155%) hue-rotate(5deg)'},
+        {n:'Pop Art',e:'🎨',c:'artistic',f:'brightness(105%) contrast(140%) saturate(160%) hue-rotate(15deg)'},
+        {n:'Duotone Blue',e:'🎨',c:'artistic',f:'brightness(98%) contrast(120%) saturate(60%) hue-rotate(-40deg) sepia(30%)'},
+        {n:'Duotone Pink',e:'🎨',c:'artistic',f:'brightness(100%) contrast(115%) saturate(60%) hue-rotate(-20deg) sepia(25%)'},
+        {n:'Neon Art',e:'🎨',c:'artistic',f:'brightness(95%) contrast(135%) saturate(150%) hue-rotate(-30deg)'},
+        {n:'Glitch',e:'🎨',c:'artistic',f:'brightness(100%) contrast(125%) saturate(130%) hue-rotate(20deg)'},
+        {n:'Psychedelic',e:'🎨',c:'artistic',f:'brightness(100%) contrast(115%) saturate(180%) hue-rotate(45deg)'},
+        {n:'Lo-Fi',e:'🎨',c:'artistic',f:'brightness(104%) contrast(95%) saturate(88%) sepia(22%)'},
+        {n:'VSCO HB2',e:'🎨',c:'artistic',f:'brightness(106%) contrast(98%) saturate(92%) sepia(16%)'},
+        {n:'VSCO M5',e:'🎨',c:'artistic',f:'brightness(108%) contrast(96%) saturate(88%) sepia(18%)'},
+        {n:'VSCO F2',e:'🎨',c:'artistic',f:'brightness(110%) contrast(95%) saturate(85%) sepia(20%)'},
+        {n:'VSCO G3',e:'🎨',c:'artistic',f:'brightness(104%) contrast(100%) saturate(90%) sepia(14%)'},
+        {n:'VSCO N1',e:'🎨',c:'artistic',f:'brightness(106%) contrast(98%) saturate(88%) sepia(12%)'},
+        {n:'Mystic',e:'🎨',c:'artistic',f:'brightness(94%) contrast(118%) saturate(110%) hue-rotate(30deg) sepia(10%)'},
+        {n:'Ethereal',e:'🎨',c:'artistic',f:'brightness(118%) contrast(88%) saturate(95%) sepia(10%)'},
+        {n:'Pastel Dream',e:'🎨',c:'artistic',f:'brightness(118%) contrast(86%) saturate(92%) hue-rotate(-10deg) sepia(8%)'},
+        {n:'Rainbow Mist',e:'🎨',c:'artistic',f:'brightness(108%) contrast(100%) saturate(140%) hue-rotate(10deg)'},
+        {n:'Holographic',e:'🎨',c:'artistic',f:'brightness(102%) contrast(115%) saturate(145%) hue-rotate(20deg)'},
+        {n:'Galaxy Filter',e:'🎨',c:'artistic',f:'brightness(88%) contrast(130%) saturate(120%) hue-rotate(-40deg)'},
+        {n:'Aurora',e:'🎨',c:'artistic',f:'brightness(94%) contrast(120%) saturate(130%) hue-rotate(-50deg)'},
+        {n:'Stardust',e:'🎨',c:'artistic',f:'brightness(96%) contrast(118%) saturate(115%) hue-rotate(-35deg)'},
+        {n:'Magic Hour',e:'🎨',c:'artistic',f:'brightness(110%) contrast(108%) saturate(125%) hue-rotate(18deg) sepia(10%)'},
+        {n:'Dream State',e:'🎨',c:'artistic',f:'brightness(115%) contrast(90%) saturate(100%) sepia(12%)'},
+        {n:'Cotton Candy',e:'🎨',c:'artistic',f:'brightness(115%) contrast(92%) saturate(115%) hue-rotate(-20deg)'},
+        {n:'Bubblegum',e:'🎨',c:'artistic',f:'brightness(112%) contrast(95%) saturate(122%) hue-rotate(-25deg)'},
+        {n:'Lavender Haze',e:'🎨',c:'artistic',f:'brightness(108%) contrast(100%) saturate(108%) hue-rotate(40deg) sepia(8%)'},
+        {n:'Rose Quartz',e:'🎨',c:'artistic',f:'brightness(112%) contrast(96%) saturate(110%) hue-rotate(-18deg) sepia(10%)'},
+        {n:'Mint Dream',e:'🎨',c:'artistic',f:'brightness(110%) contrast(98%) saturate(110%) hue-rotate(-55deg)'},
+        {n:'Soft Glow Art',e:'🎨',c:'artistic',f:'brightness(118%) contrast(90%) saturate(105%) sepia(8%)'},
+        {n:'Abstract',e:'🎨',c:'artistic',f:'brightness(98%) contrast(125%) saturate(150%) hue-rotate(25deg)'},
+
+        // ===== HDR (30) =====
+        {n:'HDR Vivid',e:'⚡',c:'hdr',f:'brightness(100%) contrast(145%) saturate(145%)'},
+        {n:'HDR Dramatic',e:'⚡',c:'hdr',f:'brightness(95%) contrast(155%) saturate(140%) hue-rotate(5deg)'},
+        {n:'HDR Landscape',e:'⚡',c:'hdr',f:'brightness(100%) contrast(148%) saturate(150%) hue-rotate(5deg)'},
+        {n:'HDR Portrait',e:'⚡',c:'hdr',f:'brightness(105%) contrast(135%) saturate(130%)'},
+        {n:'HDR Sunset',e:'⚡',c:'hdr',f:'brightness(102%) contrast(142%) saturate(148%) hue-rotate(15deg)'},
+        {n:'Ultra HDR',e:'⚡',c:'hdr',f:'brightness(98%) contrast(158%) saturate(155%)'},
+        {n:'HDR Cityscape',e:'⚡',c:'hdr',f:'brightness(95%) contrast(150%) saturate(135%) hue-rotate(-5deg)'},
+        {n:'HDR Nature',e:'⚡',c:'hdr',f:'brightness(100%) contrast(145%) saturate(152%) hue-rotate(-8deg)'},
+        {n:'HDR Sky',e:'⚡',c:'hdr',f:'brightness(96%) contrast(148%) saturate(140%) hue-rotate(-10deg)'},
+        {n:'HDR Ocean',e:'⚡',c:'hdr',f:'brightness(98%) contrast(145%) saturate(145%) hue-rotate(-15deg)'},
+        {n:'Vibrance Max',e:'⚡',c:'hdr',f:'brightness(102%) contrast(130%) saturate(170%)'},
+        {n:'Punchy',e:'⚡',c:'hdr',f:'brightness(96%) contrast(152%) saturate(148%) hue-rotate(5deg)'},
+        {n:'Gritty Realism',e:'⚡',c:'hdr',f:'brightness(92%) contrast(158%) saturate(118%) sepia(8%)'},
+        {n:'Super Contrast',e:'⚡',c:'hdr',f:'brightness(93%) contrast(162%) saturate(120%)'},
+        {n:'Rich Tones',e:'⚡',c:'hdr',f:'brightness(98%) contrast(145%) saturate(145%) hue-rotate(8deg)'},
+        {n:'Deep Colors',e:'⚡',c:'hdr',f:'brightness(96%) contrast(145%) saturate(150%) hue-rotate(3deg)'},
+        {n:'Clarity Boost',e:'⚡',c:'hdr',f:'brightness(100%) contrast(140%) saturate(130%)'},
+        {n:'Texture Pop',e:'⚡',c:'hdr',f:'brightness(98%) contrast(148%) saturate(125%) sepia(5%)'},
+        {n:'Tone Mapping',e:'⚡',c:'hdr',f:'brightness(97%) contrast(150%) saturate(138%)'},
+        {n:'Local Contrast',e:'⚡',c:'hdr',f:'brightness(100%) contrast(145%) saturate(132%) hue-rotate(2deg)'},
+        {n:'Exposure Blend',e:'⚡',c:'hdr',f:'brightness(102%) contrast(138%) saturate(135%)'},
+        {n:'Shadow Lift',e:'⚡',c:'hdr',f:'brightness(108%) contrast(135%) saturate(130%)'},
+        {n:'Highlight Pull',e:'⚡',c:'hdr',f:'brightness(95%) contrast(140%) saturate(135%)'},
+        {n:'Micro Detail',e:'⚡',c:'hdr',f:'brightness(100%) contrast(142%) saturate(128%)'},
+        {n:'HDR Cold',e:'⚡',c:'hdr',f:'brightness(96%) contrast(148%) saturate(130%) hue-rotate(-15deg)'},
+        {n:'HDR Warm',e:'⚡',c:'hdr',f:'brightness(100%) contrast(145%) saturate(140%) hue-rotate(12deg)'},
+        {n:'Adobe Lightroom Vivid',e:'⚡',c:'hdr',f:'brightness(100%) contrast(135%) saturate(145%)'},
+        {n:'LUT Strong',e:'⚡',c:'hdr',f:'brightness(97%) contrast(150%) saturate(145%) hue-rotate(5deg)'},
+        {n:'Cinema HDR',e:'⚡',c:'hdr',f:'brightness(95%) contrast(155%) saturate(132%) sepia(5%)'},
+        {n:'Raw Power',e:'⚡',c:'hdr',f:'brightness(93%) contrast(160%) saturate(140%) hue-rotate(5deg)'},
+
+        // ===== CAPCUT (30) =====
+        {n:'CapCut Original',e:'📱',c:'capcut',f:'brightness(102%) contrast(112%) saturate(115%)'},
+        {n:'CapCut Vivid',e:'📱',c:'capcut',f:'brightness(105%) contrast(118%) saturate(130%)'},
+        {n:'CapCut Soft',e:'📱',c:'capcut',f:'brightness(110%) contrast(100%) saturate(105%) sepia(8%)'},
+        {n:'CapCut Film',e:'📱',c:'capcut',f:'brightness(104%) contrast(110%) saturate(105%) sepia(15%)'},
+        {n:'CapCut Cool',e:'📱',c:'capcut',f:'brightness(98%) contrast(115%) saturate(90%) hue-rotate(-25deg)'},
+        {n:'CapCut Warm',e:'📱',c:'capcut',f:'brightness(108%) contrast(108%) saturate(115%) hue-rotate(15deg) sepia(12%)'},
+        {n:'CapCut Dark',e:'📱',c:'capcut',f:'brightness(88%) contrast(128%) saturate(108%)'},
+        {n:'CapCut Bright',e:'📱',c:'capcut',f:'brightness(118%) contrast(100%) saturate(110%)'},
+        {n:'CapCut Retro',e:'📱',c:'capcut',f:'brightness(106%) contrast(108%) saturate(95%) sepia(25%)'},
+        {n:'CapCut Matte',e:'📱',c:'capcut',f:'brightness(108%) contrast(92%) saturate(85%) sepia(12%)'},
+        {n:'CapCut Japan',e:'📱',c:'capcut',f:'brightness(112%) contrast(98%) saturate(100%) hue-rotate(-5deg) sepia(10%)'},
+        {n:'CapCut Korea',e:'📱',c:'capcut',f:'brightness(114%) contrast(94%) saturate(96%) hue-rotate(-8deg)'},
+        {n:'CapCut Hong Kong',e:'📱',c:'capcut',f:'brightness(102%) contrast(115%) saturate(108%) hue-rotate(-15deg)'},
+        {n:'CapCut India',e:'📱',c:'capcut',f:'brightness(108%) contrast(112%) saturate(122%) hue-rotate(10deg) sepia(8%)'},
+        {n:'CapCut Bollywood',e:'📱',c:'capcut',f:'brightness(110%) contrast(115%) saturate(135%) hue-rotate(12deg)'},
+        {n:'CapCut Night',e:'📱',c:'capcut',f:'brightness(120%) contrast(115%) saturate(110%) hue-rotate(-10deg)'},
+        {n:'CapCut Glow',e:'📱',c:'capcut',f:'brightness(118%) contrast(102%) saturate(115%) hue-rotate(5deg)'},
+        {n:'CapCut Dreamy',e:'📱',c:'capcut',f:'brightness(114%) contrast(96%) saturate(108%) sepia(8%)'},
+        {n:'CapCut Pastel',e:'📱',c:'capcut',f:'brightness(118%) contrast(90%) saturate(92%) hue-rotate(-8deg)'},
+        {n:'CapCut Moody',e:'📱',c:'capcut',f:'brightness(90%) contrast(122%) saturate(90%) sepia(12%)'},
+        {n:'CapCut Neon',e:'📱',c:'capcut',f:'brightness(95%) contrast(128%) saturate(140%) hue-rotate(-20deg)'},
+        {n:'CapCut Smoke',e:'📱',c:'capcut',f:'brightness(96%) contrast(115%) saturate(80%) sepia(18%)'},
+        {n:'CapCut Flash',e:'📱',c:'capcut',f:'brightness(120%) contrast(118%) saturate(118%)'},
+        {n:'CapCut Epic',e:'📱',c:'capcut',f:'brightness(98%) contrast(130%) saturate(130%) hue-rotate(5deg)'},
+        {n:'CapCut Cinematic',e:'📱',c:'capcut',f:'brightness(95%) contrast(125%) saturate(105%) sepia(8%)'},
+        {n:'CapCut Vintage',e:'📱',c:'capcut',f:'brightness(105%) contrast(108%) saturate(95%) sepia(28%)'},
+        {n:'CapCut Spring',e:'📱',c:'capcut',f:'brightness(112%) contrast(105%) saturate(125%) hue-rotate(-12deg)'},
+        {n:'CapCut Autumn',e:'📱',c:'capcut',f:'brightness(106%) contrast(112%) saturate(120%) hue-rotate(18deg) sepia(14%)'},
+        {n:'CapCut Ocean',e:'📱',c:'capcut',f:'brightness(100%) contrast(115%) saturate(115%) hue-rotate(-40deg)'},
+        {n:'CapCut Sunset',e:'📱',c:'capcut',f:'brightness(108%) contrast(112%) saturate(128%) hue-rotate(22deg) sepia(12%)'},
+
+        // ===== INSTAGRAM (30) =====
+        {n:'Clarendon',e:'📸',c:'instagram',f:'brightness(100%) contrast(115%) saturate(128%)'},
+        {n:'Gingham',e:'📸',c:'instagram',f:'brightness(108%) contrast(100%) saturate(95%) sepia(8%)'},
+        {n:'Moon',e:'📸',c:'instagram',f:'grayscale(85%) brightness(108%) contrast(112%)'},
+        {n:'Lark',e:'📸',c:'instagram',f:'brightness(108%) contrast(100%) saturate(108%) hue-rotate(-5deg)'},
+        {n:'Reyes',e:'📸',c:'instagram',f:'brightness(110%) contrast(95%) saturate(90%) sepia(18%)'},
+        {n:'Juno',e:'📸',c:'instagram',f:'brightness(100%) contrast(108%) saturate(118%) hue-rotate(-5deg)'},
+        {n:'Slumber',e:'📸',c:'instagram',f:'brightness(108%) contrast(95%) saturate(90%) sepia(12%)'},
+        {n:'Crema',e:'📸',c:'instagram',f:'brightness(108%) contrast(100%) saturate(90%) sepia(12%) hue-rotate(5deg)'},
+        {n:'Ludwig',e:'📸',c:'instagram',f:'brightness(105%) contrast(108%) saturate(100%) sepia(8%)'},
+        {n:'Aden',e:'📸',c:'instagram',f:'brightness(108%) contrast(92%) saturate(88%) hue-rotate(-10deg) sepia(10%)'},
+        {n:'Perpetua',e:'📸',c:'instagram',f:'brightness(104%) contrast(100%) saturate(108%) hue-rotate(-8deg)'},
+        {n:'Amaro',e:'📸',c:'instagram',f:'brightness(110%) contrast(104%) saturate(112%) hue-rotate(-5deg) sepia(8%)'},
+        {n:'Mayfair',e:'📸',c:'instagram',f:'brightness(106%) contrast(106%) saturate(110%) sepia(8%) hue-rotate(3deg)'},
+        {n:'Rise',e:'📸',c:'instagram',f:'brightness(112%) contrast(98%) saturate(108%) hue-rotate(5deg) sepia(10%)'},
+        {n:'Hudson',e:'📸',c:'instagram',f:'brightness(100%) contrast(110%) saturate(105%) hue-rotate(-15deg)'},
+        {n:'Valencia',e:'📸',c:'instagram',f:'brightness(106%) contrast(108%) saturate(112%) hue-rotate(10deg) sepia(12%)'},
+        {n:'X-Pro II',e:'📸',c:'instagram',f:'brightness(98%) contrast(120%) saturate(125%) hue-rotate(8deg) sepia(8%)'},
+        {n:'Sierra',e:'📸',c:'instagram',f:'brightness(108%) contrast(98%) saturate(90%) sepia(15%)'},
+        {n:'Willow',e:'📸',c:'instagram',f:'grayscale(70%) brightness(108%) contrast(105%) sepia(15%)'},
+        {n:'Lo-fi',e:'📸',c:'instagram',f:'brightness(100%) contrast(118%) saturate(130%)'},
+        {n:'Inkwell',e:'📸',c:'instagram',f:'grayscale(100%) brightness(106%) contrast(115%)'},
+        {n:'Hefe',e:'📸',c:'instagram',f:'brightness(100%) contrast(115%) saturate(122%) hue-rotate(10deg) sepia(12%)'},
+        {n:'Nashville',e:'📸',c:'instagram',f:'brightness(108%) contrast(100%) saturate(105%) hue-rotate(5deg) sepia(18%)'},
+        {n:'Stinson',e:'📸',c:'instagram',f:'brightness(110%) contrast(96%) saturate(100%) sepia(14%)'},
+        {n:'Vesper',e:'📸',c:'instagram',f:'brightness(104%) contrast(108%) saturate(95%) sepia(10%)'},
+        {n:'Earlybird',e:'📸',c:'instagram',f:'brightness(102%) contrast(105%) saturate(108%) sepia(20%) hue-rotate(5deg)'},
+        {n:'Brannan',e:'📸',c:'instagram',f:'brightness(95%) contrast(125%) saturate(90%) sepia(20%)'},
+        {n:'Sutro',e:'📸',c:'instagram',f:'brightness(90%) contrast(118%) saturate(90%) sepia(25%)'},
+        {n:'Toaster',e:'📸',c:'instagram',f:'brightness(100%) contrast(115%) saturate(115%) hue-rotate(10deg) sepia(15%)'},
+        {n:'Walden',e:'📸',c:'instagram',f:'brightness(110%) contrast(96%) saturate(95%) sepia(12%) hue-rotate(-5deg)'},
+
+        // ===== SPECIAL (20) =====
+        {n:'No Filter',e:'✨',c:'special',f:'none'},
+        {n:'Invert Art',e:'✨',c:'special',f:'invert(100%) hue-rotate(180deg)'},
+        {n:'Sepia Classic',e:'✨',c:'special',f:'sepia(80%) brightness(105%) contrast(110%)'},
+        {n:'Neon Glow',e:'✨',c:'special',f:'brightness(100%) contrast(130%) saturate(160%) hue-rotate(-30deg)'},
+        {n:'Electric',e:'✨',c:'special',f:'brightness(98%) contrast(135%) saturate(170%) hue-rotate(20deg)'},
+        {n:'Thermal',e:'✨',c:'special',f:'brightness(98%) contrast(130%) saturate(120%) hue-rotate(150deg)'},
+        {n:'X-Ray Soft',e:'✨',c:'special',f:'invert(90%) grayscale(80%) brightness(120%) contrast(130%)'},
+        {n:'Lomo Effect',e:'✨',c:'special',f:'brightness(100%) contrast(130%) saturate(125%) sepia(15%) hue-rotate(8deg)'},
+        {n:'Vignette Warm',e:'✨',c:'special',f:'brightness(100%) contrast(118%) saturate(115%) hue-rotate(12deg) sepia(15%)'},
+        {n:'Fade & Glow',e:'✨',c:'special',f:'brightness(120%) contrast(88%) saturate(90%) sepia(15%)'},
+        {n:'Glow Up',e:'✨',c:'special',f:'brightness(125%) contrast(92%) saturate(108%) hue-rotate(5deg)'},
+        {n:'Highlight Hero',e:'✨',c:'special',f:'brightness(122%) contrast(96%) saturate(112%) hue-rotate(8deg)'},
+        {n:'Shadow Play',e:'✨',c:'special',f:'brightness(80%) contrast(145%) saturate(110%) sepia(8%)'},
+        {n:'Alien World',e:'✨',c:'special',f:'brightness(98%) contrast(120%) saturate(130%) hue-rotate(90deg)'},
+        {n:'Toxic Green',e:'✨',c:'special',f:'brightness(95%) contrast(125%) saturate(130%) hue-rotate(-90deg)'},
+        {n:'Negative',e:'✨',c:'special',f:'invert(80%) brightness(110%) contrast(110%)'},
+        {n:'Monochrome Red',e:'✨',c:'special',f:'grayscale(70%) brightness(100%) contrast(120%) sepia(60%)'},
+        {n:'Monochrome Blue',e:'✨',c:'special',f:'grayscale(70%) brightness(98%) contrast(118%) hue-rotate(180deg) sepia(40%)'},
+        {n:'Pastel Pop',e:'✨',c:'special',f:'brightness(118%) contrast(88%) saturate(115%) hue-rotate(-10deg)'},
+        {n:'Smooth Touch',e:'✨',c:'special',f:'brightness(112%) contrast(96%) saturate(105%) sepia(8%)'},
+    ];
+
+    let selectedFilter = null;
+    let currentCat = 'all';
+
+    function initFilters() {
+        // Build category tabs
+        const tabsEl = document.getElementById('catTabs');
+        tabsEl.innerHTML = FILTER_CATS.map(c =>
+            `<button class="cat-tab${c.id==='all'?' active':''}" onclick="filterByCat('${c.id}',this)">${c.label}</button>`
+        ).join('');
+        renderFilters(FILTERS);
+    }
+
+    function renderFilters(list) {
+        const grid = document.getElementById('filtersGrid');
+        if (!list.length) {
+            grid.innerHTML = '<div class="no-filter-results">🔍 कोई filter नहीं मिला</div>';
+            return;
+        }
+        grid.innerHTML = list.map((f, i) =>
+            `<button class="f-btn" onclick="previewFilter(${FILTERS.indexOf(f)},this)" title="${f.n}">
+                <span class="f-emoji">${f.e}</span>
+                <span class="f-name">${f.n}</span>
+            </button>`
+        ).join('');
+    }
+
+    function filterByCat(cat, el) {
+        currentCat = cat;
+        document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
+        const q = document.getElementById('filterSearchInput').value.trim().toLowerCase();
+        let list = cat === 'all' ? FILTERS : FILTERS.filter(f => f.c === cat);
+        if (q) list = list.filter(f => f.n.toLowerCase().includes(q));
+        renderFilters(list);
+    }
+
+    function searchFilters(q) {
+        q = q.trim().toLowerCase();
+        let list = currentCat === 'all' ? FILTERS : FILTERS.filter(f => f.c === currentCat);
+        if (q) list = list.filter(f => f.n.toLowerCase().includes(q) || f.c.includes(q));
+        renderFilters(list);
+    }
+
+    function previewFilter(idx, el) {
+        if (!originalSrc) { alert('पहले फोटो upload करें!'); return; }
+        document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        selectedFilter = FILTERS[idx];
+        const previewImg = document.getElementById('filterPreviewImg');
+        previewImg.src = originalSrc;
+        previewImg.style.filter = selectedFilter.f;
+        document.getElementById('filterPreviewWrap').style.display = 'block';
+        const nameEl = document.getElementById('activeFilterName');
+        nameEl.style.display = 'block';
+        nameEl.textContent = `✅ Selected: ${selectedFilter.e} ${selectedFilter.n}`;
+        document.getElementById('applyFilterBtn').style.display = 'block';
+    }
+
+    function applySelectedFilter() {
+        if (!originalSrc || !selectedFilter) return;
+        const img = new Image();
+        img.onload = function() {
+            const c = document.getElementById('workCanvas');
+            c.width = img.width; c.height = img.height;
+            const ctx = c.getContext('2d');
+            if (selectedFilter.f !== 'none') {
+                ctx.filter = selectedFilter.f;
+            }
+            ctx.drawImage(img, 0, 0);
+            ctx.filter = 'none';
+            const a = document.createElement('a');
+            a.download = `sachin-ai-filter-${selectedFilter.n.replace(/\s+/g,'-').toLowerCase()}.jpg`;
+            a.href = c.toDataURL('image/jpeg', 0.96);
+            a.click();
+        };
+        img.src = originalSrc;
+    }
+
+    // Init filters on page load
+    initFilters();
+</script>
+<!-- ===== ADSTERRA ADS START ===== -->
+
+
+<div style="display:block;text-align:center;padding:4px 0;width:100%;min-height:56px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'b1c2005cd8e1095bc458e4c59f785aa9','format':'iframe','height':50,'width':320,'params':{}};</script>
+
+</div>
+<!-- ===== ADSTERRA ADS END ===== -->
+<script src="auth-widget.js"></script>
+</body>
 </html>
