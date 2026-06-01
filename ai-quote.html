@@ -5,5 +5,286 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="shortcut icon" href="/favicon.png">
     <link rel="apple-touch-icon" sizes="192x192" href="/logo192.png">
-    </body>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3019468976412219" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Quote Card Maker - सचिन एआई</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background: #080c16; color: #e1e7f0; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: linear-gradient(135deg,#0a0e1a,#1a0a10); border-bottom: 1px solid rgba(251,191,36,0.3); padding: 14px 20px; display: flex; align-items: center; gap: 14px; }
+        .back-btn { color: #fbbf24; text-decoration: none; font-size: 1.3rem; }
+        .page-title { font-size: 1.1rem; font-weight: 700; color: #fbbf24; }
+        .page-sub { font-size: 0.75rem; color: #64748b; }
+        main { flex: 1; padding: 24px 16px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+        .card { width: 100%; max-width: 620px; background: rgba(255,255,255,0.04); border: 1px solid rgba(251,191,36,0.2); border-radius: 20px; padding: 24px; }
+        .card-title { font-size: 0.9rem; font-weight: 700; color: #fbbf24; margin-bottom: 14px; }
+        .input-group { margin-bottom: 14px; }
+        .input-label { font-size: 0.8rem; color: #94a3b8; margin-bottom: 6px; font-weight: 600; }
+        textarea.q-input, input.q-input {
+            width: 100%; padding: 12px; background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+            color: #fff; font-size: 0.88rem; font-family: inherit; outline: none;
+        }
+        textarea.q-input { resize: none; height: 80px; }
+        textarea.q-input:focus, input.q-input:focus { border-color: #fbbf24; }
+        .style-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
+        .style-btn { padding: 10px 6px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); cursor: pointer; text-align: center; transition: all 0.2s; font-family: inherit; }
+        .style-btn:hover, .style-btn.active { border-color: #fbbf24; background: rgba(251,191,36,0.1); }
+        .style-icon { font-size: 1.4rem; margin-bottom: 3px; }
+        .style-name { font-size: 0.72rem; font-weight: 700; color: #fbbf24; }
+        .ai-toggle { display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 10px; border: 1px solid rgba(251,191,36,0.2); background: rgba(251,191,36,0.05); margin-bottom: 14px; cursor: pointer; }
+        .ai-toggle input { accent-color: #fbbf24; width: 16px; height: 16px; }
+        .ai-toggle span { font-size: 0.85rem; color: #94a3b8; }
+        .gen-btn { width: 100%; padding: 14px; font-size: 0.95rem; font-weight: 700; border: none; border-radius: 12px; cursor: pointer; background: linear-gradient(135deg,#fbbf24,#d97706); color: #0a0e1a; font-family: inherit; transition: all 0.3s; }
+        .gen-btn:hover { box-shadow: 0 0 20px rgba(251,191,36,0.4); }
+        .gen-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .spinner-txt { text-align: center; color: #fbbf24; font-size: 0.85rem; padding: 10px; display: none; }
+        .canvas-wrap { width: 100%; max-width: 500px; margin: 0 auto; border-radius: 14px; overflow: hidden; display: none; }
+        canvas#quoteCanvas { width: 100%; display: block; border-radius: 14px; }
+        .dl-btn { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: #e1e7f0; font-size: 0.85rem; cursor: pointer; font-family: inherit; margin-top: 10px; transition: all 0.2s; }
+        .dl-btn:hover { background: rgba(255,255,255,0.1); }
+        footer { text-align: center; padding: 20px; color: #334155; font-size: 0.78rem; }
+    </style>
+</head>
+<body>
+<header>
+    <a href="index.html" class="back-btn">←</a>
+    <div>
+        <div class="page-title">💬 AI Quote Card Maker</div>
+        <div class="page-sub">Motivational Quote Cards बनाओ — Share करो!</div>
+    </div>
+</header>
+<main>
+    <div class="card">
+        <div class="card-title">Step 1 — Quote लिखें या AI से बनवाएं</div>
+        <div class="input-group">
+            <div class="input-label">Quote / Thought</div>
+            <textarea class="q-input" id="quoteText" placeholder="जैसे: मेहनत वो चाबी है जो किस्मत का ताला खोल देती है।"></textarea>
+        </div>
+        <div class="input-group">
+            <div class="input-label">Author / आपका नाम (optional)</div>
+            <input class="q-input" id="authorText" placeholder="जैसे: — Sachin AI">
+        </div>
+
+        <label class="ai-toggle">
+            <input type="checkbox" id="aiGenerate" onchange="toggleAI(this)">
+            <span>🤖 AI से Quote Generate करें (खुद लिखने की ज़रूरत नहीं)</span>
+        </label>
+
+        <div id="aiTopicBox" style="display:none;margin-bottom:14px;">
+            <div class="input-label">Topic / Theme बताएं</div>
+            <input class="q-input" id="aiTopic" placeholder="जैसे: success, friendship, motivation, life, India...">
+        </div>
+
+        <div class="card-title">Step 2 — Card Style चुनें</div>
+        <div class="style-grid">
+            <div class="style-btn active" data-bg="gradient1" onclick="selectStyle(this)">
+                <div class="style-icon">🌅</div><div class="style-name">Sunset</div>
+            </div>
+            <div class="style-btn" data-bg="gradient2" onclick="selectStyle(this)">
+                <div class="style-icon">🌌</div><div class="style-name">Galaxy</div>
+            </div>
+            <div class="style-btn" data-bg="gradient3" onclick="selectStyle(this)">
+                <div class="style-icon">🌿</div><div class="style-name">Forest</div>
+            </div>
+            <div class="style-btn" data-bg="gradient4" onclick="selectStyle(this)">
+                <div class="style-icon">🔥</div><div class="style-name">Fire</div>
+            </div>
+            <div class="style-btn" data-bg="gradient5" onclick="selectStyle(this)">
+                <div class="style-icon">🌊</div><div class="style-name">Ocean</div>
+            </div>
+            <div class="style-btn" data-bg="gradient6" onclick="selectStyle(this)">
+                <div class="style-icon">🌸</div><div class="style-name">Rose</div>
+            </div>
+        </div>
+
+        <button class="gen-btn" id="genBtn" onclick="createCard()">💬 Quote Card बनाएं</button>
+        <div class="spinner-txt" id="spinnerTxt">⏳ AI Quote बना रहा है...</div>
+    </div>
+
+    <div class="card" id="resultCard" style="display:none">
+        <div class="card-title">✅ आपका Quote Card तैयार है!</div>
+        <div class="canvas-wrap" id="canvasWrap">
+            <canvas id="quoteCanvas"></canvas>
+        </div>
+        <button class="dl-btn" onclick="downloadCard()">📥 Card डाउनलोड करें (PNG)</button>
+        <button class="gen-btn" style="margin-top:10px;" onclick="createCard()">🔄 नया Card बनाएं</button>
+    </div><!-- Mid-Page Ad -->
+<div style="text-align:center;margin:12px auto;width:100%;min-height:56px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'b1c2005cd8e1095bc458e4c59f785aa9','format':'iframe','height':50,'width':320,'params':{}};</script>
+
+</div>
+</main>
+<footer>&copy; 2025 सचिन एआई फोटो स्टूडियो</footer>
+
+<script>
+    const GRADIENTS = {
+        gradient1: ['#ff6b35', '#f7931e', '#ffcc02'],
+        gradient2: ['#0f0c29', '#302b63', '#24243e'],
+        gradient3: ['#134e5e', '#71b280'],
+        gradient4: ['#c0392b', '#e74c3c', '#f39c12'],
+        gradient5: ['#1a1a2e', '#16213e', '#0f3460'],
+        gradient6: ['#ee0979', '#ff6a00']
+    };
+    let selectedBg = 'gradient1';
+
+    function selectStyle(el) {
+        document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        selectedBg = el.dataset.bg;
+    }
+
+    function toggleAI(chk) {
+        document.getElementById('aiTopicBox').style.display = chk.checked ? 'block' : 'none';
+        document.getElementById('quoteText').disabled = chk.checked;
+        if (chk.checked) document.getElementById('quoteText').placeholder = 'AI खुद Quote लिखेगा...';
+        else document.getElementById('quoteText').placeholder = 'जैसे: मेहनत वो चाबी है जो किस्मत का ताला खोल देती है।';
+    }
+
+    async function createCard() {
+        const aiGenerate = document.getElementById('aiGenerate').checked;
+        let quote = document.getElementById('quoteText').value.trim();
+        const author = document.getElementById('authorText').value.trim() || '— Sachin AI';
+
+        if (aiGenerate) {
+            const topic = document.getElementById('aiTopic').value.trim() || 'motivation';
+            document.getElementById('genBtn').disabled = true;
+            document.getElementById('spinnerTxt').style.display = 'block';
+            try {
+                const res = await fetch('/generate-code', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        description: `Write one short, powerful motivational quote about "${topic}" in Hindi or Hinglish. Maximum 2 lines. No explanation, just the quote itself.`,
+                        language: 'javascript'
+                    })
+                });
+                const data = await res.json();
+                quote = (data.code || '').replace(/["'`]/g, '').trim();
+                if (!quote || quote.length < 5) quote = 'मेहनत करो, मंज़िल मिलेगी।';
+                document.getElementById('quoteText').value = quote;
+            } catch (e) {
+                quote = 'सपने वो नहीं जो नींद में आएं, सपने वो हैं जो नींद न आने दें।';
+                document.getElementById('quoteText').value = quote;
+            }
+            document.getElementById('spinnerTxt').style.display = 'none';
+            document.getElementById('genBtn').disabled = false;
+        }
+
+        if (!quote) { alert('कृपया Quote लिखें!'); return; }
+        renderCard(quote, author);
+    }
+
+    function renderCard(quote, author) {
+        const canvas = document.getElementById('quoteCanvas');
+        const size = 800;
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+
+        const colors = GRADIENTS[selectedBg];
+        const grad = ctx.createLinearGradient(0, 0, size, size);
+        colors.forEach((c, i) => grad.addColorStop(i / (colors.length - 1), c));
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, size, size);
+
+        // Overlay for readability
+        ctx.fillStyle = 'rgba(0,0,0,0.35)';
+        ctx.fillRect(0, 0, size, size);
+
+        // Decorative lines
+        ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(60, 60); ctx.lineTo(size-60, 60); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(60, size-60); ctx.lineTo(size-60, size-60); ctx.stroke();
+
+        // Quote marks
+        ctx.fillStyle = 'rgba(255,255,255,0.3)';
+        ctx.font = 'bold 100px Georgia, serif';
+        ctx.fillText('"', 55, 165);
+
+        // Quote text with word wrap
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 38px Segoe UI, Arial, sans-serif';
+        ctx.textAlign = 'center';
+        const words = quote.split(' ');
+        const lines = [];
+        let line = '';
+        const maxWidth = size - 140;
+        for (const word of words) {
+            const test = line ? line + ' ' + word : word;
+            if (ctx.measureText(test).width > maxWidth && line) {
+                lines.push(line);
+                line = word;
+            } else {
+                line = test;
+            }
+        }
+        if (line) lines.push(line);
+        const lineH = 54;
+        const totalH = lines.length * lineH;
+        const startY = (size - totalH) / 2;
+        lines.forEach((l, i) => {
+            ctx.shadowColor = 'rgba(0,0,0,0.5)';
+            ctx.shadowBlur = 8;
+            ctx.fillText(l, size/2, startY + i * lineH);
+        });
+        ctx.shadowBlur = 0;
+
+        // Author
+        ctx.font = '26px Segoe UI, Arial, sans-serif';
+        ctx.fillStyle = 'rgba(255,255,255,0.75)';
+        ctx.fillText(author, size/2, size - 90);
+
+        // Branding
+        ctx.font = '18px Segoe UI, sans-serif';
+        ctx.fillStyle = 'rgba(255,255,255,0.4)';
+        ctx.fillText('✨ Sachin AI Studio', size/2, size - 55);
+
+        document.getElementById('canvasWrap').style.display = 'block';
+        document.getElementById('resultCard').style.display = 'block';
+        document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function downloadCard() {
+        const canvas = document.getElementById('quoteCanvas');
+        const a = document.createElement('a');
+        a.download = 'sachin-ai-quote-card.png';
+        a.href = canvas.toDataURL('image/png');
+        a.click();
+    }
+</script>
+
+<script src="tracker.js"></script>
+<script src="share-unlock.js"></script>
+
+<!-- ===== ADSTERRA ADS START ===== -->
+<!-- Popunder -->
+
+<!-- Social Bar -->
+
+<!-- 320x50 Mobile Banner -->
+<div id="sachin-ad-320" style="display:block;text-align:center;background:linear-gradient(90deg,#0a0e1a,#0d1225);border-top:1px solid rgba(99,102,241,0.3);border-bottom:1px solid rgba(99,102,241,0.3);padding:3px 0;width:100%;min-height:56px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'b1c2005cd8e1095bc458e4c59f785aa9','format':'iframe','height':50,'width':320,'params':{}};</script>
+
+</div>
+<!-- 728x90 Leaderboard Banner -->
+<div id="sachin-ad-728" style="display:block;text-align:center;background:linear-gradient(90deg,#0a0e1a,#0d1225);padding:3px 0;width:100%;min-height:96px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'5e113b8022609e2135c5e1e265084235','format':'iframe','height':90,'width':728,'params':{}};</script>
+
+</div>
+<!-- Native Banner -->
+<div style="text-align:center;margin:6px auto;max-width:100%;min-height:60px;">
+
+<div id="container-30a2c535b11a237c281ced645d908d88"></div>
+</div>
+<!-- 300x250 Rectangle -->
+<div id="sachin-ad-300" style="display:block;text-align:center;margin:8px auto;width:100%;min-height:254px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'817c9252a9900f63d05a904142664916','format':'iframe','height':250,'width':300,'params':{}};</script>
+
+</div>
+<!-- ===== ADSTERRA ADS END ===== -->
+<script src="auth-widget.js"></script>
+</body>
 </html>
