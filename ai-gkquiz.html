@@ -3,4 +3,186 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="shortcut icon" href="/favicon.png">
     <link rel="apple-touch-icon" sizes="192x192" href="/logo192.png">
-    </body></html>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3019468976412219" crossorigin="anonymous"></script><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>AI GK Quiz - सचिन एआई</title>
+<style>*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',sans-serif}body{background:#060810;color:#e1e7f0;min-height:100vh;display:flex;flex-direction:column}header{background:linear-gradient(135deg,#0a0e1a,#1a1600);border-bottom:1px solid rgba(250,204,21,.4);padding:14px 20px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100}.back{color:#facc15;text-decoration:none;font-size:1.3rem}.pt{font-size:1.05rem;font-weight:700;color:#facc15}.ps{font-size:.75rem;color:#64748b}main{flex:1;padding:20px 16px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.card{width:100%;max-width:640px;background:rgba(255,255,255,.04);border:1px solid rgba(250,204,21,.2);border-radius:18px;padding:20px}.ct{font-size:.82rem;font-weight:700;color:#facc15;margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 4px}.chip{padding:8px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);cursor:pointer;font-size:.78rem;color:#94a3b8;transition:all .2s}.chip.active,.chip:hover{border-color:#facc15;color:#facc15;background:rgba(250,204,21,.08)}
+label{font-size:.8rem;color:#94a3b8;font-weight:600;display:block;margin-bottom:5px;margin-top:10px}input{width:100%;padding:11px;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#fff;font-size:.87rem;font-family:inherit;outline:none}input:focus{border-color:#facc15}
+.btn{width:100%;padding:14px;font-size:.95rem;font-weight:700;border:none;border-radius:12px;cursor:pointer;background:linear-gradient(135deg,#facc15,#ca8a04);color:#000;font-family:inherit;transition:all .3s;margin-top:14px}.btn:hover{box-shadow:0 0 24px rgba(250,204,21,.4);transform:translateY(-1px)}.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.quiz-wrap{display:none}
+.score-bar{background:rgba(250,204,21,.1);border:1px solid rgba(250,204,21,.3);border-radius:12px;padding:14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-weight:700}
+.score-val{font-size:1.3rem;color:#facc15}
+.q-card{background:rgba(255,255,255,.04);border:1px solid rgba(250,204,21,.15);border-radius:14px;padding:18px;margin-bottom:10px}
+.q-num{font-size:.75rem;color:#facc15;font-weight:700;margin-bottom:6px}
+.q-text{font-size:.92rem;font-weight:600;margin-bottom:12px;line-height:1.5}
+.options{display:flex;flex-direction:column;gap:8px}
+.opt{padding:11px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);cursor:pointer;font-size:.85rem;transition:all .2s;text-align:left;color:#e1e7f0;font-family:inherit}
+.opt:hover:not(:disabled){border-color:#facc15;background:rgba(250,204,21,.08)}
+.opt.correct{border-color:#4ade80!important;background:rgba(74,222,128,.15)!important;color:#4ade80}
+.opt.wrong{border-color:#f87171!important;background:rgba(248,113,113,.1)!important;color:#f87171}
+.opt:disabled{cursor:not-allowed}
+.explanation{font-size:.8rem;color:#94a3b8;margin-top:8px;padding:8px 12px;background:rgba(0,0,0,.3);border-radius:8px;display:none;line-height:1.6}
+.result-summary{background:rgba(250,204,21,.08);border:2px solid rgba(250,204,21,.3);border-radius:14px;padding:20px;text-align:center;display:none}
+.big-score{font-size:2.5rem;font-weight:900;color:#facc15}
+.row-btns{display:flex;gap:10px;margin-top:10px}.sm-btn{flex:1;padding:10px;border-radius:10px;background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.3);color:#facc15;font-size:.82rem;font-weight:700;cursor:pointer;font-family:inherit}.sm-btn:hover{background:rgba(250,204,21,.15)}
+.err{color:#fca5a5;font-size:.82rem;display:none;margin-top:8px;padding:10px;background:rgba(239,68,68,.08);border-radius:8px}
+footer{text-align:center;padding:16px;color:#334155;font-size:.75rem}</style></head>
+<body>
+<header><a href="index.html" class="back">←</a><div><div class="pt">🧠 AI GK Quiz</div><div class="ps">9 Categories — Test Your Knowledge!</div></div></header>
+<main>
+<div class="card" id="setupCard">
+  <div class="ct">Category चुनें</div>
+  <div class="chips">
+    <div class="chip active" onclick="pick(this,'cat')" data-val="Indian History">🏛️ Indian History</div>
+    <div class="chip" onclick="pick(this,'cat')" data-val="Indian Geography">🗺️ Geography</div>
+    <div class="chip" onclick="pick(this,'cat')" data-val="Science & Technology">🔬 Science</div>
+    <div class="chip" onclick="pick(this,'cat')" data-val="Current Affairs India 2024-25">📰 Current Affairs</div>
+    <div class="chip" onclick="pick(this,'cat')" data-val="Indian Constitution & Politics">⚖️ Constitution</div>
+    <div class="chip" onclick="pick(this,'cat')" data-val="Sports & Games">🏏 Sports</div>
+    <div class="chip" onclick="pick(this,'cat')" data-val="Bollywood & Entertainment">🎬 Bollywood</div>
+    <div class="chip" onclick="pick(this,'cat')" data-val="General Knowledge Mixed">🌍 Mixed GK</div>
+    <div class="chip" onclick="pick(this,'cat')" data-val="Math & Reasoning">🔢 Math & Reasoning</div>
+  </div>
+  <div class="ct" style="margin-top:14px">Difficulty</div>
+  <div class="chips">
+    <div class="chip active" onclick="pick(this,'diff')" data-val="Easy">😊 Easy</div>
+    <div class="chip" onclick="pick(this,'diff')" data-val="Medium">🤔 Medium</div>
+    <div class="chip" onclick="pick(this,'diff')" data-val="Hard">🔥 Hard</div>
+    <div class="chip" onclick="pick(this,'diff')" data-val="Mixed">🎲 Mixed</div>
+  </div>
+  <label>Questions (5-15)</label>
+  <input id="qcount" type="number" min="5" max="15" value="10">
+  <button class="btn" id="btn" onclick="startQuiz()">🧠 Quiz शुरू करो!</button>
+  <div class="err" id="err"></div>
+</div>
+<div class="card quiz-wrap" id="quizWrap">
+  <div class="score-bar">
+    <span>🎯 Score</span>
+    <span class="score-val" id="scoreVal">0 / 0</span>
+    <span id="qProgress">Q 0/0</span>
+  </div>
+  <div id="quizContainer"></div>
+  <div class="result-summary" id="resultSummary">
+    <div class="big-score" id="finalScore">0/0</div>
+    <div style="margin:8px 0;color:#94a3b8">आपका Score</div>
+    <div id="remark" style="font-size:1.1rem;font-weight:600;color:#facc15;margin:8px 0"></div>
+    <div class="row-btns" style="margin-top:14px">
+      <button class="sm-btn" onclick="shareScore()">📲 Share करो</button>
+      <button class="sm-btn" onclick="restartQuiz()">🔄 दोबारा खेलो</button>
+    </div>
+  </div>
+</div>
+<!-- Mid-Page Ad -->
+<div style="text-align:center;margin:12px auto;width:100%;min-height:56px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'b1c2005cd8e1095bc458e4c59f785aa9','format':'iframe','height':50,'width':320,'params':{}};</script>
+
+</div>
+</main>
+<footer>&copy; 2025 सचिन एआई फोटो स्टूडियो</footer>
+<script>
+const state={cat:'Indian History',diff:'Easy'};
+let quizData=[],score=0,answered=0,total=0;
+function pick(el,key){document.querySelectorAll('[onclick*="pick(this,\''+key+'\'"]').forEach(e=>e.classList.remove('active'));el.classList.add('active');state[key]=el.dataset.val;}
+async function startQuiz(){
+  const btn=document.getElementById('btn');btn.disabled=true;btn.textContent='⏳ Quiz बन रही है...';
+  document.getElementById('err').style.display='none';
+  total=parseInt(document.getElementById('qcount').value)||10;
+  const prompt=`Create a GK quiz in Hindi with EXACTLY ${total} questions for category: "${state.cat}", difficulty: "${state.diff}".
+
+Format EXACTLY like this JSON (no other text):
+[
+{"q":"Question text in Hindi","opts":["Option A","Option B","Option C","Option D"],"ans":0,"exp":"Brief explanation in Hindi"},
+...
+]
+
+Rules:
+- Questions in Hindi, clear and unambiguous
+- Exactly 4 options per question  
+- "ans" is the index (0,1,2,3) of correct option
+- "exp" is a short explanation of the correct answer
+- Questions should be factually accurate
+- ${state.diff==='Easy'?'Basic level, widely known facts':''}
+- ${state.diff==='Hard'?'Challenging, specific facts':''}
+
+Return ONLY the JSON array, nothing else.`;
+  try{
+    const r=await fetch('/generate-content',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
+    const d=await r.json();if(!r.ok)throw new Error(d.error||'Error');
+    let text=d.result.trim();
+    const start=text.indexOf('[');const end=text.lastIndexOf(']');
+    if(start===-1||end===-1)throw new Error('Quiz data invalid');
+    quizData=JSON.parse(text.slice(start,end+1));
+    score=0;answered=0;total=quizData.length;
+    document.getElementById('setupCard').style.display='none';
+    document.getElementById('quizWrap').style.display='block';
+    renderQuiz();
+    document.getElementById('quizWrap').scrollIntoView({behavior:'smooth'});
+  }catch(e){const err=document.getElementById('err');err.textContent='❌ '+e.message+'. दोबारा try करो।';err.style.display='block';}
+  finally{btn.disabled=false;btn.textContent='🧠 Quiz शुरू करो!';}
+}
+function renderQuiz(){
+  const c=document.getElementById('quizContainer');c.innerHTML='';
+  document.getElementById('scoreVal').textContent=`${score} / ${answered}`;
+  document.getElementById('qProgress').textContent=`Q ${answered}/${total}`;
+  quizData.forEach((q,i)=>{
+    const card=document.createElement('div');card.className='q-card';card.id='qcard'+i;
+    card.innerHTML=`<div class="q-num">प्रश्न ${i+1}</div><div class="q-text">${q.q}</div><div class="options">${q.opts.map((o,j)=>`<button class="opt" onclick="answer(${i},${j})">${String.fromCharCode(65+j)}. ${o}</button>`).join('')}</div><div class="explanation" id="exp${i}">${q.exp||''}</div>`;
+    c.appendChild(card);
+  });
+}
+function answer(qi,optIdx){
+  const card=document.getElementById('qcard'+qi);
+  const opts=card.querySelectorAll('.opt');
+  opts.forEach(o=>o.disabled=true);
+  opts[quizData[qi].ans].classList.add('correct');
+  if(optIdx===quizData[qi].ans)score++;
+  else opts[optIdx].classList.add('wrong');
+  document.getElementById('exp'+qi).style.display='block';
+  answered++;
+  document.getElementById('scoreVal').textContent=`${score} / ${answered}`;
+  document.getElementById('qProgress').textContent=`Q ${answered}/${total}`;
+  if(answered===total){
+    setTimeout(()=>{
+      const pct=Math.round(score/total*100);
+      document.getElementById('finalScore').textContent=`${score}/${total}`;
+      document.getElementById('remark').textContent=pct>=80?'🏆 शानदार! आप Expert हैं!':pct>=60?'👏 बढ़िया! Well Done!':pct>=40?'📚 ठीक है, और पढ़ो':'💪 मेहनत करो, फिर आओ!';
+      document.getElementById('resultSummary').style.display='block';
+      document.getElementById('resultSummary').scrollIntoView({behavior:'smooth'});
+    },500);
+  }
+}
+function shareScore(){const txt=`मैंने AI GK Quiz में ${score}/${total} score किया! 🧠🎯\nCategory: ${state.cat}\n\nतुम try करो: ${window.location.href}`;navigator.share?navigator.share({text:txt}):navigator.clipboard.writeText(txt).then(()=>alert('Score copied! Share करो 📲'));}
+function restartQuiz(){document.getElementById('setupCard').style.display='block';document.getElementById('quizWrap').style.display='none';document.getElementById('quizContainer').innerHTML='';document.getElementById('resultSummary').style.display='none';}
+</script>
+
+<script src="tracker.js"></script>
+<script src="share-unlock.js"></script>
+
+<!-- ===== ADSTERRA ADS START ===== -->
+<!-- Popunder -->
+
+<!-- Social Bar -->
+
+<!-- 320x50 Mobile Banner -->
+<div id="sachin-ad-320" style="display:block;text-align:center;background:linear-gradient(90deg,#0a0e1a,#0d1225);border-top:1px solid rgba(99,102,241,0.3);border-bottom:1px solid rgba(99,102,241,0.3);padding:3px 0;width:100%;min-height:56px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'b1c2005cd8e1095bc458e4c59f785aa9','format':'iframe','height':50,'width':320,'params':{}};</script>
+
+</div>
+<!-- 728x90 Leaderboard Banner -->
+<div id="sachin-ad-728" style="display:block;text-align:center;background:linear-gradient(90deg,#0a0e1a,#0d1225);padding:3px 0;width:100%;min-height:96px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'5e113b8022609e2135c5e1e265084235','format':'iframe','height':90,'width':728,'params':{}};</script>
+
+</div>
+<!-- Native Banner -->
+<div style="text-align:center;margin:6px auto;max-width:100%;min-height:60px;">
+
+<div id="container-30a2c535b11a237c281ced645d908d88"></div>
+</div>
+<!-- 300x250 Rectangle -->
+<div id="sachin-ad-300" style="display:block;text-align:center;margin:8px auto;width:100%;min-height:254px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'817c9252a9900f63d05a904142664916','format':'iframe','height':250,'width':300,'params':{}};</script>
+
+</div>
+<!-- ===== ADSTERRA ADS END ===== -->
+<script src="auth-widget.js"></script>
+</body></html>
