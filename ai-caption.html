@@ -5,5 +5,233 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="shortcut icon" href="/favicon.png">
     <link rel="apple-touch-icon" sizes="192x192" href="/logo192.png">
-    </body>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3019468976412219" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Caption Generator - सचिन एआई</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background: #080c16; color: #e1e7f0; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: linear-gradient(135deg,#0a0e1a,#0f1a0a); border-bottom: 1px solid rgba(34,197,94,0.3); padding: 14px 20px; display: flex; align-items: center; gap: 14px; }
+        .back-btn { color: #22c55e; text-decoration: none; font-size: 1.3rem; }
+        .page-title { font-size: 1.1rem; font-weight: 700; color: #22c55e; }
+        .page-sub { font-size: 0.75rem; color: #64748b; }
+        main { flex: 1; padding: 24px 16px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+        .card { width: 100%; max-width: 620px; background: rgba(255,255,255,0.04); border: 1px solid rgba(34,197,94,0.2); border-radius: 20px; padding: 24px; }
+        .card-title { font-size: 0.9rem; font-weight: 700; color: #22c55e; margin-bottom: 14px; }
+        .upload-zone { border: 2px dashed rgba(34,197,94,0.3); border-radius: 14px; padding: 28px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .upload-zone:hover { border-color: #22c55e; background: rgba(34,197,94,0.04); }
+        .upload-zone input { display: none; }
+        .upload-icon { font-size: 2.5rem; margin-bottom: 8px; }
+        .upload-text { color: #64748b; font-size: 0.85rem; }
+        .upload-text b { color: #22c55e; }
+        .img-preview { width: 100%; max-height: 260px; object-fit: contain; border-radius: 12px; margin-top: 14px; border: 1px solid rgba(34,197,94,0.2); display: none; }
+        .platform-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 14px 0; }
+        .plat-btn { padding: 10px 6px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); cursor: pointer; text-align: center; font-family: inherit; transition: all 0.2s; }
+        .plat-btn:hover, .plat-btn.active { border-color: #22c55e; background: rgba(34,197,94,0.1); }
+        .plat-icon { font-size: 1.4rem; margin-bottom: 3px; }
+        .plat-name { font-size: 0.72rem; font-weight: 700; color: #22c55e; }
+        .lang-row { display: flex; gap: 8px; margin-bottom: 14px; }
+        .lang-btn { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); cursor: pointer; text-align: center; font-size: 0.8rem; font-family: inherit; transition: all 0.2s; color: #94a3b8; }
+        .lang-btn.active { border-color: #22c55e; color: #22c55e; background: rgba(34,197,94,0.1); font-weight: 700; }
+        .gen-btn { width: 100%; padding: 14px; font-size: 0.95rem; font-weight: 700; border: none; border-radius: 12px; cursor: pointer; background: linear-gradient(135deg,#22c55e,#16a34a); color: #fff; font-family: inherit; transition: all 0.3s; }
+        .gen-btn:hover { box-shadow: 0 0 20px rgba(34,197,94,0.4); }
+        .gen-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .spinner-box { display: none; text-align: center; padding: 20px; color: #22c55e; font-size: 0.85rem; }
+        .spin-ring { width: 40px; height: 40px; border: 3px solid rgba(34,197,94,0.2); border-top-color: #22c55e; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 10px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .result-box { background: rgba(34,197,94,0.06); border: 1px solid rgba(34,197,94,0.2); border-radius: 12px; padding: 16px; font-size: 0.88rem; line-height: 1.7; color: #e1e7f0; white-space: pre-wrap; word-break: break-word; position: relative; margin-top: 14px; display: none; }
+        .copy-btn { position: absolute; top: 8px; right: 8px; padding: 5px 12px; background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); border-radius: 8px; color: #22c55e; font-size: 0.72rem; cursor: pointer; font-family: inherit; }
+        .hashtag-box { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+        .hashtag { padding: 4px 12px; background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); border-radius: 20px; font-size: 0.75rem; color: #22c55e; cursor: pointer; }
+        footer { text-align: center; padding: 20px; color: #334155; font-size: 0.78rem; }
+    </style>
+</head>
+<body>
+<header>
+    <a href="index.html" class="back-btn">←</a>
+    <div>
+        <div class="page-title">📝 AI Caption Generator</div>
+        <div class="page-sub">फोटो अपलोड करो — AI Caption & Hashtag बनाएगा</div>
+    </div>
+</header>
+<main>
+    <div class="card">
+        <div class="card-title">Step 1 — फोटो अपलोड करें</div>
+        <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+            <div class="upload-icon">📸</div>
+            <div class="upload-text"><b>फोटो अपलोड करें</b> — AI Caption बनाएगा</div>
+            <input type="file" id="fileInput" accept="image/*" onchange="loadImg(event)">
+        </div>
+        <img id="imgPreview" class="img-preview" alt="Preview">
+
+        <div class="card-title" style="margin-top:16px;">Step 2 — Platform चुनें</div>
+        <div class="platform-grid">
+            <div class="plat-btn active" data-platform="Instagram" onclick="selectPlatform(this)">
+                <div class="plat-icon">📸</div><div class="plat-name">Instagram</div>
+            </div>
+            <div class="plat-btn" data-platform="YouTube" onclick="selectPlatform(this)">
+                <div class="plat-icon">▶️</div><div class="plat-name">YouTube</div>
+            </div>
+            <div class="plat-btn" data-platform="Facebook" onclick="selectPlatform(this)">
+                <div class="plat-icon">👥</div><div class="plat-name">Facebook</div>
+            </div>
+            <div class="plat-btn" data-platform="Twitter/X" onclick="selectPlatform(this)">
+                <div class="plat-icon">🐦</div><div class="plat-name">Twitter/X</div>
+            </div>
+            <div class="plat-btn" data-platform="LinkedIn" onclick="selectPlatform(this)">
+                <div class="plat-icon">💼</div><div class="plat-name">LinkedIn</div>
+            </div>
+            <div class="plat-btn" data-platform="WhatsApp Status" onclick="selectPlatform(this)">
+                <div class="plat-icon">💬</div><div class="plat-name">WhatsApp</div>
+            </div>
+        </div>
+
+        <div class="card-title">Step 3 — भाषा चुनें</div>
+        <div class="lang-row">
+            <button class="lang-btn active" data-lang="Hindi" onclick="selectLang(this)">🇮🇳 हिंदी</button>
+            <button class="lang-btn" data-lang="English" onclick="selectLang(this)">🇬🇧 English</button>
+            <button class="lang-btn" data-lang="Hinglish" onclick="selectLang(this)">🔀 Hinglish</button>
+        </div>
+
+        <button class="gen-btn" id="genBtn" onclick="generateCaption()" disabled>📝 Caption बनाएं</button>
+    </div>
+
+    <div class="card" id="resultCard" style="display:none">
+        <div class="spinner-box" id="spinnerBox">
+            <div class="spin-ring"></div>
+            Gemini AI Caption बना रहा है...
+        </div>
+        <div id="resultSection" style="display:none">
+            <div class="card-title">✅ आपका Caption तैयार है!</div>
+            <div class="result-box" id="captionBox">
+                <button class="copy-btn" onclick="copyCaption()">📋 Copy</button>
+                <span id="captionText"></span>
+            </div>
+            <div class="card-title" style="margin-top:16px;">🏷️ Hashtags (click to copy)</div>
+            <div class="hashtag-box" id="hashtagBox"></div>
+            <button class="gen-btn" style="margin-top:14px;" onclick="generateCaption()">🔄 नया Caption बनाएं</button>
+        </div>
+    </div><!-- Mid-Page Ad -->
+<div style="text-align:center;margin:12px auto;width:100%;min-height:56px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'b1c2005cd8e1095bc458e4c59f785aa9','format':'iframe','height':50,'width':320,'params':{}};</script>
+
+</div>
+</main>
+<footer>&copy; 2025 सचिन एआई फोटो स्टूडियो</footer>
+
+<script>
+    let imageBase64 = null, imageMime = 'image/jpeg';
+    let selectedPlatform = 'Instagram', selectedLang = 'Hindi';
+
+    function selectPlatform(el) {
+        document.querySelectorAll('.plat-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        selectedPlatform = el.dataset.platform;
+    }
+
+    function selectLang(el) {
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        selectedLang = el.dataset.lang;
+    }
+
+    function loadImg(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        imageMime = file.type || 'image/jpeg';
+        const reader = new FileReader();
+        reader.onload = e => {
+            imageBase64 = e.target.result.split(',')[1];
+            document.getElementById('imgPreview').src = e.target.result;
+            document.getElementById('imgPreview').style.display = 'block';
+            document.getElementById('genBtn').disabled = false;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    async function generateCaption() {
+        if (!imageBase64) return;
+        document.getElementById('genBtn').disabled = true;
+        document.getElementById('resultCard').style.display = 'block';
+        document.getElementById('spinnerBox').style.display = 'block';
+        document.getElementById('resultSection').style.display = 'none';
+        document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+
+        const instruction = `Analyze this image and create a perfect ${selectedPlatform} caption in ${selectedLang} language. 
+Include: 1) An engaging caption (2-4 lines), 2) Call to action, 3) 15-20 relevant hashtags.
+Format your response as:
+CAPTION:
+[your caption here]
+
+HASHTAGS:
+[hashtags here separated by spaces]`;
+
+        try {
+            const res = await fetch('/analyze-image', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ imageBase64, mimeType: imageMime, instruction })
+            });
+            const data = await res.json();
+            const raw = data.prompt || '';
+            const captionMatch = raw.match(/CAPTION:\s*([\s\S]*?)(?:HASHTAGS:|$)/i);
+            const hashtagMatch = raw.match(/HASHTAGS:\s*([\s\S]*?)$/i);
+            const caption = captionMatch ? captionMatch[1].trim() : raw;
+            const hashtagsRaw = hashtagMatch ? hashtagMatch[1].trim() : '';
+            document.getElementById('captionText').textContent = caption;
+            document.getElementById('captionBox').style.display = 'block';
+            const tags = hashtagsRaw.match(/#[\w\u0900-\u097F]+/g) || [];
+            const hashtagBox = document.getElementById('hashtagBox');
+            hashtagBox.innerHTML = tags.map(t => `<span class="hashtag" onclick="navigator.clipboard.writeText('${t}')">${t}</span>`).join('');
+        } catch (e) {
+            document.getElementById('captionText').textContent = '❌ Caption नहीं बन सका। दोबारा कोशिश करें।';
+        }
+        document.getElementById('spinnerBox').style.display = 'none';
+        document.getElementById('resultSection').style.display = 'block';
+        document.getElementById('genBtn').disabled = false;
+    }
+
+    function copyCaption() {
+        const text = document.getElementById('captionText').textContent;
+        const hashtags = [...document.querySelectorAll('.hashtag')].map(h => h.textContent).join(' ');
+        navigator.clipboard.writeText(text + '\n\n' + hashtags).then(() => {
+            const btn = document.querySelector('.copy-btn');
+            btn.textContent = '✅ Copied!';
+            setTimeout(() => btn.textContent = '📋 Copy', 2000);
+        });
+    }
+</script>
+
+<script src="tracker.js"></script>
+<script src="share-unlock.js"></script>
+
+<!-- ===== ADSTERRA ADS START ===== -->
+<!-- Popunder -->
+
+<!-- Social Bar -->
+
+<!-- 320x50 Mobile Banner -->
+<div id="sachin-ad-320" style="display:block;text-align:center;background:linear-gradient(90deg,#0a0e1a,#0d1225);border-top:1px solid rgba(99,102,241,0.3);border-bottom:1px solid rgba(99,102,241,0.3);padding:3px 0;width:100%;min-height:56px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'b1c2005cd8e1095bc458e4c59f785aa9','format':'iframe','height':50,'width':320,'params':{}};</script>
+
+</div>
+<!-- 728x90 Leaderboard Banner -->
+<div id="sachin-ad-728" style="display:block;text-align:center;background:linear-gradient(90deg,#0a0e1a,#0d1225);padding:3px 0;width:100%;min-height:96px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'5e113b8022609e2135c5e1e265084235','format':'iframe','height':90,'width':728,'params':{}};</script>
+
+</div>
+<!-- Native Banner -->
+<div style="text-align:center;margin:6px auto;max-width:100%;min-height:60px;">
+
+<div id="container-30a2c535b11a237c281ced645d908d88"></div>
+</div>
+<!-- 300x250 Rectangle -->
+<div id="sachin-ad-300" style="display:block;text-align:center;margin:8px auto;width:100%;min-height:254px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'817c9252a9900f63d05a904142664916','format':'iframe','height':250,'width':300,'params':{}};</script>
+
+</div>
+<!-- ===== ADSTERRA ADS END ===== -->
+<script src="auth-widget.js"></script>
+</body>
 </html>
