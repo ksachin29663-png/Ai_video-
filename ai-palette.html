@@ -5,5 +5,245 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="shortcut icon" href="/favicon.png">
     <link rel="apple-touch-icon" sizes="192x192" href="/logo192.png">
-    </body>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3019468976412219" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Color Palette - सचिन एआई</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background: #080c16; color: #e1e7f0; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: linear-gradient(135deg,#0a0e1a,#0a0a1a); border-bottom: 1px solid rgba(167,139,250,0.3); padding: 14px 20px; display: flex; align-items: center; gap: 14px; }
+        .back-btn { color: #a78bfa; text-decoration: none; font-size: 1.3rem; }
+        .page-title { font-size: 1.1rem; font-weight: 700; color: #a78bfa; }
+        .page-sub { font-size: 0.75rem; color: #64748b; }
+        main { flex: 1; padding: 24px 16px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+        .card { width: 100%; max-width: 620px; background: rgba(255,255,255,0.04); border: 1px solid rgba(167,139,250,0.2); border-radius: 20px; padding: 24px; }
+        .card-title { font-size: 0.9rem; font-weight: 700; color: #a78bfa; margin-bottom: 14px; }
+        .upload-zone { border: 2px dashed rgba(167,139,250,0.3); border-radius: 14px; padding: 28px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .upload-zone:hover { border-color: #a78bfa; background: rgba(167,139,250,0.04); }
+        .upload-zone input { display: none; }
+        .upload-icon { font-size: 2.5rem; margin-bottom: 8px; }
+        .upload-text { color: #64748b; font-size: 0.85rem; }
+        .upload-text b { color: #a78bfa; }
+        .img-preview { width: 100%; max-height: 240px; object-fit: contain; border-radius: 12px; margin-top: 14px; border: 1px solid rgba(167,139,250,0.2); display: none; }
+        .gen-btn { width: 100%; padding: 14px; font-size: 0.95rem; font-weight: 700; border: none; border-radius: 12px; cursor: pointer; background: linear-gradient(135deg,#a78bfa,#7c3aed); color: #fff; font-family: inherit; transition: all 0.3s; margin-top: 14px; }
+        .gen-btn:hover { box-shadow: 0 0 20px rgba(167,139,250,0.4); }
+        .gen-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .spinner-box { display: none; text-align: center; padding: 20px; color: #a78bfa; font-size: 0.85rem; }
+        .spin-ring { width: 40px; height: 40px; border: 3px solid rgba(167,139,250,0.2); border-top-color: #a78bfa; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 10px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .palette-row { display: flex; gap: 8px; margin: 16px 0; flex-wrap: wrap; }
+        .color-swatch { flex: 1; min-width: 70px; border-radius: 12px; overflow: hidden; cursor: pointer; transition: transform 0.2s; }
+        .color-swatch:hover { transform: scale(1.05); }
+        .swatch-color { height: 80px; width: 100%; }
+        .swatch-info { padding: 8px 6px; background: rgba(255,255,255,0.05); text-align: center; }
+        .swatch-hex { font-size: 0.72rem; font-weight: 700; color: #a78bfa; font-family: monospace; }
+        .swatch-name { font-size: 0.65rem; color: #64748b; margin-top: 2px; }
+        .palette-desc { background: rgba(167,139,250,0.06); border: 1px solid rgba(167,139,250,0.15); border-radius: 12px; padding: 14px; font-size: 0.85rem; line-height: 1.6; color: #e1e7f0; margin-top: 14px; }
+        .usage-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+        .usage-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(167,139,250,0.15); border-radius: 10px; padding: 12px; }
+        .usage-label { font-size: 0.72rem; color: #64748b; margin-bottom: 4px; }
+        .usage-val { font-size: 0.82rem; color: #e1e7f0; font-weight: 600; }
+        .copy-all-btn { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(167,139,250,0.3); background: rgba(167,139,250,0.08); color: #a78bfa; font-size: 0.85rem; cursor: pointer; font-family: inherit; margin-top: 12px; transition: all 0.2s; }
+        .copy-all-btn:hover { background: rgba(167,139,250,0.15); }
+        footer { text-align: center; padding: 20px; color: #334155; font-size: 0.78rem; }
+    </style>
+</head>
+<body>
+<header>
+    <a href="index.html" class="back-btn">←</a>
+    <div>
+        <div class="page-title">🎨 AI Color Palette Extractor</div>
+        <div class="page-sub">फोटो से Color Palette निकालो — Design के लिए</div>
+    </div>
+</header>
+<main>
+    <div class="card">
+        <div class="card-title">Step 1 — फोटो अपलोड करें</div>
+        <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+            <div class="upload-icon">🖼️</div>
+            <div class="upload-text"><b>फोटो अपलोड करें</b> — AI Colors निकालेगा</div>
+            <input type="file" id="fileInput" accept="image/*" onchange="loadImg(event)">
+        </div>
+        <img id="imgPreview" class="img-preview" alt="Preview">
+        <button class="gen-btn" id="genBtn" onclick="extractPalette()" disabled>🎨 Color Palette निकालें</button>
+    </div>
+
+    <div class="card" id="resultCard" style="display:none">
+        <div class="spinner-box" id="spinnerBox">
+            <div class="spin-ring"></div>
+            AI Colors Analyze कर रहा है...
+        </div>
+        <div id="resultSection" style="display:none">
+            <div class="card-title">✅ Color Palette तैयार है!</div>
+            <div class="palette-row" id="paletteRow"></div>
+            <div class="palette-desc" id="paletteDesc"></div>
+            <div class="usage-grid" id="usageGrid"></div>
+            <button class="copy-all-btn" onclick="copyAllHex()">📋 सभी HEX Codes Copy करें</button>
+            <button class="gen-btn" style="margin-top:10px;" onclick="extractPalette()">🔄 फिर से Extract करें</button>
+        </div>
+    </div><!-- Mid-Page Ad -->
+<div style="text-align:center;margin:12px auto;width:100%;min-height:56px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'b1c2005cd8e1095bc458e4c59f785aa9','format':'iframe','height':50,'width':320,'params':{}};</script>
+
+</div>
+</main>
+<footer>&copy; 2025 सचिन एआई फोटो स्टूडियो</footer>
+
+<script>
+    let imageBase64 = null, imageMime = 'image/jpeg';
+    let extractedColors = [];
+
+    function loadImg(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        imageMime = file.type || 'image/jpeg';
+        const reader = new FileReader();
+        reader.onload = e => {
+            imageBase64 = e.target.result.split(',')[1];
+            document.getElementById('imgPreview').src = e.target.result;
+            document.getElementById('imgPreview').style.display = 'block';
+            document.getElementById('genBtn').disabled = false;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    async function extractPalette() {
+        if (!imageBase64) return;
+        document.getElementById('genBtn').disabled = true;
+        document.getElementById('resultCard').style.display = 'block';
+        document.getElementById('spinnerBox').style.display = 'block';
+        document.getElementById('resultSection').style.display = 'none';
+        document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+
+        const instruction = `Analyze this image and extract exactly 6 dominant colors. For each color provide:
+1. The exact HEX code (e.g., #FF5733)
+2. A descriptive color name (e.g., "Sunset Orange")
+3. The mood or feeling it evokes
+
+Also provide:
+- Overall palette mood/theme (1 sentence)
+- Best use cases for this palette (e.g., "Perfect for fashion brands, lifestyle blogs")
+- Suggested complementary color (HEX + name)
+- Font color recommendation (dark or light) for each color
+
+Format EXACTLY as JSON:
+{
+  "colors": [
+    {"hex": "#XXXXXX", "name": "Color Name", "mood": "feeling"},
+    ... (6 total)
+  ],
+  "theme": "Overall palette description",
+  "useCases": "Best suited for...",
+  "complementary": {"hex": "#XXXXXX", "name": "Name"},
+  "fontRec": ["dark","light","dark","dark","light","dark"]
+}`;
+
+        try {
+            const res = await fetch('/analyze-image', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ imageBase64, mimeType: imageMime, instruction })
+            });
+            const data = await res.json();
+            const raw = data.prompt || '';
+            const jsonMatch = raw.match(/\{[\s\S]*\}/);
+            if (!jsonMatch) throw new Error('JSON parse failed');
+            const parsed = JSON.parse(jsonMatch[0]);
+            renderPalette(parsed);
+        } catch (e) {
+            extractFromCanvas();
+        }
+        document.getElementById('spinnerBox').style.display = 'none';
+        document.getElementById('resultSection').style.display = 'block';
+        document.getElementById('genBtn').disabled = false;
+    }
+
+    function renderPalette(data) {
+        extractedColors = data.colors || [];
+        const row = document.getElementById('paletteRow');
+        row.innerHTML = extractedColors.map((c, i) => `
+            <div class="color-swatch" onclick="navigator.clipboard.writeText('${c.hex}')">
+                <div class="swatch-color" style="background:${c.hex}"></div>
+                <div class="swatch-info">
+                    <div class="swatch-hex">${c.hex}</div>
+                    <div class="swatch-name">${c.name || ''}</div>
+                </div>
+            </div>`).join('');
+        document.getElementById('paletteDesc').textContent = data.theme || '';
+        const usageGrid = document.getElementById('usageGrid');
+        usageGrid.innerHTML = `
+            <div class="usage-item"><div class="usage-label">Best For</div><div class="usage-val">${data.useCases || 'Various designs'}</div></div>
+            <div class="usage-item"><div class="usage-label">Complementary</div><div class="usage-val" style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:${data.complementary?.hex || '#fff'}"></span>${data.complementary?.name || ''}</div></div>`;
+    }
+
+    function extractFromCanvas() {
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = 50; canvas.height = 50;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, 50, 50);
+            const pixels = ctx.getImageData(0, 0, 50, 50).data;
+            const colorMap = {};
+            for (let i = 0; i < pixels.length; i += 16) {
+                const r = Math.round(pixels[i]/32)*32;
+                const g = Math.round(pixels[i+1]/32)*32;
+                const b = Math.round(pixels[i+2]/32)*32;
+                const hex = '#' + [r,g,b].map(v => v.toString(16).padStart(2,'0')).join('');
+                colorMap[hex] = (colorMap[hex] || 0) + 1;
+            }
+            extractedColors = Object.entries(colorMap).sort((a,b) => b[1]-a[1]).slice(0,6).map(([hex]) => ({hex, name: 'Color', mood: ''}));
+            const row = document.getElementById('paletteRow');
+            row.innerHTML = extractedColors.map(c => `
+                <div class="color-swatch" onclick="navigator.clipboard.writeText('${c.hex}')">
+                    <div class="swatch-color" style="background:${c.hex}"></div>
+                    <div class="swatch-info"><div class="swatch-hex">${c.hex}</div></div>
+                </div>`).join('');
+            document.getElementById('paletteDesc').textContent = 'Image से Colors Extract किए गए। Tap करके HEX Copy करें।';
+        };
+        img.src = 'data:' + imageMime + ';base64,' + imageBase64;
+    }
+
+    function copyAllHex() {
+        const hexCodes = extractedColors.map(c => c.hex).join(', ');
+        navigator.clipboard.writeText(hexCodes).then(() => {
+            const btn = document.querySelector('.copy-all-btn');
+            btn.textContent = '✅ Copied!';
+            setTimeout(() => btn.textContent = '📋 सभी HEX Codes Copy करें', 2000);
+        });
+    }
+</script>
+
+<script src="tracker.js"></script>
+<script src="share-unlock.js"></script>
+
+<!-- ===== ADSTERRA ADS START ===== -->
+<!-- Popunder -->
+
+<!-- Social Bar -->
+
+<!-- 320x50 Mobile Banner -->
+<div id="sachin-ad-320" style="display:block;text-align:center;background:linear-gradient(90deg,#0a0e1a,#0d1225);border-top:1px solid rgba(99,102,241,0.3);border-bottom:1px solid rgba(99,102,241,0.3);padding:3px 0;width:100%;min-height:56px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'b1c2005cd8e1095bc458e4c59f785aa9','format':'iframe','height':50,'width':320,'params':{}};</script>
+
+</div>
+<!-- 728x90 Leaderboard Banner -->
+<div id="sachin-ad-728" style="display:block;text-align:center;background:linear-gradient(90deg,#0a0e1a,#0d1225);padding:3px 0;width:100%;min-height:96px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'5e113b8022609e2135c5e1e265084235','format':'iframe','height':90,'width':728,'params':{}};</script>
+
+</div>
+<!-- Native Banner -->
+<div style="text-align:center;margin:6px auto;max-width:100%;min-height:60px;">
+
+<div id="container-30a2c535b11a237c281ced645d908d88"></div>
+</div>
+<!-- 300x250 Rectangle -->
+<div id="sachin-ad-300" style="display:block;text-align:center;margin:8px auto;width:100%;min-height:254px;overflow:hidden;">
+<script type="text/javascript">atOptions={'key':'817c9252a9900f63d05a904142664916','format':'iframe','height':250,'width':300,'params':{}};</script>
+
+</div>
+<!-- ===== ADSTERRA ADS END ===== -->
+<script src="auth-widget.js"></script>
+</body>
 </html>
