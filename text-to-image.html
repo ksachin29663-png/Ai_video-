@@ -2,1020 +2,993 @@
 <html lang="hi">
 <head>
     <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <link rel="shortcut icon" href="/favicon.png">
-    <link rel="apple-touch-icon" sizes="192x192" href="/logo192.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Ultra Photo Studio Pro - सचिन एआई</title>
+    <title>AI Ultra Studio Pro - सचिन एआई</title>
     <style>
-        :root {
-            --accent: #00ffcc;
-            --accent2: #7c3aed;
-            --bg: #05080f;
-            --card: rgba(255,255,255,0.04);
-            --border: rgba(0,255,204,0.18);
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background: var(--bg); color: #e1e7f0; min-height: 100vh; display: flex; flex-direction: column; }
-
-        header {
-            background: linear-gradient(135deg,#0a0e1a,#0d1b2e);
-            border-bottom: 1px solid var(--border);
-            padding: 14px 20px;
-            display: flex; align-items: center; gap: 14px;
-            position: sticky; top: 0; z-index: 100;
-        }
-        .back-btn { color: var(--accent); text-decoration: none; font-size: 1.3rem; }
-        .header-info { flex: 1; }
-        .page-title { font-size: 1.05rem; font-weight: 700; color: var(--accent); }
-        .page-sub { font-size: 0.72rem; color: #64748b; }
-        .header-btns { display: flex; gap: 8px; }
-        .hbtn { padding: 7px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #94a3b8; font-size: 0.75rem; cursor: pointer; font-family: inherit; transition: all 0.2s; }
-        .hbtn:hover { border-color: var(--accent); color: var(--accent); }
-
-        main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 16px 12px 60px; gap: 14px; }
-        .card { width: 100%; max-width: 620px; background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 20px; }
+        :root { --a:#00ffcc; --a2:#7c3aed; --bg:#05080f; --card:rgba(255,255,255,0.04); --border:rgba(0,255,204,0.18); }
+        *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',sans-serif}
+        body{background:var(--bg);color:#e1e7f0;min-height:100vh;display:flex;flex-direction:column}
+        header{background:linear-gradient(135deg,#0a0e1a,#0d1b2e);border-bottom:1px solid var(--border);padding:13px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
+        .back-btn{color:var(--a);text-decoration:none;font-size:1.2rem}
+        .hinfo{flex:1}.htitle{font-size:1rem;font-weight:700;color:var(--a)}.hsub{font-size:0.7rem;color:#64748b}
+        main{flex:1;display:flex;flex-direction:column;align-items:center;padding:14px 12px 60px;gap:12px}
+        .card{width:100%;max-width:620px;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px}
 
         /* TABS */
-        .tabs { display: flex; gap: 0; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 18px; }
-        .tab { flex: 1; padding: 10px 4px; text-align: center; font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: all 0.2s; background: rgba(0,0,0,0.3); color: #64748b; font-family: inherit; border: none; }
-        .tab.active { background: linear-gradient(135deg,var(--accent),#00c9a7); color: #0a0e1a; }
+        .tabs{display:flex;border-radius:12px;overflow:hidden;border:1px solid var(--border);margin-bottom:16px}
+        .tab{flex:1;padding:10px 2px;text-align:center;font-size:0.72rem;font-weight:700;cursor:pointer;background:rgba(0,0,0,0.3);color:#64748b;font-family:inherit;border:none;transition:all .2s}
+        .tab.active{background:linear-gradient(135deg,var(--a),#00c9a7);color:#0a0e1a}
 
         /* PREVIEW */
-        .preview-wrap {
-            width: 100%; aspect-ratio: 1; background: #080c18;
-            border: 2px dashed rgba(0,255,204,0.2); border-radius: 16px;
-            overflow: hidden; position: relative;
-            display: flex; align-items: center; justify-content: center;
-            margin-bottom: 16px; transition: aspect-ratio 0.3s;
-        }
-        .preview-wrap img { width: 100%; height: 100%; object-fit: contain; display: none; }
-        .preview-placeholder { text-align: center; padding: 20px; pointer-events: none; }
-        .preview-placeholder .bigicon { font-size: 3rem; opacity: 0.25; margin-bottom: 10px; }
-        .preview-placeholder p { color: #334155; font-size: 0.85rem; line-height: 1.6; }
-        .spinner-overlay {
-            display: none; position: absolute; inset: 0;
-            background: rgba(5,8,15,0.88);
-            align-items: center; justify-content: center; flex-direction: column; gap: 10px;
-        }
-        .spinner-overlay.active { display: flex; }
-        .spin-ring { width: 52px; height: 52px; border: 3px solid rgba(0,255,204,0.1); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .spin-label { color: var(--accent); font-size: 0.85rem; text-align: center; max-width: 200px; }
-        .spin-model { color: #64748b; font-size: 0.72rem; }
-        .spin-progress { width: 160px; height: 3px; background: rgba(0,255,204,0.1); border-radius: 2px; overflow: hidden; }
-        .spin-progress-bar { height: 100%; background: var(--accent); border-radius: 2px; animation: loadBar 20s linear forwards; }
-        @keyframes loadBar { from { width: 0%; } to { width: 95%; } }
+        .pbox{width:100%;aspect-ratio:1;background:#080c18;border:2px dashed rgba(0,255,204,0.2);border-radius:14px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:14px;transition:aspect-ratio .3s}
+        .pbox img{width:100%;height:100%;object-fit:contain;display:none}
+        .pplaceholder{text-align:center;padding:20px;pointer-events:none}
+        .pplaceholder .bi{font-size:2.8rem;opacity:.2;margin-bottom:8px}
+        .pplaceholder p{color:#334155;font-size:.82rem;line-height:1.6}
+        .spin{display:none;position:absolute;inset:0;background:rgba(5,8,15,.9);align-items:center;justify-content:center;flex-direction:column;gap:10px}
+        .spin.on{display:flex}
+        .ring{width:48px;height:48px;border:3px solid rgba(0,255,204,0.12);border-top-color:var(--a);border-radius:50%;animation:spin .8s linear infinite}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .slabel{color:var(--a);font-size:.82rem;text-align:center;padding:0 20px}
+        .smodel{color:#475569;font-size:.7rem}
+        .spbar{width:150px;height:3px;background:rgba(0,255,204,0.08);border-radius:2px;overflow:hidden}
+        .spbar-fill{height:100%;background:var(--a);border-radius:2px;animation:ld 28s linear forwards}
+        @keyframes ld{from{width:0}to{width:92%}}
 
-        /* BATCH GRID */
-        .batch-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
-        .batch-cell {
-            aspect-ratio: 1; border-radius: 12px; overflow: hidden; cursor: pointer;
-            border: 2px solid transparent; transition: all 0.2s; position: relative;
-            background: rgba(0,0,0,0.3);
-        }
-        .batch-cell img { width: 100%; height: 100%; object-fit: cover; display: none; }
-        .batch-cell .cell-spinner { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px; }
-        .mini-ring { width: 28px; height: 28px; border: 2px solid rgba(0,255,204,0.1); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
-        .batch-cell.selected { border-color: var(--accent); box-shadow: 0 0 18px rgba(0,255,204,0.3); }
-        .batch-cell .select-overlay {
-            position: absolute; bottom: 6px; right: 6px;
-            width: 24px; height: 24px; border-radius: 50%;
-            background: var(--accent); display: none; align-items: center; justify-content: center;
-            font-size: 0.75rem; font-weight: 700; color: #0a0e1a;
-        }
-        .batch-cell.selected .select-overlay { display: flex; }
-        .batch-cell .dl-overlay {
-            position: absolute; top: 6px; right: 6px; padding: 4px 8px;
-            background: rgba(0,0,0,0.7); border-radius: 6px;
-            font-size: 0.68rem; color: #fff; display: none; cursor: pointer;
-        }
-        .batch-cell:hover .dl-overlay { display: block; }
-        .batch-cell .cell-num {
-            position: absolute; top: 6px; left: 6px; width: 22px; height: 22px;
-            border-radius: 50%; background: rgba(0,0,0,0.6);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.7rem; color: #94a3b8;
-        }
+        .sl{font-size:.73rem;font-weight:700;color:var(--a);margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px}
 
-        .section-label { font-size: 0.75rem; font-weight: 700; color: var(--accent); margin-bottom: 9px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; }
+        /* STYLES SCROLL */
+        .sscroll{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;scroll-snap-type:x mandatory}
+        .sscroll::-webkit-scrollbar{height:3px}
+        .sscroll::-webkit-scrollbar-thumb{background:rgba(0,255,204,.2);border-radius:2px}
+        .sc{flex-shrink:0;scroll-snap-align:start;width:68px;text-align:center;cursor:pointer;border:1px solid rgba(255,255,255,.07);border-radius:11px;padding:9px 5px;background:rgba(255,255,255,.03);transition:all .2s;user-select:none}
+        .sc:hover,.sc.active{border-color:var(--a);background:rgba(0,255,204,.07)}
+        .sc .si{font-size:1.4rem;margin-bottom:4px}
+        .sc .sn{font-size:.62rem;color:#64748b;font-weight:600;line-height:1.2}
+        .sc.active .sn{color:var(--a)}
 
-        /* STYLE PRESETS */
-        .style-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 16px; scroll-snap-type: x mandatory; }
-        .style-scroll::-webkit-scrollbar { height: 3px; }
-        .style-scroll::-webkit-scrollbar-thumb { background: rgba(0,255,204,0.2); border-radius: 2px; }
-        .style-card {
-            flex-shrink: 0; scroll-snap-align: start;
-            width: 72px; text-align: center; cursor: pointer; transition: all 0.2s;
-            border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 10px 6px;
-            background: rgba(255,255,255,0.03); user-select: none;
-        }
-        .style-card:hover, .style-card.active { border-color: var(--accent); background: rgba(0,255,204,0.07); }
-        .style-card .sicon { font-size: 1.5rem; margin-bottom: 5px; }
-        .style-card .sname { font-size: 0.65rem; color: #64748b; font-weight: 600; line-height: 1.2; }
-        .style-card.active .sname { color: var(--accent); }
+        /* QUALITY + ASPECT */
+        .brow{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+        .bbtn{flex:1;min-width:60px;padding:8px 4px;border:1px solid rgba(255,255,255,.08);border-radius:9px;background:rgba(255,255,255,.03);color:#64748b;font-size:.7rem;font-weight:700;cursor:pointer;text-align:center;transition:all .2s;font-family:inherit}
+        .bbtn span{font-size:.58rem;display:block;margin-top:2px;color:#475569}
+        .bbtn.aq{color:#a78bfa}.bbtn.aq.active{border-color:#a78bfa;background:rgba(167,139,250,.08)}
+        .bbtn.ar.active{border-color:#f59e0b;color:#f59e0b;background:rgba(245,158,11,.08)}
+        .bbtn.am.active{color:#fff}
 
-        /* QUALITY */
-        .qual-row { display: flex; gap: 7px; margin-bottom: 14px; }
-        .qual-btn {
-            flex: 1; padding: 9px 2px; border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 10px; background: rgba(255,255,255,0.03);
-            color: #64748b; font-size: 0.72rem; font-weight: 700;
-            cursor: pointer; text-align: center; transition: all 0.2s; font-family: inherit;
-        }
-        .qual-btn .qdim { font-size: 0.6rem; display: block; margin-top: 2px; color: #475569; }
-        .qual-btn.active { border-color: #a78bfa; color: #a78bfa; background: rgba(167,139,250,0.08); }
+        /* PROMPTS */
+        .pwrap{position:relative;margin-bottom:8px}
+        textarea.pi{width:100%;padding:13px 44px 13px 13px;border-radius:11px;border:1px solid rgba(255,255,255,.1);background:rgba(0,0,0,.5);color:#fff;font-size:.9rem;resize:none;height:84px;font-family:inherit;outline:none;transition:border .2s;line-height:1.5}
+        textarea.pi:focus{border-color:var(--a)}
+        .rnd{position:absolute;right:8px;top:8px;width:28px;height:28px;border-radius:7px;border:1px solid rgba(0,255,204,.2);background:rgba(0,255,204,.06);color:var(--a);cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;transition:all .2s}
+        .rnd:hover{background:rgba(0,255,204,.15)}
+        .negtog{font-size:.72rem;color:#64748b;cursor:pointer;margin-bottom:5px;display:flex;align-items:center;gap:4px}
+        .negtog:hover{color:#f87171}
+        textarea.ni{width:100%;padding:9px 13px;border-radius:9px;border:1px solid rgba(248,113,113,.2);background:rgba(248,113,113,.04);color:#fca5a5;font-size:.8rem;resize:none;height:56px;font-family:inherit;outline:none;margin-bottom:9px}
+        textarea.ni:focus{border-color:#f87171}
+        .enhrow{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding:9px 13px;border-radius:9px;background:rgba(0,255,204,.03);border:1px solid rgba(0,255,204,.08)}
+        .enhlab{font-size:.78rem;color:#94a3b8}.enhlab b{color:var(--a)}
+        .tog{width:40px;height:22px;border-radius:11px;background:#1e293b;border:1px solid rgba(255,255,255,.1);cursor:pointer;position:relative;transition:all .3s;flex-shrink:0}
+        .tog.on{background:rgba(0,255,204,.25);border-color:var(--a)}
+        .tog::after{content:'';position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#64748b;transition:all .3s}
+        .tog.on::after{left:21px;background:var(--a)}
 
-        /* ASPECT */
-        .aspect-row { display: flex; gap: 7px; margin-bottom: 14px; }
-        .aspect-btn {
-            flex: 1; padding: 9px 4px; border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 10px; background: rgba(255,255,255,0.03);
-            color: #64748b; font-size: 0.8rem; cursor: pointer; text-align: center;
-            transition: all 0.2s; font-family: inherit;
-        }
-        .aspect-btn.active { border-color: #f59e0b; color: #f59e0b; background: rgba(245,158,11,0.08); }
-
-        /* COLOR MOOD */
-        .mood-row { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 14px; }
-        .mood-chip {
-            padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08);
-            background: rgba(255,255,255,0.03); color: #64748b; font-size: 0.73rem;
-            cursor: pointer; transition: all 0.2s;
-        }
-        .mood-chip.active { color: #fff; }
-
-        /* PROMPT */
-        .prompt-wrap { position: relative; margin-bottom: 10px; }
-        textarea.prompt-input {
-            width: 100%; padding: 14px 46px 14px 14px; border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5);
-            color: #fff; font-size: 0.92rem; resize: none; height: 88px;
-            font-family: inherit; outline: none; transition: border 0.2s; line-height: 1.5;
-        }
-        textarea.prompt-input:focus { border-color: var(--accent); }
-        .rand-btn {
-            position: absolute; right: 10px; top: 10px; width: 30px; height: 30px;
-            border-radius: 8px; border: 1px solid rgba(0,255,204,0.2);
-            background: rgba(0,255,204,0.07); color: var(--accent); cursor: pointer;
-            font-size: 1rem; display: flex; align-items: center; justify-content: center;
-            transition: all 0.2s;
-        }
-        .rand-btn:hover { background: rgba(0,255,204,0.15); }
-
-        .negative-toggle { font-size: 0.75rem; color: #64748b; cursor: pointer; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
-        .negative-toggle:hover { color: #f87171; }
-        textarea.neg-input {
-            width: 100%; padding: 10px 14px; border-radius: 10px;
-            border: 1px solid rgba(248,113,113,0.2); background: rgba(248,113,113,0.04);
-            color: #fca5a5; font-size: 0.82rem; resize: none; height: 60px;
-            font-family: inherit; outline: none; margin-bottom: 10px;
-        }
-        textarea.neg-input:focus { border-color: #f87171; }
-
-        /* ENHANCE ROW */
-        .enhance-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; padding: 10px 14px; border-radius: 10px; background: rgba(0,255,204,0.03); border: 1px solid rgba(0,255,204,0.08); }
-        .enhance-label { font-size: 0.8rem; color: #94a3b8; }
-        .enhance-label b { color: var(--accent); }
-        .toggle { width: 42px; height: 24px; border-radius: 12px; background: #1e293b; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; position: relative; transition: all 0.3s; flex-shrink: 0; }
-        .toggle.on { background: rgba(0,255,204,0.25); border-color: var(--accent); }
-        .toggle::after { content:''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: #64748b; transition: all 0.3s; }
-        .toggle.on::after { left: 21px; background: var(--accent); }
-
-        /* TIP CHIPS */
-        .tip-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
-        .tip-chip { padding: 5px 10px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.03); color: #64748b; font-size: 0.72rem; cursor: pointer; transition: all 0.2s; }
-        .tip-chip:hover { border-color: rgba(0,255,204,0.3); color: #94a3b8; }
+        /* TIPS */
+        .tips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+        .tip{padding:5px 10px;border-radius:14px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);color:#64748b;font-size:.7rem;cursor:pointer;transition:all .2s}
+        .tip:hover{border-color:rgba(0,255,204,.3);color:#94a3b8}
 
         /* BUTTONS */
-        .gen-btn {
-            width: 100%; padding: 16px; font-size: 0.98rem; font-weight: 700;
-            border: none; border-radius: 14px; cursor: pointer;
-            background: linear-gradient(135deg,var(--accent),#00c9a7);
-            color: #0a0e1a; transition: all 0.3s; letter-spacing: 0.3px;
-        }
-        .gen-btn:hover { box-shadow: 0 0 30px rgba(0,255,204,0.4); transform: translateY(-1px); }
-        .gen-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+        .gbtn{width:100%;padding:15px;font-size:.95rem;font-weight:700;border:none;border-radius:13px;cursor:pointer;background:linear-gradient(135deg,var(--a),#00c9a7);color:#0a0e1a;transition:all .3s;letter-spacing:.3px}
+        .gbtn:hover{box-shadow:0 0 28px rgba(0,255,204,.4);transform:translateY(-1px)}
+        .gbtn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+        .pbtn{width:100%;padding:13px;font-size:.88rem;font-weight:700;border:none;border-radius:12px;cursor:pointer;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;transition:all .3s;margin-bottom:12px}
+        .pbtn:hover{box-shadow:0 0 22px rgba(124,58,237,.4)}
+        .pbtn:disabled{opacity:.5;cursor:not-allowed}
+        .arow{display:none;flex-wrap:wrap;gap:7px;margin-top:12px}
+        .abtn{flex:1;min-width:72px;padding:10px 6px;border-radius:9px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#e1e7f0;font-size:.76rem;cursor:pointer;font-family:inherit;transition:all .2s;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:3px}
+        .abtn:hover{background:rgba(255,255,255,.1);border-color:rgba(0,255,204,.3)}
 
-        .batch-gen-btn {
-            width: 100%; padding: 14px; font-size: 0.95rem; font-weight: 700;
-            border: none; border-radius: 14px; cursor: pointer;
-            background: linear-gradient(135deg,#7c3aed,#a78bfa);
-            color: #fff; transition: all 0.3s; margin-bottom: 14px;
-        }
-        .batch-gen-btn:hover { box-shadow: 0 0 25px rgba(124,58,237,0.5); }
-        .batch-gen-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        /* ERROR/SUCCESS */
+        .err{color:#f87171;font-size:.8rem;text-align:center;padding:9px 12px;background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.15);border-radius:9px;margin-top:8px;display:none}
+        .ok{color:#4ade80;font-size:.8rem;text-align:center;padding:7px 12px;background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.15);border-radius:9px;display:none}
 
-        .action-row { display: none; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
-        .action-btn {
-            flex: 1; min-width: 80px; padding: 11px 8px; border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05);
-            color: #e1e7f0; font-size: 0.8rem; cursor: pointer; font-family: inherit;
-            transition: all 0.2s; text-align: center; text-decoration: none;
-            display: flex; align-items: center; justify-content: center; gap: 4px;
-        }
-        .action-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(0,255,204,0.3); }
+        /* TOAST */
+        .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);padding:11px 20px;background:rgba(0,255,204,.12);border:1px solid var(--a);border-radius:22px;color:var(--a);font-size:.82rem;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap}
+        .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-        /* HISTORY */
-        .history-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
-        .history-row::-webkit-scrollbar { height: 3px; }
-        .history-row::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
-        .hist-chip {
-            flex-shrink: 0; padding: 6px 12px; border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04);
-            color: #94a3b8; font-size: 0.72rem; cursor: pointer; max-width: 180px;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: all 0.2s;
-        }
-        .hist-chip:hover { border-color: var(--accent); color: var(--accent); }
+        /* BATCH */
+        .bgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+        .bc{aspect-ratio:1;border-radius:11px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:all .2s;position:relative;background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center}
+        .bc img{width:100%;height:100%;object-fit:cover;display:none}
+        .bc.sel{border-color:var(--a);box-shadow:0 0 16px rgba(0,255,204,.3)}
+        .bc .bsp{display:flex;flex-direction:column;align-items:center;gap:6px}
+        .mring{width:26px;height:26px;border:2px solid rgba(0,255,204,.1);border-top-color:var(--a);border-radius:50%;animation:spin .8s linear infinite;display:none}
+        .bc .bnum{position:absolute;top:5px;left:5px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;font-size:.65rem;color:#94a3b8}
+        .bc .bdl{position:absolute;top:5px;right:5px;padding:3px 7px;background:rgba(0,0,0,.7);border-radius:5px;font-size:.65rem;color:#fff;display:none;cursor:pointer}
+        .bc:hover .bdl{display:block}
+        .bc .bsel{position:absolute;bottom:5px;right:5px;width:22px;height:22px;border-radius:50%;background:var(--a);display:none;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:#0a0e1a}
+        .bc.sel .bsel{display:flex}
+
+        /* DESIGN MODE */
+        .dgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+        .dc{padding:12px 6px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);cursor:pointer;text-align:center;transition:all .2s}
+        .dc:hover,.dc.active{border-color:var(--a);background:rgba(0,255,204,.07)}
+        .dc .di{font-size:1.6rem;margin-bottom:5px}
+        .dc .dn{font-size:.68rem;color:#64748b;font-weight:600}
+        .dc.active .dn{color:var(--a)}
+        .design-fields{background:rgba(0,255,204,.03);border:1px solid rgba(0,255,204,.1);border-radius:12px;padding:14px;margin-bottom:12px}
+        .df-label{font-size:.75rem;color:#94a3b8;margin-bottom:5px;display:block}
+        .df-input{width:100%;padding:9px 12px;border-radius:9px;border:1px solid rgba(255,255,255,.1);background:rgba(0,0,0,.4);color:#fff;font-size:.85rem;font-family:inherit;outline:none;margin-bottom:10px;transition:border .2s}
+        .df-input:focus{border-color:var(--a)}
+        .photo-upload-area{border:2px dashed rgba(0,255,204,.2);border-radius:10px;padding:14px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:10px}
+        .photo-upload-area:hover{border-color:var(--a);background:rgba(0,255,204,.03)}
+        .photo-upload-area input{display:none}
+        .photo-preview{width:100%;max-height:100px;object-fit:contain;border-radius:8px;margin-top:8px;display:none}
+        .color-swatches{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+        .cswatch{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .2s;flex-shrink:0}
+        .cswatch.active{border-color:#fff;transform:scale(1.15)}
+
+        /* CHAT */
+        .cwin{display:flex;flex-direction:column;gap:11px;max-height:380px;overflow-y:auto;padding-right:4px;margin-bottom:12px}
+        .cwin::-webkit-scrollbar{width:3px}
+        .cwin::-webkit-scrollbar-thumb{background:rgba(0,255,204,.15);border-radius:2px}
+        .cbbl{padding:11px 14px;border-radius:14px;font-size:.84rem;line-height:1.55;max-width:92%;animation:fu .3s ease}
+        @keyframes fu{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+        .bai{background:rgba(0,255,204,.06);border:1px solid rgba(0,255,204,.13);color:#cbd5e1;align-self:flex-start;border-bottom-left-radius:3px}
+        .buser{background:linear-gradient(135deg,rgba(0,255,204,.12),rgba(0,201,167,.08));border:1px solid rgba(0,255,204,.18);color:#e1e7f0;align-self:flex-end;border-bottom-right-radius:3px}
+        .ogrid{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+        .och{padding:6px 12px;border-radius:18px;border:1px solid rgba(0,255,204,.22);background:rgba(0,255,204,.04);color:var(--a);font-size:.75rem;cursor:pointer;transition:all .2s}
+        .och:hover{background:rgba(0,255,204,.12);transform:scale(1.03)}
+        .cprog{height:3px;background:rgba(0,255,204,.08);border-radius:2px;margin-bottom:7px;overflow:hidden}
+        .cpfill{height:100%;background:linear-gradient(90deg,var(--a),#00c9a7);transition:width .5s}
+        .cstxt{font-size:.7rem;color:#475569;margin-bottom:9px}
+        .cirow{display:flex;gap:7px}
+        .ci{flex:1;padding:11px 14px;border-radius:22px;border:1px solid rgba(0,255,204,.18);background:rgba(0,0,0,.4);color:#fff;font-size:.86rem;font-family:inherit;outline:none}
+        .ci:focus{border-color:var(--a)}
+        .csnd{padding:11px 16px;background:linear-gradient(135deg,var(--a),#00c9a7);border:none;border-radius:22px;cursor:pointer;color:#0a0e1a;font-size:1rem;font-weight:700}
+        .bbuildchat{width:100%;padding:13px;font-size:.9rem;font-weight:700;border:none;border-radius:12px;cursor:pointer;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;margin-top:10px;display:none}
 
         /* GALLERY */
-        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-        .gal-item { aspect-ratio: 1; border-radius: 10px; overflow: hidden; position: relative; cursor: pointer; }
-        .gal-item img { width: 100%; height: 100%; object-fit: cover; }
-        .gal-item .gal-dl { position: absolute; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; font-size: 1.3rem; }
-        .gal-item:hover .gal-dl { display: flex; }
-        .gal-empty { text-align: center; padding: 30px; color: #334155; font-size: 0.85rem; grid-column: 1/-1; }
+        .ggrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+        .gi{aspect-ratio:1;border-radius:9px;overflow:hidden;position:relative;cursor:pointer}
+        .gi img{width:100%;height:100%;object-fit:cover}
+        .gi .gdl{position:absolute;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;font-size:1.2rem}
+        .gi:hover .gdl{display:flex}
+        .gempty{text-align:center;padding:28px;color:#334155;font-size:.82rem;grid-column:1/-1}
 
-        /* CHAT MODE */
-        .chat-window { display: flex; flex-direction: column; gap: 12px; max-height: 400px; overflow-y: auto; padding-right: 4px; margin-bottom: 14px; }
-        .chat-window::-webkit-scrollbar { width: 4px; }
-        .chat-window::-webkit-scrollbar-thumb { background: rgba(0,255,204,0.15); border-radius: 2px; }
-        .chat-bubble { padding: 12px 16px; border-radius: 16px; font-size: 0.87rem; line-height: 1.55; max-width: 92%; animation: fadeUp 0.3s ease; }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-        .bubble-ai { background: rgba(0,255,204,0.06); border: 1px solid rgba(0,255,204,0.13); color: #cbd5e1; align-self: flex-start; border-bottom-left-radius: 4px; }
-        .bubble-user { background: linear-gradient(135deg,rgba(0,255,204,0.12),rgba(0,201,167,0.08)); border: 1px solid rgba(0,255,204,0.18); color: #e1e7f0; align-self: flex-end; border-bottom-right-radius: 4px; }
-        .opts-grid { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
-        .opt-chip { padding: 7px 13px; border-radius: 20px; border: 1px solid rgba(0,255,204,0.22); background: rgba(0,255,204,0.04); color: var(--accent); font-size: 0.78rem; cursor: pointer; transition: all 0.2s; }
-        .opt-chip:hover { background: rgba(0,255,204,0.12); transform: scale(1.03); }
-        .chat-progress { height: 3px; background: rgba(0,255,204,0.08); border-radius: 2px; margin-bottom: 8px; overflow: hidden; }
-        .chat-progress-fill { height: 100%; background: linear-gradient(90deg,var(--accent),#00c9a7); transition: width 0.5s; }
-        .chat-step-txt { font-size: 0.72rem; color: #475569; margin-bottom: 10px; }
-        .chat-input-row { display: flex; gap: 8px; }
-        .chat-inp { flex: 1; padding: 12px 16px; border-radius: 24px; border: 1px solid rgba(0,255,204,0.18); background: rgba(0,0,0,0.4); color: #fff; font-size: 0.88rem; font-family: inherit; outline: none; }
-        .chat-inp:focus { border-color: var(--accent); }
-        .chat-send-btn { padding: 12px 18px; background: linear-gradient(135deg,var(--accent),#00c9a7); border: none; border-radius: 24px; cursor: pointer; color: #0a0e1a; font-size: 1.1rem; font-weight: 700; }
-        .build-from-chat-btn { width: 100%; padding: 14px; font-size: 0.95rem; font-weight: 700; border: none; border-radius: 14px; cursor: pointer; background: linear-gradient(135deg,#7c3aed,#a78bfa); color: #fff; margin-top: 12px; display: none; }
-
-        .error-banner { color: #f87171; font-size: 0.82rem; text-align: center; padding: 10px 14px; background: rgba(248,113,113,0.06); border: 1px solid rgba(248,113,113,0.15); border-radius: 10px; margin-top: 10px; display: none; }
-        .success-banner { color: #4ade80; font-size: 0.82rem; text-align: center; padding: 8px 14px; background: rgba(74,222,128,0.06); border: 1px solid rgba(74,222,128,0.15); border-radius: 10px; display: none; }
-
-        /* NOTIFICATION TOAST */
-        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(20px); padding: 12px 22px; background: rgba(0,255,204,0.12); border: 1px solid var(--accent); border-radius: 24px; color: var(--accent); font-size: 0.85rem; font-weight: 600; opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 999; white-space: nowrap; }
-        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-        .divider { height: 1px; background: rgba(255,255,255,0.05); margin: 4px 0 16px; }
+        /* HISTORY */
+        .hrow{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px}
+        .hrow::-webkit-scrollbar{height:3px}
+        .hrow::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
+        .hchip{flex-shrink:0;padding:5px 10px;border-radius:18px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);color:#94a3b8;font-size:.7rem;cursor:pointer;max-width:170px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:all .2s}
+        .hchip:hover{border-color:var(--a);color:var(--a)}
+        .div{height:1px;background:rgba(255,255,255,.05);margin:4px 0 14px}
     </style>
 </head>
 <body>
 <header>
     <a href="index.html" class="back-btn">←</a>
-    <div class="header-info">
-        <div class="page-title">✨ AI Ultra Photo Studio Pro</div>
-        <div class="page-sub">4K • Batch • Gallery • Chat AI • Ultra Premium</div>
-    </div>
-    <div class="header-btns">
-        <button class="hbtn" onclick="showTab('gallery')">🗂️ Gallery</button>
+    <div class="hinfo">
+        <div class="htitle">✨ AI Ultra Studio Pro</div>
+        <div class="hsub">Photo • Logo • Thumbnail • Design • Gallery</div>
     </div>
 </header>
 
 <div class="toast" id="toast"></div>
 
 <main>
-    <!-- ====== TABS ====== -->
-    <div class="card" style="padding:0;overflow:hidden;">
+    <div class="card" style="padding:0;overflow:hidden">
         <div class="tabs">
-            <button class="tab active" onclick="showTab('single')">⚡ Single</button>
-            <button class="tab" onclick="showTab('batch')">🖼️ Batch ×4</button>
-            <button class="tab" onclick="showTab('chat')">💬 AI Chat</button>
-            <button class="tab" onclick="showTab('gallery')">🗂️ Gallery</button>
+            <button class="tab active" onclick="showTab('single')">⚡ Photo</button>
+            <button class="tab" onclick="showTab('design')">🎨 Design</button>
+            <button class="tab" onclick="showTab('batch')">🖼️ Batch×4</button>
+            <button class="tab" onclick="showTab('chat')">💬 Chat AI</button>
+            <button class="tab" onclick="showTab('gallery')">⭐ Gallery</button>
         </div>
     </div>
 
-    <!-- ====== SINGLE MODE ====== -->
-    <div class="card tab-panel" id="panel-single">
-        <div class="preview-wrap" id="previewWrap">
-            <img id="outputImg" alt="Generated">
-            <div class="preview-placeholder" id="placeholder">
-                <div class="bigicon">🎨</div>
-                <p>आपकी AI Photo यहाँ दिखेगी</p>
-                <p style="font-size:0.75rem;margin-top:6px;">Ultra HD • 4K Pro • Cinematic Quality</p>
+    <!-- ===== SINGLE PHOTO ===== -->
+    <div class="card tp" id="p-single">
+        <div class="pbox" id="pbox">
+            <img id="oimg" alt="">
+            <div class="pplaceholder" id="pph">
+                <div class="bi">🎨</div>
+                <p>Ultra HD • 4K • Cinematic Quality</p>
+                <p style="margin-top:5px;font-size:.72rem">नीचे लिखें और photo बनाएं</p>
             </div>
-            <div class="spinner-overlay" id="spinner">
-                <div class="spin-ring"></div>
-                <div class="spin-label" id="spinLabel">AI Photo बना रहा है...</div>
-                <div class="spin-model" id="spinModel"></div>
-                <div class="spin-progress"><div class="spin-progress-bar" id="spinBar"></div></div>
-            </div>
-        </div>
-
-        <div class="action-row" id="actionRow">
-            <button class="action-btn" onclick="generateSingle()">🔄 फिर बनाएं</button>
-            <a class="action-btn" id="downloadBtn" download="sachin-ai.png">📥 Save</a>
-            <button class="action-btn" onclick="shareWhatsApp()">💬 WhatsApp</button>
-            <button class="action-btn" onclick="copyLink()">🔗 Link Copy</button>
-            <button class="action-btn" onclick="saveToGallery()">⭐ Gallery</button>
-        </div>
-
-        <div class="divider"></div>
-
-        <!-- STYLE PRESETS -->
-        <div class="section-label">🎨 Style Presets</div>
-        <div class="style-scroll" id="styleScroll">
-            <div class="style-card active" data-style="" data-name="Auto">
-                <div class="sicon">🎯</div><div class="sname">Auto</div>
-            </div>
-            <div class="style-card" data-style="ultra photorealistic, 8K DSLR photo, Sony A7R IV, perfect lighting, hyperdetailed, professional photography, depth of field, award winning" data-name="Real Photo">
-                <div class="sicon">📷</div><div class="sname">Real Photo</div>
-            </div>
-            <div class="style-card" data-style="ultra photorealistic portrait, 8K, studio lighting, bokeh, Canon EOS R5, perfect skin, sharp focus, Vogue magazine style" data-name="Portrait">
-                <div class="sicon">👤</div><div class="sname">Portrait</div>
-            </div>
-            <div class="style-card" data-style="high fashion photography, Vogue editorial, luxury brand, dramatic lighting, perfect model pose, ultra HD" data-name="Fashion">
-                <div class="sicon">👗</div><div class="sname">Fashion</div>
-            </div>
-            <div class="style-card" data-style="cinematic movie still, IMAX quality, dramatic lighting, film grain, epic scene, Hollywood production, anamorphic lens, masterpiece" data-name="Cinematic">
-                <div class="sicon">🎬</div><div class="sname">Cinematic</div>
-            </div>
-            <div class="style-card" data-style="anime style, Studio Ghibli, manga art, vibrant colors, detailed linework, cel shading, clean and crisp" data-name="Anime">
-                <div class="sicon">🎌</div><div class="sname">Anime</div>
-            </div>
-            <div class="style-card" data-style="3D CGI render, Pixar animation style, hyperdetailed, smooth shading, octane render, cinema4D, 8K, colorful" data-name="3D CGI">
-                <div class="sicon">🧊</div><div class="sname">3D CGI</div>
-            </div>
-            <div class="style-card" data-style="cyberpunk neon city, blade runner aesthetic, dark night, holographic, neon signs, rain reflections, futuristic" data-name="Cyberpunk">
-                <div class="sicon">🌃</div><div class="sname">Cyberpunk</div>
-            </div>
-            <div class="style-card" data-style="fantasy digital art, concept art, artstation trending, epic illustration, magical world, intricate details, dramatic lighting" data-name="Fantasy">
-                <div class="sicon">🔮</div><div class="sname">Fantasy</div>
-            </div>
-            <div class="style-card" data-style="oil painting masterpiece, Renaissance style, dramatic lighting, texture, old masters, museum quality, rich colors" data-name="Oil Paint">
-                <div class="sicon">🖼️</div><div class="sname">Oil Paint</div>
-            </div>
-            <div class="style-card" data-style="watercolor painting, soft dreamy brushstrokes, pastel colors, wet wash technique, artistic, peaceful" data-name="Watercolor">
-                <div class="sicon">💧</div><div class="sname">Watercolor</div>
-            </div>
-            <div class="style-card" data-style="detailed pencil sketch, graphite drawing, cross-hatching, black and white, fine art, realistic drawing" data-name="Sketch">
-                <div class="sicon">✏️</div><div class="sname">Sketch</div>
-            </div>
-            <div class="style-card" data-style="vintage retro photo, film grain, desaturated, nostalgic, 1970s style, faded colors, analog photography" data-name="Vintage">
-                <div class="sicon">📸</div><div class="sname">Vintage</div>
-            </div>
-            <div class="style-card" data-style="minimalist flat design, clean lines, geometric shapes, simple color palette, modern graphic design" data-name="Minimal">
-                <div class="sicon">◻️</div><div class="sname">Minimal</div>
-            </div>
-            <div class="style-card" data-style="pop art style, Roy Lichtenstein, bold colors, comic dots, high contrast, retro graphic art" data-name="Pop Art">
-                <div class="sicon">🎉</div><div class="sname">Pop Art</div>
-            </div>
-            <div class="style-card" data-style="macro photography, extreme close up, sharp focus, bokeh background, nature details, DSLR macro lens" data-name="Macro">
-                <div class="sicon">🔬</div><div class="sname">Macro</div>
-            </div>
-            <div class="style-card" data-style="aerial drone photography, bird's eye view, landscape, ultra wide angle, golden hour, DJI Mavic 3" data-name="Aerial">
-                <div class="sicon">🚁</div><div class="sname">Aerial</div>
-            </div>
-            <div class="style-card" data-style="food photography, professional, steam rising, appetizing, restaurant quality, perfect lighting, shallow depth of field" data-name="Food">
-                <div class="sicon">🍜</div><div class="sname">Food</div>
-            </div>
-            <div class="style-card" data-style="astronomy astrophotography, deep space, nebula, stars, milky way, ultra sharp, NASA quality, cosmic" data-name="Space">
-                <div class="sicon">🌌</div><div class="sname">Space</div>
-            </div>
-            <div class="style-card" data-style="game concept art, video game render, Unreal Engine 5, ray tracing, ultra detailed, epic games quality" data-name="Game Art">
-                <div class="sicon">🎮</div><div class="sname">Game Art</div>
+            <div class="spin" id="spin">
+                <div class="ring"></div>
+                <div class="slabel" id="slbl">AI Photo बना रहा है...</div>
+                <div class="smodel" id="smld"></div>
+                <div class="spbar"><div class="spbar-fill" id="spbf"></div></div>
             </div>
         </div>
 
-        <!-- QUALITY -->
-        <div class="section-label">⚡ Quality</div>
-        <div class="qual-row">
-            <button class="qual-btn active" data-w="512" data-h="512">Normal<span class="qdim">512px</span></button>
-            <button class="qual-btn" data-w="768" data-h="768">HD<span class="qdim">768px</span></button>
-            <button class="qual-btn" data-w="1024" data-h="1024">FHD<span class="qdim">1024px</span></button>
-            <button class="qual-btn" data-w="1280" data-h="1280">4K Pro<span class="qdim">1280px</span></button>
+        <div class="arow" id="arow">
+            <button class="abtn" onclick="genSingle()">🔄 फिर बनाएं</button>
+            <a class="abtn" id="dlbtn" download="sachin-ai.png">📥 Save</a>
+            <button class="abtn" onclick="waShare()">💬 WhatsApp</button>
+            <button class="abtn" onclick="cpLink()">🔗 Copy</button>
+            <button class="abtn" onclick="saveGallery()">⭐ Gallery</button>
         </div>
 
-        <!-- ASPECT -->
-        <div class="section-label">📐 Aspect Ratio</div>
-        <div class="aspect-row">
-            <button class="aspect-btn active" data-r="1:1">◻️ 1:1</button>
-            <button class="aspect-btn" data-r="16:9">🖥️ 16:9</button>
-            <button class="aspect-btn" data-r="9:16">📱 9:16</button>
-            <button class="aspect-btn" data-r="4:3">📷 4:3</button>
-            <button class="aspect-btn" data-r="3:4">🖼️ 3:4</button>
+        <div class="div"></div>
+
+        <div class="sl">🎨 Style Preset</div>
+        <div class="sscroll" id="ss">
+            <div class="sc active" data-s="">🎯<div class="sn">Auto</div></div>
+            <div class="sc" data-s="ultra photorealistic, 8K DSLR photo, Sony A7R, hyperdetailed, professional photography, depth of field">📷<div class="sn">Real Photo</div></div>
+            <div class="sc" data-s="photorealistic portrait, 8K, studio bokeh, perfect skin, Vogue style, sharp focus">👤<div class="sn">Portrait</div></div>
+            <div class="sc" data-s="high fashion editorial, Vogue magazine, luxury brand, dramatic lighting, runway model">👗<div class="sn">Fashion</div></div>
+            <div class="sc" data-s="cinematic movie still, IMAX quality, dramatic lighting, Hollywood, anamorphic">🎬<div class="sn">Cinematic</div></div>
+            <div class="sc" data-s="anime style, Studio Ghibli, manga art, vibrant colors, cel shading">🎌<div class="sn">Anime</div></div>
+            <div class="sc" data-s="3D CGI render, Pixar style, octane render, cinema4D, hyperdetailed">🧊<div class="sn">3D CGI</div></div>
+            <div class="sc" data-s="cyberpunk neon, blade runner, dark night, holographic, rain reflections">🌃<div class="sn">Cyberpunk</div></div>
+            <div class="sc" data-s="fantasy digital art, concept art, artstation, epic illustration, magical">🔮<div class="sn">Fantasy</div></div>
+            <div class="sc" data-s="oil painting, Renaissance masterpiece, rich texture, dramatic lighting, museum quality">🖼️<div class="sn">Oil Paint</div></div>
+            <div class="sc" data-s="watercolor painting, soft brushstrokes, dreamy, pastel colors, artistic">💧<div class="sn">Watercolor</div></div>
+            <div class="sc" data-s="detailed pencil sketch, graphite drawing, fine art, realistic">✏️<div class="sn">Sketch</div></div>
+            <div class="sc" data-s="vintage retro photo, film grain, nostalgic, 1970s, faded colors, analog">📸<div class="sn">Vintage</div></div>
+            <div class="sc" data-s="food photography, professional, steam, restaurant quality, shallow depth of field">🍜<div class="sn">Food</div></div>
+            <div class="sc" data-s="astrophotography, deep space, nebula, Milky Way, NASA quality, cosmic">🌌<div class="sn">Space</div></div>
+            <div class="sc" data-s="Unreal Engine 5, ray tracing, game concept art, epic games quality">🎮<div class="sn">Game Art</div></div>
+            <div class="sc" data-s="pop art, Roy Lichtenstein, bold colors, comic dots, high contrast">🎉<div class="sn">Pop Art</div></div>
+            <div class="sc" data-s="macro photography, extreme close up, sharp focus, bokeh, nature detail">🔬<div class="sn">Macro</div></div>
         </div>
 
-        <!-- COLOR MOOD -->
-        <div class="section-label">🌈 Color Mood</div>
-        <div class="mood-row">
-            <div class="mood-chip active" data-mood="" style="border-color:rgba(255,255,255,0.15)">🎯 Auto</div>
-            <div class="mood-chip" data-mood="warm golden tones, orange, amber, honey colors" style="border-color:rgba(251,191,36,0.3)">☀️ Warm</div>
-            <div class="mood-chip" data-mood="cool blue tones, icy, azure, cerulean palette" style="border-color:rgba(59,130,246,0.3)">❄️ Cool</div>
-            <div class="mood-chip" data-mood="vibrant saturated neon colors, electric, vivid" style="border-color:rgba(0,255,204,0.3)">🌈 Vivid</div>
-            <div class="mood-chip" data-mood="dark moody palette, deep shadows, dramatic contrast" style="border-color:rgba(107,33,168,0.4)">🌑 Dark</div>
-            <div class="mood-chip" data-mood="pastel soft colors, gentle hues, dreamy palette" style="border-color:rgba(244,114,182,0.3)">🌸 Pastel</div>
-            <div class="mood-chip" data-mood="black and white monochrome, dramatic contrast" style="border-color:rgba(255,255,255,0.2)">⚫ B&W</div>
+        <div class="sl">⚡ Quality</div>
+        <div class="brow">
+            <button class="bbtn aq active" data-w="512" data-h="512">Normal<span>512px</span></button>
+            <button class="bbtn aq" data-w="768" data-h="768">HD<span>768px</span></button>
+            <button class="bbtn aq" data-w="1024" data-h="1024">Full HD<span>1024px</span></button>
+            <button class="bbtn aq" data-w="1280" data-h="1280">4K Pro<span>1280px</span></button>
         </div>
 
-        <!-- QUICK EXAMPLES -->
-        <div class="section-label">💡 Quick Ideas</div>
-        <div class="tip-chips">
-            <span class="tip-chip" onclick="setPrompt('A beautiful young Indian woman in red saree, golden jewelry, temple background, traditional')">💃 Indian Bride</span>
-            <span class="tip-chip" onclick="setPrompt('Handsome Indian cricketer celebrating century, stadium, crowd cheering, epic moment')">🏏 Cricket Star</span>
-            <span class="tip-chip" onclick="setPrompt('Cute Indian baby laughing, soft lighting, portrait, adorable, closeup')">👶 Baby Portrait</span>
-            <span class="tip-chip" onclick="setPrompt('Bollywood actress style glamorous woman, golden hour, red carpet, stunning')">🌟 Bollywood</span>
-            <span class="tip-chip" onclick="setPrompt('Muscular Indian man fitness model, gym background, confident pose, athletic body')">💪 Fitness Model</span>
-            <span class="tip-chip" onclick="setPrompt('Majestic snow mountains at golden sunrise, pink sky, ultra HD landscape')">🏔️ Mountains</span>
-            <span class="tip-chip" onclick="setPrompt('Futuristic Mumbai 2050, flying cars, neon lights, cyberpunk India, epic city')">🏙️ Future India</span>
-            <span class="tip-chip" onclick="setPrompt('Majestic Bengal tiger in jungle, close up, intense eyes, wildlife photography')">🐯 Tiger</span>
-            <span class="tip-chip" onclick="setPrompt('Delicious butter chicken curry, professional food photography, steam, restaurant quality')">🍛 Food Art</span>
-            <span class="tip-chip" onclick="setPrompt('Abstract colorful galaxy cosmos, space nebula, stars, swirling colors, cosmic art')">🌌 Space Art</span>
+        <div class="sl">📐 Aspect Ratio</div>
+        <div class="brow">
+            <button class="bbtn ar active" data-r="1:1">◻️ 1:1</button>
+            <button class="bbtn ar" data-r="16:9">🖥️ 16:9</button>
+            <button class="bbtn ar" data-r="9:16">📱 9:16</button>
+            <button class="bbtn ar" data-r="4:3">📷 4:3</button>
+            <button class="bbtn ar" data-r="3:4">🖼️ 3:4</button>
         </div>
 
-        <!-- PROMPT -->
-        <div class="section-label">📝 Prompt</div>
-        <div class="prompt-wrap">
-            <textarea class="prompt-input" id="promptInput" placeholder="यहाँ लिखें — कोई भी इंसान, जगह, चीज़...
+        <div class="sl">🌈 Color Mood</div>
+        <div class="brow" style="flex-wrap:wrap">
+            <button class="bbtn am active" data-m="" style="border-color:rgba(255,255,255,.15)">🎯 Auto</button>
+            <button class="bbtn am" data-m="warm golden tones, amber, honey" style="border-color:rgba(251,191,36,.3)">☀️ Warm</button>
+            <button class="bbtn am" data-m="cool blue tones, icy, azure" style="border-color:rgba(59,130,246,.3)">❄️ Cool</button>
+            <button class="bbtn am" data-m="vibrant neon colors, electric, vivid" style="border-color:rgba(0,255,204,.3)">🌈 Vivid</button>
+            <button class="bbtn am" data-m="dark moody, deep shadows, dramatic contrast" style="border-color:rgba(107,33,168,.4)">🌑 Dark</button>
+            <button class="bbtn am" data-m="pastel soft colors, dreamy, gentle" style="border-color:rgba(244,114,182,.3)">🌸 Pastel</button>
+            <button class="bbtn am" data-m="black and white monochrome, dramatic" style="border-color:rgba(255,255,255,.2)">⚫ B&W</button>
+        </div>
+
+        <div class="sl">💡 Quick Ideas</div>
+        <div class="tips">
+            <span class="tip" onclick="sp('A beautiful young Indian woman in red saree, golden jewelry, temple background')">💃 Indian Bride</span>
+            <span class="tip" onclick="sp('Handsome Indian cricketer celebrating century, stadium crowd, epic moment')">🏏 Cricket Star</span>
+            <span class="tip" onclick="sp('Cute Indian baby laughing, soft lighting, portrait, closeup')">👶 Baby Portrait</span>
+            <span class="tip" onclick="sp('Bollywood actress glamorous woman, golden hour, red carpet, stunning')">🌟 Bollywood</span>
+            <span class="tip" onclick="sp('Muscular Indian fitness model, gym background, confident pose, athletic')">💪 Fitness</span>
+            <span class="tip" onclick="sp('Majestic snow mountains at golden sunrise, pink sky, ultra HD landscape')">🏔️ Mountains</span>
+            <span class="tip" onclick="sp('Futuristic Mumbai 2050, flying cars, neon lights, cyberpunk India')">🏙️ Future India</span>
+            <span class="tip" onclick="sp('Majestic Bengal tiger in jungle, wildlife photography, intense eyes')">🐯 Tiger</span>
+            <span class="tip" onclick="sp('Delicious butter chicken curry, professional food photography, steam')">🍛 Food Art</span>
+            <span class="tip" onclick="sp('Abstract colorful galaxy cosmos, space nebula, stars, cosmic art')">🌌 Space Art</span>
+        </div>
+
+        <div class="sl">📝 Prompt</div>
+        <div class="pwrap">
+            <textarea class="pi" id="pi" placeholder="यहाँ लिखें — कोई भी इंसान, जगह, चीज़, logo, design...
 जैसे: A beautiful Indian girl smiling, traditional dress, nature background"></textarea>
-            <button class="rand-btn" onclick="randomPrompt()" title="Random Prompt">🎲</button>
+            <button class="rnd" onclick="rndPrompt('pi')" title="Random">🎲</button>
         </div>
 
-        <!-- NEGATIVE PROMPT -->
-        <div class="negative-toggle" onclick="toggleNeg()">
-            <span id="negToggleIcon">▶</span> Negative Prompt (क्या नहीं बनाना)
-        </div>
-        <textarea class="neg-input" id="negInput" placeholder="blurry, distorted, ugly, deformed, low quality, watermark, text..." style="display:none"></textarea>
+        <div class="negtog" onclick="tgNeg()"><span id="nti">▶</span> Negative Prompt (क्या नहीं बनाना)</div>
+        <textarea class="ni" id="ni" style="display:none" placeholder="blurry, distorted, ugly, deformed, low quality, watermark, text..."></textarea>
 
-        <!-- ENHANCE -->
-        <div class="enhance-row">
-            <div class="enhance-label">🪄 <b>AI Auto-Enhance</b> — Prompt खुद बेहतर बनाएगा</div>
-            <div class="toggle on" id="enhanceToggle" onclick="this.classList.toggle('on')"></div>
+        <div class="enhrow">
+            <div class="enhlab">🪄 <b>AI Auto-Enhance</b> — Prompt खुद बेहतर बनाएगा</div>
+            <div class="tog on" id="enh" onclick="this.classList.toggle('on')"></div>
         </div>
 
-        <div class="error-banner" id="errorBanner"></div>
+        <div class="err" id="errBn"></div>
+        <button class="gbtn" id="gbtn" onclick="genSingle()">✨ Ultra Photo बनाएं</button>
 
-        <button class="gen-btn" id="genBtn" onclick="generateSingle()">✨ Ultra Photo बनाएं</button>
-
-        <!-- PROMPT HISTORY -->
-        <div id="historySection" style="margin-top:16px;display:none;">
-            <div class="section-label" style="margin-bottom:8px;">🕐 Recent Prompts</div>
-            <div class="history-row" id="historyRow"></div>
+        <div id="hsec" style="margin-top:14px;display:none">
+            <div class="sl" style="margin-bottom:7px">🕐 Recent Prompts</div>
+            <div class="hrow" id="hrow"></div>
         </div>
     </div>
 
-    <!-- ====== BATCH MODE ====== -->
-    <div class="card tab-panel" id="panel-batch" style="display:none">
-        <div class="section-label">🖼️ Batch Generate — एक साथ 4 Photos</div>
-        <p style="font-size:0.8rem;color:#64748b;margin-bottom:16px;">4 अलग-अलग variations बनाओ और best चुनो। Click करके select करो और download करो।</p>
-
-        <div class="batch-grid" id="batchGrid">
-            <div class="batch-cell" id="bc0">
-                <div class="cell-spinner"><span style="font-size:1.5rem;opacity:0.2;">🖼️</span></div>
-                <img id="bi0" alt="">
-                <div class="cell-num">1</div>
-                <div class="select-overlay">✓</div>
-                <div class="dl-overlay" onclick="dlBatch(0)">💾</div>
+    <!-- ===== DESIGN MODE ===== -->
+    <div class="card tp" id="p-design" style="display:none">
+        <div class="pbox" id="dbox">
+            <img id="dimg" alt="">
+            <div class="pplaceholder" id="dph">
+                <div class="bi">🎨</div>
+                <p>Design यहाँ बनेगा</p>
+                <p style="margin-top:5px;font-size:.72rem">नीचे से design type चुनें</p>
             </div>
-            <div class="batch-cell" id="bc1">
-                <div class="cell-spinner"><span style="font-size:1.5rem;opacity:0.2;">🖼️</span></div>
-                <img id="bi1" alt="">
-                <div class="cell-num">2</div>
-                <div class="select-overlay">✓</div>
-                <div class="dl-overlay" onclick="dlBatch(1)">💾</div>
-            </div>
-            <div class="batch-cell" id="bc2">
-                <div class="cell-spinner"><span style="font-size:1.5rem;opacity:0.2;">🖼️</span></div>
-                <img id="bi2" alt="">
-                <div class="cell-num">3</div>
-                <div class="select-overlay">✓</div>
-                <div class="dl-overlay" onclick="dlBatch(2)">💾</div>
-            </div>
-            <div class="batch-cell" id="bc3">
-                <div class="cell-spinner"><span style="font-size:1.5rem;opacity:0.2;">🖼️</span></div>
-                <img id="bi3" alt="">
-                <div class="cell-num">4</div>
-                <div class="select-overlay">✓</div>
-                <div class="dl-overlay" onclick="dlBatch(3)">💾</div>
+            <div class="spin" id="dspin">
+                <div class="ring"></div>
+                <div class="slabel" id="dslbl">AI Design बना रहा है...</div>
+                <div class="smodel" id="dsmld"></div>
+                <div class="spbar"><div class="spbar-fill" id="dspbf"></div></div>
             </div>
         </div>
 
-        <div class="prompt-wrap" style="margin-bottom:10px;">
-            <textarea class="prompt-input" id="batchPrompt" placeholder="Prompt लिखें — 4 different variations बनेंगी..."></textarea>
-            <button class="rand-btn" onclick="randomPrompt('batch')" title="Random">🎲</button>
+        <div class="arow" id="darow">
+            <button class="abtn" onclick="genDesign()">🔄 फिर बनाएं</button>
+            <a class="abtn" id="ddlbtn" download="sachin-ai-design.png">📥 Save</a>
+            <button class="abtn" onclick="waShareD()">💬 WhatsApp</button>
+            <button class="abtn" onclick="saveGalleryD()">⭐ Gallery</button>
         </div>
 
-        <div class="section-label" style="margin-bottom:8px;">Style Mix</div>
-        <div class="style-scroll" id="batchStyleScroll">
-            <div class="style-card active" data-style="">🎯 Auto</div>
-            <div class="style-card" data-style="ultra photorealistic, 8K DSLR">📷 Real</div>
-            <div class="style-card" data-style="anime style, manga">🎌 Anime</div>
-            <div class="style-card" data-style="cinematic, dramatic">🎬 Cinematic</div>
-            <div class="style-card" data-style="3D CGI render, octane">🧊 3D</div>
-            <div class="style-card" data-style="cyberpunk neon, futuristic">🌃 Cyber</div>
-            <div class="style-card" data-style="oil painting, artistic">🖼️ Paint</div>
+        <div class="div"></div>
+
+        <div class="sl">🎯 Design Type चुनें</div>
+        <div class="dgrid">
+            <div class="dc active" data-d="logo" onclick="selDesign(this,'logo')">
+                <div class="di">🏷️</div><div class="dn">Logo Maker</div>
+            </div>
+            <div class="dc" data-d="youtube" onclick="selDesign(this,'youtube')">
+                <div class="di">📺</div><div class="dn">YT Thumbnail</div>
+            </div>
+            <div class="dc" data-d="appicon" onclick="selDesign(this,'appicon')">
+                <div class="di">📱</div><div class="dn">App Icon</div>
+            </div>
+            <div class="dc" data-d="banner" onclick="selDesign(this,'banner')">
+                <div class="di">🎯</div><div class="dn">Banner/Ad</div>
+            </div>
+            <div class="dc" data-d="poster" onclick="selDesign(this,'poster')">
+                <div class="di">📋</div><div class="dn">Poster</div>
+            </div>
+            <div class="dc" data-d="card" onclick="selDesign(this,'card')">
+                <div class="di">💼</div><div class="dn">Business Card</div>
+            </div>
+            <div class="dc" data-d="wallpaper" onclick="selDesign(this,'wallpaper')">
+                <div class="di">🖼️</div><div class="dn">Wallpaper</div>
+            </div>
+            <div class="dc" data-d="invitation" onclick="selDesign(this,'invitation')">
+                <div class="di">💌</div><div class="dn">Invitation</div>
+            </div>
+            <div class="dc" data-d="meme" onclick="selDesign(this,'meme')">
+                <div class="di">😂</div><div class="dn">Meme Template</div>
+            </div>
         </div>
 
-        <button class="batch-gen-btn" id="batchBtn" onclick="generateBatch()">🚀 4 Photos एक साथ बनाएं</button>
-        <div class="success-banner" id="batchSuccess">✅ सभी 4 Photos बन गईं! Best वाली चुनें और 💾 से download करें।</div>
+        <!-- DYNAMIC FIELDS -->
+        <div class="design-fields" id="dfields">
+            <!-- Logo Fields (default) -->
+            <div id="df-logo">
+                <label class="df-label">📝 Logo पर क्या लिखना है?</label>
+                <input class="df-input" id="logo-text" placeholder='जैसे: AI Website 36 Tool'>
+                <label class="df-label">🎨 Logo Style</label>
+                <select class="df-input" id="logo-style">
+                    <option>Modern Minimalist</option>
+                    <option>Tech/Futuristic</option>
+                    <option>Bold & Strong</option>
+                    <option>Elegant & Luxury</option>
+                    <option>Playful & Fun</option>
+                    <option>3D Metallic</option>
+                    <option>Neon Glow</option>
+                    <option>Vintage Classic</option>
+                    <option>Indian Traditional</option>
+                    <option>Gaming/Esports</option>
+                </select>
+                <label class="df-label">🌈 Color Theme</label>
+                <div class="color-swatches" id="logo-colors">
+                    <div class="cswatch active" style="background:linear-gradient(135deg,#00ffcc,#0088ff)" data-c="teal and blue gradient" title="Teal-Blue"></div>
+                    <div class="cswatch" style="background:linear-gradient(135deg,#ff6b35,#f7c59f)" data-c="orange and gold gradient" title="Orange-Gold"></div>
+                    <div class="cswatch" style="background:linear-gradient(135deg,#7c3aed,#ec4899)" data-c="purple and pink gradient" title="Purple-Pink"></div>
+                    <div class="cswatch" style="background:linear-gradient(135deg,#dc2626,#f59e0b)" data-c="red and gold gradient" title="Red-Gold"></div>
+                    <div class="cswatch" style="background:linear-gradient(135deg,#059669,#10b981)" data-c="green gradient" title="Green"></div>
+                    <div class="cswatch" style="background:linear-gradient(135deg,#1e40af,#3b82f6)" data-c="deep blue gradient" title="Blue"></div>
+                    <div class="cswatch" style="background:linear-gradient(135deg,#111827,#374151)" data-c="black and dark grey" title="Dark/Black"></div>
+                    <div class="cswatch" style="background:linear-gradient(135deg,#ffd700,#ff8c00)" data-c="gold and yellow gradient" title="Gold"></div>
+                </div>
+                <label class="df-label">💬 Extra Description (optional)</label>
+                <input class="df-input" id="logo-desc" placeholder='जैसे: technology, AI, robot icon with it'>
+            </div>
+
+            <!-- YouTube Thumbnail Fields -->
+            <div id="df-youtube" style="display:none">
+                <label class="df-label">📺 Video का Title (thumbnail पर दिखेगा)</label>
+                <input class="df-input" id="yt-title" placeholder='जैसे: 10 AI Tools That Will Blow Your Mind'>
+                <label class="df-label">🎭 Thumbnail Style</label>
+                <select class="df-input" id="yt-style">
+                    <option>Shocking/Clickbait Style with bold text</option>
+                    <option>Clean Professional Educational</option>
+                    <option>Gaming/Action Style</option>
+                    <option>Vlog/Lifestyle Style</option>
+                    <option>Tech/AI Modern Style</option>
+                    <option>News/Journalism Style</option>
+                    <option>Motivational/Inspirational</option>
+                </select>
+                <label class="df-label">📸 अपनी Photo Add करें (optional)</label>
+                <div class="photo-upload-area" onclick="document.getElementById('yt-photo').click()">
+                    <div>📸 Click करें — अपनी Photo upload करें</div>
+                    <div style="font-size:.72rem;color:#475569;margin-top:4px">AI इसे thumbnail में include करेगा</div>
+                    <input type="file" id="yt-photo" accept="image/*" onchange="prevPhoto(event,'yt-prev')">
+                    <img id="yt-prev" class="photo-preview" alt="">
+                </div>
+                <label class="df-label">🌈 Background Style</label>
+                <select class="df-input" id="yt-bg">
+                    <option>Dramatic dark gradient background</option>
+                    <option>Bright colorful gradient</option>
+                    <option>Futuristic tech background</option>
+                    <option>Stadium/crowd background</option>
+                    <option>City skyline background</option>
+                    <option>Simple clean white/grey</option>
+                </select>
+            </div>
+
+            <!-- App Icon Fields -->
+            <div id="df-appicon" style="display:none">
+                <label class="df-label">📱 App का नाम</label>
+                <input class="df-input" id="app-name" placeholder='जैसे: FitTrack, ShopEasy'>
+                <label class="df-label">🎯 App Category</label>
+                <select class="df-input" id="app-cat">
+                    <option>Social Media</option>
+                    <option>Fitness/Health</option>
+                    <option>Finance/Money</option>
+                    <option>Education/Learning</option>
+                    <option>Food/Restaurant</option>
+                    <option>Travel/Maps</option>
+                    <option>Gaming</option>
+                    <option>Music/Audio</option>
+                    <option>Shopping/E-commerce</option>
+                    <option>AI/Technology</option>
+                </select>
+                <label class="df-label">🎨 Icon Style</label>
+                <select class="df-input" id="app-style">
+                    <option>Modern Flat Design</option>
+                    <option>3D Glossy Icon</option>
+                    <option>Minimal Line Art</option>
+                    <option>Gradient Bold</option>
+                    <option>Neumorphism/Soft UI</option>
+                </select>
+            </div>
+
+            <!-- Banner Fields -->
+            <div id="df-banner" style="display:none">
+                <label class="df-label">📢 Banner का Main Text</label>
+                <input class="df-input" id="bn-title" placeholder='जैसे: SALE 50% OFF Today Only!'>
+                <label class="df-label">📝 Subtext (optional)</label>
+                <input class="df-input" id="bn-sub" placeholder='जैसे: Limited Time Offer'>
+                <label class="df-label">🎯 Banner Type</label>
+                <select class="df-input" id="bn-type">
+                    <option>Sale/Discount Offer</option>
+                    <option>Event/Announcement</option>
+                    <option>Product Launch</option>
+                    <option>Social Media Post</option>
+                    <option>Website Header</option>
+                    <option>WhatsApp/Instagram Story</option>
+                </select>
+            </div>
+
+            <!-- Poster Fields -->
+            <div id="df-poster" style="display:none">
+                <label class="df-label">🎬 Poster का Title</label>
+                <input class="df-input" id="ps-title" placeholder='जैसे: Diwali Night Festival 2025'>
+                <label class="df-label">📝 Details</label>
+                <input class="df-input" id="ps-detail" placeholder='Date, Venue, etc.'>
+                <label class="df-label">🎨 Poster Style</label>
+                <select class="df-input" id="ps-style">
+                    <option>Movie Poster Style</option>
+                    <option>Event/Festival Poster</option>
+                    <option>Concert/Music Poster</option>
+                    <option>Political/Campaign</option>
+                    <option>Educational/Informational</option>
+                    <option>Bollywood Style</option>
+                </select>
+            </div>
+
+            <!-- Business Card Fields -->
+            <div id="df-card" style="display:none">
+                <label class="df-label">👤 नाम</label>
+                <input class="df-input" id="bc-name" placeholder='जैसे: Sachin Sharma'>
+                <label class="df-label">💼 Position/Title</label>
+                <input class="df-input" id="bc-pos" placeholder='जैसे: CEO & Founder, AI Expert'>
+                <label class="df-label">🏢 Company Name</label>
+                <input class="df-input" id="bc-co" placeholder='जैसे: Sachin AI Solutions'>
+                <label class="df-label">🎨 Card Style</label>
+                <select class="df-input" id="bc-style">
+                    <option>Modern Dark Premium</option>
+                    <option>Clean White Minimal</option>
+                    <option>Gold Luxury</option>
+                    <option>Tech/AI Style</option>
+                    <option>Creative Colorful</option>
+                </select>
+            </div>
+
+            <!-- Wallpaper -->
+            <div id="df-wallpaper" style="display:none">
+                <label class="df-label">🖼️ Wallpaper Theme</label>
+                <select class="df-input" id="wp-theme">
+                    <option>Abstract Art</option>
+                    <option>Nature/Landscape</option>
+                    <option>Space/Galaxy</option>
+                    <option>City/Urban</option>
+                    <option>Minimalist</option>
+                    <option>Mandala/Pattern</option>
+                    <option>Motivational Quote</option>
+                    <option>Fantasy/Magical</option>
+                </select>
+                <label class="df-label">📐 Device Size</label>
+                <select class="df-input" id="wp-size">
+                    <option value="mobile">📱 Mobile (9:16)</option>
+                    <option value="desktop">🖥️ Desktop (16:9)</option>
+                </select>
+            </div>
+
+            <!-- Invitation -->
+            <div id="df-invitation" style="display:none">
+                <label class="df-label">🎉 Event का नाम</label>
+                <input class="df-input" id="inv-event" placeholder='जैसे: Aryan & Priya Wedding'>
+                <label class="df-label">📅 Date & Venue</label>
+                <input class="df-input" id="inv-detail" placeholder='जैसे: 15 Dec 2025, Hotel Grand'>
+                <label class="df-label">🎨 Style</label>
+                <select class="df-input" id="inv-style">
+                    <option>Royal Indian Wedding</option>
+                    <option>Modern Elegant</option>
+                    <option>Floral & Romantic</option>
+                    <option>Traditional Hindu</option>
+                    <option>Birthday Celebration</option>
+                    <option>Corporate Event</option>
+                </select>
+            </div>
+
+            <!-- Meme -->
+            <div id="df-meme" style="display:none">
+                <label class="df-label">😂 Meme Situation</label>
+                <input class="df-input" id="mm-txt" placeholder='जैसे: When mom asks if I ate, but I just ate maggi'>
+                <label class="df-label">🎭 Meme Style</label>
+                <select class="df-input" id="mm-style">
+                    <option>Indian Desi Meme</option>
+                    <option>Bollywood Meme</option>
+                    <option>Drake meme format</option>
+                    <option>Distracted Boyfriend style</option>
+                    <option>Classic Internet Meme</option>
+                    <option>Office/Work Meme</option>
+                </select>
+            </div>
+        </div>
+
+        <button class="gbtn" id="dgbtn" onclick="genDesign()">🎨 AI Design बनाएं</button>
+        <div class="err" id="derrBn"></div>
     </div>
 
-    <!-- ====== CHAT MODE ====== -->
-    <div class="card tab-panel" id="panel-chat" style="display:none">
-        <div class="chat-progress"><div class="chat-progress-fill" id="chatProgressFill" style="width:0%"></div></div>
-        <div class="chat-step-txt" id="chatStepTxt">Step 0 / 10 — AI आपसे सवाल पूछेगा</div>
-        <div class="chat-window" id="chatWindow"></div>
-        <div class="chat-input-row">
-            <input class="chat-inp" id="chatInp" placeholder="या यहाँ खुद लिखें..." onkeypress="if(event.key==='Enter')chatSend()">
-            <button class="chat-send-btn" onclick="chatSend()">➤</button>
+    <!-- ===== BATCH ===== -->
+    <div class="card tp" id="p-batch" style="display:none">
+        <div class="sl">🖼️ Batch — एक साथ 4 Photos</div>
+        <p style="font-size:.78rem;color:#64748b;margin-bottom:14px">4 variations बनो, best चुनो और download करो</p>
+        <div class="bgrid">
+            <div class="bc" id="bc0"><div class="bsp"><span style="font-size:1.4rem;opacity:.2">🖼️</span></div><img id="bi0"><div class="bnum">1</div><div class="bdl" onclick="dlB(0)">💾</div><div class="bsel">✓</div></div>
+            <div class="bc" id="bc1"><div class="bsp"><span style="font-size:1.4rem;opacity:.2">🖼️</span></div><img id="bi1"><div class="bnum">2</div><div class="bdl" onclick="dlB(1)">💾</div><div class="bsel">✓</div></div>
+            <div class="bc" id="bc2"><div class="bsp"><span style="font-size:1.4rem;opacity:.2">🖼️</span></div><img id="bi2"><div class="bnum">3</div><div class="bdl" onclick="dlB(2)">💾</div><div class="bsel">✓</div></div>
+            <div class="bc" id="bc3"><div class="bsp"><span style="font-size:1.4rem;opacity:.2">🖼️</span></div><img id="bi3"><div class="bnum">4</div><div class="bdl" onclick="dlB(3)">💾</div><div class="bsel">✓</div></div>
         </div>
-        <button class="build-from-chat-btn" id="buildChatBtn" onclick="buildFromChat()">🎨 मेरी Dream Photo बनाएं!</button>
+        <div class="pwrap" style="margin-bottom:9px">
+            <textarea class="pi" id="bpi" placeholder="Prompt लिखें — 4 different variations बनेंगी..."></textarea>
+            <button class="rnd" onclick="rndPrompt('bpi')">🎲</button>
+        </div>
+        <button class="pbtn" id="bbtn" onclick="genBatch()">🚀 4 Photos एक साथ बनाएं</button>
+        <div class="ok" id="bok">✅ सभी 4 Photos बन गईं! Best वाली चुनें और 💾 से download करें।</div>
     </div>
 
-    <!-- ====== GALLERY ====== -->
-    <div class="card tab-panel" id="panel-gallery" style="display:none">
-        <div class="section-label" style="margin-bottom:4px;">⭐ My AI Gallery</div>
-        <p style="font-size:0.78rem;color:#64748b;margin-bottom:14px;">आपकी save की हुई photos — phone में store होती हैं</p>
-        <div class="gallery-grid" id="galleryGrid">
-            <div class="gal-empty">अभी कोई photo नहीं है।<br>Photo बनाएं और ⭐ Gallery में save करें।</div>
+    <!-- ===== CHAT ===== -->
+    <div class="card tp" id="p-chat" style="display:none">
+        <div class="cprog"><div class="cpfill" id="cpf" style="width:0%"></div></div>
+        <div class="cstxt" id="cstxt">Step 0 / 10 — AI आपसे सवाल पूछेगा</div>
+        <div class="cwin" id="cwin"></div>
+        <div class="cirow">
+            <input class="ci" id="ci" placeholder="या यहाँ खुद लिखें..." onkeypress="if(event.key==='Enter')csnd()">
+            <button class="csnd" onclick="csnd()">➤</button>
         </div>
-        <button onclick="clearGallery()" style="margin-top:14px;width:100%;padding:10px;border-radius:10px;border:1px solid rgba(248,113,113,0.2);background:rgba(248,113,113,0.05);color:#f87171;font-family:inherit;font-size:0.82rem;cursor:pointer;">🗑️ Gallery Clear करें</button>
+        <button class="bbuildchat" id="cbuild" onclick="buildChat()">🎨 मेरी Dream Photo बनाएं!</button>
+    </div>
+
+    <!-- ===== GALLERY ===== -->
+    <div class="card tp" id="p-gallery" style="display:none">
+        <div class="sl" style="margin-bottom:4px">⭐ My AI Gallery</div>
+        <p style="font-size:.76rem;color:#64748b;margin-bottom:12px">Save की हुई photos — phone में store</p>
+        <div class="ggrid" id="ggrid"><div class="gempty">अभी gallery खाली है।<br>Photo/Design बनाएं और ⭐ save करें।</div></div>
+        <button onclick="clrGallery()" style="margin-top:12px;width:100%;padding:9px;border-radius:9px;border:1px solid rgba(248,113,113,.2);background:rgba(248,113,113,.05);color:#f87171;font-family:inherit;font-size:.8rem;cursor:pointer">🗑️ Gallery Clear करें</button>
     </div>
 </main>
 
 <script>
-const MODELS = ['flux', 'turbo', 'flux-realism', 'flux-pro', 'flux-anime'];
-let selStyle = '', selW = 512, selH = 512, selAspect = '1:1', selMood = '', batchSelStyle = '';
-let lastUrl = '';
-let chatStep = 0, chatAns = {};
+// ======= CONFIG =======
+// Multiple URL patterns — fallback from simplest to complex
+function buildUrls(prompt, neg, w, h) {
+    const enc = encodeURIComponent(prompt);
+    const seed = Math.floor(Math.random()*9999999);
+    const seed2 = Math.floor(Math.random()*9999999);
+    return [
+        // 1. Simplest — no model, no extra params (most reliable)
+        `https://image.pollinations.ai/prompt/${enc}?width=${w}&height=${h}&nologo=true&seed=${seed}`,
+        // 2. With turbo model
+        `https://image.pollinations.ai/prompt/${enc}?width=${w}&height=${h}&nologo=true&seed=${seed2}&model=turbo`,
+        // 3. With flux model
+        `https://image.pollinations.ai/prompt/${enc}?width=${w}&height=${h}&nologo=true&seed=${Math.floor(Math.random()*9999999)}&model=flux`,
+        // 4. Smaller size fallback
+        `https://image.pollinations.ai/prompt/${enc}?width=${Math.min(w,768)}&height=${Math.min(h,768)}&nologo=true&seed=${Math.floor(Math.random()*9999999)}`,
+        // 5. Even smaller
+        `https://image.pollinations.ai/prompt/${enc}?width=512&height=512&nologo=true&seed=${Math.floor(Math.random()*9999999)}`,
+        // 6. flux-realism
+        `https://image.pollinations.ai/prompt/${enc}?width=512&height=512&nologo=true&seed=${Math.floor(Math.random()*9999999)}&model=flux-realism`,
+        // 7. Absolute fallback — different endpoint format
+        `https://pollinations.ai/p/${enc}?width=512&height=512&seed=${Math.floor(Math.random()*9999999)}&nologo=true`
+    ];
+}
 
-const RANDOM_PROMPTS = [
-    'A majestic Indian woman warrior princess, armored, sword, epic fantasy, dramatic lighting, 8K',
-    'Cute baby elephant playing in golden sunflower field, magical lighting, ultra HD',
-    'Handsome Indian man in royal Mughal emperor outfit, palace background, cinematic portrait',
-    'Beautiful Indian dancer in Bharatanatyam pose, temple, colorful lights, traditional',
-    'Lion king on African savanna at golden sunset, majestic, wildlife photography, 8K',
-    'Futuristic Mumbai skyline 2050, flying cars, neon lights, rainy night, cyberpunk',
-    'A magical library with floating books and glowing orbs, fantasy, detailed art',
-    'Professional Indian chef cooking biryani, restaurant kitchen, steam, dramatic lighting',
-    'Cosmic jellyfish floating in nebula space, surreal, colorful, ultra detailed art',
-    'Old Indian grandfather with grandchild, sunset village, warm golden light, emotional portrait',
-    'Dragon flying over Himalayan peaks, snow, epic fantasy, cinematic wide shot',
-    'Beautiful underwater coral reef, colorful fish, crystal clear water, nature photography',
-    'Indian street food market at night, colorful lights, bokeh, photorealistic, vibrant',
-    'Snow leopard in Himalayan mountains, wildlife photography, perfect detail, 8K',
-    'Surreal floating islands with waterfalls, lush green, magical world, concept art'
+let selStyle='', selW=512, selH=512, selAspect='1:1', selMood='', lastUrl='', lastDUrl='';
+let bUrls=['','','',''], curDesign='logo', selColor='teal and blue gradient';
+
+const RNDS = [
+    'A majestic Indian woman warrior princess, armored, sword, epic fantasy, 8K',
+    'Cute baby elephant in golden sunflower field, magical lighting, ultra HD',
+    'Handsome Indian man in royal Mughal emperor outfit, palace, cinematic',
+    'Beautiful Indian Bharatanatyam dancer, temple, colorful lights, traditional',
+    'Lion on African savanna at golden sunset, wildlife photography, 8K',
+    'Futuristic Mumbai skyline 2050, flying cars, neon lights, rainy night',
+    'Magical library with floating books, glowing orbs, fantasy, detailed art',
+    'Indian chef cooking biryani, restaurant kitchen, steam, dramatic lighting',
+    'Cosmic jellyfish floating in nebula space, surreal, colorful, ultra detailed',
+    'Old grandfather with grandchild, sunset village, warm golden light, portrait',
+    'Dragon flying over Himalayan peaks, epic fantasy, cinematic wide shot',
+    'Beautiful underwater coral reef, colorful fish, nature photography',
+    'Indian street food market at night, colorful lights, bokeh, vibrant',
+    'Snow leopard in Himalayas, wildlife photography, perfect detail, 8K',
+    'Surreal floating islands with waterfalls, magical world, concept art'
 ];
 
-// ===== TABS =====
-function showTab(tab) {
-    document.querySelectorAll('.tab').forEach((t,i)=>{
-        const tabs = ['single','batch','chat','gallery'];
-        t.classList.toggle('active', tabs[i] === tab);
-    });
-    document.querySelectorAll('.tab-panel').forEach(p => p.style.display = 'none');
-    document.getElementById('panel-'+tab).style.display = 'block';
-    if (tab === 'chat' && !document.getElementById('chatWindow').children.length) initChat();
-    if (tab === 'gallery') renderGallery();
-}
+// ======= CORE: ROBUST GENERATE =======
+async function robustGen(prompt, neg, w, h, spinEl, lblEl, mdlEl, onSuccess) {
+    const urls = buildUrls(prompt, neg, w, h);
+    const err = spinEl.closest('.card') ? spinEl.closest('.card').querySelector('.err') : document.getElementById('errBn');
+    if (err) err.style.display = 'none';
 
-// ===== STYLE CARDS =====
-document.querySelectorAll('#styleScroll .style-card').forEach(c=>{
-    c.addEventListener('click',()=>{
-        document.querySelectorAll('#styleScroll .style-card').forEach(x=>x.classList.remove('active'));
-        c.classList.add('active'); selStyle = c.dataset.style;
-    });
-});
-document.querySelectorAll('#batchStyleScroll .style-card').forEach(c=>{
-    c.addEventListener('click',()=>{
-        document.querySelectorAll('#batchStyleScroll .style-card').forEach(x=>x.classList.remove('active'));
-        c.classList.add('active'); batchSelStyle = c.dataset.style;
-    });
-});
+    // Restart progress bar animation
+    const bar = spinEl.closest('.card') ? spinEl.closest('.card').querySelector('.spbar-fill') : document.getElementById('spbf');
 
-// ===== QUALITY =====
-document.querySelectorAll('.qual-btn').forEach(b=>{
-    b.addEventListener('click',()=>{
-        document.querySelectorAll('.qual-btn').forEach(x=>x.classList.remove('active'));
-        b.classList.add('active'); selW = +b.dataset.w; selH = +b.dataset.h;
-    });
-});
+    spinEl.classList.add('on');
 
-// ===== ASPECT =====
-document.querySelectorAll('.aspect-btn').forEach(b=>{
-    b.addEventListener('click',()=>{
-        document.querySelectorAll('.aspect-btn').forEach(x=>x.classList.remove('active'));
-        b.classList.add('active'); selAspect = b.dataset.r;
-    });
-});
-
-// ===== MOOD =====
-document.querySelectorAll('.mood-chip').forEach(c=>{
-    c.addEventListener('click',()=>{
-        document.querySelectorAll('.mood-chip').forEach(x=>x.classList.remove('active'));
-        c.classList.add('active'); selMood = c.dataset.mood;
-    });
-});
-
-// ===== HELPERS =====
-function getDims(w, h, aspect) {
-    const s = w;
-    const map = {
-        '1:1':  [s, s],
-        '16:9': [Math.round(s*16/9/64)*64, s],
-        '9:16': [s, Math.round(s*16/9/64)*64],
-        '4:3':  [Math.round(s*4/3/64)*64, s],
-        '3:4':  [s, Math.round(s*4/3/64)*64]
-    };
-    return map[aspect] || [s, s];
-}
-
-function enhancePrompt(raw, isHuman) {
-    const qualSuffix = selW >= 1024
-        ? 'ultra photorealistic, 8K, hyperdetailed, sharp focus, award winning, trending on artstation, professional lighting, masterpiece, best quality'
-        : 'high quality, detailed, professional, sharp focus';
-    if (isHuman) {
-        return raw + ', ultra photorealistic portrait, 8K DSLR, studio lighting, perfect skin detail, bokeh background, Canon EOS R5, professional photography, ' + qualSuffix;
-    }
-    return raw + ', ' + qualSuffix;
-}
-
-function isHumanPrompt(p) {
-    return /\b(man|woman|girl|boy|person|people|actor|actress|player|singer|model|beautiful|handsome|face|portrait|bride|dancer|warrior|grandfather|baby|child|princess|king|queen|emperor|chef)\b/i.test(p) ||
-           /\b(indian|virat|sachin|amitabh|bollywood|ladki|ladka|aadmi|aurat)\b/i.test(p);
-}
-
-function buildFullPrompt(raw, style, mood) {
-    let parts = [raw];
-    if (style) parts.push(style);
-    if (mood) parts.push(mood);
-    const autoEnhance = document.getElementById('enhanceToggle').classList.contains('on');
-    if (autoEnhance) {
-        const humanish = isHumanPrompt(raw);
-        parts = [enhancePrompt(parts.join(', '), humanish)];
-    }
-    return parts.join(', ');
-}
-
-function setPrompt(txt) {
-    document.getElementById('promptInput').value = txt;
-    document.getElementById('promptInput').focus();
-}
-
-function toggleNeg() {
-    const neg = document.getElementById('negInput');
-    const icon = document.getElementById('negToggleIcon');
-    const show = neg.style.display === 'none';
-    neg.style.display = show ? 'block' : 'none';
-    icon.textContent = show ? '▼' : '▶';
-    if (show && !neg.value) neg.value = 'blurry, distorted face, extra limbs, ugly, bad anatomy, watermark, text, deformed, low quality, pixelated';
-}
-
-function randomPrompt(target) {
-    const p = RANDOM_PROMPTS[Math.floor(Math.random()*RANDOM_PROMPTS.length)];
-    const el = document.getElementById(target === 'batch' ? 'batchPrompt' : 'promptInput');
-    el.value = p;
-    el.focus();
-}
-
-function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(()=>t.classList.remove('show'), 2500);
-}
-
-// ===== GENERATE WITH RETRY =====
-async function generateImg(prompt, negPrompt, w, h, onSuccess, spinEl, labelEl, modelEl) {
-    const bar = document.getElementById('spinBar');
-    const errorBanner = document.getElementById('errorBanner');
-    if (errorBanner) errorBanner.style.display = 'none';
-
-    for (let attempt = 0; attempt < 5; attempt++) {
-        const model = MODELS[attempt % MODELS.length];
-        const seed = Math.floor(Math.random() * 9999999);
-
-        if (spinEl) spinEl.classList.add('active');
-        if (labelEl) labelEl.textContent = attempt === 0 ? '✨ AI Photo बना रहा है...' : `🔄 Model ${attempt+1}/5 try कर रहा है...`;
-        if (modelEl) modelEl.textContent = `Model: ${model}`;
-        if (bar) { bar.style.animation = 'none'; bar.offsetHeight; bar.style.animation = 'loadBar 25s linear forwards'; }
-
-        let url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=${w}&height=${h}&nologo=true&seed=${seed}&model=${model}&enhance=true`;
-        if (negPrompt) url += `&negative=${encodeURIComponent(negPrompt)}`;
+    for (let i = 0; i < urls.length; i++) {
+        const url = urls[i];
+        if (lblEl) lblEl.textContent = i === 0 ? '✨ AI Photo बना रहा है...' : `🔄 Try ${i+1}/7 — दूसरा server...`;
+        if (mdlEl) mdlEl.textContent = i > 0 ? `Attempt ${i+1} of 7` : '';
+        if (bar) { bar.style.animation = 'none'; bar.offsetHeight; bar.style.animation = 'ld 28s linear forwards'; }
 
         try {
-            await new Promise((resolve, reject) => {
+            const imgUrl = await new Promise((resolve, reject) => {
                 const img = new Image();
-                img.crossOrigin = 'anonymous';
-                const timer = setTimeout(()=>reject(new Error('timeout')), 35000);
-                img.onload = ()=>{ clearTimeout(timer); resolve(url); };
-                img.onerror = ()=>{ clearTimeout(timer); reject(new Error('fail')); };
+                const timer = setTimeout(() => reject(new Error('timeout')), i < 3 ? 40000 : 25000);
+                img.onload = () => { clearTimeout(timer); resolve(url); };
+                img.onerror = () => { clearTimeout(timer); reject(new Error('load failed')); };
+                // No crossOrigin for first few attempts to avoid CORS blocking
+                if (i >= 3) img.crossOrigin = 'anonymous';
                 img.src = url;
             });
-            if (spinEl) spinEl.classList.remove('active');
-            onSuccess(url);
-            return url;
+
+            spinEl.classList.remove('on');
+            onSuccess(imgUrl);
+            return imgUrl;
+
         } catch(e) {
-            await new Promise(r=>setTimeout(r, 1000));
+            // Small delay before next attempt
+            await new Promise(r => setTimeout(r, i < 3 ? 1500 : 800));
         }
     }
 
-    if (spinEl) spinEl.classList.remove('active');
-    if (errorBanner) {
-        errorBanner.textContent = '❌ सभी AI servers busy हैं। थोड़ी देर बाद try करें।';
-        errorBanner.style.display = 'block';
+    spinEl.classList.remove('on');
+    if (err) {
+        err.textContent = '❌ AI Photo नहीं बन पाई। Internet check करें और 30 सेकंड बाद फिर try करें।';
+        err.style.display = 'block';
     }
     return null;
 }
 
-// ===== SINGLE GENERATE =====
-async function generateSingle() {
-    const raw = document.getElementById('promptInput').value.trim();
-    if (!raw) { showToast('⚠️ कृपया कुछ लिखें!'); return; }
-    const negPrompt = document.getElementById('negInput').style.display !== 'none' ? document.getElementById('negInput').value.trim() : '';
-    const [w, h] = getDims(selW, selH, selAspect);
-    const fullPrompt = buildFullPrompt(raw, selStyle, selMood);
-
-    // Update aspect ratio of preview
-    const wrap = document.getElementById('previewWrap');
-    wrap.style.aspectRatio = selAspect.replace(':', '/');
-
-    const btn = document.getElementById('genBtn');
-    btn.disabled = true; btn.textContent = '⏳ बन रहा है...';
-    document.getElementById('actionRow').style.display = 'none';
-    document.getElementById('outputImg').style.display = 'none';
-    document.getElementById('placeholder').style.display = 'none';
-
-    const url = await generateImg(
-        fullPrompt, negPrompt, w, h,
-        (url) => {
-            const img = document.getElementById('outputImg');
-            img.src = url; img.style.display = 'block';
-            document.getElementById('placeholder').style.display = 'none';
-            document.getElementById('downloadBtn').href = url;
-            lastUrl = url;
-            document.getElementById('actionRow').style.display = 'flex';
-            addToHistory(raw);
-        },
-        document.getElementById('spinner'),
-        document.getElementById('spinLabel'),
-        document.getElementById('spinModel')
-    );
-
-    btn.disabled = false; btn.textContent = '✨ Ultra Photo बनाएं';
+// ======= TABS =======
+function showTab(t) {
+    const tabs = ['single','design','batch','chat','gallery'];
+    document.querySelectorAll('.tab').forEach((el,i) => el.classList.toggle('active', tabs[i]===t));
+    document.querySelectorAll('.tp').forEach(p => p.style.display='none');
+    document.getElementById('p-'+t).style.display='block';
+    if (t==='chat' && !document.getElementById('cwin').children.length) initChat();
+    if (t==='gallery') renderGallery();
 }
 
-// ===== SHARE / COPY =====
-function shareWhatsApp() {
-    if (!lastUrl) { showToast('⚠️ पहले photo बनाएं'); return; }
-    window.open('https://wa.me/?text=' + encodeURIComponent('देखो मैंने AI से यह Photo बनाई 🤩\n' + lastUrl + '\n\nआप भी बनाएं: aiwebsite36tootcreatephoto.online'), '_blank');
-}
-function copyLink() {
-    if (!lastUrl) { showToast('⚠️ पहले photo बनाएं'); return; }
-    navigator.clipboard.writeText(lastUrl).then(()=>showToast('✅ Link Copy हो गई!'));
+// ======= STYLE/QUALITY/ASPECT/MOOD =======
+document.querySelectorAll('#ss .sc').forEach(c=>c.addEventListener('click',()=>{
+    document.querySelectorAll('#ss .sc').forEach(x=>x.classList.remove('active'));
+    c.classList.add('active'); selStyle=c.dataset.s;
+}));
+document.querySelectorAll('.bbtn.aq').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('.bbtn.aq').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active'); selW=+b.dataset.w; selH=+b.dataset.h;
+}));
+document.querySelectorAll('.bbtn.ar').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('.bbtn.ar').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active'); selAspect=b.dataset.r;
+}));
+document.querySelectorAll('.bbtn.am').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('.bbtn.am').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active'); selMood=b.dataset.m;
+}));
+document.querySelectorAll('#logo-colors .cswatch').forEach(sw=>sw.addEventListener('click',()=>{
+    document.querySelectorAll('#logo-colors .cswatch').forEach(x=>x.classList.remove('active'));
+    sw.classList.add('active'); selColor=sw.dataset.c;
+}));
+
+function getDims(aspect, base) {
+    const s = base;
+    return {'1:1':[s,s],'16:9':[Math.round(s*16/9/64)*64,s],'9:16':[s,Math.round(s*16/9/64)*64],'4:3':[Math.round(s*4/3/64)*64,s],'3:4':[s,Math.round(s*4/3/64)*64]}[aspect]||[s,s];
 }
 
-// ===== GALLERY =====
-function saveToGallery() {
-    if (!lastUrl) { showToast('⚠️ पहले photo बनाएं'); return; }
-    const gallery = JSON.parse(localStorage.getItem('sachinAIGallery') || '[]');
-    if (gallery.includes(lastUrl)) { showToast('ℹ️ पहले से Gallery में है'); return; }
-    gallery.unshift(lastUrl);
-    if (gallery.length > 30) gallery.pop();
-    localStorage.setItem('sachinAIGallery', JSON.stringify(gallery));
-    showToast('⭐ Gallery में save हो गई!');
-}
-function renderGallery() {
-    const g = document.getElementById('galleryGrid');
-    const gallery = JSON.parse(localStorage.getItem('sachinAIGallery') || '[]');
-    if (!gallery.length) { g.innerHTML = '<div class="gal-empty">अभी कोई photo नहीं है।<br>Photo बनाएं और ⭐ Gallery में save करें।</div>'; return; }
-    g.innerHTML = gallery.map((url,i) => `
-        <div class="gal-item">
-            <img src="${url}" alt="Gallery ${i+1}" loading="lazy">
-            <a class="gal-dl" href="${url}" download="sachin-ai-${i+1}.png">💾</a>
-        </div>`).join('');
-}
-function clearGallery() {
-    if (!confirm('सभी saved photos delete करें?')) return;
-    localStorage.removeItem('sachinAIGallery');
-    renderGallery();
-    showToast('🗑️ Gallery clear हो गई');
+function isHuman(p) {
+    return /\b(man|woman|girl|boy|person|people|actor|actress|player|singer|model|beautiful|handsome|face|portrait|bride|dancer|warrior|baby|child|princess|king|queen|emperor|chef|athlete)\b/i.test(p)||/\b(indian|bollywood|ladki|ladka|aadmi|aurat|insaan|log)\b/i.test(p);
 }
 
-// ===== PROMPT HISTORY =====
-function addToHistory(prompt) {
-    let h = JSON.parse(localStorage.getItem('sachinPromptHistory') || '[]');
-    h = h.filter(p => p !== prompt);
-    h.unshift(prompt);
-    if (h.length > 10) h.pop();
-    localStorage.setItem('sachinPromptHistory', JSON.stringify(h));
-    renderHistory();
+function buildPrompt(raw, style, mood) {
+    let parts = [raw];
+    if (style) parts.push(style);
+    if (mood) parts.push(mood);
+    const enhance = document.getElementById('enh').classList.contains('on');
+    if (enhance) {
+        const human = isHuman(raw);
+        const q = selW>=1024 ? 'ultra photorealistic, 8K, hyperdetailed, sharp focus, award winning photography, masterpiece, best quality' : 'high quality, detailed, sharp focus, professional';
+        if (human) parts.push('ultra photorealistic portrait, 8K DSLR, studio bokeh, perfect skin, Canon EOS R5, ' + q);
+        else parts.push(q);
+    }
+    return parts.join(', ');
 }
-function renderHistory() {
-    const h = JSON.parse(localStorage.getItem('sachinPromptHistory') || '[]');
-    const sec = document.getElementById('historySection');
-    const row = document.getElementById('historyRow');
-    if (!h.length) { sec.style.display = 'none'; return; }
-    sec.style.display = 'block';
-    row.innerHTML = h.map(p => `<div class="hist-chip" onclick="setPrompt('${p.replace(/'/g,"\\'")}' )">${p}</div>`).join('');
-}
-renderHistory();
 
-// ===== BATCH GENERATE =====
-let batchUrls = ['','','',''];
-function dlBatch(i) {
-    if (!batchUrls[i]) return;
-    const a = document.createElement('a'); a.href = batchUrls[i]; a.download = `sachin-ai-batch-${i+1}.png`; a.click();
-}
-async function generateBatch() {
-    const raw = document.getElementById('batchPrompt').value.trim();
-    if (!raw) { showToast('⚠️ Prompt लिखें!'); return; }
-    const btn = document.getElementById('batchBtn');
-    btn.disabled = true; btn.textContent = '⏳ 4 Photos बन रही हैं...';
-    document.getElementById('batchSuccess').style.display = 'none';
-    batchUrls = ['','','',''];
+// ======= SINGLE GENERATE =======
+async function genSingle() {
+    const raw = document.getElementById('pi').value.trim();
+    if (!raw) { toast('⚠️ कृपया कुछ लिखें!'); return; }
+    const neg = document.getElementById('ni').style.display!=='none' ? document.getElementById('ni').value.trim() : '';
+    const [w,h] = getDims(selAspect, selW);
+    const fp = buildPrompt(raw, selStyle, selMood);
+    document.getElementById('pbox').style.aspectRatio = selAspect.replace(':','/');
+    const btn = document.getElementById('gbtn');
+    btn.disabled=true; btn.textContent='⏳ बन रहा है...';
+    document.getElementById('arow').style.display='none';
+    document.getElementById('oimg').style.display='none';
+    document.getElementById('pph').style.display='block';
 
-    const styleVariants = ['', 'ultra photorealistic, 8K', 'cinematic, dramatic lighting', 'artistic, detailed'];
-
-    // Generate all 4 in parallel
-    const tasks = [0,1,2,3].map(async (i) => {
-        const cell = document.getElementById('bc'+i);
-        const img = document.getElementById('bi'+i);
-        img.style.display = 'none';
-        cell.classList.remove('selected');
-        cell.querySelector('.cell-spinner').innerHTML = '<div class="mini-ring"></div><span style="font-size:0.7rem;color:#64748b">AI...</span>';
-
-        const seed = Math.floor(Math.random() * 9999999);
-        const sv = batchSelStyle || styleVariants[i];
-        const prompt = encodeURIComponent(raw + (sv ? ', ' + sv : '') + ', ultra HD, masterpiece');
-        const model = MODELS[i % MODELS.length];
-        const url = `https://image.pollinations.ai/prompt/${prompt}?width=512&height=512&nologo=true&seed=${seed}&model=${model}&enhance=true`;
-
-        for (let attempt = 0; attempt < 4; attempt++) {
-            try {
-                await new Promise((resolve, reject) => {
-                    const t = new Image();
-                    const timer = setTimeout(()=>reject(new Error('timeout')), 35000);
-                    t.onload = ()=>{ clearTimeout(timer); resolve(); };
-                    t.onerror = ()=>{ clearTimeout(timer); reject(); };
-                    t.src = url;
-                });
-                batchUrls[i] = url;
-                img.src = url; img.style.display = 'block';
-                cell.querySelector('.cell-spinner').innerHTML = '';
-                cell.onclick = () => {
-                    document.querySelectorAll('.batch-cell').forEach(c=>c.classList.remove('selected'));
-                    cell.classList.add('selected');
-                    lastUrl = url;
-                };
-                return;
-            } catch(e) {
-                if (attempt === 3) {
-                    cell.querySelector('.cell-spinner').innerHTML = '<span style="color:#f87171;font-size:0.75rem">❌ Failed</span>';
-                }
-                await new Promise(r=>setTimeout(r, 500));
-            }
-        }
+    await robustGen(fp, neg, w, h, document.getElementById('spin'), document.getElementById('slbl'), document.getElementById('smld'), url=>{
+        const img=document.getElementById('oimg'); img.src=url; img.style.display='block';
+        document.getElementById('pph').style.display='none';
+        document.getElementById('dlbtn').href=url; lastUrl=url;
+        document.getElementById('arow').style.display='flex';
+        addHistory(raw);
     });
 
-    await Promise.all(tasks);
-    btn.disabled = false; btn.textContent = '🔄 फिर 4 Photos बनाएं';
-    document.getElementById('batchSuccess').style.display = 'block';
+    btn.disabled=false; btn.textContent='✨ Ultra Photo बनाएं';
 }
 
-// ===== CHAT MODE =====
-const chatQs = [
-    { q:'🎨 किस तरह की Photo चाहिए?', k:'type', opts:['👤 Portrait/इंसान','🌿 Nature/Landscape','🏙️ City/Urban','🎭 Fantasy/Art','🐾 Animals','🍕 Food Photo','🚗 Vehicle','🌌 Space/Cosmos','✏️ Illustration/Art','💫 Abstract'] },
-    { q:'👤 Subject कौन/क्या है?', k:'subject', opts:['👱‍♀️ Young Woman','👨 Young Man','👶 Baby/Child','💑 Couple','👨‍👩‍👧 Family','🦸 Superhero','👑 King/Queen','🧙 Wizard/Fantasy char','🤖 Robot/AI','🚫 Person नहीं'] },
-    { q:'🌍 Look/Style कैसा चाहिए?', k:'look', opts:['🇮🇳 Indian Traditional','🌟 Bollywood Glamour','🏏 Sports Hero','🎭 Historical/Period','🦸 Marvel/DC Style','🌸 Korean/K-pop','🤵 Business/Formal','🏋️ Fitness Model','🧛 Dark/Gothic','🌈 Colorful/Vibrant'] },
-    { q:'😊 Expression/Mood कैसी?', k:'mood', opts:['😊 Happy & Smiling','😎 Cool & Confident','💪 Powerful/Intense','🥰 Romantic/Soft','😤 Fierce/Angry','😇 Innocent/Pure','🤔 Thoughtful','😴 Calm/Relaxed','🔥 Bold & Dramatic','🌟 Majestic/Royal'] },
-    { q:'🏠 Background/Setting?', k:'bg', opts:['🏟️ Stadium/Ground','🌊 Beach/Ocean','🌿 Forest/Nature','🏙️ City/Skyline','🌌 Space/Galaxy','🏯 Palace/Fort','📸 Plain Studio','🌅 Sunset/Sunrise','🌸 Garden/Flowers','🔮 Fantasy World'] },
-    { q:'💡 Lighting कैसी चाहिए?', k:'light', opts:['☀️ Natural Sunlight','🌅 Golden Hour','🌙 Night/Moonlight','💡 Studio Light','🔦 Dramatic Dark','🌈 Colorful Neon','❄️ Cool Blue','🕯️ Warm Candlelight','⚡ Lightning Storm','✨ Magical/Fairy'] },
-    { q:'👗 Outfit/Clothing?', k:'outfit', opts:['👘 Traditional Saree/Kurta','👔 Business Suit','🥋 Sports Jersey','💃 Dance Costume','👑 Royal Attire','🦸 Superhero Suit','🥼 Lab/Doctor Coat','👗 Fashion/Glamour','🏊 Athletic/Gym','🚫 No Preference'] },
-    { q:'🎨 Art Style?', k:'art', opts:['📷 Ultra Realistic Photo','🎌 Anime/Manga','🎨 Oil Painting','✏️ Pencil Sketch','🌊 Watercolor','🧊 3D CGI Render','🎬 Cinematic Film','💎 Digital Fantasy Art','📸 Vintage/Retro','🌃 Cyberpunk/Neon'] },
-    { q:'✨ Special Effects?', k:'fx', opts:['💨 Smoke/Fog','⚡ Lightning','🌸 Flower Petals','💥 Action Blur','🌟 Stars/Sparkles','🔥 Fire Effect','❄️ Snow/Ice','🌊 Water Splash','🌈 Rainbow','🚫 Effects नहीं'] },
-    { q:'👑 Quality & Size?', k:'quality', opts:['⚡ Fast - 512px','📱 HD - 768px','🖥️ Full HD - 1024px','👑 4K Ultra Pro - 1280px'] }
-];
-let chatFiltered = [];
-
-function initChat() {
-    chatAns = {}; chatStep = 0;
-    chatFiltered = chatQs;
-    document.getElementById('chatWindow').innerHTML = '';
-    document.getElementById('buildChatBtn').style.display = 'none';
-    updateChatProgress(0);
-    addBubble('ai', '🙏 नमस्ते! मैं आपसे 10 सवाल पूछूंगा और फिर आपकी <b>सपनों की Ultra HD Photo</b> बनाऊंगा! 🎨<br><br>ऊपर से option चुनें या नीचे खुद लिखें।', []);
-    setTimeout(()=>askChat(), 600);
+// ======= DESIGN MODE =======
+function selDesign(el, type) {
+    document.querySelectorAll('.dc').forEach(x=>x.classList.remove('active')); el.classList.add('active');
+    curDesign=type;
+    document.querySelectorAll('[id^="df-"]').forEach(x=>x.style.display='none');
+    document.getElementById('df-'+type).style.display='block';
 }
 
-function askChat() {
-    if (chatStep >= chatFiltered.length) {
-        addBubble('ai', '🎉 <b>Perfect!</b> सभी जानकारी मिल गई! <b>अब मैं आपकी Ultra AI Photo बनाऊंगा!</b>', []);
-        document.getElementById('buildChatBtn').style.display = 'block';
-        updateChatProgress(chatFiltered.length);
-        return;
-    }
-    const q = chatFiltered[chatStep];
-    updateChatProgress(chatStep);
-    document.getElementById('chatStepTxt').textContent = `Step ${chatStep+1} / ${chatFiltered.length}`;
-    addBubble('ai', q.q, q.opts);
-    scrollChat();
+function prevPhoto(e, prevId) {
+    const file = e.target.files[0]; if(!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => { const p=document.getElementById(prevId); p.src=ev.target.result; p.style.display='block'; };
+    reader.readAsDataURL(file);
 }
 
-function addBubble(who, text, opts) {
-    const win = document.getElementById('chatWindow');
-    const div = document.createElement('div');
-    div.className = `chat-bubble bubble-${who}`;
-    div.innerHTML = text;
-    if (opts.length) {
-        const grid = document.createElement('div');
-        grid.className = 'opts-grid';
-        opts.forEach(o => {
-            const chip = document.createElement('div');
-            chip.className = 'opt-chip';
-            chip.textContent = o;
-            chip.onclick = () => chatPick(o);
-            grid.appendChild(chip);
-        });
-        div.appendChild(grid);
-    }
-    win.appendChild(div);
-    scrollChat();
-}
-
-function scrollChat() { const w = document.getElementById('chatWindow'); setTimeout(()=>w.scrollTop=w.scrollHeight,100); }
-function updateChatProgress(step) { document.getElementById('chatProgressFill').style.width = (step/chatFiltered.length*100)+'%'; }
-
-function chatPick(opt) {
-    if (chatStep >= chatFiltered.length) return;
-    chatAns[chatFiltered[chatStep].k] = opt;
-    addBubble('user', opt, []);
-    chatStep++;
-    setTimeout(()=>askChat(), 400);
-}
-
-function chatSend() {
-    const v = document.getElementById('chatInp').value.trim();
-    if (!v) return;
-    document.getElementById('chatInp').value = '';
-    chatPick(v);
-}
-
-async function buildFromChat() {
-    const btn = document.getElementById('buildChatBtn');
-    btn.disabled = true; btn.textContent = '⏳ बन रहा है...';
-
-    const qualMap = {'⚡ Fast - 512px':512,'📱 HD - 768px':768,'🖥️ Full HD - 1024px':1024,'👑 4K Ultra Pro - 1280px':1280};
-    const artMap = {
-        '📷 Ultra Realistic Photo':'ultra photorealistic, 8K DSLR, hyperdetailed, award winning photography, Canon EOS R5',
-        '🎌 Anime/Manga':'anime style, manga art, Studio Ghibli, vibrant',
-        '🎨 Oil Painting':'oil painting, museum quality, old masters, masterpiece',
-        '✏️ Pencil Sketch':'detailed pencil sketch, graphite, black and white',
-        '🌊 Watercolor':'watercolor painting, soft brushstrokes, dreamy',
-        '🧊 3D CGI Render':'3D CGI render, octane render, cinema4D, hyperdetailed',
-        '🎬 Cinematic Film':'cinematic movie still, IMAX, film grain, Hollywood',
-        '💎 Digital Fantasy Art':'digital art, concept art, artstation, fantasy, epic',
-        '📸 Vintage/Retro':'vintage photo, film grain, retro, nostalgic, analog',
-        '🌃 Cyberpunk/Neon':'cyberpunk, neon lights, blade runner, futuristic night'
-    };
-
-    let parts = [];
-    if (chatAns.type) parts.push(chatAns.type.replace(/^[\S]+ /,''));
-    if (chatAns.subject && !chatAns.subject.includes('नहीं')) parts.push(chatAns.subject.replace(/^[\S]+ /,''));
-    if (chatAns.look) parts.push(chatAns.look.replace(/^[\S]+ /,'') + ' style');
-    if (chatAns.mood) parts.push(chatAns.mood.replace(/^[\S]+ /,'') + ' expression');
-    if (chatAns.bg) parts.push(chatAns.bg.replace(/^[\S]+ /,'') + ' background');
-    if (chatAns.light) parts.push(chatAns.light.replace(/^[\S]+ /,'') + ' lighting');
-    if (chatAns.outfit && !chatAns.outfit.includes('नहीं')) parts.push('wearing ' + chatAns.outfit.replace(/^[\S]+ /,''));
-    if (chatAns.fx && !chatAns.fx.includes('नहीं')) parts.push(chatAns.fx.replace(/^[\S]+ /,'') + ' effect');
-    if (chatAns.art) parts.push(artMap[chatAns.art] || chatAns.art.replace(/^[\S]+ /,''));
-    parts.push('ultra HD, professional, masterpiece, high quality, detailed, sharp focus');
-
-    const qv = qualMap[chatAns.quality] || 768;
-    const finalPrompt = parts.join(', ');
-
-    showTab('single');
-    document.getElementById('promptInput').value = finalPrompt;
-    selW = qv; selH = qv;
-    document.getElementById('previewWrap').style.aspectRatio = '1';
-    document.getElementById('outputImg').style.display = 'none';
-    document.getElementById('placeholder').style.display = 'block';
-    document.getElementById('actionRow').style.display = 'none';
-
-    const url = await generateImg(
-        finalPrompt, '', qv, qv,
-        (url)=>{
-            const img = document.getElementById('outputImg');
-            img.src = url; img.style.display = 'block';
-            document.getElementById('placeholder').style.display = 'none';
-            document.getElementById('downloadBtn').href = url;
-            lastUrl = url;
-            document.getElementById('actionRow').style.display = 'flex';
-            addToHistory(finalPrompt.slice(0, 80));
+function buildDesignPrompt() {
+    const dm = {
+        logo: () => {
+            const txt=document.getElementById('logo-text').value||'My Brand';
+            const sty=document.getElementById('logo-style').value;
+            const desc=document.getElementById('logo-desc').value;
+            return `Professional logo design for "${txt}", ${sty} style, ${selColor} color scheme, clean vector design, transparent background, high quality brand identity, ${desc?desc+', ':''}ultra HD, professional graphic design`;
         },
-        document.getElementById('spinner'),
-        document.getElementById('spinLabel'),
-        document.getElementById('spinModel')
+        youtube: () => {
+            const title=document.getElementById('yt-title').value||'Amazing Video';
+            const sty=document.getElementById('yt-style').value;
+            const bg=document.getElementById('yt-bg').value;
+            const hasPic = document.getElementById('yt-prev').style.display!=='none';
+            return `YouTube thumbnail, "${title}", ${sty}, ${bg}, ${hasPic?'with a person on the side looking shocked/excited, ':''}bold large text, high contrast, eye-catching design, 16:9 ratio, professional thumbnail design, ultra HD`;
+        },
+        appicon: () => {
+            const name=document.getElementById('app-name').value||'MyApp';
+            const cat=document.getElementById('app-cat').value;
+            const sty=document.getElementById('app-style').value;
+            return `Mobile app icon for "${name}", ${cat} app, ${sty}, rounded corners, clean minimal design, App Store ready, professional icon design, gradient colors, ultra HD, white background`;
+        },
+        banner: () => {
+            const title=document.getElementById('bn-title').value||'Special Offer';
+            const sub=document.getElementById('bn-sub').value;
+            const type=document.getElementById('bn-type').value;
+            return `Professional ${type} banner design, main text: "${title}"${sub?', subtext: "'+sub+'"':''}, bold typography, eye-catching colors, professional graphic design, ultra HD, marketing design`;
+        },
+        poster: () => {
+            const title=document.getElementById('ps-title').value||'Event Poster';
+            const detail=document.getElementById('ps-detail').value;
+            const sty=document.getElementById('ps-style').value;
+            return `${sty}, title: "${title}"${detail?', '+detail:''}, dramatic design, bold typography, professional poster design, ultra HD, high quality graphic design`;
+        },
+        card: () => {
+            const name=document.getElementById('bc-name').value||'Your Name';
+            const pos=document.getElementById('bc-pos').value||'Professional';
+            const co=document.getElementById('bc-co').value||'Company Name';
+            const sty=document.getElementById('bc-style').value;
+            return `${sty} business card design, name: "${name}", title: "${pos}", company: "${co}", professional layout, elegant typography, high quality graphic design, ultra HD`;
+        },
+        wallpaper: () => {
+            const theme=document.getElementById('wp-theme').value;
+            const sz=document.getElementById('wp-size').value;
+            if(sz==='mobile'){selAspect='9:16';}else{selAspect='16:9';}
+            return `${theme} wallpaper, stunning visuals, ultra detailed, 4K quality, professional photography or digital art, vibrant colors, perfect for phone/desktop wallpaper`;
+        },
+        invitation: () => {
+            const ev=document.getElementById('inv-event').value||'Special Event';
+            const det=document.getElementById('inv-detail').value;
+            const sty=document.getElementById('inv-style').value;
+            return `${sty} invitation card design, event: "${ev}"${det?', '+det:''}, beautiful decorative design, elegant typography, flowers and ornaments, ultra HD, professional design`;
+        },
+        meme: () => {
+            const txt=document.getElementById('mm-txt').value||'Funny situation';
+            const sty=document.getElementById('mm-style').value;
+            return `${sty} meme template image, situation: "${txt}", funny relatable scene, expressive characters, ${sty} aesthetic, meme format, humorous, viral content style`;
+        }
+    };
+    return dm[curDesign]();
+}
+
+async function genDesign() {
+    const prompt = buildDesignPrompt();
+    const btn = document.getElementById('dgbtn');
+    btn.disabled=true; btn.textContent='⏳ AI बना रहा है...';
+    document.getElementById('darow').style.display='none';
+    document.getElementById('dimg').style.display='none';
+    document.getElementById('dph').style.display='block';
+    document.getElementById('dbox').style.aspectRatio = curDesign==='youtube'?'16/9' : curDesign==='card'?'16/9' : curDesign==='banner'?'16/9' : '1';
+
+    const [w,h] = curDesign==='youtube'||curDesign==='banner'||curDesign==='card' ? [1280,720] : curDesign==='poster' ? [768,1024] : [768,768];
+
+    await robustGen(prompt, 'text, watermark, low quality, blurry', w, h,
+        document.getElementById('dspin'), document.getElementById('dslbl'), document.getElementById('dsmld'),
+        url => {
+            const img=document.getElementById('dimg'); img.src=url; img.style.display='block';
+            document.getElementById('dph').style.display='none';
+            document.getElementById('ddlbtn').href=url; lastDUrl=url;
+            document.getElementById('darow').style.display='flex';
+        }
     );
 
-    btn.disabled = false; btn.textContent = '🎨 मेरी Dream Photo बनाएं!';
+    btn.disabled=false; btn.textContent='🎨 AI Design बनाएं';
+}
+
+// ======= BATCH =======
+async function genBatch() {
+    const raw = document.getElementById('bpi').value.trim();
+    if (!raw) { toast('⚠️ Prompt लिखें!'); return; }
+    const btn=document.getElementById('bbtn');
+    btn.disabled=true; btn.textContent='⏳ 4 Photos बन रही हैं...';
+    document.getElementById('bok').style.display='none';
+    bUrls=['','','',''];
+
+    const variants=['', 'ultra photorealistic, 8K', 'cinematic, dramatic lighting', 'artistic, detailed illustration'];
+
+    await Promise.all([0,1,2,3].map(async i=>{
+        const cell=document.getElementById('bc'+i), img=document.getElementById('bi'+i);
+        img.style.display='none'; cell.classList.remove('sel');
+        const ring=document.createElement('div'); ring.className='mring'; ring.style.display='block';
+        cell.querySelector('.bsp').innerHTML=''; cell.querySelector('.bsp').appendChild(ring);
+        const seed=Math.floor(Math.random()*9999999);
+        const p=encodeURIComponent(raw+(variants[i]?', '+variants[i]:'')+', ultra HD, masterpiece');
+        const models=['','turbo','flux','flux-realism'];
+        for(let a=0;a<4;a++){
+            const m=models[a];
+            const url=`https://image.pollinations.ai/prompt/${p}?width=512&height=512&nologo=true&seed=${seed+a}${m?'&model='+m:''}`;
+            try{
+                await new Promise((res,rej)=>{
+                    const t=new Image(); const tm=setTimeout(()=>rej(),35000);
+                    t.onload=()=>{clearTimeout(tm);res()};t.onerror=()=>{clearTimeout(tm);rej()};t.src=url;
+                });
+                bUrls[i]=url; img.src=url; img.style.display='block';
+                cell.querySelector('.bsp').innerHTML='';
+                cell.onclick=()=>{document.querySelectorAll('.bc').forEach(c=>c.classList.remove('sel'));cell.classList.add('sel');lastUrl=url;};
+                return;
+            }catch(e){await new Promise(r=>setTimeout(r,800));}
+        }
+        cell.querySelector('.bsp').innerHTML='<span style="color:#f87171;font-size:.72rem">❌ Failed</span>';
+    }));
+
+    btn.disabled=false; btn.textContent='🔄 फिर 4 Photos बनाएं';
+    document.getElementById('bok').style.display='block';
+}
+
+function dlB(i){if(!bUrls[i])return;const a=document.createElement('a');a.href=bUrls[i];a.download=`sachin-batch-${i+1}.png`;a.click();}
+
+// ======= UTILS =======
+function sp(t){document.getElementById('pi').value=t;document.getElementById('pi').focus();}
+function rndPrompt(id){document.getElementById(id).value=RNDS[Math.floor(Math.random()*RNDS.length)];}
+function tgNeg(){const n=document.getElementById('ni'),ic=document.getElementById('nti');const s=n.style.display==='none';n.style.display=s?'block':'none';ic.textContent=s?'▼':'▶';if(s&&!n.value)n.value='blurry, distorted face, extra limbs, ugly, bad anatomy, watermark, text, deformed, low quality, pixelated';}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+function waShare(){if(!lastUrl){toast('⚠️ पहले photo बनाएं');return;}window.open('https://wa.me/?text='+encodeURIComponent('देखो AI से यह Photo बनाई 🤩\n'+lastUrl+'\n\nआप भी बनाएं: aiwebsite36tootcreatephoto.online'),'_blank');}
+function waShareD(){if(!lastDUrl){toast('⚠️ पहले design बनाएं');return;}window.open('https://wa.me/?text='+encodeURIComponent('देखो AI से यह Design बनाया 🎨\n'+lastDUrl+'\n\nआप भी: aiwebsite36tootcreatephoto.online'),'_blank');}
+function cpLink(){if(!lastUrl){toast('⚠️ पहले photo बनाएं');return;}navigator.clipboard.writeText(lastUrl).then(()=>toast('✅ Link copy हो गई!'));}
+
+function saveGallery(){if(!lastUrl){toast('⚠️ पहले photo बनाएं');return;}let g=JSON.parse(localStorage.getItem('sai_gal')||'[]');if(g.includes(lastUrl)){toast('ℹ️ Already saved');return;}g.unshift(lastUrl);if(g.length>30)g.pop();localStorage.setItem('sai_gal',JSON.stringify(g));toast('⭐ Gallery में save!');}
+function saveGalleryD(){if(!lastDUrl){toast('⚠️ पहले design बनाएं');return;}let g=JSON.parse(localStorage.getItem('sai_gal')||'[]');if(g.includes(lastDUrl)){toast('ℹ️ Already saved');return;}g.unshift(lastDUrl);if(g.length>30)g.pop();localStorage.setItem('sai_gal',JSON.stringify(g));toast('⭐ Gallery में save!');}
+function renderGallery(){const g=document.getElementById('ggrid');const items=JSON.parse(localStorage.getItem('sai_gal')||'[]');if(!items.length){g.innerHTML='<div class="gempty">Gallery खाली है।<br>Photo/Design बनाएं और ⭐ save करें।</div>';return;}g.innerHTML=items.map((u,i)=>`<div class="gi"><img src="${u}" loading="lazy" alt="Gallery ${i+1}"><a class="gdl" href="${u}" download="sachin-ai-${i+1}.png">💾</a></div>`).join('');}
+function clrGallery(){if(!confirm('सभी photos delete करें?'))return;localStorage.removeItem('sai_gal');renderGallery();toast('🗑️ Gallery clear!');}
+
+function addHistory(p){let h=JSON.parse(localStorage.getItem('sai_hist')||'[]');h=h.filter(x=>x!==p);h.unshift(p);if(h.length>10)h.pop();localStorage.setItem('sai_hist',JSON.stringify(h));renderHistory();}
+function renderHistory(){const h=JSON.parse(localStorage.getItem('sai_hist')||'[]');const sec=document.getElementById('hsec'),row=document.getElementById('hrow');if(!h.length){sec.style.display='none';return;}sec.style.display='block';row.innerHTML=h.map(p=>`<div class="hchip" onclick="sp('${p.replace(/'/g,"\\'")}')">${p}</div>`).join('');}
+renderHistory();
+
+// ======= CHAT =======
+const CQS = [
+    {q:'🎨 किस तरह की Photo?',k:'type',opts:['👤 Portrait/इंसान','🌿 Nature','🏙️ City','🎭 Fantasy','🐾 Animal','🍕 Food','🌌 Space','💫 Abstract']},
+    {q:'👤 Subject कौन है?',k:'sub',opts:['👱‍♀️ Young Woman','👨 Young Man','👶 Baby','💑 Couple','👑 King/Queen','🦸 Superhero','🤖 Robot','🚫 Person नहीं']},
+    {q:'🌍 Look/Style?',k:'look',opts:['🇮🇳 Indian Traditional','🌟 Bollywood','🏏 Sports Hero','🎭 Historical','🌸 Korean Style','🤵 Formal Suit','🏋️ Fitness Model','🌈 Colorful']},
+    {q:'😊 Mood/Expression?',k:'mood',opts:['😊 Happy','😎 Cool','💪 Powerful','🥰 Romantic','😤 Fierce','😇 Innocent','🌟 Majestic','🔥 Dramatic']},
+    {q:'🏠 Background?',k:'bg',opts:['🏟️ Stadium','🌊 Beach','🌿 Forest','🏙️ City Night','🌌 Space','🏯 Palace','📸 Studio','🌅 Sunset']},
+    {q:'💡 Lighting?',k:'light',opts:['☀️ Natural','🌅 Golden Hour','🌙 Night','💡 Studio','🔦 Dramatic','🌈 Neon','❄️ Cool Blue','✨ Magical']},
+    {q:'👗 Outfit?',k:'outfit',opts:['👘 Traditional','👔 Formal Suit','🥋 Sports','👑 Royal','🦸 Superhero','💃 Dance','🏋️ Athletic','🚫 No Pref']},
+    {q:'🎨 Art Style?',k:'art',opts:['📷 Ultra Realistic','🎌 Anime','🎨 Oil Painting','✏️ Sketch','🧊 3D CGI','🎬 Cinematic','💎 Digital Art','🌃 Cyberpunk']},
+    {q:'✨ Special Effect?',k:'fx',opts:['💨 Smoke/Fog','⚡ Lightning','🌸 Petals','🌟 Sparkles','🔥 Fire','❄️ Snow','🌊 Water','🚫 No Effect']},
+    {q:'👑 Quality?',k:'q',opts:['⚡ Fast 512px','📱 HD 768px','🖥️ Full HD 1024px','👑 4K 1280px']}
+];
+let cStep=0, cAns={};
+
+function initChat(){cAns={};cStep=0;document.getElementById('cwin').innerHTML='';document.getElementById('cbuild').style.display='none';document.getElementById('cpf').style.width='0%';addBbl('ai','🙏 नमस्ते! मैं 10 सवाल पूछूंगा और आपकी <b>Ultra HD Dream Photo</b> बनाऊंगा! 🎨<br><br>Options चुनें या नीचे type करें।',[]);setTimeout(askChat,600);}
+function askChat(){if(cStep>=CQS.length){addBbl('ai','🎉 <b>Perfect!</b> अब आपकी Ultra AI Photo बनाऊंगा!',[]);document.getElementById('cbuild').style.display='block';document.getElementById('cpf').style.width='100%';return;}const q=CQS[cStep];document.getElementById('cpf').style.width=(cStep/CQS.length*100)+'%';document.getElementById('cstxt').textContent=`Step ${cStep+1} / ${CQS.length}`;addBbl('ai',q.q,q.opts);scrollC();}
+function addBbl(who,txt,opts){const w=document.getElementById('cwin');const d=document.createElement('div');d.className=`cbbl b${who}`;d.innerHTML=txt;if(opts.length){const g=document.createElement('div');g.className='ogrid';opts.forEach(o=>{const c=document.createElement('div');c.className='och';c.textContent=o;c.onclick=()=>cpick(o);g.appendChild(c);});d.appendChild(g);}w.appendChild(d);scrollC();}
+function scrollC(){const w=document.getElementById('cwin');setTimeout(()=>w.scrollTop=w.scrollHeight,100);}
+function cpick(opt){if(cStep>=CQS.length)return;cAns[CQS[cStep].k]=opt;addBbl('user',opt,[]);cStep++;setTimeout(askChat,400);}
+function csnd(){const v=document.getElementById('ci').value.trim();if(!v)return;document.getElementById('ci').value='';cpick(v);}
+
+async function buildChat(){
+    const btn=document.getElementById('cbuild');btn.disabled=true;btn.textContent='⏳ बन रहा है...';
+    const qm={'⚡ Fast 512px':512,'📱 HD 768px':768,'🖥️ Full HD 1024px':1024,'👑 4K 1280px':1280};
+    const am={'📷 Ultra Realistic':'ultra photorealistic, 8K DSLR, hyperdetailed, Canon EOS R5','🎌 Anime':'anime style, manga art, Studio Ghibli','🎨 Oil Painting':'oil painting, museum quality, masterpiece','✏️ Sketch':'detailed pencil sketch, graphite, black and white','🧊 3D CGI':'3D CGI render, octane render, cinema4D','🎬 Cinematic':'cinematic movie still, IMAX, dramatic','💎 Digital Art':'digital art, concept art, artstation, fantasy','🌃 Cyberpunk':'cyberpunk, neon lights, blade runner'};
+    let parts=[];
+    if(cAns.type)parts.push(cAns.type.replace(/^[\S]+ /,''));
+    if(cAns.sub&&!cAns.sub.includes('नहीं'))parts.push(cAns.sub.replace(/^[\S]+ /,''));
+    if(cAns.look)parts.push(cAns.look.replace(/^[\S]+ /,''),'style');
+    if(cAns.mood)parts.push(cAns.mood.replace(/^[\S]+ /,''),'expression');
+    if(cAns.bg)parts.push(cAns.bg.replace(/^[\S]+ /,''),'background');
+    if(cAns.light)parts.push(cAns.light.replace(/^[\S]+ /,''),'lighting');
+    if(cAns.outfit&&!cAns.outfit.includes('No'))parts.push('wearing',cAns.outfit.replace(/^[\S]+ /,''));
+    if(cAns.fx&&!cAns.fx.includes('No'))parts.push(cAns.fx.replace(/^[\S]+ /,''),'effect');
+    const artKey=Object.keys(am).find(k=>cAns.art&&cAns.art.includes(k.slice(2)));
+    if(artKey)parts.push(am[artKey]);
+    parts.push('ultra HD, professional, masterpiece, sharp focus');
+    const qv=qm[cAns.q]||768;
+    const fp=parts.join(', ');
+    showTab('single');
+    document.getElementById('pi').value=fp.slice(0,120);
+    selW=qv;selH=qv;
+    document.getElementById('pbox').style.aspectRatio='1';
+    document.getElementById('oimg').style.display='none';
+    document.getElementById('pph').style.display='block';
+    document.getElementById('arow').style.display='none';
+
+    await robustGen(fp,'',qv,qv,document.getElementById('spin'),document.getElementById('slbl'),document.getElementById('smld'),url=>{
+        const img=document.getElementById('oimg');img.src=url;img.style.display='block';
+        document.getElementById('pph').style.display='none';
+        document.getElementById('dlbtn').href=url;lastUrl=url;
+        document.getElementById('arow').style.display='flex';
+        addHistory(fp.slice(0,80));
+    });
+    btn.disabled=false;btn.textContent='🎨 मेरी Dream Photo बनाएं!';
 }
 </script>
 
