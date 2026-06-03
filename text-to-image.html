@@ -8,23 +8,17 @@
     <style>
         *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',sans-serif}
         body{background:#05080f;color:#e1e7f0;min-height:100vh;display:flex;flex-direction:column}
-
         header{background:linear-gradient(135deg,#0a0e1a,#0d1b2e);border-bottom:1px solid rgba(0,255,204,0.15);padding:13px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
         .back-btn{color:#00ffcc;text-decoration:none;font-size:1.2rem}
         .htitle{font-size:1rem;font-weight:700;color:#00ffcc}
         .hsub{font-size:0.7rem;color:#64748b;margin-top:2px}
-
         main{flex:1;display:flex;flex-direction:column;align-items:center;padding:16px 14px 60px;gap:14px}
-
         .card{width:100%;max-width:580px;background:rgba(255,255,255,0.04);border:1px solid rgba(0,255,204,0.15);border-radius:18px;padding:18px}
-
-        /* PREVIEW */
         .pbox{width:100%;aspect-ratio:1;background:#080c18;border:2px dashed rgba(0,255,204,0.15);border-radius:14px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:0;transition:aspect-ratio .3s}
         .pbox img{width:100%;height:100%;object-fit:contain;display:none}
         .pph{text-align:center;padding:20px;pointer-events:none}
         .pph .icon{font-size:3rem;opacity:.15;margin-bottom:10px}
         .pph p{color:#334155;font-size:.82rem}
-
         .spin{display:none;position:absolute;inset:0;background:rgba(5,8,15,.95);align-items:center;justify-content:center;flex-direction:column;gap:10px}
         .spin.on{display:flex}
         .ring{width:48px;height:48px;border:3px solid rgba(0,255,204,0.1);border-top-color:#00ffcc;border-radius:50%;animation:spin .8s linear infinite}
@@ -34,43 +28,28 @@
         .sbar{width:150px;height:3px;background:rgba(0,255,204,0.08);border-radius:2px;overflow:hidden;margin-top:4px}
         .sbar-f{height:100%;background:#00ffcc;border-radius:2px;animation:ld 60s linear forwards}
         @keyframes ld{from{width:0}to{width:90%}}
-
-        /* PROMPT */
         .lbl{font-size:.72rem;font-weight:700;color:#00ffcc;margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px}
         textarea{width:100%;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px;color:#e1e7f0;font-size:.92rem;resize:none;font-family:inherit;line-height:1.6}
         textarea:focus{outline:none;border-color:rgba(0,255,204,0.3)}
         textarea::placeholder{color:#334155}
-
         .row{display:flex;gap:8px;align-items:center;margin-top:8px}
         .rnd{background:rgba(0,255,204,0.06);border:1px solid rgba(0,255,204,0.15);border-radius:9px;padding:8px 12px;color:#00ffcc;font-size:.78rem;cursor:pointer;font-family:inherit;white-space:nowrap}
         .rnd:active{background:rgba(0,255,204,0.12)}
-
-        /* STYLE CHIPS */
         .chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
         .chip{padding:6px 12px;border-radius:20px;border:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.03);color:#64748b;font-size:.72rem;cursor:pointer;font-family:inherit;transition:all .2s}
         .chip:hover,.chip.on{border-color:#00ffcc;background:rgba(0,255,204,0.08);color:#00ffcc}
-
-        /* ASPECT */
         .arow{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
         .abtn{padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.03);color:#64748b;font-size:.72rem;cursor:pointer;font-family:inherit;transition:all .2s}
         .abtn:hover,.abtn.on{border-color:#00ffcc;background:rgba(0,255,204,0.08);color:#00ffcc}
-
-        /* GENERATE */
         .gbtn{width:100%;padding:15px;border-radius:14px;border:none;background:linear-gradient(135deg,#00ffcc,#00c9a7);color:#0a0e1a;font-size:1rem;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .2s;margin-top:14px}
         .gbtn:disabled{opacity:.5;cursor:not-allowed}
         .gbtn:not(:disabled):active{opacity:.85}
-
-        /* ERROR */
         .err{background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.2);border-radius:10px;padding:10px 14px;color:#fbbf24;font-size:.78rem;margin-top:10px;display:none}
-
-        /* ACTION ROW */
         .arow2{display:flex;gap:8px;margin-top:12px;display:none}
-        .arow2 a,.arow2 button{flex:1;padding:9px;border-radius:10px;border:1px solid rgba(0,255,204,0.2);background:rgba(0,255,204,0.05);color:#00ffcc;font-size:.78rem;text-align:center;text-decoration:none;cursor:pointer;font-family:inherit}
-
-        /* TOAST */
+        .arow2 button{flex:1;padding:9px;border-radius:10px;border:1px solid rgba(0,255,204,0.2);background:rgba(0,255,204,0.05);color:#00ffcc;font-size:.78rem;text-align:center;cursor:pointer;font-family:inherit}
+        .arow2 button:active{background:rgba(0,255,204,0.12)}
         #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1e293b;color:#e1e7f0;padding:10px 20px;border-radius:10px;font-size:.82rem;opacity:0;transition:all .3s;z-index:999;white-space:nowrap}
         #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
         .ideas{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px}
         .ideas::-webkit-scrollbar{height:3px}
         .ideas::-webkit-scrollbar-thumb{background:rgba(0,255,204,.2);border-radius:2px}
@@ -79,7 +58,6 @@
     </style>
 </head>
 <body>
-
 <header>
     <a href="/" class="back-btn">←</a>
     <div>
@@ -87,10 +65,7 @@
         <div class="hsub">Text लिखो → AI Photo बनाएं</div>
     </div>
 </header>
-
 <main>
-
-    <!-- PREVIEW -->
     <div class="card" style="padding:14px">
         <div class="pbox" id="pbox">
             <img id="oimg" alt="Generated">
@@ -106,16 +81,12 @@
             </div>
         </div>
         <div class="arow2" id="arow">
-            <a id="dlbtn" download="sachin-ai-photo.png">💾 Download</a>
+            <button onclick="downloadImg()">💾 Download</button>
             <button onclick="regen()">🔄 फिर बनाएं</button>
         </div>
         <div class="err" id="err"></div>
     </div>
-
-    <!-- GENERATE CARD -->
     <div class="card">
-
-        <!-- Style chips -->
         <div class="lbl">📸 Photo Style</div>
         <div class="chips">
             <button class="chip on" data-s="" onclick="setChip(this,'')">Auto</button>
@@ -127,8 +98,6 @@
             <button class="chip" data-s="pencil sketch, graphite, black and white" onclick="setChip(this,'pencil sketch, graphite, black and white')">✏️ Sketch</button>
             <button class="chip" data-s="digital art, concept art, artstation" onclick="setChip(this,'digital art, concept art, artstation')">💎 Digital Art</button>
         </div>
-
-        <!-- Aspect ratio -->
         <div class="lbl">📐 Size</div>
         <div class="arow" id="asel">
             <button class="abtn on" data-w="512" data-h="512" onclick="setAsp(this)">■ 1:1</button>
@@ -136,26 +105,18 @@
             <button class="abtn" data-w="512" data-h="912" onclick="setAsp(this)">▮ 9:16</button>
             <button class="abtn" data-w="768" data-h="1024" onclick="setAsp(this)">🖼 Portrait</button>
         </div>
-
-        <!-- Quick ideas -->
         <div class="lbl">💡 Quick Ideas</div>
         <div class="ideas" id="ideas"></div>
-
-        <!-- Prompt -->
         <div class="lbl">✍️ Prompt</div>
         <textarea id="pi" rows="3" placeholder="जो Photo चाहिए वो यहाँ लिखें... (Hindi या English)"></textarea>
         <div class="row">
             <button class="rnd" onclick="rndIdea()">🎲 Random</button>
             <button class="rnd" style="flex:1" onclick="enhToggle()" id="enhbtn">✨ AI Enhance: ON</button>
         </div>
-
         <button class="gbtn" id="gbtn" onclick="generate()">✨ Photo बनाएं</button>
     </div>
-
 </main>
-
 <div id="toast"></div>
-
 <script>
 const IDEAS = [
     'Beautiful Indian girl in red saree, golden jewelry, temple background',
@@ -180,19 +141,14 @@ const IDEAS = [
     'Robot with human eyes, close-up portrait, photorealistic',
 ];
 
-// State
-let selStyle = '';
-let selW = 512, selH = 512;
-let enhance = true;
-let lastPrompt = '';
+let selStyle = '', selW = 512, selH = 512, enhance = true, lastUrl = '';
 
-// Fill ideas
 const ideasEl = document.getElementById('ideas');
 IDEAS.forEach(t => {
     const b = document.createElement('button');
     b.className = 'idea';
     b.textContent = t.split(',')[0].trim();
-    b.onclick = () => { document.getElementById('pi').value = t; document.getElementById('pi').focus(); };
+    b.onclick = () => { document.getElementById('pi').value = t; };
     ideasEl.appendChild(b);
 });
 
@@ -204,7 +160,8 @@ function setChip(el, s) {
 function setAsp(el) {
     document.querySelectorAll('.abtn').forEach(b => b.classList.remove('on'));
     el.classList.add('on'); selW = +el.dataset.w; selH = +el.dataset.h;
-    document.getElementById('pbox').style.aspectRatio = selW > selH ? '16/9' : selH > selW ? '9/16' : '1';
+    const ratio = selW > selH ? '16/9' : selH > selW ? '9/16' : '1';
+    document.getElementById('pbox').style.aspectRatio = ratio;
 }
 
 function enhToggle() {
@@ -214,9 +171,7 @@ function enhToggle() {
 }
 
 function rndIdea() {
-    const t = IDEAS[Math.floor(Math.random() * IDEAS.length)];
-    document.getElementById('pi').value = t;
-    document.getElementById('pi').focus();
+    document.getElementById('pi').value = IDEAS[Math.floor(Math.random() * IDEAS.length)];
 }
 
 function buildPrompt(raw) {
@@ -224,8 +179,9 @@ function buildPrompt(raw) {
     if (selStyle) parts.push(selStyle);
     if (enhance) {
         const human = /\b(man|woman|girl|boy|person|people|face|portrait|bride|dancer|warrior|baby|child|princess|king|queen|model|indian|ladki|ladka)\b/i.test(raw);
-        if (human) parts.push('ultra photorealistic, 8K DSLR, professional portrait, sharp focus, perfect lighting');
-        else parts.push('ultra HD, sharp focus, professional quality, highly detailed');
+        parts.push(human
+            ? 'ultra photorealistic, 8K DSLR, professional portrait, sharp focus, perfect lighting'
+            : 'ultra HD, sharp focus, professional quality, highly detailed');
     }
     return parts.join(', ');
 }
@@ -234,32 +190,30 @@ function buildUrls(prompt) {
     const enc = encodeURIComponent(prompt);
     const t = Date.now();
     return [
-        `https://image.pollinations.ai/prompt/${enc}?width=${selW}&height=${selH}&seed=${t}&nologo=true`,
-        `https://image.pollinations.ai/prompt/${enc}?width=${selW}&height=${selH}&seed=${t+1}&model=turbo&nologo=true`,
-        `https://image.pollinations.ai/prompt/${enc}?width=512&height=512&seed=${t+2}&nologo=true`,
-        `https://image.pollinations.ai/prompt/${enc}?width=512&height=512&seed=${t+3}&model=flux&nologo=true`,
-        `https://image.pollinations.ai/prompt/${enc}?width=512&height=512&seed=${t+4}&nologo=true`,
-        `https://pollinations.ai/p/${enc}?width=512&height=512&seed=${t+5}&nologo=true`,
+        `https://image.pollinations.ai/prompt/${enc}?width=${selW}&height=${selH}&seed=${t}&model=flux&nologo=true`,
+        `https://image.pollinations.ai/prompt/${enc}?width=${selW}&height=${selH}&seed=${t+1}&nologo=true`,
+        `https://image.pollinations.ai/prompt/${enc}?width=512&height=512&seed=${t+2}&model=flux&nologo=true`,
+        `https://image.pollinations.ai/prompt/${enc}?width=512&height=512&seed=${t+3}&nologo=true`,
     ];
 }
 
 let _active = false;
 
-async function tryImg(url, ms) {
+function tryImg(url, ms) {
     return new Promise((resolve, reject) => {
-        const img = new Image(); let done = false;
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        let done = false;
         const timer = setTimeout(() => { if(done)return; done=true; img.src=''; reject(); }, ms);
         img.onload = () => { if(done)return; done=true; clearTimeout(timer); resolve(url); };
         img.onerror = () => { if(done)return; done=true; clearTimeout(timer); reject(); };
-        img.src = url;
+        img.src = url + '&cb=' + Math.random();
     });
 }
 
 async function generate() {
     const raw = document.getElementById('pi').value.trim();
     if (!raw) { toast('⚠️ कुछ तो लिखें!'); return; }
-    lastPrompt = raw;
-
     if (_active) { toast('⏳ पहले वाली photo बन रही है...'); return; }
     _active = true;
 
@@ -275,26 +229,27 @@ async function generate() {
     const urls = buildUrls(fp);
 
     for (let i = 0; i < urls.length; i++) {
-        const t = i === 0 ? 90000 : i < 3 ? 60000 : 45000;
+        const timeout = i === 0 ? 60000 : 45000;
         document.getElementById('slbl').textContent = i === 0 ? '✨ AI Photo बना रहा है...' : `🔄 Try ${i+1}/${urls.length}...`;
-        document.getElementById('ssub').textContent = i === 0 ? '30-90 seconds' : `Server ${i+1} of ${urls.length}`;
+        document.getElementById('ssub').textContent = i === 0 ? '30-60 seconds' : `Server ${i+1} of ${urls.length}`;
         const bar = document.getElementById('sbarf');
         bar.style.animation = 'none'; bar.offsetHeight;
-        bar.style.animation = `ld ${Math.round(t/1000)}s linear forwards`;
+        bar.style.animation = `ld ${Math.round(timeout/1000)}s linear forwards`;
 
         try {
-            const url = await tryImg(urls[i], t);
+            const url = await tryImg(urls[i], timeout);
+            lastUrl = url;
             document.getElementById('spin').classList.remove('on');
-            document.getElementById('oimg').src = url;
-            document.getElementById('oimg').style.display = 'block';
+            const imgEl = document.getElementById('oimg');
+            imgEl.src = url;
+            imgEl.style.display = 'block';
             document.getElementById('pph').style.display = 'none';
-            document.getElementById('dlbtn').href = url;
             document.getElementById('arow').style.display = 'flex';
             _active = false;
             btn.disabled = false; btn.textContent = '✨ Photo बनाएं';
             return;
         } catch(e) {
-            if (i < urls.length - 1) await new Promise(r => setTimeout(r, 3000));
+            if (i < urls.length - 1) await new Promise(r => setTimeout(r, 2000));
         }
     }
 
@@ -305,6 +260,25 @@ async function generate() {
     err.style.display = 'block';
     _active = false;
     btn.disabled = false; btn.textContent = '🔄 दोबारा Try करें';
+}
+
+async function downloadImg() {
+    if (!lastUrl) return;
+    toast('⏳ Download हो रहा है...');
+    try {
+        const res = await fetch('/api/proxy-image?url=' + encodeURIComponent(lastUrl));
+        if (!res.ok) throw new Error();
+        const blob = await res.blob();
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'sachin-ai-photo.png';
+        a.click();
+        URL.revokeObjectURL(a.href);
+        toast('✅ Download हो गया!');
+    } catch {
+        window.open(lastUrl, '_blank');
+        toast('⚠️ नई tab में खुल गया, वहाँ से save करें');
+    }
 }
 
 function regen() { generate(); }
