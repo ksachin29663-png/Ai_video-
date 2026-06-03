@@ -125,6 +125,29 @@
 </main>
 
 <script>
+
+async function analyzeWithAI(base64, mime, instruction) {
+  const seed = Math.floor(Math.random() * 99999);
+  const res = await fetch('https://text.pollinations.ai/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      messages: [{
+        role: 'user',
+        content: [
+          { type: 'text', text: instruction },
+          { type: 'image_url', image_url: { url: 'data:' + mime + ';base64,' + base64 } }
+        ]
+      }],
+      model: 'openai',
+      seed: seed
+    })
+  });
+  if (!res.ok) throw new Error('AI Error: ' + res.status);
+  const text = await res.text();
+  return text.trim();
+}
+
     let imageBase64 = null;
     let imageMime = 'image/jpeg';
     let selectedMode = 'detailed';
@@ -169,39 +192,9 @@
         document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
 
         try {
-            const response = await fetch('/analyze-image', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    imageBase64,
-                    mimeType: imageMime,
-                    instruction: modeInstructions[selectedMode]
-                })
-            });
-
-            if (!response.ok) throw new Error('Server error');
-            const data = await response.json();
-            generatedPrompt = data.prompt || 'Prompt generate नहीं हो सका।';
-
+            generatedPrompt = await analyzeWithAI(imageBase64, imageMime, modeInstructions[selectedMode]);
         } catch (e) {
-            generatedPrompt = '❌ Gemini AI से connect नहीं हो सका। Server check करें।\n\nError: ' + e.message;
-        }
-
-        document.getElementById('promptText').textContent = generatedPrompt;
-
-        // Extract tags
-        const words = generatedPrompt.match(/\b[a-zA-Z]{4,}\b/g) || [];
-        const tagWords = [...new Set(words)].slice(0, 12);
-        const tagsBox = document.getElementById('tagsBox');
-        tagsBox.innerHTML = tagWords.map(w => `<span class="tag" onclick="copyTag('${w}')">${w}</span>`).join('');
-
-        // Prefill try link
-        document.getElementById('tryBtn').href = `text-to-image.html`;
-
-        document.getElementById('spinnerBox').style.display = 'none';
-        document.getElementById('resultSection').style.display = 'block';
-        document.getElementById('analyzeBtn').disabled = false;
-    }
+          generatedPrompt = '❌ AI से connect नहीं हो सका: ' + e.message;
 
     function copyPrompt() {
         navigator.clipboard.writeText(generatedPrompt).then(() => {
