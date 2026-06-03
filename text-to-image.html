@@ -7,463 +7,916 @@
     <link rel="apple-touch-icon" sizes="192x192" href="/logo192.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Ultra Photo Studio - सचिन एआई</title>
+    <title>AI Ultra Photo Studio Pro - सचिन एआई</title>
     <style>
+        :root {
+            --accent: #00ffcc;
+            --accent2: #7c3aed;
+            --bg: #05080f;
+            --card: rgba(255,255,255,0.04);
+            --border: rgba(0,255,204,0.18);
+        }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background: #05080f; color: #e1e7f0; min-height: 100vh; display: flex; flex-direction: column; }
-        header { background: linear-gradient(135deg,#0a0e1a,#0d1b2e); border-bottom: 1px solid rgba(0,255,204,0.2); padding: 14px 20px; display: flex; align-items: center; gap: 14px; }
-        .back-btn { color: #00ffcc; text-decoration: none; font-size: 1.3rem; }
-        .page-title { font-size: 1.1rem; font-weight: 700; color: #00ffcc; }
-        .page-sub { font-size: 0.75rem; color: #64748b; }
-        main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 20px 14px 40px; gap: 16px; }
-        .card { width: 100%; max-width: 600px; background: rgba(255,255,255,0.04); border: 1px solid rgba(0,255,204,0.15); border-radius: 20px; padding: 22px; }
+        body { background: var(--bg); color: #e1e7f0; min-height: 100vh; display: flex; flex-direction: column; }
 
-        /* MODE TABS */
-        .mode-tabs { display: flex; gap: 0; border-radius: 12px; overflow: hidden; border: 1px solid rgba(0,255,204,0.2); margin-bottom: 20px; }
-        .mode-tab { flex: 1; padding: 11px; text-align: center; font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: all 0.2s; background: rgba(0,0,0,0.3); color: #64748b; font-family: inherit; border: none; }
-        .mode-tab.active { background: linear-gradient(135deg,#00ffcc,#00c9a7); color: #0a0e1a; }
+        header {
+            background: linear-gradient(135deg,#0a0e1a,#0d1b2e);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 20px;
+            display: flex; align-items: center; gap: 14px;
+            position: sticky; top: 0; z-index: 100;
+        }
+        .back-btn { color: var(--accent); text-decoration: none; font-size: 1.3rem; }
+        .header-info { flex: 1; }
+        .page-title { font-size: 1.05rem; font-weight: 700; color: var(--accent); }
+        .page-sub { font-size: 0.72rem; color: #64748b; }
+        .header-btns { display: flex; gap: 8px; }
+        .hbtn { padding: 7px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #94a3b8; font-size: 0.75rem; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+        .hbtn:hover { border-color: var(--accent); color: var(--accent); }
+
+        main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 16px 12px 60px; gap: 14px; }
+        .card { width: 100%; max-width: 620px; background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 20px; }
+
+        /* TABS */
+        .tabs { display: flex; gap: 0; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 18px; }
+        .tab { flex: 1; padding: 10px 4px; text-align: center; font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: all 0.2s; background: rgba(0,0,0,0.3); color: #64748b; font-family: inherit; border: none; }
+        .tab.active { background: linear-gradient(135deg,var(--accent),#00c9a7); color: #0a0e1a; }
 
         /* PREVIEW */
-        .preview-wrap { position: relative; width: 100%; aspect-ratio: 1; background: #0a0e1a; border: 2px dashed rgba(0,255,204,0.25); border-radius: 14px; overflow: hidden; margin-bottom: 18px; display: flex; align-items: center; justify-content: center; }
+        .preview-wrap {
+            width: 100%; aspect-ratio: 1; background: #080c18;
+            border: 2px dashed rgba(0,255,204,0.2); border-radius: 16px;
+            overflow: hidden; position: relative;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 16px; transition: aspect-ratio 0.3s;
+        }
         .preview-wrap img { width: 100%; height: 100%; object-fit: contain; display: none; }
-        .preview-placeholder { text-align: center; padding: 20px; }
-        .preview-placeholder .bigicon { font-size: 3.5rem; margin-bottom: 10px; opacity: 0.35; }
-        .preview-placeholder p { color: #475569; font-size: 0.88rem; line-height: 1.5; }
-        .spinner-overlay { display: none; position: absolute; inset: 0; background: rgba(5,8,15,0.85); align-items: center; justify-content: center; flex-direction: column; gap: 14px; }
+        .preview-placeholder { text-align: center; padding: 20px; pointer-events: none; }
+        .preview-placeholder .bigicon { font-size: 3rem; opacity: 0.25; margin-bottom: 10px; }
+        .preview-placeholder p { color: #334155; font-size: 0.85rem; line-height: 1.6; }
+        .spinner-overlay {
+            display: none; position: absolute; inset: 0;
+            background: rgba(5,8,15,0.88);
+            align-items: center; justify-content: center; flex-direction: column; gap: 10px;
+        }
         .spinner-overlay.active { display: flex; }
-        .spin-ring { width: 52px; height: 52px; border: 3px solid rgba(0,255,204,0.15); border-top-color: #00ffcc; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        .spin-ring { width: 52px; height: 52px; border: 3px solid rgba(0,255,204,0.1); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .spin-label { color: #00ffcc; font-size: 0.85rem; text-align: center; }
-        .retry-badge { color: #fbbf24; font-size: 0.75rem; }
+        .spin-label { color: var(--accent); font-size: 0.85rem; text-align: center; max-width: 200px; }
+        .spin-model { color: #64748b; font-size: 0.72rem; }
+        .spin-progress { width: 160px; height: 3px; background: rgba(0,255,204,0.1); border-radius: 2px; overflow: hidden; }
+        .spin-progress-bar { height: 100%; background: var(--accent); border-radius: 2px; animation: loadBar 20s linear forwards; }
+        @keyframes loadBar { from { width: 0%; } to { width: 95%; } }
 
-        /* QUALITY/STYLE */
-        .section-label { font-size: 0.78rem; font-weight: 700; color: #00ffcc; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .style-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-bottom: 16px; }
-        .style-btn { padding: 9px 4px; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; background: rgba(255,255,255,0.03); color: #94a3b8; font-size: 0.73rem; cursor: pointer; text-align: center; transition: all 0.2s; font-family: inherit; }
-        .style-btn:hover, .style-btn.active { border-color: #00ffcc; color: #00ffcc; background: rgba(0,255,204,0.08); }
+        /* BATCH GRID */
+        .batch-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+        .batch-cell {
+            aspect-ratio: 1; border-radius: 12px; overflow: hidden; cursor: pointer;
+            border: 2px solid transparent; transition: all 0.2s; position: relative;
+            background: rgba(0,0,0,0.3);
+        }
+        .batch-cell img { width: 100%; height: 100%; object-fit: cover; display: none; }
+        .batch-cell .cell-spinner { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px; }
+        .mini-ring { width: 28px; height: 28px; border: 2px solid rgba(0,255,204,0.1); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        .batch-cell.selected { border-color: var(--accent); box-shadow: 0 0 18px rgba(0,255,204,0.3); }
+        .batch-cell .select-overlay {
+            position: absolute; bottom: 6px; right: 6px;
+            width: 24px; height: 24px; border-radius: 50%;
+            background: var(--accent); display: none; align-items: center; justify-content: center;
+            font-size: 0.75rem; font-weight: 700; color: #0a0e1a;
+        }
+        .batch-cell.selected .select-overlay { display: flex; }
+        .batch-cell .dl-overlay {
+            position: absolute; top: 6px; right: 6px; padding: 4px 8px;
+            background: rgba(0,0,0,0.7); border-radius: 6px;
+            font-size: 0.68rem; color: #fff; display: none; cursor: pointer;
+        }
+        .batch-cell:hover .dl-overlay { display: block; }
+        .batch-cell .cell-num {
+            position: absolute; top: 6px; left: 6px; width: 22px; height: 22px;
+            border-radius: 50%; background: rgba(0,0,0,0.6);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.7rem; color: #94a3b8;
+        }
 
-        .quality-row { display: flex; gap: 7px; margin-bottom: 16px; }
-        .qual-btn { flex: 1; padding: 9px 4px; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; background: rgba(255,255,255,0.03); color: #94a3b8; font-size: 0.78rem; font-weight: 700; cursor: pointer; text-align: center; transition: all 0.2s; font-family: inherit; }
-        .qual-btn:hover, .qual-btn.active { border-color: #a78bfa; color: #a78bfa; background: rgba(167,139,250,0.08); }
-        .qual-btn .qual-size { font-size: 0.65rem; color: #64748b; display: block; margin-top: 2px; }
+        .section-label { font-size: 0.75rem; font-weight: 700; color: var(--accent); margin-bottom: 9px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; }
 
-        .size-select { padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.4); color: #e1e7f0; font-size: 0.85rem; font-family: inherit; outline: none; width: 100%; margin-bottom: 14px; }
+        /* STYLE PRESETS */
+        .style-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 16px; scroll-snap-type: x mandatory; }
+        .style-scroll::-webkit-scrollbar { height: 3px; }
+        .style-scroll::-webkit-scrollbar-thumb { background: rgba(0,255,204,0.2); border-radius: 2px; }
+        .style-card {
+            flex-shrink: 0; scroll-snap-align: start;
+            width: 72px; text-align: center; cursor: pointer; transition: all 0.2s;
+            border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 10px 6px;
+            background: rgba(255,255,255,0.03); user-select: none;
+        }
+        .style-card:hover, .style-card.active { border-color: var(--accent); background: rgba(0,255,204,0.07); }
+        .style-card .sicon { font-size: 1.5rem; margin-bottom: 5px; }
+        .style-card .sname { font-size: 0.65rem; color: #64748b; font-weight: 600; line-height: 1.2; }
+        .style-card.active .sname { color: var(--accent); }
+
+        /* QUALITY */
+        .qual-row { display: flex; gap: 7px; margin-bottom: 14px; }
+        .qual-btn {
+            flex: 1; padding: 9px 2px; border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px; background: rgba(255,255,255,0.03);
+            color: #64748b; font-size: 0.72rem; font-weight: 700;
+            cursor: pointer; text-align: center; transition: all 0.2s; font-family: inherit;
+        }
+        .qual-btn .qdim { font-size: 0.6rem; display: block; margin-top: 2px; color: #475569; }
+        .qual-btn.active { border-color: #a78bfa; color: #a78bfa; background: rgba(167,139,250,0.08); }
+
+        /* ASPECT */
+        .aspect-row { display: flex; gap: 7px; margin-bottom: 14px; }
+        .aspect-btn {
+            flex: 1; padding: 9px 4px; border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px; background: rgba(255,255,255,0.03);
+            color: #64748b; font-size: 0.8rem; cursor: pointer; text-align: center;
+            transition: all 0.2s; font-family: inherit;
+        }
+        .aspect-btn.active { border-color: #f59e0b; color: #f59e0b; background: rgba(245,158,11,0.08); }
+
+        /* COLOR MOOD */
+        .mood-row { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 14px; }
+        .mood-chip {
+            padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.03); color: #64748b; font-size: 0.73rem;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .mood-chip.active { color: #fff; }
 
         /* PROMPT */
-        textarea.prompt-input { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5); color: #fff; font-size: 0.95rem; resize: none; height: 90px; font-family: inherit; outline: none; transition: border 0.2s; line-height: 1.5; }
-        textarea.prompt-input:focus { border-color: #00ffcc; }
+        .prompt-wrap { position: relative; margin-bottom: 10px; }
+        textarea.prompt-input {
+            width: 100%; padding: 14px 46px 14px 14px; border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5);
+            color: #fff; font-size: 0.92rem; resize: none; height: 88px;
+            font-family: inherit; outline: none; transition: border 0.2s; line-height: 1.5;
+        }
+        textarea.prompt-input:focus { border-color: var(--accent); }
+        .rand-btn {
+            position: absolute; right: 10px; top: 10px; width: 30px; height: 30px;
+            border-radius: 8px; border: 1px solid rgba(0,255,204,0.2);
+            background: rgba(0,255,204,0.07); color: var(--accent); cursor: pointer;
+            font-size: 1rem; display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+        }
+        .rand-btn:hover { background: rgba(0,255,204,0.15); }
 
-        /* ENHANCE TOGGLE */
-        .enhance-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; padding: 10px 14px; border-radius: 10px; background: rgba(0,255,204,0.04); border: 1px solid rgba(0,255,204,0.1); }
-        .enhance-label { font-size: 0.82rem; color: #94a3b8; }
-        .enhance-label b { color: #00ffcc; }
-        .toggle { width: 42px; height: 24px; border-radius: 12px; background: #1e293b; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; position: relative; transition: all 0.3s; }
-        .toggle.on { background: rgba(0,255,204,0.3); border-color: #00ffcc; }
+        .negative-toggle { font-size: 0.75rem; color: #64748b; cursor: pointer; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+        .negative-toggle:hover { color: #f87171; }
+        textarea.neg-input {
+            width: 100%; padding: 10px 14px; border-radius: 10px;
+            border: 1px solid rgba(248,113,113,0.2); background: rgba(248,113,113,0.04);
+            color: #fca5a5; font-size: 0.82rem; resize: none; height: 60px;
+            font-family: inherit; outline: none; margin-bottom: 10px;
+        }
+        textarea.neg-input:focus { border-color: #f87171; }
+
+        /* ENHANCE ROW */
+        .enhance-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; padding: 10px 14px; border-radius: 10px; background: rgba(0,255,204,0.03); border: 1px solid rgba(0,255,204,0.08); }
+        .enhance-label { font-size: 0.8rem; color: #94a3b8; }
+        .enhance-label b { color: var(--accent); }
+        .toggle { width: 42px; height: 24px; border-radius: 12px; background: #1e293b; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; position: relative; transition: all 0.3s; flex-shrink: 0; }
+        .toggle.on { background: rgba(0,255,204,0.25); border-color: var(--accent); }
         .toggle::after { content:''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: #64748b; transition: all 0.3s; }
-        .toggle.on::after { left: 21px; background: #00ffcc; }
-
-        /* GENERATE BTN */
-        .gen-btn { width: 100%; padding: 16px; font-size: 1rem; font-weight: 700; border: none; border-radius: 14px; cursor: pointer; background: linear-gradient(135deg,#00ffcc,#00c9a7); color: #0a0e1a; transition: all 0.3s; letter-spacing: 0.5px; }
-        .gen-btn:hover { box-shadow: 0 0 30px rgba(0,255,204,0.4); transform: translateY(-1px); }
-        .gen-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
-        .action-row { display: none; flex-direction: row; gap: 10px; margin-top: 14px; }
-        .action-btn { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.05); color: #e1e7f0; font-size: 0.85rem; cursor: pointer; font-family: inherit; transition: all 0.2s; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 5px; }
-        .action-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(0,255,204,0.3); }
-
-        /* ========= CHAT MODE ========= */
-        #chatMode { display: none; }
-        .chat-window { display: flex; flex-direction: column; gap: 12px; min-height: 200px; max-height: 420px; overflow-y: auto; padding-right: 4px; margin-bottom: 14px; }
-        .chat-window::-webkit-scrollbar { width: 4px; }
-        .chat-window::-webkit-scrollbar-track { background: transparent; }
-        .chat-window::-webkit-scrollbar-thumb { background: rgba(0,255,204,0.2); border-radius: 2px; }
-        .chat-bubble { padding: 12px 16px; border-radius: 16px; font-size: 0.88rem; line-height: 1.5; max-width: 90%; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-        .bubble-ai { background: rgba(0,255,204,0.07); border: 1px solid rgba(0,255,204,0.15); color: #cbd5e1; align-self: flex-start; border-bottom-left-radius: 4px; }
-        .bubble-user { background: linear-gradient(135deg,rgba(0,255,204,0.15),rgba(0,201,167,0.1)); border: 1px solid rgba(0,255,204,0.2); color: #e1e7f0; align-self: flex-end; border-bottom-right-radius: 4px; }
-        .options-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-        .opt-chip { padding: 8px 14px; border-radius: 20px; border: 1px solid rgba(0,255,204,0.25); background: rgba(0,255,204,0.05); color: #00ffcc; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
-        .opt-chip:hover { background: rgba(0,255,204,0.15); transform: scale(1.04); }
-        .chat-input-row { display: flex; gap: 10px; }
-        .chat-input { flex: 1; padding: 12px 16px; border-radius: 24px; border: 1px solid rgba(0,255,204,0.2); background: rgba(0,0,0,0.4); color: #fff; font-size: 0.9rem; font-family: inherit; outline: none; }
-        .chat-input:focus { border-color: #00ffcc; }
-        .chat-send { padding: 12px 18px; background: linear-gradient(135deg,#00ffcc,#00c9a7); border: none; border-radius: 24px; cursor: pointer; color: #0a0e1a; font-size: 1.1rem; font-weight: 700; transition: all 0.2s; }
-        .chat-send:hover { box-shadow: 0 0 15px rgba(0,255,204,0.4); }
-        .chat-progress { height: 4px; background: rgba(0,255,204,0.1); border-radius: 2px; margin-bottom: 10px; overflow: hidden; }
-        .chat-progress-bar { height: 100%; background: linear-gradient(90deg,#00ffcc,#00c9a7); border-radius: 2px; transition: width 0.5s ease; }
-        .chat-step-label { font-size: 0.75rem; color: #64748b; margin-bottom: 10px; }
-        .build-btn { width: 100%; padding: 14px; font-size: 0.95rem; font-weight: 700; border: none; border-radius: 14px; cursor: pointer; background: linear-gradient(135deg,#7c3aed,#a78bfa); color: #fff; margin-top: 12px; display: none; transition: all 0.3s; }
-        .build-btn:hover { box-shadow: 0 0 25px rgba(124,58,237,0.5); }
+        .toggle.on::after { left: 21px; background: var(--accent); }
 
         /* TIP CHIPS */
-        .tip-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
-        .tip-chip { padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); color: #64748b; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; }
-        .tip-chip:hover { border-color: rgba(0,255,204,0.3); color: #94a3b8; background: rgba(0,255,204,0.04); }
+        .tip-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+        .tip-chip { padding: 5px 10px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.03); color: #64748b; font-size: 0.72rem; cursor: pointer; transition: all 0.2s; }
+        .tip-chip:hover { border-color: rgba(0,255,204,0.3); color: #94a3b8; }
 
-        .error-msg { color: #f87171; font-size: 0.83rem; text-align: center; padding: 10px; background: rgba(248,113,113,0.07); border-radius: 10px; margin-top: 10px; display: none; }
+        /* BUTTONS */
+        .gen-btn {
+            width: 100%; padding: 16px; font-size: 0.98rem; font-weight: 700;
+            border: none; border-radius: 14px; cursor: pointer;
+            background: linear-gradient(135deg,var(--accent),#00c9a7);
+            color: #0a0e1a; transition: all 0.3s; letter-spacing: 0.3px;
+        }
+        .gen-btn:hover { box-shadow: 0 0 30px rgba(0,255,204,0.4); transform: translateY(-1px); }
+        .gen-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        .batch-gen-btn {
+            width: 100%; padding: 14px; font-size: 0.95rem; font-weight: 700;
+            border: none; border-radius: 14px; cursor: pointer;
+            background: linear-gradient(135deg,#7c3aed,#a78bfa);
+            color: #fff; transition: all 0.3s; margin-bottom: 14px;
+        }
+        .batch-gen-btn:hover { box-shadow: 0 0 25px rgba(124,58,237,0.5); }
+        .batch-gen-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .action-row { display: none; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+        .action-btn {
+            flex: 1; min-width: 80px; padding: 11px 8px; border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05);
+            color: #e1e7f0; font-size: 0.8rem; cursor: pointer; font-family: inherit;
+            transition: all 0.2s; text-align: center; text-decoration: none;
+            display: flex; align-items: center; justify-content: center; gap: 4px;
+        }
+        .action-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(0,255,204,0.3); }
+
+        /* HISTORY */
+        .history-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+        .history-row::-webkit-scrollbar { height: 3px; }
+        .history-row::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+        .hist-chip {
+            flex-shrink: 0; padding: 6px 12px; border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04);
+            color: #94a3b8; font-size: 0.72rem; cursor: pointer; max-width: 180px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: all 0.2s;
+        }
+        .hist-chip:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* GALLERY */
+        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .gal-item { aspect-ratio: 1; border-radius: 10px; overflow: hidden; position: relative; cursor: pointer; }
+        .gal-item img { width: 100%; height: 100%; object-fit: cover; }
+        .gal-item .gal-dl { position: absolute; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; font-size: 1.3rem; }
+        .gal-item:hover .gal-dl { display: flex; }
+        .gal-empty { text-align: center; padding: 30px; color: #334155; font-size: 0.85rem; grid-column: 1/-1; }
+
+        /* CHAT MODE */
+        .chat-window { display: flex; flex-direction: column; gap: 12px; max-height: 400px; overflow-y: auto; padding-right: 4px; margin-bottom: 14px; }
+        .chat-window::-webkit-scrollbar { width: 4px; }
+        .chat-window::-webkit-scrollbar-thumb { background: rgba(0,255,204,0.15); border-radius: 2px; }
+        .chat-bubble { padding: 12px 16px; border-radius: 16px; font-size: 0.87rem; line-height: 1.55; max-width: 92%; animation: fadeUp 0.3s ease; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+        .bubble-ai { background: rgba(0,255,204,0.06); border: 1px solid rgba(0,255,204,0.13); color: #cbd5e1; align-self: flex-start; border-bottom-left-radius: 4px; }
+        .bubble-user { background: linear-gradient(135deg,rgba(0,255,204,0.12),rgba(0,201,167,0.08)); border: 1px solid rgba(0,255,204,0.18); color: #e1e7f0; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .opts-grid { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+        .opt-chip { padding: 7px 13px; border-radius: 20px; border: 1px solid rgba(0,255,204,0.22); background: rgba(0,255,204,0.04); color: var(--accent); font-size: 0.78rem; cursor: pointer; transition: all 0.2s; }
+        .opt-chip:hover { background: rgba(0,255,204,0.12); transform: scale(1.03); }
+        .chat-progress { height: 3px; background: rgba(0,255,204,0.08); border-radius: 2px; margin-bottom: 8px; overflow: hidden; }
+        .chat-progress-fill { height: 100%; background: linear-gradient(90deg,var(--accent),#00c9a7); transition: width 0.5s; }
+        .chat-step-txt { font-size: 0.72rem; color: #475569; margin-bottom: 10px; }
+        .chat-input-row { display: flex; gap: 8px; }
+        .chat-inp { flex: 1; padding: 12px 16px; border-radius: 24px; border: 1px solid rgba(0,255,204,0.18); background: rgba(0,0,0,0.4); color: #fff; font-size: 0.88rem; font-family: inherit; outline: none; }
+        .chat-inp:focus { border-color: var(--accent); }
+        .chat-send-btn { padding: 12px 18px; background: linear-gradient(135deg,var(--accent),#00c9a7); border: none; border-radius: 24px; cursor: pointer; color: #0a0e1a; font-size: 1.1rem; font-weight: 700; }
+        .build-from-chat-btn { width: 100%; padding: 14px; font-size: 0.95rem; font-weight: 700; border: none; border-radius: 14px; cursor: pointer; background: linear-gradient(135deg,#7c3aed,#a78bfa); color: #fff; margin-top: 12px; display: none; }
+
+        .error-banner { color: #f87171; font-size: 0.82rem; text-align: center; padding: 10px 14px; background: rgba(248,113,113,0.06); border: 1px solid rgba(248,113,113,0.15); border-radius: 10px; margin-top: 10px; display: none; }
+        .success-banner { color: #4ade80; font-size: 0.82rem; text-align: center; padding: 8px 14px; background: rgba(74,222,128,0.06); border: 1px solid rgba(74,222,128,0.15); border-radius: 10px; display: none; }
+
+        /* NOTIFICATION TOAST */
+        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(20px); padding: 12px 22px; background: rgba(0,255,204,0.12); border: 1px solid var(--accent); border-radius: 24px; color: var(--accent); font-size: 0.85rem; font-weight: 600; opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 999; white-space: nowrap; }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        .divider { height: 1px; background: rgba(255,255,255,0.05); margin: 4px 0 16px; }
     </style>
 </head>
 <body>
 <header>
     <a href="index.html" class="back-btn">←</a>
-    <div>
-        <div class="page-title">✨ AI Ultra Photo Studio</div>
-        <div class="page-sub">HD, 4K, Famous People, Custom Style — सब कुछ!</div>
+    <div class="header-info">
+        <div class="page-title">✨ AI Ultra Photo Studio Pro</div>
+        <div class="page-sub">4K • Batch • Gallery • Chat AI • Ultra Premium</div>
+    </div>
+    <div class="header-btns">
+        <button class="hbtn" onclick="showTab('gallery')">🗂️ Gallery</button>
     </div>
 </header>
-<main>
-    <div class="card">
-        <!-- MODE TABS -->
-        <div class="mode-tabs">
-            <button class="mode-tab active" onclick="switchMode('normal')">⚡ नॉर्मल मोड</button>
-            <button class="mode-tab" onclick="switchMode('chat')">💬 AI चैट मोड</button>
-        </div>
 
-        <!-- PREVIEW -->
+<div class="toast" id="toast"></div>
+
+<main>
+    <!-- ====== TABS ====== -->
+    <div class="card" style="padding:0;overflow:hidden;">
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('single')">⚡ Single</button>
+            <button class="tab" onclick="showTab('batch')">🖼️ Batch ×4</button>
+            <button class="tab" onclick="showTab('chat')">💬 AI Chat</button>
+            <button class="tab" onclick="showTab('gallery')">🗂️ Gallery</button>
+        </div>
+    </div>
+
+    <!-- ====== SINGLE MODE ====== -->
+    <div class="card tab-panel" id="panel-single">
         <div class="preview-wrap" id="previewWrap">
             <img id="outputImg" alt="Generated">
             <div class="preview-placeholder" id="placeholder">
                 <div class="bigicon">🎨</div>
-                <p>आपकी AI Ultra Photo यहाँ दिखेगी</p>
-                <p style="margin-top:6px;font-size:0.78rem;">नीचे लिखें और फोटो बनाएं</p>
+                <p>आपकी AI Photo यहाँ दिखेगी</p>
+                <p style="font-size:0.75rem;margin-top:6px;">Ultra HD • 4K Pro • Cinematic Quality</p>
             </div>
             <div class="spinner-overlay" id="spinner">
                 <div class="spin-ring"></div>
-                <div class="spin-label" id="spinLabel">AI फोटो बना रहा है...</div>
-                <div class="retry-badge" id="retryBadge"></div>
+                <div class="spin-label" id="spinLabel">AI Photo बना रहा है...</div>
+                <div class="spin-model" id="spinModel"></div>
+                <div class="spin-progress"><div class="spin-progress-bar" id="spinBar"></div></div>
             </div>
         </div>
 
-        <!-- ===== NORMAL MODE ===== -->
-        <div id="normalMode">
-            <div class="section-label">Style चुनें</div>
-            <div class="style-grid">
-                <button class="style-btn active" data-style="">🎯 Normal</button>
-                <button class="style-btn" data-style="ultra photorealistic, 8K DSLR photo, hyperdetailed, natural lighting, professional photography, shot on Sony A7R">📷 Realistic HD</button>
-                <button class="style-btn" data-style="anime style, manga art, Studio Ghibli, vibrant colors, detailed">🎌 Anime</button>
-                <button class="style-btn" data-style="3D render, Pixar animation style, smooth shading, colorful, high quality">🧊 3D Cartoon</button>
-                <button class="style-btn" data-style="cyberpunk neon city, futuristic, dark atmosphere, neon lights, blade runner aesthetic">🌃 Cyberpunk</button>
-                <button class="style-btn" data-style="oil painting, Renaissance masterpiece, dramatic lighting, texture, museum quality">🖼️ Oil Paint</button>
-                <button class="style-btn" data-style="watercolor painting, soft brushstrokes, dreamy, pastel colors">💧 Watercolor</button>
-                <button class="style-btn" data-style="pencil sketch, black and white, detailed drawing, artistic">✏️ Sketch</button>
-                <button class="style-btn" data-style="cinematic movie still, dramatic lighting, epic scene, film grain, anamorphic">🎬 Cinematic</button>
+        <div class="action-row" id="actionRow">
+            <button class="action-btn" onclick="generateSingle()">🔄 फिर बनाएं</button>
+            <a class="action-btn" id="downloadBtn" download="sachin-ai.png">📥 Save</a>
+            <button class="action-btn" onclick="shareWhatsApp()">💬 WhatsApp</button>
+            <button class="action-btn" onclick="copyLink()">🔗 Link Copy</button>
+            <button class="action-btn" onclick="saveToGallery()">⭐ Gallery</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- STYLE PRESETS -->
+        <div class="section-label">🎨 Style Presets</div>
+        <div class="style-scroll" id="styleScroll">
+            <div class="style-card active" data-style="" data-name="Auto">
+                <div class="sicon">🎯</div><div class="sname">Auto</div>
             </div>
-
-            <div class="section-label">Quality चुनें</div>
-            <div class="quality-row">
-                <button class="qual-btn active" data-w="512" data-h="512">Normal<span class="qual-size">512×512</span></button>
-                <button class="qual-btn" data-w="768" data-h="768">HD<span class="qual-size">768×768</span></button>
-                <button class="qual-btn" data-w="1024" data-h="1024">Full HD<span class="qual-size">1024×1024</span></button>
-                <button class="qual-btn" data-w="1280" data-h="1280">4K Pro<span class="qual-size">1280×1280</span></button>
+            <div class="style-card" data-style="ultra photorealistic, 8K DSLR photo, Sony A7R IV, perfect lighting, hyperdetailed, professional photography, depth of field, award winning" data-name="Real Photo">
+                <div class="sicon">📷</div><div class="sname">Real Photo</div>
             </div>
-
-            <div class="section-label">Aspect Ratio</div>
-            <select class="size-select" id="aspectSelect">
-                <option value="1:1">◻️ Square (Instagram)</option>
-                <option value="16:9">📺 Landscape (YouTube/PC)</option>
-                <option value="9:16">📱 Portrait (Reels/TikTok)</option>
-                <option value="4:3">🖥️ 4:3 (Wallpaper)</option>
-            </select>
-
-            <div class="section-label">Quick Examples</div>
-            <div class="tip-chips">
-                <span class="tip-chip" onclick="fillPrompt('A beautiful Indian girl in traditional red saree, golden jewelry, natural lighting')">💃 Indian Girl</span>
-                <span class="tip-chip" onclick="fillPrompt('Virat Kohli style cricketer, celebrating century, stadium crowd, HDR')">🏏 Cricket Hero</span>
-                <span class="tip-chip" onclick="fillPrompt('Handsome Indian man, fitness model, gym background, professional photo')">💪 Fitness Model</span>
-                <span class="tip-chip" onclick="fillPrompt('Bollywood actress style, glamorous, golden hour, stunning makeup')">🌟 Bollywood Star</span>
-                <span class="tip-chip" onclick="fillPrompt('Futuristic city with flying cars, neon lights, night scene, India 2050')">🏙️ Future India</span>
-                <span class="tip-chip" onclick="fillPrompt('Cute baby elephant playing in forest, colorful, cartoon style')">🐘 Cute Elephant</span>
-                <span class="tip-chip" onclick="fillPrompt('Majestic mountains at sunrise, snow peaks, golden sky, ultra HD')">🏔️ Mountains</span>
-                <span class="tip-chip" onclick="fillPrompt('Delicious biryani in a bowl, food photography, professional, steam')">🍛 Food Photo</span>
+            <div class="style-card" data-style="ultra photorealistic portrait, 8K, studio lighting, bokeh, Canon EOS R5, perfect skin, sharp focus, Vogue magazine style" data-name="Portrait">
+                <div class="sicon">👤</div><div class="sname">Portrait</div>
             </div>
-
-            <div class="enhance-row">
-                <div class="enhance-label">🪄 <b>Auto Enhance</b> — AI खुद prompt बेहतर बनाएगा</div>
-                <div class="toggle on" id="enhanceToggle" onclick="this.classList.toggle('on')"></div>
+            <div class="style-card" data-style="high fashion photography, Vogue editorial, luxury brand, dramatic lighting, perfect model pose, ultra HD" data-name="Fashion">
+                <div class="sicon">👗</div><div class="sname">Fashion</div>
             </div>
-
-            <textarea class="prompt-input" id="promptInput" placeholder="यहाँ लिखें — कोई भी इंसान, जगह, चीज़, सपना...
-जैसे: A tall handsome Indian man with beard, wearing suit, office background, professional photography"></textarea>
-
-            <div class="error-msg" id="errorMsg"></div>
-
-            <button class="gen-btn" id="genBtn" onclick="generateNormal()">✨ Ultra Photo बनाएं</button>
-
-            <div class="action-row" id="actionRow">
-                <button class="action-btn" onclick="generateNormal()">🔄 फिर से बनाएं</button>
-                <a class="action-btn" id="downloadBtn" download="sachin-ai-ultra.png">📥 डाउनलोड</a>
-                <button class="action-btn" onclick="shareImage()">📤 Share</button>
+            <div class="style-card" data-style="cinematic movie still, IMAX quality, dramatic lighting, film grain, epic scene, Hollywood production, anamorphic lens, masterpiece" data-name="Cinematic">
+                <div class="sicon">🎬</div><div class="sname">Cinematic</div>
+            </div>
+            <div class="style-card" data-style="anime style, Studio Ghibli, manga art, vibrant colors, detailed linework, cel shading, clean and crisp" data-name="Anime">
+                <div class="sicon">🎌</div><div class="sname">Anime</div>
+            </div>
+            <div class="style-card" data-style="3D CGI render, Pixar animation style, hyperdetailed, smooth shading, octane render, cinema4D, 8K, colorful" data-name="3D CGI">
+                <div class="sicon">🧊</div><div class="sname">3D CGI</div>
+            </div>
+            <div class="style-card" data-style="cyberpunk neon city, blade runner aesthetic, dark night, holographic, neon signs, rain reflections, futuristic" data-name="Cyberpunk">
+                <div class="sicon">🌃</div><div class="sname">Cyberpunk</div>
+            </div>
+            <div class="style-card" data-style="fantasy digital art, concept art, artstation trending, epic illustration, magical world, intricate details, dramatic lighting" data-name="Fantasy">
+                <div class="sicon">🔮</div><div class="sname">Fantasy</div>
+            </div>
+            <div class="style-card" data-style="oil painting masterpiece, Renaissance style, dramatic lighting, texture, old masters, museum quality, rich colors" data-name="Oil Paint">
+                <div class="sicon">🖼️</div><div class="sname">Oil Paint</div>
+            </div>
+            <div class="style-card" data-style="watercolor painting, soft dreamy brushstrokes, pastel colors, wet wash technique, artistic, peaceful" data-name="Watercolor">
+                <div class="sicon">💧</div><div class="sname">Watercolor</div>
+            </div>
+            <div class="style-card" data-style="detailed pencil sketch, graphite drawing, cross-hatching, black and white, fine art, realistic drawing" data-name="Sketch">
+                <div class="sicon">✏️</div><div class="sname">Sketch</div>
+            </div>
+            <div class="style-card" data-style="vintage retro photo, film grain, desaturated, nostalgic, 1970s style, faded colors, analog photography" data-name="Vintage">
+                <div class="sicon">📸</div><div class="sname">Vintage</div>
+            </div>
+            <div class="style-card" data-style="minimalist flat design, clean lines, geometric shapes, simple color palette, modern graphic design" data-name="Minimal">
+                <div class="sicon">◻️</div><div class="sname">Minimal</div>
+            </div>
+            <div class="style-card" data-style="pop art style, Roy Lichtenstein, bold colors, comic dots, high contrast, retro graphic art" data-name="Pop Art">
+                <div class="sicon">🎉</div><div class="sname">Pop Art</div>
+            </div>
+            <div class="style-card" data-style="macro photography, extreme close up, sharp focus, bokeh background, nature details, DSLR macro lens" data-name="Macro">
+                <div class="sicon">🔬</div><div class="sname">Macro</div>
+            </div>
+            <div class="style-card" data-style="aerial drone photography, bird's eye view, landscape, ultra wide angle, golden hour, DJI Mavic 3" data-name="Aerial">
+                <div class="sicon">🚁</div><div class="sname">Aerial</div>
+            </div>
+            <div class="style-card" data-style="food photography, professional, steam rising, appetizing, restaurant quality, perfect lighting, shallow depth of field" data-name="Food">
+                <div class="sicon">🍜</div><div class="sname">Food</div>
+            </div>
+            <div class="style-card" data-style="astronomy astrophotography, deep space, nebula, stars, milky way, ultra sharp, NASA quality, cosmic" data-name="Space">
+                <div class="sicon">🌌</div><div class="sname">Space</div>
+            </div>
+            <div class="style-card" data-style="game concept art, video game render, Unreal Engine 5, ray tracing, ultra detailed, epic games quality" data-name="Game Art">
+                <div class="sicon">🎮</div><div class="sname">Game Art</div>
             </div>
         </div>
 
-        <!-- ===== CHAT MODE ===== -->
-        <div id="chatMode">
-            <div class="chat-progress"><div class="chat-progress-bar" id="progressBar" style="width:0%"></div></div>
-            <div class="chat-step-label" id="stepLabel">Step 0 of 10</div>
-
-            <div class="chat-window" id="chatWindow"></div>
-
-            <div class="chat-input-row">
-                <input type="text" class="chat-input" id="chatInput" placeholder="यहाँ टाइप करें या ऊपर से चुनें..." onkeypress="if(event.key==='Enter')sendChat()">
-                <button class="chat-send" onclick="sendChat()">➤</button>
-            </div>
-
-            <button class="build-btn" id="buildBtn" onclick="buildFromChat()">🎨 अब Ultra Photo बनाएं!</button>
+        <!-- QUALITY -->
+        <div class="section-label">⚡ Quality</div>
+        <div class="qual-row">
+            <button class="qual-btn active" data-w="512" data-h="512">Normal<span class="qdim">512px</span></button>
+            <button class="qual-btn" data-w="768" data-h="768">HD<span class="qdim">768px</span></button>
+            <button class="qual-btn" data-w="1024" data-h="1024">FHD<span class="qdim">1024px</span></button>
+            <button class="qual-btn" data-w="1280" data-h="1280">4K Pro<span class="qdim">1280px</span></button>
         </div>
+
+        <!-- ASPECT -->
+        <div class="section-label">📐 Aspect Ratio</div>
+        <div class="aspect-row">
+            <button class="aspect-btn active" data-r="1:1">◻️ 1:1</button>
+            <button class="aspect-btn" data-r="16:9">🖥️ 16:9</button>
+            <button class="aspect-btn" data-r="9:16">📱 9:16</button>
+            <button class="aspect-btn" data-r="4:3">📷 4:3</button>
+            <button class="aspect-btn" data-r="3:4">🖼️ 3:4</button>
+        </div>
+
+        <!-- COLOR MOOD -->
+        <div class="section-label">🌈 Color Mood</div>
+        <div class="mood-row">
+            <div class="mood-chip active" data-mood="" style="border-color:rgba(255,255,255,0.15)">🎯 Auto</div>
+            <div class="mood-chip" data-mood="warm golden tones, orange, amber, honey colors" style="border-color:rgba(251,191,36,0.3)">☀️ Warm</div>
+            <div class="mood-chip" data-mood="cool blue tones, icy, azure, cerulean palette" style="border-color:rgba(59,130,246,0.3)">❄️ Cool</div>
+            <div class="mood-chip" data-mood="vibrant saturated neon colors, electric, vivid" style="border-color:rgba(0,255,204,0.3)">🌈 Vivid</div>
+            <div class="mood-chip" data-mood="dark moody palette, deep shadows, dramatic contrast" style="border-color:rgba(107,33,168,0.4)">🌑 Dark</div>
+            <div class="mood-chip" data-mood="pastel soft colors, gentle hues, dreamy palette" style="border-color:rgba(244,114,182,0.3)">🌸 Pastel</div>
+            <div class="mood-chip" data-mood="black and white monochrome, dramatic contrast" style="border-color:rgba(255,255,255,0.2)">⚫ B&W</div>
+        </div>
+
+        <!-- QUICK EXAMPLES -->
+        <div class="section-label">💡 Quick Ideas</div>
+        <div class="tip-chips">
+            <span class="tip-chip" onclick="setPrompt('A beautiful young Indian woman in red saree, golden jewelry, temple background, traditional')">💃 Indian Bride</span>
+            <span class="tip-chip" onclick="setPrompt('Handsome Indian cricketer celebrating century, stadium, crowd cheering, epic moment')">🏏 Cricket Star</span>
+            <span class="tip-chip" onclick="setPrompt('Cute Indian baby laughing, soft lighting, portrait, adorable, closeup')">👶 Baby Portrait</span>
+            <span class="tip-chip" onclick="setPrompt('Bollywood actress style glamorous woman, golden hour, red carpet, stunning')">🌟 Bollywood</span>
+            <span class="tip-chip" onclick="setPrompt('Muscular Indian man fitness model, gym background, confident pose, athletic body')">💪 Fitness Model</span>
+            <span class="tip-chip" onclick="setPrompt('Majestic snow mountains at golden sunrise, pink sky, ultra HD landscape')">🏔️ Mountains</span>
+            <span class="tip-chip" onclick="setPrompt('Futuristic Mumbai 2050, flying cars, neon lights, cyberpunk India, epic city')">🏙️ Future India</span>
+            <span class="tip-chip" onclick="setPrompt('Majestic Bengal tiger in jungle, close up, intense eyes, wildlife photography')">🐯 Tiger</span>
+            <span class="tip-chip" onclick="setPrompt('Delicious butter chicken curry, professional food photography, steam, restaurant quality')">🍛 Food Art</span>
+            <span class="tip-chip" onclick="setPrompt('Abstract colorful galaxy cosmos, space nebula, stars, swirling colors, cosmic art')">🌌 Space Art</span>
+        </div>
+
+        <!-- PROMPT -->
+        <div class="section-label">📝 Prompt</div>
+        <div class="prompt-wrap">
+            <textarea class="prompt-input" id="promptInput" placeholder="यहाँ लिखें — कोई भी इंसान, जगह, चीज़...
+जैसे: A beautiful Indian girl smiling, traditional dress, nature background"></textarea>
+            <button class="rand-btn" onclick="randomPrompt()" title="Random Prompt">🎲</button>
+        </div>
+
+        <!-- NEGATIVE PROMPT -->
+        <div class="negative-toggle" onclick="toggleNeg()">
+            <span id="negToggleIcon">▶</span> Negative Prompt (क्या नहीं बनाना)
+        </div>
+        <textarea class="neg-input" id="negInput" placeholder="blurry, distorted, ugly, deformed, low quality, watermark, text..." style="display:none"></textarea>
+
+        <!-- ENHANCE -->
+        <div class="enhance-row">
+            <div class="enhance-label">🪄 <b>AI Auto-Enhance</b> — Prompt खुद बेहतर बनाएगा</div>
+            <div class="toggle on" id="enhanceToggle" onclick="this.classList.toggle('on')"></div>
+        </div>
+
+        <div class="error-banner" id="errorBanner"></div>
+
+        <button class="gen-btn" id="genBtn" onclick="generateSingle()">✨ Ultra Photo बनाएं</button>
+
+        <!-- PROMPT HISTORY -->
+        <div id="historySection" style="margin-top:16px;display:none;">
+            <div class="section-label" style="margin-bottom:8px;">🕐 Recent Prompts</div>
+            <div class="history-row" id="historyRow"></div>
+        </div>
+    </div>
+
+    <!-- ====== BATCH MODE ====== -->
+    <div class="card tab-panel" id="panel-batch" style="display:none">
+        <div class="section-label">🖼️ Batch Generate — एक साथ 4 Photos</div>
+        <p style="font-size:0.8rem;color:#64748b;margin-bottom:16px;">4 अलग-अलग variations बनाओ और best चुनो। Click करके select करो और download करो।</p>
+
+        <div class="batch-grid" id="batchGrid">
+            <div class="batch-cell" id="bc0">
+                <div class="cell-spinner"><span style="font-size:1.5rem;opacity:0.2;">🖼️</span></div>
+                <img id="bi0" alt="">
+                <div class="cell-num">1</div>
+                <div class="select-overlay">✓</div>
+                <div class="dl-overlay" onclick="dlBatch(0)">💾</div>
+            </div>
+            <div class="batch-cell" id="bc1">
+                <div class="cell-spinner"><span style="font-size:1.5rem;opacity:0.2;">🖼️</span></div>
+                <img id="bi1" alt="">
+                <div class="cell-num">2</div>
+                <div class="select-overlay">✓</div>
+                <div class="dl-overlay" onclick="dlBatch(1)">💾</div>
+            </div>
+            <div class="batch-cell" id="bc2">
+                <div class="cell-spinner"><span style="font-size:1.5rem;opacity:0.2;">🖼️</span></div>
+                <img id="bi2" alt="">
+                <div class="cell-num">3</div>
+                <div class="select-overlay">✓</div>
+                <div class="dl-overlay" onclick="dlBatch(2)">💾</div>
+            </div>
+            <div class="batch-cell" id="bc3">
+                <div class="cell-spinner"><span style="font-size:1.5rem;opacity:0.2;">🖼️</span></div>
+                <img id="bi3" alt="">
+                <div class="cell-num">4</div>
+                <div class="select-overlay">✓</div>
+                <div class="dl-overlay" onclick="dlBatch(3)">💾</div>
+            </div>
+        </div>
+
+        <div class="prompt-wrap" style="margin-bottom:10px;">
+            <textarea class="prompt-input" id="batchPrompt" placeholder="Prompt लिखें — 4 different variations बनेंगी..."></textarea>
+            <button class="rand-btn" onclick="randomPrompt('batch')" title="Random">🎲</button>
+        </div>
+
+        <div class="section-label" style="margin-bottom:8px;">Style Mix</div>
+        <div class="style-scroll" id="batchStyleScroll">
+            <div class="style-card active" data-style="">🎯 Auto</div>
+            <div class="style-card" data-style="ultra photorealistic, 8K DSLR">📷 Real</div>
+            <div class="style-card" data-style="anime style, manga">🎌 Anime</div>
+            <div class="style-card" data-style="cinematic, dramatic">🎬 Cinematic</div>
+            <div class="style-card" data-style="3D CGI render, octane">🧊 3D</div>
+            <div class="style-card" data-style="cyberpunk neon, futuristic">🌃 Cyber</div>
+            <div class="style-card" data-style="oil painting, artistic">🖼️ Paint</div>
+        </div>
+
+        <button class="batch-gen-btn" id="batchBtn" onclick="generateBatch()">🚀 4 Photos एक साथ बनाएं</button>
+        <div class="success-banner" id="batchSuccess">✅ सभी 4 Photos बन गईं! Best वाली चुनें और 💾 से download करें।</div>
+    </div>
+
+    <!-- ====== CHAT MODE ====== -->
+    <div class="card tab-panel" id="panel-chat" style="display:none">
+        <div class="chat-progress"><div class="chat-progress-fill" id="chatProgressFill" style="width:0%"></div></div>
+        <div class="chat-step-txt" id="chatStepTxt">Step 0 / 10 — AI आपसे सवाल पूछेगा</div>
+        <div class="chat-window" id="chatWindow"></div>
+        <div class="chat-input-row">
+            <input class="chat-inp" id="chatInp" placeholder="या यहाँ खुद लिखें..." onkeypress="if(event.key==='Enter')chatSend()">
+            <button class="chat-send-btn" onclick="chatSend()">➤</button>
+        </div>
+        <button class="build-from-chat-btn" id="buildChatBtn" onclick="buildFromChat()">🎨 मेरी Dream Photo बनाएं!</button>
+    </div>
+
+    <!-- ====== GALLERY ====== -->
+    <div class="card tab-panel" id="panel-gallery" style="display:none">
+        <div class="section-label" style="margin-bottom:4px;">⭐ My AI Gallery</div>
+        <p style="font-size:0.78rem;color:#64748b;margin-bottom:14px;">आपकी save की हुई photos — phone में store होती हैं</p>
+        <div class="gallery-grid" id="galleryGrid">
+            <div class="gal-empty">अभी कोई photo नहीं है।<br>Photo बनाएं और ⭐ Gallery में save करें।</div>
+        </div>
+        <button onclick="clearGallery()" style="margin-top:14px;width:100%;padding:10px;border-radius:10px;border:1px solid rgba(248,113,113,0.2);background:rgba(248,113,113,0.05);color:#f87171;font-family:inherit;font-size:0.82rem;cursor:pointer;">🗑️ Gallery Clear करें</button>
     </div>
 </main>
 
 <script>
-// ===== CONFIG =====
-const MODELS = ['flux', 'turbo', 'flux-realism', 'flux-anime', 'flux-3d'];
-let currentModel = 0;
-let selectedStyle = '';
-let selectedW = 512, selectedH = 512;
-let chatAnswers = {};
-let chatStep = 0;
-let lastImageUrl = '';
+const MODELS = ['flux', 'turbo', 'flux-realism', 'flux-pro', 'flux-anime'];
+let selStyle = '', selW = 512, selH = 512, selAspect = '1:1', selMood = '', batchSelStyle = '';
+let lastUrl = '';
+let chatStep = 0, chatAns = {};
 
-// ===== STYLE BUTTONS =====
-document.querySelectorAll('.style-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        selectedStyle = btn.dataset.style;
+const RANDOM_PROMPTS = [
+    'A majestic Indian woman warrior princess, armored, sword, epic fantasy, dramatic lighting, 8K',
+    'Cute baby elephant playing in golden sunflower field, magical lighting, ultra HD',
+    'Handsome Indian man in royal Mughal emperor outfit, palace background, cinematic portrait',
+    'Beautiful Indian dancer in Bharatanatyam pose, temple, colorful lights, traditional',
+    'Lion king on African savanna at golden sunset, majestic, wildlife photography, 8K',
+    'Futuristic Mumbai skyline 2050, flying cars, neon lights, rainy night, cyberpunk',
+    'A magical library with floating books and glowing orbs, fantasy, detailed art',
+    'Professional Indian chef cooking biryani, restaurant kitchen, steam, dramatic lighting',
+    'Cosmic jellyfish floating in nebula space, surreal, colorful, ultra detailed art',
+    'Old Indian grandfather with grandchild, sunset village, warm golden light, emotional portrait',
+    'Dragon flying over Himalayan peaks, snow, epic fantasy, cinematic wide shot',
+    'Beautiful underwater coral reef, colorful fish, crystal clear water, nature photography',
+    'Indian street food market at night, colorful lights, bokeh, photorealistic, vibrant',
+    'Snow leopard in Himalayan mountains, wildlife photography, perfect detail, 8K',
+    'Surreal floating islands with waterfalls, lush green, magical world, concept art'
+];
+
+// ===== TABS =====
+function showTab(tab) {
+    document.querySelectorAll('.tab').forEach((t,i)=>{
+        const tabs = ['single','batch','chat','gallery'];
+        t.classList.toggle('active', tabs[i] === tab);
+    });
+    document.querySelectorAll('.tab-panel').forEach(p => p.style.display = 'none');
+    document.getElementById('panel-'+tab).style.display = 'block';
+    if (tab === 'chat' && !document.getElementById('chatWindow').children.length) initChat();
+    if (tab === 'gallery') renderGallery();
+}
+
+// ===== STYLE CARDS =====
+document.querySelectorAll('#styleScroll .style-card').forEach(c=>{
+    c.addEventListener('click',()=>{
+        document.querySelectorAll('#styleScroll .style-card').forEach(x=>x.classList.remove('active'));
+        c.classList.add('active'); selStyle = c.dataset.style;
+    });
+});
+document.querySelectorAll('#batchStyleScroll .style-card').forEach(c=>{
+    c.addEventListener('click',()=>{
+        document.querySelectorAll('#batchStyleScroll .style-card').forEach(x=>x.classList.remove('active'));
+        c.classList.add('active'); batchSelStyle = c.dataset.style;
     });
 });
 
-// ===== QUALITY BUTTONS =====
-document.querySelectorAll('.qual-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        document.querySelectorAll('.qual-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        selectedW = parseInt(btn.dataset.w);
-        selectedH = parseInt(btn.dataset.h);
+// ===== QUALITY =====
+document.querySelectorAll('.qual-btn').forEach(b=>{
+    b.addEventListener('click',()=>{
+        document.querySelectorAll('.qual-btn').forEach(x=>x.classList.remove('active'));
+        b.classList.add('active'); selW = +b.dataset.w; selH = +b.dataset.h;
     });
 });
 
-// ===== ASPECT RATIO LOGIC =====
-function getDims() {
-    const aspect = document.getElementById('aspectSelect').value;
-    const base = selectedW;
-    const ratioMap = {
-        '1:1':  [base, base],
-        '16:9': [Math.round(base * 16/9 / 64)*64, base],
-        '9:16': [base, Math.round(base * 16/9 / 64)*64],
-        '4:3':  [Math.round(base * 4/3 / 64)*64, base]
+// ===== ASPECT =====
+document.querySelectorAll('.aspect-btn').forEach(b=>{
+    b.addEventListener('click',()=>{
+        document.querySelectorAll('.aspect-btn').forEach(x=>x.classList.remove('active'));
+        b.classList.add('active'); selAspect = b.dataset.r;
+    });
+});
+
+// ===== MOOD =====
+document.querySelectorAll('.mood-chip').forEach(c=>{
+    c.addEventListener('click',()=>{
+        document.querySelectorAll('.mood-chip').forEach(x=>x.classList.remove('active'));
+        c.classList.add('active'); selMood = c.dataset.mood;
+    });
+});
+
+// ===== HELPERS =====
+function getDims(w, h, aspect) {
+    const s = w;
+    const map = {
+        '1:1':  [s, s],
+        '16:9': [Math.round(s*16/9/64)*64, s],
+        '9:16': [s, Math.round(s*16/9/64)*64],
+        '4:3':  [Math.round(s*4/3/64)*64, s],
+        '3:4':  [s, Math.round(s*4/3/64)*64]
     };
-    return ratioMap[aspect] || [base, base];
+    return map[aspect] || [s, s];
 }
 
-// ===== MODE SWITCH =====
-function switchMode(mode) {
-    document.querySelectorAll('.mode-tab').forEach((t,i) => t.classList.toggle('active', (mode==='normal'&&i===0)||(mode==='chat'&&i===1)));
-    document.getElementById('normalMode').style.display = mode === 'normal' ? 'block' : 'none';
-    document.getElementById('chatMode').style.display = mode === 'chat' ? 'block' : 'none';
-    if (mode === 'chat' && document.getElementById('chatWindow').children.length === 0) initChat();
+function enhancePrompt(raw, isHuman) {
+    const qualSuffix = selW >= 1024
+        ? 'ultra photorealistic, 8K, hyperdetailed, sharp focus, award winning, trending on artstation, professional lighting, masterpiece, best quality'
+        : 'high quality, detailed, professional, sharp focus';
+    if (isHuman) {
+        return raw + ', ultra photorealistic portrait, 8K DSLR, studio lighting, perfect skin detail, bokeh background, Canon EOS R5, professional photography, ' + qualSuffix;
+    }
+    return raw + ', ' + qualSuffix;
 }
 
-// ===== FILL PROMPT =====
-function fillPrompt(text) {
-    document.getElementById('promptInput').value = text;
+function isHumanPrompt(p) {
+    return /\b(man|woman|girl|boy|person|people|actor|actress|player|singer|model|beautiful|handsome|face|portrait|bride|dancer|warrior|grandfather|baby|child|princess|king|queen|emperor|chef)\b/i.test(p) ||
+           /\b(indian|virat|sachin|amitabh|bollywood|ladki|ladka|aadmi|aurat)\b/i.test(p);
+}
+
+function buildFullPrompt(raw, style, mood) {
+    let parts = [raw];
+    if (style) parts.push(style);
+    if (mood) parts.push(mood);
+    const autoEnhance = document.getElementById('enhanceToggle').classList.contains('on');
+    if (autoEnhance) {
+        const humanish = isHumanPrompt(raw);
+        parts = [enhancePrompt(parts.join(', '), humanish)];
+    }
+    return parts.join(', ');
+}
+
+function setPrompt(txt) {
+    document.getElementById('promptInput').value = txt;
     document.getElementById('promptInput').focus();
 }
 
-// ===== PROMPT ENHANCER =====
-function enhancePrompt(raw) {
-    const isHuman = /\b(man|woman|girl|boy|person|people|actor|actress|cricketer|player|singer|politician|hero|model|beautiful|handsome|face|portrait|style|looking|like)\b/i.test(raw) ||
-                    /\b(virat|kohli|sachin|amitabh|srk|salman|deepika|priyanka|modi|indian|human|ek insaan|ladki|ladka|aadmi|aurat)\b/i.test(raw);
+function toggleNeg() {
+    const neg = document.getElementById('negInput');
+    const icon = document.getElementById('negToggleIcon');
+    const show = neg.style.display === 'none';
+    neg.style.display = show ? 'block' : 'none';
+    icon.textContent = show ? '▼' : '▶';
+    if (show && !neg.value) neg.value = 'blurry, distorted face, extra limbs, ugly, bad anatomy, watermark, text, deformed, low quality, pixelated';
+}
 
-    let enhanced = raw;
+function randomPrompt(target) {
+    const p = RANDOM_PROMPTS[Math.floor(Math.random()*RANDOM_PROMPTS.length)];
+    const el = document.getElementById(target === 'batch' ? 'batchPrompt' : 'promptInput');
+    el.value = p;
+    el.focus();
+}
 
-    if (isHuman) {
-        enhanced += ', ultra photorealistic portrait, 8K DSLR quality, professional photography, perfect lighting, hyperdetailed face, sharp focus, cinematic, award winning photo, bokeh background, Canon EOS R5';
-    } else {
-        enhanced += ', ultra HD, high quality, detailed, professional, sharp focus, vivid colors, masterpiece';
-    }
-
-    return enhanced;
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'), 2500);
 }
 
 // ===== GENERATE WITH RETRY =====
-async function generateWithRetry(prompt, w, h, maxRetries = 4) {
-    const spinner = document.getElementById('spinner');
-    const spinLabel = document.getElementById('spinLabel');
-    const retryBadge = document.getElementById('retryBadge');
-    const errorMsg = document.getElementById('errorMsg');
-    errorMsg.style.display = 'none';
+async function generateImg(prompt, negPrompt, w, h, onSuccess, spinEl, labelEl, modelEl) {
+    const bar = document.getElementById('spinBar');
+    const errorBanner = document.getElementById('errorBanner');
+    if (errorBanner) errorBanner.style.display = 'none';
 
-    spinner.classList.add('active');
-
-    for (let attempt = 0; attempt < maxRetries; attempt++) {
+    for (let attempt = 0; attempt < 5; attempt++) {
         const model = MODELS[attempt % MODELS.length];
         const seed = Math.floor(Math.random() * 9999999);
 
-        spinLabel.textContent = attempt === 0
-            ? '✨ AI Ultra Photo बना रहा है...'
-            : `🔄 दूसरे AI Model से बना रहा है... (${attempt+1}/${maxRetries})`;
-        retryBadge.textContent = attempt > 0 ? `Model: ${model}` : '';
+        if (spinEl) spinEl.classList.add('active');
+        if (labelEl) labelEl.textContent = attempt === 0 ? '✨ AI Photo बना रहा है...' : `🔄 Model ${attempt+1}/5 try कर रहा है...`;
+        if (modelEl) modelEl.textContent = `Model: ${model}`;
+        if (bar) { bar.style.animation = 'none'; bar.offsetHeight; bar.style.animation = 'loadBar 25s linear forwards'; }
 
-        const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=${w}&height=${h}&nologo=true&seed=${seed}&model=${model}&enhance=true`;
+        let url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=${w}&height=${h}&nologo=true&seed=${seed}&model=${model}&enhance=true`;
+        if (negPrompt) url += `&negative=${encodeURIComponent(negPrompt)}`;
 
         try {
             await new Promise((resolve, reject) => {
                 const img = new Image();
                 img.crossOrigin = 'anonymous';
-                let timer = setTimeout(() => reject(new Error('timeout')), 30000);
-                img.onload = () => { clearTimeout(timer); resolve(url); };
-                img.onerror = () => { clearTimeout(timer); reject(new Error('load error')); };
+                const timer = setTimeout(()=>reject(new Error('timeout')), 35000);
+                img.onload = ()=>{ clearTimeout(timer); resolve(url); };
+                img.onerror = ()=>{ clearTimeout(timer); reject(new Error('fail')); };
                 img.src = url;
             });
-
-            // SUCCESS
-            const outputImg = document.getElementById('outputImg');
-            outputImg.src = url;
-            outputImg.style.display = 'block';
-            document.getElementById('placeholder').style.display = 'none';
-            document.getElementById('downloadBtn').href = url;
-            lastImageUrl = url;
-            spinner.classList.remove('active');
-            document.getElementById('actionRow').style.display = 'flex';
-            return true;
-
+            if (spinEl) spinEl.classList.remove('active');
+            onSuccess(url);
+            return url;
         } catch(e) {
-            // Try next model
-            await new Promise(r => setTimeout(r, 800));
+            await new Promise(r=>setTimeout(r, 1000));
         }
     }
 
-    // ALL FAILED
-    spinner.classList.remove('active');
-    document.getElementById('placeholder').style.display = 'block';
-    errorMsg.textContent = '❌ सभी AI servers busy हैं। 30 सेकंड बाद फिर try करें।';
-    errorMsg.style.display = 'block';
-    return false;
+    if (spinEl) spinEl.classList.remove('active');
+    if (errorBanner) {
+        errorBanner.textContent = '❌ सभी AI servers busy हैं। थोड़ी देर बाद try करें।';
+        errorBanner.style.display = 'block';
+    }
+    return null;
 }
 
-// ===== NORMAL GENERATE =====
-async function generateNormal() {
+// ===== SINGLE GENERATE =====
+async function generateSingle() {
     const raw = document.getElementById('promptInput').value.trim();
-    if (!raw) { alert('कृपया कुछ लिखें! (जैसे: Virat Kohli playing cricket)'); return; }
+    if (!raw) { showToast('⚠️ कृपया कुछ लिखें!'); return; }
+    const negPrompt = document.getElementById('negInput').style.display !== 'none' ? document.getElementById('negInput').value.trim() : '';
+    const [w, h] = getDims(selW, selH, selAspect);
+    const fullPrompt = buildFullPrompt(raw, selStyle, selMood);
+
+    // Update aspect ratio of preview
+    const wrap = document.getElementById('previewWrap');
+    wrap.style.aspectRatio = selAspect.replace(':', '/');
 
     const btn = document.getElementById('genBtn');
-    btn.disabled = true;
-    btn.textContent = '⏳ बन रहा है...';
+    btn.disabled = true; btn.textContent = '⏳ बन रहा है...';
+    document.getElementById('actionRow').style.display = 'none';
+    document.getElementById('outputImg').style.display = 'none';
+    document.getElementById('placeholder').style.display = 'none';
 
-    const autoEnhance = document.getElementById('enhanceToggle').classList.contains('on');
-    const prompt = autoEnhance ? enhancePrompt((selectedStyle ? raw + ', ' + selectedStyle : raw)) : (selectedStyle ? raw + ', ' + selectedStyle : raw);
+    const url = await generateImg(
+        fullPrompt, negPrompt, w, h,
+        (url) => {
+            const img = document.getElementById('outputImg');
+            img.src = url; img.style.display = 'block';
+            document.getElementById('placeholder').style.display = 'none';
+            document.getElementById('downloadBtn').href = url;
+            lastUrl = url;
+            document.getElementById('actionRow').style.display = 'flex';
+            addToHistory(raw);
+        },
+        document.getElementById('spinner'),
+        document.getElementById('spinLabel'),
+        document.getElementById('spinModel')
+    );
 
-    const [w, h] = getDims();
-
-    // Update preview aspect ratio
-    const wrap = document.getElementById('previewWrap');
-    if (w > h) wrap.style.aspectRatio = `${w}/${h}`;
-    else if (h > w) wrap.style.aspectRatio = `${w}/${h}`;
-    else wrap.style.aspectRatio = '1';
-
-    await generateWithRetry(prompt, w, h);
-
-    btn.disabled = false;
-    btn.textContent = '✨ Ultra Photo बनाएं';
+    btn.disabled = false; btn.textContent = '✨ Ultra Photo बनाएं';
 }
 
-// ===== SHARE =====
-function shareImage() {
-    if (!lastImageUrl) return;
-    if (navigator.share) {
-        navigator.share({ title: 'AI Photo by Sachin AI', url: lastImageUrl });
-    } else {
-        navigator.clipboard.writeText(lastImageUrl);
-        alert('Image URL copied! Share करें');
-    }
+// ===== SHARE / COPY =====
+function shareWhatsApp() {
+    if (!lastUrl) { showToast('⚠️ पहले photo बनाएं'); return; }
+    window.open('https://wa.me/?text=' + encodeURIComponent('देखो मैंने AI से यह Photo बनाई 🤩\n' + lastUrl + '\n\nआप भी बनाएं: aiwebsite36tootcreatephoto.online'), '_blank');
+}
+function copyLink() {
+    if (!lastUrl) { showToast('⚠️ पहले photo बनाएं'); return; }
+    navigator.clipboard.writeText(lastUrl).then(()=>showToast('✅ Link Copy हो गई!'));
+}
+
+// ===== GALLERY =====
+function saveToGallery() {
+    if (!lastUrl) { showToast('⚠️ पहले photo बनाएं'); return; }
+    const gallery = JSON.parse(localStorage.getItem('sachinAIGallery') || '[]');
+    if (gallery.includes(lastUrl)) { showToast('ℹ️ पहले से Gallery में है'); return; }
+    gallery.unshift(lastUrl);
+    if (gallery.length > 30) gallery.pop();
+    localStorage.setItem('sachinAIGallery', JSON.stringify(gallery));
+    showToast('⭐ Gallery में save हो गई!');
+}
+function renderGallery() {
+    const g = document.getElementById('galleryGrid');
+    const gallery = JSON.parse(localStorage.getItem('sachinAIGallery') || '[]');
+    if (!gallery.length) { g.innerHTML = '<div class="gal-empty">अभी कोई photo नहीं है।<br>Photo बनाएं और ⭐ Gallery में save करें।</div>'; return; }
+    g.innerHTML = gallery.map((url,i) => `
+        <div class="gal-item">
+            <img src="${url}" alt="Gallery ${i+1}" loading="lazy">
+            <a class="gal-dl" href="${url}" download="sachin-ai-${i+1}.png">💾</a>
+        </div>`).join('');
+}
+function clearGallery() {
+    if (!confirm('सभी saved photos delete करें?')) return;
+    localStorage.removeItem('sachinAIGallery');
+    renderGallery();
+    showToast('🗑️ Gallery clear हो गई');
+}
+
+// ===== PROMPT HISTORY =====
+function addToHistory(prompt) {
+    let h = JSON.parse(localStorage.getItem('sachinPromptHistory') || '[]');
+    h = h.filter(p => p !== prompt);
+    h.unshift(prompt);
+    if (h.length > 10) h.pop();
+    localStorage.setItem('sachinPromptHistory', JSON.stringify(h));
+    renderHistory();
+}
+function renderHistory() {
+    const h = JSON.parse(localStorage.getItem('sachinPromptHistory') || '[]');
+    const sec = document.getElementById('historySection');
+    const row = document.getElementById('historyRow');
+    if (!h.length) { sec.style.display = 'none'; return; }
+    sec.style.display = 'block';
+    row.innerHTML = h.map(p => `<div class="hist-chip" onclick="setPrompt('${p.replace(/'/g,"\\'")}' )">${p}</div>`).join('');
+}
+renderHistory();
+
+// ===== BATCH GENERATE =====
+let batchUrls = ['','','',''];
+function dlBatch(i) {
+    if (!batchUrls[i]) return;
+    const a = document.createElement('a'); a.href = batchUrls[i]; a.download = `sachin-ai-batch-${i+1}.png`; a.click();
+}
+async function generateBatch() {
+    const raw = document.getElementById('batchPrompt').value.trim();
+    if (!raw) { showToast('⚠️ Prompt लिखें!'); return; }
+    const btn = document.getElementById('batchBtn');
+    btn.disabled = true; btn.textContent = '⏳ 4 Photos बन रही हैं...';
+    document.getElementById('batchSuccess').style.display = 'none';
+    batchUrls = ['','','',''];
+
+    const styleVariants = ['', 'ultra photorealistic, 8K', 'cinematic, dramatic lighting', 'artistic, detailed'];
+
+    // Generate all 4 in parallel
+    const tasks = [0,1,2,3].map(async (i) => {
+        const cell = document.getElementById('bc'+i);
+        const img = document.getElementById('bi'+i);
+        img.style.display = 'none';
+        cell.classList.remove('selected');
+        cell.querySelector('.cell-spinner').innerHTML = '<div class="mini-ring"></div><span style="font-size:0.7rem;color:#64748b">AI...</span>';
+
+        const seed = Math.floor(Math.random() * 9999999);
+        const sv = batchSelStyle || styleVariants[i];
+        const prompt = encodeURIComponent(raw + (sv ? ', ' + sv : '') + ', ultra HD, masterpiece');
+        const model = MODELS[i % MODELS.length];
+        const url = `https://image.pollinations.ai/prompt/${prompt}?width=512&height=512&nologo=true&seed=${seed}&model=${model}&enhance=true`;
+
+        for (let attempt = 0; attempt < 4; attempt++) {
+            try {
+                await new Promise((resolve, reject) => {
+                    const t = new Image();
+                    const timer = setTimeout(()=>reject(new Error('timeout')), 35000);
+                    t.onload = ()=>{ clearTimeout(timer); resolve(); };
+                    t.onerror = ()=>{ clearTimeout(timer); reject(); };
+                    t.src = url;
+                });
+                batchUrls[i] = url;
+                img.src = url; img.style.display = 'block';
+                cell.querySelector('.cell-spinner').innerHTML = '';
+                cell.onclick = () => {
+                    document.querySelectorAll('.batch-cell').forEach(c=>c.classList.remove('selected'));
+                    cell.classList.add('selected');
+                    lastUrl = url;
+                };
+                return;
+            } catch(e) {
+                if (attempt === 3) {
+                    cell.querySelector('.cell-spinner').innerHTML = '<span style="color:#f87171;font-size:0.75rem">❌ Failed</span>';
+                }
+                await new Promise(r=>setTimeout(r, 500));
+            }
+        }
+    });
+
+    await Promise.all(tasks);
+    btn.disabled = false; btn.textContent = '🔄 फिर 4 Photos बनाएं';
+    document.getElementById('batchSuccess').style.display = 'block';
 }
 
 // ===== CHAT MODE =====
-const chatQuestions = [
-    {
-        q: 'आप किस तरह की फोटो बनवाना चाहते हैं?',
-        key: 'type',
-        opts: ['👤 इंसान/Portrait', '🌿 Nature/Landscape', '🏙️ City/Urban', '🎨 Fantasy/Art', '🐾 Animal', '🍕 Food', '🚗 Vehicle', '🏠 Architecture', '🌌 Space/Cosmos', '💫 Abstract']
-    },
-    {
-        q: 'Gender & Age कौनसा चाहते हैं?',
-        key: 'subject',
-        opts: ['👱‍♀️ Young Woman (18-25)', '👨 Young Man (18-25)', '👶 Baby/Child', '👩 Adult Woman (25-40)', '👨‍💼 Adult Man (25-40)', '👴 Old Man', '👵 Old Woman', '🧑 Any Gender', '❌ Person नहीं चाहिए', '👥 Group of People'],
-        skip: (ans) => !['👤 इंसान/Portrait'].includes(ans.type)
-    },
-    {
-        q: 'Nationality/Look कैसा चाहते हैं?',
-        key: 'ethnicity',
-        opts: ['🇮🇳 Indian', '🌟 Bollywood Star Style', '🏏 Cricketer Style', '🌍 African', '🌏 Asian/Korean', '🇺🇸 Western/American', '🎭 Fantasy Character', '🤖 Robot/AI', '👼 Angel', '😈 Dark Fantasy'],
-        skip: (ans) => !['👤 इंसान/Portrait'].includes(ans.type)
-    },
-    {
-        q: 'Mood/Expression कैसी चाहिए?',
-        key: 'mood',
-        opts: ['😊 Happy & Smiling', '😎 Cool & Confident', '💪 Powerful/Strong', '🥰 Romantic & Soft', '😢 Sad & Emotional', '😤 Angry/Fierce', '🤔 Thoughtful', '😴 Relaxed/Calm', '🔥 Bold & Intense', '😇 Innocent & Pure']
-    },
-    {
-        q: 'Background/Setting कहाँ की चाहिए?',
-        key: 'background',
-        opts: ['🏟️ Stadium/Sports Ground', '🏙️ Modern City Night', '🌊 Beach/Ocean', '🌿 Green Forest/Nature', '🏔️ Mountains', '🌌 Space/Galaxy', '🏠 Luxury Interior', '📸 Plain Studio BG', '🌸 Garden/Flowers', '🔮 Fantasy World']
-    },
-    {
-        q: 'Lighting कैसी चाहिए?',
-        key: 'lighting',
-        opts: ['☀️ Natural Sunlight', '🌅 Golden Hour Sunset', '🌙 Night/Moonlight', '💡 Studio Lighting', '🔦 Dramatic Dark', '🌈 Colorful/Neon', '❄️ Cool Blue Light', '🕯️ Warm Candlelight', '⚡ Lightning/Storm', '✨ Magical Glow']
-    },
-    {
-        q: 'Outfit/Clothing कैसा चाहिए?',
-        key: 'outfit',
-        opts: ['👔 Business/Formal Suit', '👗 Traditional Indian (Saree)', '👕 Casual/Streetwear', '🥋 Sports/Athletic', '👑 Royal/King-Queen', '🦸 Superhero/Costume', '🎭 Historical/Period', '👙 Fashion Model', '🥼 Doctor/Professional', '🚫 No Clothing Preference'],
-        skip: (ans) => !['👤 इंसान/Portrait'].includes(ans.type)
-    },
-    {
-        q: 'Art Style कौनसा चाहते हैं?',
-        key: 'artstyle',
-        opts: ['📷 Ultra Realistic Photo', '🎌 Anime/Manga', '🎨 Oil Painting', '✏️ Pencil Drawing', '🌊 Watercolor', '🧊 3D Rendered', '🌃 Cyberpunk/Neon', '🎬 Cinematic Film', '💎 Fantasy Digital Art', '📸 Vintage/Retro Photo']
-    },
-    {
-        q: 'Extra Effects क्या चाहते हैं?',
-        key: 'effects',
-        opts: ['✨ Bokeh/Blur Background', '💨 Smoke/Fog Effect', '⚡ Lightning Effect', '🌸 Flower Petals', '💥 Action/Motion Blur', '🌟 Stars/Sparkles', '🔥 Fire Effect', '❄️ Snow/Ice Effect', '🌊 Water Reflection', '🚫 No Special Effects']
-    },
-    {
-        q: 'Quality कितनी चाहिए?',
-        key: 'quality',
-        opts: ['⚡ Fast (512px)', '📱 HD (768px)', '🖥️ Full HD (1024px)', '👑 4K Ultra Pro (1280px)']
-    }
+const chatQs = [
+    { q:'🎨 किस तरह की Photo चाहिए?', k:'type', opts:['👤 Portrait/इंसान','🌿 Nature/Landscape','🏙️ City/Urban','🎭 Fantasy/Art','🐾 Animals','🍕 Food Photo','🚗 Vehicle','🌌 Space/Cosmos','✏️ Illustration/Art','💫 Abstract'] },
+    { q:'👤 Subject कौन/क्या है?', k:'subject', opts:['👱‍♀️ Young Woman','👨 Young Man','👶 Baby/Child','💑 Couple','👨‍👩‍👧 Family','🦸 Superhero','👑 King/Queen','🧙 Wizard/Fantasy char','🤖 Robot/AI','🚫 Person नहीं'] },
+    { q:'🌍 Look/Style कैसा चाहिए?', k:'look', opts:['🇮🇳 Indian Traditional','🌟 Bollywood Glamour','🏏 Sports Hero','🎭 Historical/Period','🦸 Marvel/DC Style','🌸 Korean/K-pop','🤵 Business/Formal','🏋️ Fitness Model','🧛 Dark/Gothic','🌈 Colorful/Vibrant'] },
+    { q:'😊 Expression/Mood कैसी?', k:'mood', opts:['😊 Happy & Smiling','😎 Cool & Confident','💪 Powerful/Intense','🥰 Romantic/Soft','😤 Fierce/Angry','😇 Innocent/Pure','🤔 Thoughtful','😴 Calm/Relaxed','🔥 Bold & Dramatic','🌟 Majestic/Royal'] },
+    { q:'🏠 Background/Setting?', k:'bg', opts:['🏟️ Stadium/Ground','🌊 Beach/Ocean','🌿 Forest/Nature','🏙️ City/Skyline','🌌 Space/Galaxy','🏯 Palace/Fort','📸 Plain Studio','🌅 Sunset/Sunrise','🌸 Garden/Flowers','🔮 Fantasy World'] },
+    { q:'💡 Lighting कैसी चाहिए?', k:'light', opts:['☀️ Natural Sunlight','🌅 Golden Hour','🌙 Night/Moonlight','💡 Studio Light','🔦 Dramatic Dark','🌈 Colorful Neon','❄️ Cool Blue','🕯️ Warm Candlelight','⚡ Lightning Storm','✨ Magical/Fairy'] },
+    { q:'👗 Outfit/Clothing?', k:'outfit', opts:['👘 Traditional Saree/Kurta','👔 Business Suit','🥋 Sports Jersey','💃 Dance Costume','👑 Royal Attire','🦸 Superhero Suit','🥼 Lab/Doctor Coat','👗 Fashion/Glamour','🏊 Athletic/Gym','🚫 No Preference'] },
+    { q:'🎨 Art Style?', k:'art', opts:['📷 Ultra Realistic Photo','🎌 Anime/Manga','🎨 Oil Painting','✏️ Pencil Sketch','🌊 Watercolor','🧊 3D CGI Render','🎬 Cinematic Film','💎 Digital Fantasy Art','📸 Vintage/Retro','🌃 Cyberpunk/Neon'] },
+    { q:'✨ Special Effects?', k:'fx', opts:['💨 Smoke/Fog','⚡ Lightning','🌸 Flower Petals','💥 Action Blur','🌟 Stars/Sparkles','🔥 Fire Effect','❄️ Snow/Ice','🌊 Water Splash','🌈 Rainbow','🚫 Effects नहीं'] },
+    { q:'👑 Quality & Size?', k:'quality', opts:['⚡ Fast - 512px','📱 HD - 768px','🖥️ Full HD - 1024px','👑 4K Ultra Pro - 1280px'] }
 ];
-
-let activeChatStep = 0;
+let chatFiltered = [];
 
 function initChat() {
-    chatAnswers = {};
-    activeChatStep = 0;
+    chatAns = {}; chatStep = 0;
+    chatFiltered = chatQs;
     document.getElementById('chatWindow').innerHTML = '';
-    document.getElementById('buildBtn').style.display = 'none';
-    document.getElementById('progressBar').style.width = '0%';
-    document.getElementById('stepLabel').textContent = 'Step 0 of 10';
-    addBubble('ai', '🙏 नमस्ते! मैं आपसे कुछ सवाल पूछूंगा और फिर आपकी सपनों की Ultra HD Photo बनाऊंगा! 🎨<br><br>हर सवाल के नीचे options होंगे — या खुद भी लिख सकते हैं।', []);
-    setTimeout(() => askChatQuestion(), 600);
+    document.getElementById('buildChatBtn').style.display = 'none';
+    updateChatProgress(0);
+    addBubble('ai', '🙏 नमस्ते! मैं आपसे 10 सवाल पूछूंगा और फिर आपकी <b>सपनों की Ultra HD Photo</b> बनाऊंगा! 🎨<br><br>ऊपर से option चुनें या नीचे खुद लिखें।', []);
+    setTimeout(()=>askChat(), 600);
 }
 
-function askChatQuestion() {
-    const filtered = getFilteredQuestions();
-    if (activeChatStep >= filtered.length) {
-        addBubble('ai', '🎉 Perfect! सभी जानकारी मिल गई! अब मैं आपकी <b>Ultra AI Photo</b> बनाऊंगा!', []);
-        document.getElementById('buildBtn').style.display = 'block';
-        updateProgress(filtered.length, filtered.length);
+function askChat() {
+    if (chatStep >= chatFiltered.length) {
+        addBubble('ai', '🎉 <b>Perfect!</b> सभी जानकारी मिल गई! <b>अब मैं आपकी Ultra AI Photo बनाऊंगा!</b>', []);
+        document.getElementById('buildChatBtn').style.display = 'block';
+        updateChatProgress(chatFiltered.length);
         return;
     }
-    const q = filtered[activeChatStep];
-    updateProgress(activeChatStep, filtered.length);
-    document.getElementById('stepLabel').textContent = `Step ${activeChatStep+1} of ${filtered.length}`;
+    const q = chatFiltered[chatStep];
+    updateChatProgress(chatStep);
+    document.getElementById('chatStepTxt').textContent = `Step ${chatStep+1} / ${chatFiltered.length}`;
     addBubble('ai', q.q, q.opts);
     scrollChat();
-}
-
-function getFilteredQuestions() {
-    return chatQuestions.filter(q => !q.skip || !q.skip(chatAnswers));
 }
 
 function addBubble(who, text, opts) {
@@ -471,14 +924,14 @@ function addBubble(who, text, opts) {
     const div = document.createElement('div');
     div.className = `chat-bubble bubble-${who}`;
     div.innerHTML = text;
-    if (opts && opts.length > 0) {
+    if (opts.length) {
         const grid = document.createElement('div');
-        grid.className = 'options-grid';
-        opts.forEach(opt => {
+        grid.className = 'opts-grid';
+        opts.forEach(o => {
             const chip = document.createElement('div');
             chip.className = 'opt-chip';
-            chip.textContent = opt;
-            chip.onclick = () => selectChatOption(opt);
+            chip.textContent = o;
+            chip.onclick = () => chatPick(o);
             grid.appendChild(chip);
         });
         div.appendChild(grid);
@@ -487,116 +940,82 @@ function addBubble(who, text, opts) {
     scrollChat();
 }
 
-function scrollChat() {
-    const win = document.getElementById('chatWindow');
-    setTimeout(() => win.scrollTop = win.scrollHeight, 100);
-}
+function scrollChat() { const w = document.getElementById('chatWindow'); setTimeout(()=>w.scrollTop=w.scrollHeight,100); }
+function updateChatProgress(step) { document.getElementById('chatProgressFill').style.width = (step/chatFiltered.length*100)+'%'; }
 
-function selectChatOption(opt) {
-    const filtered = getFilteredQuestions();
-    if (activeChatStep >= filtered.length) return;
-    const key = filtered[activeChatStep].key;
-    chatAnswers[key] = opt;
+function chatPick(opt) {
+    if (chatStep >= chatFiltered.length) return;
+    chatAns[chatFiltered[chatStep].k] = opt;
     addBubble('user', opt, []);
-    activeChatStep++;
-    setTimeout(() => askChatQuestion(), 400);
+    chatStep++;
+    setTimeout(()=>askChat(), 400);
 }
 
-function sendChat() {
-    const input = document.getElementById('chatInput');
-    const val = input.value.trim();
-    if (!val) return;
-    input.value = '';
-    selectChatOption(val);
-}
-
-function updateProgress(step, total) {
-    const pct = total > 0 ? Math.round((step / total) * 100) : 0;
-    document.getElementById('progressBar').style.width = pct + '%';
+function chatSend() {
+    const v = document.getElementById('chatInp').value.trim();
+    if (!v) return;
+    document.getElementById('chatInp').value = '';
+    chatPick(v);
 }
 
 async function buildFromChat() {
-    // Build prompt from answers
+    const btn = document.getElementById('buildChatBtn');
+    btn.disabled = true; btn.textContent = '⏳ बन रहा है...';
+
+    const qualMap = {'⚡ Fast - 512px':512,'📱 HD - 768px':768,'🖥️ Full HD - 1024px':1024,'👑 4K Ultra Pro - 1280px':1280};
+    const artMap = {
+        '📷 Ultra Realistic Photo':'ultra photorealistic, 8K DSLR, hyperdetailed, award winning photography, Canon EOS R5',
+        '🎌 Anime/Manga':'anime style, manga art, Studio Ghibli, vibrant',
+        '🎨 Oil Painting':'oil painting, museum quality, old masters, masterpiece',
+        '✏️ Pencil Sketch':'detailed pencil sketch, graphite, black and white',
+        '🌊 Watercolor':'watercolor painting, soft brushstrokes, dreamy',
+        '🧊 3D CGI Render':'3D CGI render, octane render, cinema4D, hyperdetailed',
+        '🎬 Cinematic Film':'cinematic movie still, IMAX, film grain, Hollywood',
+        '💎 Digital Fantasy Art':'digital art, concept art, artstation, fantasy, epic',
+        '📸 Vintage/Retro':'vintage photo, film grain, retro, nostalgic, analog',
+        '🌃 Cyberpunk/Neon':'cyberpunk, neon lights, blade runner, futuristic night'
+    };
+
     let parts = [];
+    if (chatAns.type) parts.push(chatAns.type.replace(/^[\S]+ /,''));
+    if (chatAns.subject && !chatAns.subject.includes('नहीं')) parts.push(chatAns.subject.replace(/^[\S]+ /,''));
+    if (chatAns.look) parts.push(chatAns.look.replace(/^[\S]+ /,'') + ' style');
+    if (chatAns.mood) parts.push(chatAns.mood.replace(/^[\S]+ /,'') + ' expression');
+    if (chatAns.bg) parts.push(chatAns.bg.replace(/^[\S]+ /,'') + ' background');
+    if (chatAns.light) parts.push(chatAns.light.replace(/^[\S]+ /,'') + ' lighting');
+    if (chatAns.outfit && !chatAns.outfit.includes('नहीं')) parts.push('wearing ' + chatAns.outfit.replace(/^[\S]+ /,''));
+    if (chatAns.fx && !chatAns.fx.includes('नहीं')) parts.push(chatAns.fx.replace(/^[\S]+ /,'') + ' effect');
+    if (chatAns.art) parts.push(artMap[chatAns.art] || chatAns.art.replace(/^[\S]+ /,''));
+    parts.push('ultra HD, professional, masterpiece, high quality, detailed, sharp focus');
 
-    const typeMap = {
-        '👤 इंसान/Portrait': 'portrait',
-        '🌿 Nature/Landscape': 'beautiful landscape, nature',
-        '🏙️ City/Urban': 'urban cityscape',
-        '🎨 Fantasy/Art': 'fantasy artwork',
-        '🐾 Animal': 'animal photo',
-        '🍕 Food': 'food photography',
-        '🚗 Vehicle': 'vehicle photo',
-        '🏠 Architecture': 'architectural photography',
-        '🌌 Space/Cosmos': 'space cosmos galaxy',
-        '💫 Abstract': 'abstract art'
-    };
-
-    const subjectMap = {
-        '👱‍♀️ Young Woman (18-25)': 'beautiful young Indian woman 20 years old',
-        '👨 Young Man (18-25)': 'handsome young Indian man 20 years old',
-        '👶 Baby/Child': 'cute baby child',
-        '👩 Adult Woman (25-40)': 'beautiful Indian woman 30 years old',
-        '👨‍💼 Adult Man (25-40)': 'handsome Indian man 30 years old',
-        '👴 Old Man': 'wise old man, grey beard',
-        '👵 Old Woman': 'wise old woman',
-        '🧑 Any Gender': 'person',
-        '👥 Group of People': 'group of people'
-    };
-
-    const qualMap = {
-        '⚡ Fast (512px)': [512, 512],
-        '📱 HD (768px)': [768, 768],
-        '🖥️ Full HD (1024px)': [1024, 1024],
-        '👑 4K Ultra Pro (1280px)': [1280, 1280]
-    };
-
-    if (chatAnswers.type) parts.push(typeMap[chatAnswers.type] || chatAnswers.type);
-    if (chatAnswers.subject && subjectMap[chatAnswers.subject]) parts.push(subjectMap[chatAnswers.subject]);
-    else if (chatAnswers.subject && chatAnswers.subject !== '❌ Person नहीं चाहिए') parts.push(chatAnswers.subject);
-    if (chatAnswers.ethnicity && !chatAnswers.ethnicity.startsWith('❌')) parts.push(chatAnswers.ethnicity.replace(/^[\S]+ /,''));
-    if (chatAnswers.mood) parts.push(chatAnswers.mood.replace(/^[\S]+ /,'') + ' expression');
-    if (chatAnswers.background) parts.push(chatAnswers.background.replace(/^[\S]+ /,'') + ' background');
-    if (chatAnswers.lighting) parts.push(chatAnswers.lighting.replace(/^[\S]+ /,'') + ' lighting');
-    if (chatAnswers.outfit && !chatAnswers.outfit.startsWith('🚫')) parts.push('wearing ' + chatAnswers.outfit.replace(/^[\S]+ /,''));
-    if (chatAnswers.effects && !chatAnswers.effects.startsWith('🚫')) parts.push(chatAnswers.effects.replace(/^[\S]+ /,'') + ' effect');
-
-    const artStyleMap = {
-        '📷 Ultra Realistic Photo': 'ultra photorealistic, 8K DSLR, hyperdetailed, award winning photography',
-        '🎌 Anime/Manga': 'anime style, manga, Studio Ghibli',
-        '🎨 Oil Painting': 'oil painting, museum quality, masterpiece',
-        '✏️ Pencil Drawing': 'detailed pencil sketch, black and white',
-        '🌊 Watercolor': 'watercolor painting, soft brushstrokes',
-        '🧊 3D Rendered': '3D render, cinema4D, octane render',
-        '🌃 Cyberpunk/Neon': 'cyberpunk, neon lights, blade runner',
-        '🎬 Cinematic Film': 'cinematic movie still, film grain, dramatic',
-        '💎 Fantasy Digital Art': 'fantasy digital art, concept art, artstation',
-        '📸 Vintage/Retro Photo': 'vintage photo, retro film, nostalgic'
-    };
-
-    if (chatAnswers.artstyle) {
-        parts.push(artStyleMap[chatAnswers.artstyle] || chatAnswers.artstyle);
-    }
-
-    // Quality
-    const [qw, qh] = qualMap[chatAnswers.quality] || [768, 768];
-
-    // Add ultra quality suffix
-    parts.push('ultra HD, highly detailed, professional quality, sharp focus, 4K, trending on artstation');
-
+    const qv = qualMap[chatAns.quality] || 768;
     const finalPrompt = parts.join(', ');
 
-    document.getElementById('buildBtn').disabled = true;
-    document.getElementById('buildBtn').textContent = '⏳ बन रहा है...';
-
-    switchMode('normal');
+    showTab('single');
     document.getElementById('promptInput').value = finalPrompt;
-    selectedW = qw; selectedH = qh;
+    selW = qv; selH = qv;
+    document.getElementById('previewWrap').style.aspectRatio = '1';
+    document.getElementById('outputImg').style.display = 'none';
+    document.getElementById('placeholder').style.display = 'block';
+    document.getElementById('actionRow').style.display = 'none';
 
-    await generateWithRetry(finalPrompt, qw, qh);
+    const url = await generateImg(
+        finalPrompt, '', qv, qv,
+        (url)=>{
+            const img = document.getElementById('outputImg');
+            img.src = url; img.style.display = 'block';
+            document.getElementById('placeholder').style.display = 'none';
+            document.getElementById('downloadBtn').href = url;
+            lastUrl = url;
+            document.getElementById('actionRow').style.display = 'flex';
+            addToHistory(finalPrompt.slice(0, 80));
+        },
+        document.getElementById('spinner'),
+        document.getElementById('spinLabel'),
+        document.getElementById('spinModel')
+    );
 
-    document.getElementById('buildBtn').disabled = false;
-    document.getElementById('buildBtn').textContent = '🎨 अब Ultra Photo बनाएं!';
+    btn.disabled = false; btn.textContent = '🎨 मेरी Dream Photo बनाएं!';
 }
 </script>
 
