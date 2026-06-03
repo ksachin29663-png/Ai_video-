@@ -603,29 +603,18 @@
 
 <script>
 // ======= CONFIG =======
-// Multiple URL patterns — fallback from simplest to complex
-// Replit proxy server — fetches images server-side (bypasses ISP blocks completely)
-const PROXY = 'https://2103bc84-547c-4c58-81cb-4978332a549f-00-3so91rlkoak3b.sisko.replit.dev';
-
-function buildUrls(prompt, neg, w, h) {
+function buildUrls(prompt, w, h) {
     const enc = encodeURIComponent(prompt);
-    const penc = encodeURIComponent(prompt.slice(0, 400));
-    const seed = Math.floor(Math.random()*9999999);
+    const t = Date.now();
+    // Each attempt uses fresh random seed to avoid cached rate-limit errors
     return [
-        // 1. OUR SERVER PROXY — server-side fetch, ISP cannot block (most reliable!)
-        `${PROXY}/proxy-image?prompt=${penc}&w=${w}&h=${h}&seed=${seed}`,
-        // 2. Proxy with smaller size
-        `${PROXY}/proxy-image?prompt=${penc}&w=512&h=512&seed=${seed+1}`,
-        // 3. Direct Pollinations — no model (fast)
-        `https://image.pollinations.ai/prompt/${enc}?width=${w}&height=${h}&nologo=true&seed=${seed}`,
-        // 4. Direct Pollinations — turbo
-        `https://image.pollinations.ai/prompt/${enc}?width=${w}&height=${h}&nologo=true&seed=${seed+1}&model=turbo`,
-        // 5. Direct Pollinations — flux
-        `https://image.pollinations.ai/prompt/${enc}?width=512&height=512&nologo=true&seed=${seed+2}&model=flux`,
-        // 6. Direct Pollinations — smaller
-        `https://image.pollinations.ai/prompt/${enc}?width=512&height=512&nologo=true&seed=${seed+3}`,
-        // 7. Different endpoint
-        `https://pollinations.ai/p/${enc}?width=512&height=512&seed=${seed+4}&nologo=true`
+        `https://image.pollinations.ai/prompt/${enc}?width=${w}&height=${h}&seed=${t}&nologo=true`,
+        `https://image.pollinations.ai/prompt/${enc}?width=${w}&height=${h}&seed=${t+1}&model=turbo&nologo=true`,
+        `https://image.pollinations.ai/prompt/${enc}?width=512&height=512&seed=${t+2}&nologo=true`,
+        `https://image.pollinations.ai/prompt/${enc}?width=512&height=512&seed=${t+3}&model=flux&nologo=true`,
+        `https://image.pollinations.ai/prompt/${enc}?width=512&height=512&seed=${t+4}&nologo=true`,
+        `https://image.pollinations.ai/prompt/${enc}?width=512&height=512&seed=${t+5}&model=turbo&nologo=true`,
+        `https://pollinations.ai/p/${enc}?width=512&height=512&seed=${t+6}&nologo=true`,
     ];
 }
 
@@ -650,70 +639,70 @@ const RNDS = [
     'Surreal floating islands with waterfalls, magical world, concept art'
 ];
 
-// ======= CORE: ROBUST GENERATE (fetch+blob — no CORS, no limit) =======
-async function fetchBlob(url, timeoutMs) {
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), timeoutMs);
-    try {
-        const res = await fetch(url, { signal: ctrl.signal });
-        clearTimeout(timer);
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const blob = await res.blob();
-        if (!blob || blob.size < 1000) throw new Error('tiny blob');
-        return URL.createObjectURL(blob);
-    } catch(e) {
-        clearTimeout(timer);
-        throw e;
-    }
-}
-
-// Fallback: use img tag directly (bypasses CORS preload issues)
-async function loadImgTag(url, timeoutMs) {
+// ======= CORE: PURE IMG-TAG GENERATE (no fetch — no CORS issues ever) =======
+async function tryImgUrl(url, timeoutMs) {
     return new Promise((resolve, reject) => {
         const img = new Image();
-        const timer = setTimeout(() => { img.src = ''; reject(new Error('timeout')); }, timeoutMs);
-        img.onload = () => { clearTimeout(timer); resolve(url); };
-        img.onerror = () => { clearTimeout(timer); reject(new Error('err')); };
+        let done = false;
+        const timer = setTimeout(() => {
+            if (done) return; done = true;
+            img.src = ''; reject(new Error('timeout'));
+        }, timeoutMs);
+        img.onload = () => {
+            if (done) return; done = true;
+            clearTimeout(timer); resolve(url);
+        };
+        img.onerror = () => {
+            if (done) return; done = true;
+            clearTimeout(timer); reject(new Error('onerror'));
+        };
         img.src = url;
     });
 }
 
-async function robustGen(prompt, neg, w, h, spinEl, lblEl, mdlEl, onSuccess) {
-    const urls = buildUrls(prompt, neg, w, h);
-    const errEl = spinEl.closest('.card') ? spinEl.closest('.card').querySelector('.err') : document.getElementById('errBn');
+let _genActive = false; // prevent concurrent requests (rate limit fix)
+
+async function robustGen(prompt, w, h, spinEl, lblEl, mdlEl, onSuccess) {
+    // Wait if another request is running (prevents Pollinations rate-limit)
+    let waited = 0;
+    while (_genActive && waited < 90) {
+        await new Promise(r => setTimeout(r, 1000));
+        waited++;
+    }
+    _genActive = true;
+
+    const urls = buildUrls(prompt, w, h);
+    const card = spinEl.closest('.card');
+    const errEl = card ? card.querySelector('.err') : document.getElementById('errBn');
+    const bar = card ? card.querySelector('.spbar-fill') : document.getElementById('spbf');
     if (errEl) errEl.style.display = 'none';
-    const bar = spinEl.closest('.card') ? spinEl.closest('.card').querySelector('.spbar-fill') : document.getElementById('spbf');
     spinEl.classList.add('on');
 
     for (let i = 0; i < urls.length; i++) {
         const url = urls[i];
         const isLast = i === urls.length - 1;
-        if (lblEl) lblEl.textContent = i === 0 ? '✨ AI Photo बना रहा है...' : `🔄 दूसरा server try ${i+1}/7...`;
-        if (mdlEl) mdlEl.textContent = i > 0 ? `Server ${i+1} of 7` : '';
-        if (bar) { bar.style.animation = 'none'; bar.offsetHeight; bar.style.animation = 'ld 35s linear forwards'; }
+        // Update label with countdown
+        const timeout = i === 0 ? 90000 : (i < 3 ? 60000 : 45000);
+        if (lblEl) lblEl.textContent = i === 0 ? '✨ AI बना रहा है... (30-60 sec)' : `🔄 Try ${i+1}/7 — अगला server...`;
+        if (mdlEl) mdlEl.textContent = i > 0 ? `Attempt ${i+1} of 7` : 'Pollinations.ai';
+        if (bar) { bar.style.animation = 'none'; bar.offsetHeight; bar.style.animation = `ld ${Math.round(timeout/1000)}s linear forwards`; }
 
-        // Method 1: fetch + blob (best — no CORS issues, no size limit)
         try {
-            const blobUrl = await fetchBlob(url, i < 2 ? 55000 : 35000);
+            const resultUrl = await tryImgUrl(url, timeout);
             spinEl.classList.remove('on');
-            onSuccess(blobUrl);
-            return blobUrl;
-        } catch(e1) {
-            // Method 2: img tag direct (fallback — works even without CORS)
-            try {
-                const directUrl = await loadImgTag(url, i < 2 ? 50000 : 30000);
-                spinEl.classList.remove('on');
-                onSuccess(directUrl);
-                return directUrl;
-            } catch(e2) {
-                if (!isLast) await new Promise(r => setTimeout(r, 1200));
-            }
+            _genActive = false;
+            onSuccess(resultUrl);
+            return resultUrl;
+        } catch(e) {
+            // Between attempts: short pause to avoid rate-limit cascade
+            if (!isLast) await new Promise(r => setTimeout(r, i < 3 ? 3000 : 1500));
         }
     }
 
     spinEl.classList.remove('on');
+    _genActive = false;
     if (errEl) {
-        errEl.textContent = '❌ सभी 7 servers busy हैं। कृपया 1 मिनट बाद दोबारा try करें।';
+        errEl.textContent = '⚠️ AI server अभी busy है। 2 मिनट बाद फिर try करें।';
         errEl.style.display = 'block';
     }
     return null;
@@ -778,7 +767,6 @@ function buildPrompt(raw, style, mood) {
 async function genSingle() {
     const raw = document.getElementById('pi').value.trim();
     if (!raw) { toast('⚠️ कृपया कुछ लिखें!'); return; }
-    const neg = document.getElementById('ni').style.display!=='none' ? document.getElementById('ni').value.trim() : '';
     const [w,h] = getDims(selAspect, selW);
     const fp = buildPrompt(raw, selStyle, selMood);
     document.getElementById('pbox').style.aspectRatio = selAspect.replace(':','/');
@@ -788,7 +776,7 @@ async function genSingle() {
     document.getElementById('oimg').style.display='none';
     document.getElementById('pph').style.display='block';
 
-    await robustGen(fp, neg, w, h, document.getElementById('spin'), document.getElementById('slbl'), document.getElementById('smld'), url=>{
+    await robustGen(fp, w, h, document.getElementById('spin'), document.getElementById('slbl'), document.getElementById('smld'), url=>{
         const img=document.getElementById('oimg'); img.src=url; img.style.display='block';
         document.getElementById('pph').style.display='none';
         document.getElementById('dlbtn').href=url; lastUrl=url;
@@ -875,18 +863,200 @@ function buildDesignPrompt() {
     return dm[curDesign]();
 }
 
+// ======= CANVAS DESIGN — instant, zero API, never fails =======
+const LOGO_COLORS = {
+    'teal and blue gradient': ['#00ffcc','#0088ff'],
+    'orange and gold gradient': ['#ff6b35','#f7c59f'],
+    'purple and pink gradient': ['#7c3aed','#ec4899'],
+    'red and gold gradient': ['#dc2626','#f59e0b'],
+    'green gradient': ['#059669','#10b981'],
+    'deep blue gradient': ['#1e40af','#3b82f6'],
+    'black and dark grey': ['#1a1a2e','#374151'],
+    'gold and yellow gradient': ['#ffd700','#ff8c00'],
+};
+
+function canvasDesign(type) {
+    const W = type==='card'||type==='youtube'||type==='banner' ? 900 : 512;
+    const H = type==='card'||type==='youtube'||type==='banner' ? 506 : 512;
+    const cv = document.createElement('canvas'); cv.width=W; cv.height=H;
+    const c = cv.getContext('2d');
+    const cols = LOGO_COLORS[selColor] || ['#00ffcc','#0088ff'];
+    const [c1,c2] = cols;
+
+    if (type === 'logo') {
+        const txt = (document.getElementById('logo-text').value||'My Brand').toUpperCase();
+        const sty = document.getElementById('logo-style').value;
+
+        // Background
+        if (sty.includes('3D Metallic') || sty.includes('Tech')) {
+            c.fillStyle = '#050a15'; c.fillRect(0,0,W,H);
+        } else if (sty.includes('Neon') || sty.includes('Futuristic')) {
+            c.fillStyle = '#000'; c.fillRect(0,0,W,H);
+        } else { c.fillStyle = '#0a0e1a'; c.fillRect(0,0,W,H); }
+
+        // Gradient orb
+        const og = c.createRadialGradient(W/2,H/2,30,W/2,H/2,180);
+        og.addColorStop(0, c1+'44'); og.addColorStop(1,'transparent');
+        c.fillStyle=og; c.fillRect(0,0,W,H);
+
+        // Ring
+        c.beginPath(); c.arc(W/2,H/2,140,0,Math.PI*2);
+        const rg=c.createLinearGradient(W/2-140,H/2-140,W/2+140,H/2+140);
+        rg.addColorStop(0,c1); rg.addColorStop(1,c2);
+        c.strokeStyle=rg; c.lineWidth=3; c.stroke();
+
+        // Inner shape
+        c.save(); c.translate(W/2,H/2-30);
+        const ig=c.createLinearGradient(-50,-50,50,50);
+        ig.addColorStop(0,c1); ig.addColorStop(1,c2);
+        c.fillStyle=ig;
+        if (sty.includes('Minimalist')||sty.includes('Modern')) {
+            const r=38; c.beginPath(); c.moveTo(0,-r); c.lineTo(r*0.87,r*0.5); c.lineTo(-r*0.87,r*0.5); c.closePath(); c.fill();
+        } else if (sty.includes('Bold')) {
+            c.beginPath(); c.roundRect(-36,-36,72,72,12); c.fill();
+        } else if (sty.includes('Luxury')||sty.includes('Elegant')) {
+            c.beginPath(); c.arc(0,0,40,0,Math.PI*2); c.fill();
+        } else if (sty.includes('Gaming')) {
+            c.beginPath(); c.moveTo(0,-42); c.lineTo(30,-15); c.lineTo(42,20); c.lineTo(0,42); c.lineTo(-42,20); c.lineTo(-30,-15); c.closePath(); c.fill();
+        } else {
+            c.beginPath(); c.moveTo(0,-40); c.lineTo(34,20); c.lineTo(-34,20); c.closePath(); c.fill();
+        }
+        c.restore();
+
+        // Brand name
+        const words = txt.split(' ');
+        const fsize = words.length===1&&txt.length<=6 ? 52 : txt.length<=12?38:28;
+        c.font = `bold ${fsize}px 'Segoe UI', Arial`;
+        c.textAlign='center';
+        const tg=c.createLinearGradient(0,H/2+70-fsize,0,H/2+70);
+        tg.addColorStop(0,'#ffffff'); tg.addColorStop(1,c1);
+        c.fillStyle=tg;
+        if (words.length===1||txt.length<=16) {
+            c.fillText(txt, W/2, H/2+80);
+        } else {
+            words.forEach((w,i)=>c.fillText(w, W/2, H/2+65+i*(fsize+6)));
+        }
+
+        // Subtitle
+        const desc = document.getElementById('logo-desc').value;
+        if (desc) {
+            c.font='14px Segoe UI'; c.fillStyle='rgba(255,255,255,0.45)';
+            c.fillText(desc.toUpperCase(), W/2, H/2+120);
+        }
+
+    } else if (type === 'card') {
+        const name = document.getElementById('bc-name').value||'Your Name';
+        const pos = document.getElementById('bc-pos').value||'CEO & Founder';
+        const co = document.getElementById('bc-co').value||'Company Name';
+        const sty = document.getElementById('bc-style').value||'Modern Dark Premium';
+
+        // Background
+        if (sty.includes('White')||sty.includes('Clean')) {
+            c.fillStyle='#f8fafc'; c.fillRect(0,0,W,H);
+            const bg2=c.createLinearGradient(0,0,W,H); bg2.addColorStop(0,'#e2e8f0'); bg2.addColorStop(1,'#f8fafc');
+            c.fillStyle=bg2; c.fillRect(0,0,W,H);
+        } else if (sty.includes('Gold')) {
+            c.fillStyle='#1a0a00'; c.fillRect(0,0,W,H);
+        } else { c.fillStyle='#080c18'; c.fillRect(0,0,W,H); }
+
+        // Side accent
+        const sg=c.createLinearGradient(0,0,0,H);
+        sg.addColorStop(0,c1); sg.addColorStop(1,c2);
+        c.fillStyle=sg; c.fillRect(0,0,7,H);
+        c.fillStyle=sg; c.fillRect(W-7,0,7,H);
+
+        // Name
+        c.font='bold 42px Segoe UI'; c.textAlign='left';
+        c.fillStyle=sty.includes('White')?'#1e293b':c1;
+        c.fillText(name, 50, H/2-30);
+
+        // Position
+        c.font='18px Segoe UI'; c.fillStyle=sty.includes('White')?'#64748b':'rgba(255,255,255,0.7)';
+        c.fillText(pos, 50, H/2+10);
+
+        // Company
+        c.font='bold 20px Segoe UI'; c.fillStyle=sty.includes('White')?'#334155':c2;
+        c.fillText('● '+co, 50, H/2+48);
+
+    } else if (type === 'banner') {
+        const title = document.getElementById('bn-title').value||'Special Offer';
+        const sub = document.getElementById('bn-sub').value||'';
+        const bg=c.createLinearGradient(0,0,W,H);
+        bg.addColorStop(0,c1+'cc'); bg.addColorStop(0.5,'#0a0e1a'); bg.addColorStop(1,c2+'cc');
+        c.fillStyle='#050810'; c.fillRect(0,0,W,H);
+        c.fillStyle=bg; c.fillRect(0,0,W,H);
+
+        // Decorative circles
+        for(let i=0;i<3;i++){
+            c.beginPath(); c.arc(i===0?80:i===1?W-80:W/2, i===2?H-60:H/2,60+i*20,0,Math.PI*2);
+            c.strokeStyle=c1+'22'; c.lineWidth=2; c.stroke();
+        }
+
+        // Title
+        const fs=title.length<=20?54:title.length<=35?38:28;
+        c.font=`bold ${fs}px 'Segoe UI'`; c.textAlign='center';
+        const tg2=c.createLinearGradient(0,0,W,0); tg2.addColorStop(0,c1); tg2.addColorStop(1,c2);
+        c.fillStyle=tg2;
+        // Wrap long title
+        const mw=W-80; let words2=title.toUpperCase().split(' '), line='', lines2=[];
+        for(const w of words2){const tw=c.measureText(line+w+' ').width;if(tw>mw&&line){lines2.push(line.trim());line=w+' ';}else line+=w+' ';}
+        if(line) lines2.push(line.trim());
+        const startY = lines2.length===1?H/2+20:H/2;
+        lines2.forEach((l,i)=>c.fillText(l, W/2, startY+i*(fs+8)-((lines2.length-1)*(fs+8))/2));
+
+        // Sub
+        if(sub){c.font='22px Segoe UI';c.fillStyle='rgba(255,255,255,0.8)';c.fillText(sub,W/2,startY+lines2.length*(fs+8)+10);}
+
+    } else if (type === 'invitation') {
+        const ev=document.getElementById('inv-event').value||'Special Event';
+        const det=document.getElementById('inv-detail').value||'';
+        c.fillStyle='#0a0618'; c.fillRect(0,0,W,H);
+        const bg3=c.createRadialGradient(W/2,H/2,50,W/2,H/2,280);
+        bg3.addColorStop(0,c1+'33'); bg3.addColorStop(1,'transparent');
+        c.fillStyle=bg3; c.fillRect(0,0,W,H);
+        // Border
+        c.strokeStyle=c1+'66'; c.lineWidth=2;
+        c.strokeRect(18,18,W-36,H-36);
+        c.strokeStyle=c2+'44'; c.lineWidth=1;
+        c.strokeRect(26,26,W-52,H-52);
+        // Title
+        c.font=`bold 44px 'Segoe UI'`; c.textAlign='center';
+        const tg3=c.createLinearGradient(0,0,W,0); tg3.addColorStop(0,c1); tg3.addColorStop(1,c2);
+        c.fillStyle=tg3; c.fillText(ev, W/2, H/2-20);
+        if(det){c.font='20px Segoe UI';c.fillStyle='rgba(255,255,255,0.75)';c.fillText(det,W/2,H/2+30);}
+    }
+
+    const dataUrl = cv.toDataURL('image/png');
+    const img=document.getElementById('dimg'); img.src=dataUrl; img.style.display='block';
+    document.getElementById('dph').style.display='none';
+    document.getElementById('ddlbtn').href=dataUrl; lastDUrl=dataUrl;
+    document.getElementById('darow').style.display='flex';
+    toast('✅ Design बन गई!');
+}
+
+const CANVAS_TYPES = new Set(['logo','card','banner','invitation']);
+
 async function genDesign() {
-    const prompt = buildDesignPrompt();
     const btn = document.getElementById('dgbtn');
-    btn.disabled=true; btn.textContent='⏳ AI बना रहा है...';
+    btn.disabled=true; btn.textContent='⏳ बन रहा है...';
     document.getElementById('darow').style.display='none';
     document.getElementById('dimg').style.display='none';
     document.getElementById('dph').style.display='block';
-    document.getElementById('dbox').style.aspectRatio = curDesign==='youtube'?'16/9' : curDesign==='card'?'16/9' : curDesign==='banner'?'16/9' : '1';
+    document.getElementById('derrBn').style.display='none';
+    document.getElementById('dbox').style.aspectRatio = curDesign==='youtube'||curDesign==='card'||curDesign==='banner'?'16/9':'1';
 
-    const [w,h] = curDesign==='youtube'||curDesign==='banner'||curDesign==='card' ? [1280,720] : curDesign==='poster' ? [768,1024] : [768,768];
+    if (CANVAS_TYPES.has(curDesign)) {
+        // Instant Canvas generation — no API needed!
+        setTimeout(()=>canvasDesign(curDesign), 50);
+        btn.disabled=false; btn.textContent='🎨 AI Design बनाएं';
+        return;
+    }
 
-    await robustGen(prompt, 'text, watermark, low quality, blurry', w, h,
+    // AI generation for other types
+    const prompt = buildDesignPrompt();
+    const [w,h] = curDesign==='youtube'||curDesign==='poster' ? [768,432] : [512,512];
+
+    await robustGen(prompt, w, h,
         document.getElementById('dspin'), document.getElementById('dslbl'), document.getElementById('dsmld'),
         url => {
             const img=document.getElementById('dimg'); img.src=url; img.style.display='block';
@@ -910,33 +1080,30 @@ async function genBatch() {
 
     const variants=['', 'ultra photorealistic, 8K', 'cinematic, dramatic lighting', 'artistic, detailed illustration'];
 
-    await Promise.all([0,1,2,3].map(async i=>{
+    // Sequential batch (prevent rate-limit from parallel requests)
+    for(let i=0;i<4;i++){
         const cell=document.getElementById('bc'+i), img=document.getElementById('bi'+i);
         img.style.display='none'; cell.classList.remove('sel');
         const ring=document.createElement('div'); ring.className='mring'; ring.style.display='block';
         cell.querySelector('.bsp').innerHTML=''; cell.querySelector('.bsp').appendChild(ring);
-        const seed=Math.floor(Math.random()*9999999);
+        const t=Date.now();
         const p=encodeURIComponent(raw+(variants[i]?', '+variants[i]:'')+', ultra HD, masterpiece');
-        const models=['','turbo','flux','flux-realism'];
+        const models=['','turbo','flux',''];
+        let loaded=false;
         for(let a=0;a<4;a++){
             const m=models[a];
-            const url=`https://image.pollinations.ai/prompt/${p}?width=512&height=512&nologo=true&seed=${seed+a}${m?'&model='+m:''}`;
+            const url=`https://image.pollinations.ai/prompt/${p}?width=512&height=512&nologo=true&seed=${t+i*10+a}${m?'&model='+m:''}`;
             try{
-                // fetch+blob approach for batch too
-                let loadedUrl = url;
-                try {
-                    const ctrl=new AbortController(); const tm2=setTimeout(()=>ctrl.abort(),40000);
-                    const res=await fetch(url,{signal:ctrl.signal}); clearTimeout(tm2);
-                    if(res.ok){const bl=await res.blob();if(bl.size>1000)loadedUrl=URL.createObjectURL(bl);}
-                } catch(fe){ await new Promise((res,rej)=>{const t=new Image();const tm=setTimeout(()=>rej(),35000);t.onload=()=>{clearTimeout(tm);res()};t.onerror=()=>{clearTimeout(tm);rej()};t.src=url;}); }
-                bUrls[i]=loadedUrl; img.src=loadedUrl; img.style.display='block';
+                await tryImgUrl(url, 60000);
+                bUrls[i]=url; img.src=url; img.style.display='block';
                 cell.querySelector('.bsp').innerHTML='';
                 cell.onclick=()=>{document.querySelectorAll('.bc').forEach(c=>c.classList.remove('sel'));cell.classList.add('sel');lastUrl=url;};
-                return;
-            }catch(e){await new Promise(r=>setTimeout(r,800));}
+                loaded=true; break;
+            }catch(e){ await new Promise(r=>setTimeout(r,1500)); }
         }
-        cell.querySelector('.bsp').innerHTML='<span style="color:#f87171;font-size:.72rem">❌ Failed</span>';
-    }));
+        if(!loaded) cell.querySelector('.bsp').innerHTML='<span style="color:#f87171;font-size:.72rem">❌ Failed — फिर try करें</span>';
+        if(i<3) await new Promise(r=>setTimeout(r,2000)); // pace between requests
+    }
 
     btn.disabled=false; btn.textContent='🔄 फिर 4 Photos बनाएं';
     document.getElementById('bok').style.display='block';
@@ -1010,7 +1177,7 @@ async function buildChat(){
     document.getElementById('pph').style.display='block';
     document.getElementById('arow').style.display='none';
 
-    await robustGen(fp,'',qv,qv,document.getElementById('spin'),document.getElementById('slbl'),document.getElementById('smld'),url=>{
+    await robustGen(fp,qv,qv,document.getElementById('spin'),document.getElementById('slbl'),document.getElementById('smld'),url=>{
         const img=document.getElementById('oimg');img.src=url;img.style.display='block';
         document.getElementById('pph').style.display='none';
         document.getElementById('dlbtn').href=url;lastUrl=url;
