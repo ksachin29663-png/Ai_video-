@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Photo Generator - सचिन एआई</title>
@@ -9,265 +8,332 @@
         *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',sans-serif}
         body{background:#05080f;color:#e1e7f0;min-height:100vh;display:flex;flex-direction:column}
         header{background:linear-gradient(135deg,#0a0e1a,#0d1b2e);border-bottom:1px solid rgba(0,255,204,0.15);padding:13px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
-        .back-btn{color:#00ffcc;text-decoration:none;font-size:1.2rem}
-        .htitle{font-size:1rem;font-weight:700;color:#00ffcc}
-        .hsub{font-size:0.7rem;color:#64748b;margin-top:2px}
+        .back{color:#00ffcc;text-decoration:none;font-size:1.2rem;padding:4px}
+        .ht{font-size:1rem;font-weight:700;color:#00ffcc}
+        .hs{font-size:.7rem;color:#64748b;margin-top:2px}
         main{flex:1;display:flex;flex-direction:column;align-items:center;padding:16px 14px 60px;gap:14px}
         .card{width:100%;max-width:580px;background:rgba(255,255,255,0.04);border:1px solid rgba(0,255,204,0.15);border-radius:18px;padding:18px}
-        .pbox{width:100%;aspect-ratio:1;background:#080c18;border:2px dashed rgba(0,255,204,0.15);border-radius:14px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;transition:aspect-ratio .3s}
-        .pbox img{width:100%;height:100%;object-fit:contain;display:none}
-        .pph{text-align:center;padding:20px;pointer-events:none}
-        .pph .icon{font-size:3rem;opacity:.15;margin-bottom:10px}
-        .pph p{color:#334155;font-size:.82rem}
-        .spin{display:none;position:absolute;inset:0;background:rgba(5,8,15,.95);align-items:center;justify-content:center;flex-direction:column;gap:10px}
+        /* Image display */
+        .imgbox{width:100%;aspect-ratio:1;background:#080c18;border:2px dashed rgba(0,255,204,0.12);border-radius:14px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center}
+        .imgbox img{width:100%;height:100%;object-fit:contain;display:none}
+        .placeholder{text-align:center;padding:20px}
+        .placeholder .ico{font-size:3rem;opacity:.15;display:block;margin-bottom:8px}
+        .placeholder p{color:#334155;font-size:.82rem}
+        /* Spinner overlay */
+        .spin{display:none;position:absolute;inset:0;background:rgba(5,8,15,.96);flex-direction:column;align-items:center;justify-content:center;gap:12px}
         .spin.on{display:flex}
-        .ring{width:48px;height:48px;border:3px solid rgba(0,255,204,0.1);border-top-color:#00ffcc;border-radius:50%;animation:spin .8s linear infinite}
-        @keyframes spin{to{transform:rotate(360deg)}}
-        .slbl{color:#00ffcc;font-size:.82rem;text-align:center;padding:0 16px}
-        .ssub{color:#475569;font-size:.7rem;margin-top:2px}
-        .sbar{width:150px;height:3px;background:rgba(0,255,204,0.08);border-radius:2px;overflow:hidden;margin-top:4px}
-        .sbar-f{height:100%;background:#00ffcc;border-radius:2px;width:0}
-        .lbl{font-size:.72rem;font-weight:700;color:#00ffcc;margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px}
-        textarea{width:100%;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px;color:#e1e7f0;font-size:.92rem;resize:none;font-family:inherit;line-height:1.6}
-        textarea:focus{outline:none;border-color:rgba(0,255,204,0.3)}
-        textarea::placeholder{color:#334155}
-        .row{display:flex;gap:8px;align-items:center;margin-top:8px}
-        .rnd{background:rgba(0,255,204,0.06);border:1px solid rgba(0,255,204,0.15);border-radius:9px;padding:8px 12px;color:#00ffcc;font-size:.78rem;cursor:pointer;font-family:inherit;white-space:nowrap}
+        .ring{width:52px;height:52px;border:3px solid rgba(0,255,204,.08);border-top-color:#00ffcc;border-radius:50%;animation:rot .8s linear infinite}
+        @keyframes rot{to{transform:rotate(360deg)}}
+        .slbl{color:#00ffcc;font-size:.9rem;font-weight:600}
+        .ssub{color:#64748b;font-size:.72rem;text-align:center;padding:0 20px;line-height:1.5}
+        .prog-wrap{width:200px;height:4px;background:rgba(0,255,204,.08);border-radius:2px;overflow:hidden}
+        .prog{height:100%;background:linear-gradient(90deg,#00ffcc,#00c9a7);border-radius:2px;width:0%;transition:width .5s}
+        /* Labels */
+        .lbl{font-size:.72rem;font-weight:700;color:#00ffcc;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+        /* Style chips */
         .chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
-        .chip{padding:6px 12px;border-radius:20px;border:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.03);color:#64748b;font-size:.72rem;cursor:pointer;font-family:inherit;transition:all .2s}
-        .chip:hover,.chip.on{border-color:#00ffcc;background:rgba(0,255,204,0.08);color:#00ffcc}
-        .arow{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
-        .abtn{padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.03);color:#64748b;font-size:.72rem;cursor:pointer;font-family:inherit;transition:all .2s}
-        .abtn:hover,.abtn.on{border-color:#00ffcc;background:rgba(0,255,204,0.08);color:#00ffcc}
-        .gbtn{width:100%;padding:15px;border-radius:14px;border:none;background:linear-gradient(135deg,#00ffcc,#00c9a7);color:#0a0e1a;font-size:1rem;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .2s;margin-top:14px}
-        .gbtn:disabled{opacity:.5;cursor:not-allowed}
-        .err{background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.2);border-radius:10px;padding:10px 14px;color:#fbbf24;font-size:.78rem;margin-top:10px;display:none}
-        .actrow{display:none;gap:8px;margin-top:12px}
-        .actrow button{flex:1;padding:9px;border-radius:10px;border:1px solid rgba(0,255,204,0.2);background:rgba(0,255,204,0.05);color:#00ffcc;font-size:.78rem;cursor:pointer;font-family:inherit}
-        #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1e293b;color:#e1e7f0;padding:10px 20px;border-radius:10px;font-size:.82rem;opacity:0;transition:all .3s;z-index:999;white-space:nowrap}
+        .chip{padding:6px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);color:#64748b;font-size:.72rem;cursor:pointer;font-family:inherit;transition:all .2s}
+        .chip.on,.chip:hover{border-color:#00ffcc;background:rgba(0,255,204,.08);color:#00ffcc}
+        /* Size buttons */
+        .szrow{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+        .szbtn{padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);color:#64748b;font-size:.72rem;cursor:pointer;font-family:inherit;transition:all .2s}
+        .szbtn.on,.szbtn:hover{border-color:#00ffcc;background:rgba(0,255,204,.08);color:#00ffcc}
+        /* Ideas scroll */
+        .ideas{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;scrollbar-width:none}
+        .ideas::-webkit-scrollbar{display:none}
+        .idea{flex-shrink:0;padding:6px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);color:#475569;font-size:.72rem;cursor:pointer;white-space:nowrap;font-family:inherit;transition:all .2s}
+        .idea:hover{border-color:rgba(0,255,204,.3);color:#00ffcc}
+        /* Prompt area */
+        textarea{width:100%;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px;color:#e1e7f0;font-size:.92rem;resize:vertical;font-family:inherit;line-height:1.6;min-height:80px}
+        textarea:focus{outline:none;border-color:rgba(0,255,204,.3)}
+        textarea::placeholder{color:#334155}
+        .row{display:flex;gap:8px;margin-top:8px}
+        .rbtn{flex:1;padding:9px;background:rgba(0,255,204,.06);border:1px solid rgba(0,255,204,.15);border-radius:9px;color:#00ffcc;font-size:.78rem;cursor:pointer;font-family:inherit}
+        /* Generate button */
+        .gbtn{width:100%;padding:15px;border-radius:14px;border:none;background:linear-gradient(135deg,#00ffcc,#00a896);color:#0a0e1a;font-size:1rem;font-weight:700;cursor:pointer;font-family:inherit;margin-top:14px;transition:opacity .2s}
+        .gbtn:disabled{opacity:.45;cursor:not-allowed}
+        /* Action row */
+        .acts{display:none;gap:8px;margin-top:12px}
+        .abtn{flex:1;padding:9px;border-radius:10px;border:1px solid rgba(0,255,204,.2);background:rgba(0,255,204,.05);color:#00ffcc;font-size:.78rem;cursor:pointer;font-family:inherit}
+        /* Error */
+        .err{background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:10px;padding:12px 14px;color:#fbbf24;font-size:.8rem;margin-top:10px;display:none;line-height:1.6}
+        /* Toast */
+        #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1e293b;border:1px solid rgba(255,255,255,.08);color:#e1e7f0;padding:10px 20px;border-radius:10px;font-size:.82rem;opacity:0;transition:all .3s;z-index:999;white-space:nowrap}
         #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-        .ideas{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px}
-        .ideas::-webkit-scrollbar{height:3px}
-        .ideas::-webkit-scrollbar-thumb{background:rgba(0,255,204,.2);border-radius:2px}
-        .idea{flex-shrink:0;padding:6px 12px;border-radius:20px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:#475569;font-size:.72rem;cursor:pointer;white-space:nowrap;font-family:inherit}
-        .idea:hover{border-color:rgba(0,255,204,0.3);color:#00ffcc}
-        .api-info{font-size:.68rem;color:#334155;text-align:center;margin-top:8px}
+        .pinfo{font-size:.65rem;color:#1e293b;text-align:center;margin-top:6px}
     </style>
 </head>
 <body>
 <header>
-    <a href="/" class="back-btn">←</a>
+    <a href="/" class="back">←</a>
     <div>
-        <div class="htitle">✨ AI Photo Generator</div>
-        <div class="hsub">Text लिखो → AI Photo बनाएं — Free & Fast</div>
+        <div class="ht">✨ AI Photo Generator</div>
+        <div class="hs">Text लिखो → AI से Photo बनाएं — बिल्कुल Free</div>
     </div>
 </header>
+
 <main>
+    <!-- Image preview card -->
     <div class="card" style="padding:14px">
-        <div class="pbox" id="pbox">
-            <img id="oimg" alt="Generated">
-            <div class="pph" id="pph">
-                <div class="icon">🎨</div>
+        <div class="imgbox" id="imgbox">
+            <img id="genimg" alt="Generated Image">
+            <div class="placeholder" id="ph">
+                <span class="ico">🎨</span>
                 <p>यहाँ आपकी AI Photo दिखेगी</p>
             </div>
             <div class="spin" id="spin">
                 <div class="ring"></div>
-                <div class="slbl" id="slbl">✨ AI Photo बना रहा है...</div>
-                <div class="ssub" id="ssub">कृपया प्रतीक्षा करें</div>
-                <div class="sbar"><div class="sbar-f" id="sbarf"></div></div>
+                <div class="slbl" id="slbl">🎨 AI Photo बना रहा है...</div>
+                <div class="ssub" id="ssub">Stable Diffusion AI process कर रहा है<br>30-90 सेकंड लग सकते हैं</div>
+                <div class="prog-wrap"><div class="prog" id="prog"></div></div>
             </div>
         </div>
-        <div class="actrow" id="actrow">
-            <button onclick="downloadImg()">💾 Download</button>
-            <button onclick="generate()">🔄 फिर बनाएं</button>
+        <div class="acts" id="acts">
+            <button class="abtn" onclick="dlImg()">💾 Download</button>
+            <button class="abtn" onclick="generate()">🔄 फिर बनाएं</button>
         </div>
         <div class="err" id="err"></div>
     </div>
+
+    <!-- Controls card -->
     <div class="card">
         <div class="lbl">📸 Photo Style</div>
         <div class="chips">
-            <button class="chip on" data-s="" onclick="setChip(this,'')">Auto</button>
-            <button class="chip" data-s="ultra photorealistic, DSLR, 8K" onclick="setChip(this,'ultra photorealistic, DSLR, 8K')">📷 Realistic</button>
-            <button class="chip" data-s="cinematic, movie still, dramatic lighting" onclick="setChip(this,'cinematic, movie still, dramatic lighting')">🎬 Cinematic</button>
-            <button class="chip" data-s="anime style, vibrant, studio ghibli" onclick="setChip(this,'anime style, vibrant, studio ghibli')">🎌 Anime</button>
-            <button class="chip" data-s="oil painting, museum quality, artistic" onclick="setChip(this,'oil painting, museum quality, artistic')">🎨 Painting</button>
-            <button class="chip" data-s="3D CGI render, octane render, detailed" onclick="setChip(this,'3D CGI render, octane render, detailed')">🧊 3D CGI</button>
-            <button class="chip" data-s="pencil sketch, graphite, black and white" onclick="setChip(this,'pencil sketch, graphite, black and white')">✏️ Sketch</button>
+            <button class="chip on" onclick="setStyle(this,'')">Auto</button>
+            <button class="chip" onclick="setStyle(this,'ultra photorealistic, DSLR photograph, 8K resolution')">📷 Realistic</button>
+            <button class="chip" onclick="setStyle(this,'cinematic movie still, dramatic lighting, 4K')">🎬 Cinematic</button>
+            <button class="chip" onclick="setStyle(this,'anime style, vibrant colors, studio ghibli art')">🎌 Anime</button>
+            <button class="chip" onclick="setStyle(this,'oil painting, impressionist, museum quality')">🎨 Painting</button>
+            <button class="chip" onclick="setStyle(this,'3D CGI render, octane render, highly detailed')">🧊 3D CGI</button>
+            <button class="chip" onclick="setStyle(this,'pencil sketch, graphite drawing, black and white')">✏️ Sketch</button>
+            <button class="chip" onclick="setStyle(this,'watercolor painting, soft colors, artistic')">💧 Watercolor</button>
         </div>
-        <div class="lbl">📐 Size</div>
-        <div class="arow">
-            <button class="abtn on" data-w="512" data-h="512" onclick="setAsp(this)">■ 1:1</button>
-            <button class="abtn" data-w="768" data-h="432" onclick="setAsp(this)">▬ 16:9</button>
-            <button class="abtn" data-w="432" data-h="768" onclick="setAsp(this)">▮ 9:16</button>
-            <button class="abtn" data-w="512" data-h="768" onclick="setAsp(this)">🖼 Portrait</button>
+
+        <div class="lbl">📐 Image Size</div>
+        <div class="szrow">
+            <button class="szbtn on" data-w="512" data-h="512" onclick="setSize(this)">■ 1:1</button>
+            <button class="szbtn" data-w="768" data-h="512" onclick="setSize(this)">▬ Landscape</button>
+            <button class="szbtn" data-w="512" data-h="768" onclick="setSize(this)">▮ Portrait</button>
         </div>
+
         <div class="lbl">💡 Quick Ideas</div>
         <div class="ideas" id="ideas"></div>
-        <div class="lbl">✍️ Prompt</div>
-        <textarea id="pi" rows="3" placeholder="जो Photo चाहिए वो यहाँ लिखें... (Hindi या English दोनों चलेगा)"></textarea>
+
+        <div class="lbl">✍️ Prompt (Hindi या English)</div>
+        <textarea id="pi" rows="3" placeholder="जो Photo चाहिए वो यहाँ लिखें...&#10;उदाहरण: Beautiful Indian girl in red saree, temple background"></textarea>
         <div class="row">
-            <button class="rnd" onclick="rndIdea()">🎲 Random</button>
-            <button class="rnd" style="flex:1" onclick="enhToggle()" id="enhbtn">✨ Enhance: ON</button>
+            <button class="rbtn" onclick="rnd()">🎲 Random Idea</button>
+            <button class="rbtn" id="enhbtn" onclick="toggleEnh()">✨ Enhance: ON</button>
         </div>
         <button class="gbtn" id="gbtn" onclick="generate()">✨ Photo बनाएं</button>
-        <div class="api-info" id="apiInfo">Powered by AI Image Generation</div>
+        <div class="pinfo">Powered by Stable Horde — Free Community AI</div>
     </div>
 </main>
 <div id="toast"></div>
+
 <script>
 const IDEAS = [
-    'Beautiful Indian girl in red saree, golden jewelry, temple background',
+    'Beautiful Indian girl in red saree, golden jewelry, temple',
     'Handsome Indian man in royal Mughal outfit, palace, cinematic',
-    'Baby elephant in sunflower field, golden light, magical',
-    'Lion on savanna at sunset, wildlife photography, 8K',
+    'Baby elephant in sunflower field, golden hour, magical',
+    'Lion on African savanna at sunset, wildlife photography',
     'Futuristic Mumbai skyline 2050, neon lights, rainy night',
-    'Indian Bharatanatyam dancer, colorful lights, traditional',
+    'Indian Bharatanatyam dancer, colorful stage lights',
     'Dragon over Himalayan peaks, epic fantasy, wide shot',
     'Underwater coral reef, colorful fish, nature photography',
-    'Indian street food market at night, bokeh, vibrant',
-    'Snow leopard in Himalayas, wildlife photography, 8K',
+    'Indian street food market at night, bokeh lights, vibrant',
+    'Snow leopard in snowy Himalayas, wildlife, 4K',
     'Magical forest with glowing mushrooms, fairy lights',
-    'Cute cat wearing royal crown, studio portrait, 4K',
-    'Indian bride close-up, floral jewelry, warm bokeh',
-    'Abstract colorful galaxy swirl, digital art, 8K',
-    'Old man portrait, deep wrinkles, black and white, film',
-    'Superhero flying over city, cinematic, dramatic clouds',
-    'Peacock in full display, macro photography, vibrant',
-    'Mountain lake reflection, sunrise, landscape photography',
+    'Cute cat wearing royal golden crown, studio portrait',
+    'Indian bride close-up, floral jewelry, warm golden bokeh',
+    'Colorful galaxy and nebula, deep space, NASA style',
+    'Old man portrait, wrinkled face, black and white film',
+    'Superhero flying over city, cinematic, dramatic storm clouds',
+    'Peacock in full feather display, macro photography',
+    'Himalayan mountain lake at sunrise, reflections, 8K',
+    'Tiger in jungle, intense gaze, wildlife photography',
+    'Indian farmer in mustard field, golden hour, portrait',
 ];
 
-// Multiple free APIs — tries each if previous fails
-const APIS = [
-    { name: 'Pollinations (Flux)', fn: (p, w, h) => `https://image.pollinations.ai/prompt/${encodeURIComponent(p)}?width=${w}&height=${h}&model=flux&nologo=true&nofeed=true` },
-    { name: 'Pollinations (Default)', fn: (p, w, h) => `https://image.pollinations.ai/prompt/${encodeURIComponent(p)}?width=${w}&height=${h}&nologo=true&nofeed=true` },
-    { name: 'Pollinations (Turbo)', fn: (p, w, h) => `https://image.pollinations.ai/prompt/${encodeURIComponent(p)}?width=${w}&height=${h}&model=turbo&nologo=true&nofeed=true` },
-];
+const HORDE_API = 'https://stablehorde.net/api/v2';
+const ANON_KEY  = '0000000000';
 
-let selStyle = '', selW = 512, selH = 512, enhance = true, lastUrl = '', lastPrompt = '';
-let _active = false, _apiIdx = 0;
+let selStyle='', selW=512, selH=512, enhance=true;
+let _busy=false, _imgData=null;
 
-// Fill quick ideas
+// Populate ideas
 const ideasEl = document.getElementById('ideas');
 IDEAS.forEach(t => {
     const b = document.createElement('button');
-    b.className = 'idea'; b.textContent = t.split(',')[0].trim();
-    b.onclick = () => { document.getElementById('pi').value = t; };
+    b.className='idea'; b.textContent=t.split(',')[0].trim();
+    b.onclick=()=>{ document.getElementById('pi').value=t; };
     ideasEl.appendChild(b);
 });
 
-function setChip(el, s) { document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on')); el.classList.add('on'); selStyle=s; }
-function setAsp(el) {
-    document.querySelectorAll('.abtn').forEach(b=>b.classList.remove('on')); el.classList.add('on');
-    selW=+el.dataset.w; selH=+el.dataset.h;
-    document.getElementById('pbox').style.aspectRatio = selW>selH?'16/9':selH>selW?'9/16':'1';
+function setStyle(el, s) {
+    document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+    el.classList.add('on'); selStyle=s;
 }
-function enhToggle() { enhance=!enhance; document.getElementById('enhbtn').textContent='✨ Enhance: '+(enhance?'ON':'OFF'); document.getElementById('enhbtn').style.opacity=enhance?'1':'0.5'; }
-function rndIdea() { document.getElementById('pi').value=IDEAS[Math.floor(Math.random()*IDEAS.length)]; }
+function setSize(el) {
+    document.querySelectorAll('.szbtn').forEach(b=>b.classList.remove('on'));
+    el.classList.add('on');
+    selW=+el.dataset.w; selH=+el.dataset.h;
+    const ratio = selW===768&&selH===512 ? '16/9' : selW===512&&selH===768 ? '9/16' : '1';
+    document.getElementById('imgbox').style.aspectRatio = ratio;
+}
+function toggleEnh() {
+    enhance=!enhance;
+    const b=document.getElementById('enhbtn');
+    b.textContent='✨ Enhance: '+(enhance?'ON':'OFF');
+    b.style.opacity=enhance?'1':'0.6';
+}
+function rnd() { document.getElementById('pi').value=IDEAS[Math.floor(Math.random()*IDEAS.length)]; }
 
 function buildPrompt(raw) {
-    let parts=[raw];
+    const parts=[raw];
     if(selStyle) parts.push(selStyle);
     if(enhance){
-        const human=/\b(man|woman|girl|boy|person|people|face|portrait|bride|dancer|warrior|baby|child|princess|king|queen|model|indian|ladki|ladka)\b/i.test(raw);
-        parts.push(human?'ultra photorealistic, 8K DSLR, sharp focus, perfect lighting':'ultra HD, sharp focus, highly detailed');
+        const hasHuman=/\b(man|woman|girl|boy|person|people|face|portrait|bride|dancer|warrior|princess|king|queen|model|indian|farmer|athlete)\b/i.test(raw);
+        parts.push(hasHuman
+            ? 'ultra photorealistic, sharp focus, 8K DSLR, perfect skin, cinematic lighting'
+            : 'ultra HD, sharp focus, highly detailed, 8K, masterpiece');
     }
     return parts.join(', ');
 }
 
-// Progressive bar animation
-function startBar(secs) {
-    const bar = document.getElementById('sbarf');
-    bar.style.transition = 'none'; bar.style.width = '0%';
-    bar.offsetHeight;
-    bar.style.transition = `width ${secs}s linear`;
-    bar.style.width = '85%';
-}
-
-async function tryImage(url, timeoutMs) {
-    return new Promise((resolve, reject) => {
-        const img = new Image();
-        let done = false;
-        const timer = setTimeout(() => { if(done)return; done=true; img.src=''; reject(new Error('timeout')); }, timeoutMs);
-        img.onload = () => { if(done)return; done=true; clearTimeout(timer); resolve(url); };
-        img.onerror = () => { if(done)return; done=true; clearTimeout(timer); reject(new Error('load error')); };
-        img.src = url;
-    });
-}
+function setProg(pct) { document.getElementById('prog').style.width=pct+'%'; }
 
 async function generate() {
     const raw = document.getElementById('pi').value.trim();
-    if (!raw) { toast('⚠️ कुछ तो लिखें!'); return; }
-    if (_active) { toast('⏳ पहले वाली photo बन रही है...'); return; }
-    _active = true; lastPrompt = raw;
+    if(!raw){ toast('⚠️ कुछ तो लिखें!'); return; }
+    if(_busy){ toast('⏳ पहले वाली photo बन रही है...'); return; }
+    _busy=true; _imgData=null;
 
-    const btn = document.getElementById('gbtn');
-    btn.disabled = true; btn.textContent = '⏳ बन रहा है...';
-    document.getElementById('err').style.display = 'none';
-    document.getElementById('actrow').style.display = 'none';
-    document.getElementById('oimg').style.display = 'none';
-    document.getElementById('pph').style.display = 'block';
+    const btn=document.getElementById('gbtn');
+    btn.disabled=true; btn.textContent='⏳ बन रहा है...';
+    document.getElementById('err').style.display='none';
+    document.getElementById('acts').style.display='none';
+    document.getElementById('genimg').style.display='none';
+    document.getElementById('ph').style.display='block';
     document.getElementById('spin').classList.add('on');
+    document.getElementById('slbl').textContent='📤 Request भेज रहा है...';
+    document.getElementById('ssub').textContent='Stable Diffusion AI से connect हो रहा है';
+    setProg(5);
 
-    const fp = buildPrompt(raw);
-    let success = false;
+    const prompt=buildPrompt(raw);
 
-    for (let i = 0; i < APIS.length; i++) {
-        const api = APIS[i];
-        const timeoutMs = i === 0 ? 45000 : 30000;
-        document.getElementById('slbl').textContent = i === 0 ? '✨ AI Photo बना रहा है...' : `🔄 दूसरे server से try कर रहे हैं...`;
-        document.getElementById('ssub').textContent = api.name + (i === 0 ? ' · 30-45 सेकंड' : '');
-        document.getElementById('apiInfo').textContent = 'Powered by ' + api.name;
-        startBar(timeoutMs / 1000);
-
-        const url = api.fn(fp, selW, selH);
-        try {
-            const finalUrl = await tryImage(url, timeoutMs);
-            lastUrl = finalUrl;
-            document.getElementById('spin').classList.remove('on');
-            const imgEl = document.getElementById('oimg');
-            imgEl.src = finalUrl;
-            imgEl.style.display = 'block';
-            document.getElementById('pph').style.display = 'none';
-            document.getElementById('actrow').style.display = 'flex';
-            success = true;
-            break;
-        } catch {
-            if (i < APIS.length - 1) {
-                await new Promise(r => setTimeout(r, 1500));
-            }
-        }
-    }
-
-    if (!success) {
-        document.getElementById('spin').classList.remove('on');
-        document.getElementById('pph').style.display = 'block';
-        const err = document.getElementById('err');
-        err.textContent = '⚠️ सभी AI servers अभी busy हैं। 2-3 मिनट बाद दोबारा try करें। Internet connection भी check करें।';
-        err.style.display = 'block';
-        btn.textContent = '🔄 दोबारा Try करें';
-    } else {
-        btn.textContent = '✨ Photo बनाएं';
-    }
-
-    btn.disabled = false;
-    _active = false;
-}
-
-async function downloadImg() {
-    if (!lastUrl) return;
-    toast('⏳ Download शुरू हो रही है...');
     try {
-        const a = document.createElement('a');
-        a.href = lastUrl; a.download = 'sachin-ai-photo.png'; a.target = '_blank';
-        a.click();
-        toast('✅ Download शुरू हो गई!');
-    } catch { window.open(lastUrl, '_blank'); toast('⚠️ नई tab में खुला — वहाँ से save करें'); }
+        // Step 1: Submit job to Stable Horde
+        const submitRes = await fetch(`${HORDE_API}/generate/async`, {
+            method:'POST',
+            headers:{ 'Content-Type':'application/json', 'apikey': ANON_KEY },
+            body: JSON.stringify({
+                prompt,
+                params:{ width:selW, height:selH, steps:25, cfg_scale:7, sampler_name:'k_euler_a', n:1 },
+                models:['stable_diffusion'],
+                r2: false,
+                shared: false
+            })
+        });
+        const submitData = await submitRes.json();
+        if(!submitData.id) throw new Error(submitData.message || 'Job submit failed');
+
+        const jobId = submitData.id;
+        document.getElementById('slbl').textContent='🎨 AI Photo बना रहा है...';
+        document.getElementById('ssub').textContent='Community AI servers पर process हो रहा है\n30-90 सेकंड लग सकते हैं';
+        setProg(15);
+
+        // Step 2: Poll for completion
+        let attempts=0, maxAttempts=60; // 5 min max
+        while(attempts < maxAttempts) {
+            await sleep(5000);
+            attempts++;
+
+            const checkRes = await fetch(`${HORDE_API}/generate/check/${jobId}`, {
+                headers:{ 'apikey': ANON_KEY }
+            });
+            const check = await checkRes.json();
+
+            // Update progress bar
+            const prog = Math.min(90, 15 + (attempts/maxAttempts)*70 + (check.done ? 80 : 0));
+            setProg(prog);
+
+            // Update status message
+            if(check.wait_time > 0) {
+                document.getElementById('ssub').textContent=`⏳ Queue में है — लगभग ${check.wait_time} सेकंड बाकी`;
+            }
+            if(check.processing > 0) {
+                document.getElementById('ssub').textContent='⚡ Photo बन रही है — लगभग पूरी हो गई...';
+            }
+
+            if(check.done) {
+                // Step 3: Get result
+                const statusRes = await fetch(`${HORDE_API}/generate/status/${jobId}`, {
+                    headers:{ 'apikey': ANON_KEY }
+                });
+                const status = await statusRes.json();
+                const gen = status.generations && status.generations[0];
+
+                if(gen && gen.img) {
+                    // img is a URL or base64
+                    setProg(100);
+                    showImage(gen.img);
+                    break;
+                } else {
+                    throw new Error('Image data नहीं मिली');
+                }
+            }
+
+            if(check.faulted) throw new Error('Server error — फिर try करें');
+        }
+
+        if(attempts >= maxAttempts) throw new Error('Timeout — बहुत time लग रहा है, फिर try करें');
+
+    } catch(e) {
+        document.getElementById('spin').classList.remove('on');
+        document.getElementById('ph').style.display='block';
+        const err=document.getElementById('err');
+        err.textContent='⚠️ ' + (e.message || 'Error आई') + '\n\nNetwork connection check करें और दोबारा try करें।';
+        err.style.display='block';
+        btn.textContent='🔄 दोबारा Try करें';
+    } finally {
+        btn.disabled=false;
+        _busy=false;
+        if(btn.textContent==='⏳ बन रहा है...') btn.textContent='✨ Photo बनाएं';
+    }
 }
+
+function showImage(url) {
+    document.getElementById('spin').classList.remove('on');
+    const img=document.getElementById('genimg');
+    _imgData=url;
+    img.src=url;
+    img.style.display='block';
+    document.getElementById('ph').style.display='none';
+    document.getElementById('acts').style.display='flex';
+    document.getElementById('gbtn').textContent='✨ Photo बनाएं';
+    toast('✅ Photo बन गई!');
+}
+
+async function dlImg() {
+    if(!_imgData){ toast('⚠️ पहले photo बनाएं'); return; }
+    toast('💾 Download हो रही है...');
+    try {
+        // Try direct download
+        const a=document.createElement('a');
+        a.href=_imgData;
+        a.download='sachin-ai-photo.png';
+        a.target='_blank';
+        a.click();
+    } catch { window.open(_imgData,'_blank'); }
+}
+
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
 
 function toast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg; t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2500);
+    const t=document.getElementById('toast');
+    t.textContent=msg; t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'),2800);
 }
 </script>
 </body>
