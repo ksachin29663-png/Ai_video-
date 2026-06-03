@@ -119,6 +119,14 @@
 <footer>&copy; 2025 सचिन एआई फोटो स्टूडियो</footer>
 
 <script>
+
+async function callAI(prompt) {
+  const seed = Math.floor(Math.random() * 99999);
+  const res = await fetch('https://text.pollinations.ai/' + encodeURIComponent(prompt) + '?model=openai&seed=' + seed);
+  if (!res.ok) throw new Error('AI Error: ' + res.status);
+  return (await res.text()).trim();
+}
+
     const GRADIENTS = {
         gradient1: ['#ff6b35', '#f7931e', '#ffcc02'],
         gradient2: ['#0f0c29', '#302b63', '#24243e'],
@@ -152,16 +160,8 @@
             document.getElementById('genBtn').disabled = true;
             document.getElementById('spinnerTxt').style.display = 'block';
             try {
-                const res = await fetch('/generate-code', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        description: `Write one short, powerful motivational quote about "${topic}" in Hindi or Hinglish. Maximum 2 lines. No explanation, just the quote itself.`,
-                        language: 'javascript'
-                    })
-                });
-                const data = await res.json();
-                quote = (data.code || '').replace(/["'`]/g, '').trim();
+                const aiText = await callAI(prompt);
+                quote = aiText.replace(/["`]/g, '').trim();
                 if (!quote || quote.length < 5) quote = 'मेहनत करो, मंज़िल मिलेगी।';
                 document.getElementById('quoteText').value = quote;
             } catch (e) {
