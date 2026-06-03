@@ -91,6 +91,29 @@
 <footer>&copy; 2025 सचिन एआई फोटो स्टूडियो</footer>
 
 <script>
+
+async function analyzeWithAI(base64, mime, instruction) {
+  const seed = Math.floor(Math.random() * 99999);
+  const res = await fetch('https://text.pollinations.ai/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      messages: [{
+        role: 'user',
+        content: [
+          { type: 'text', text: instruction },
+          { type: 'image_url', image_url: { url: 'data:' + mime + ';base64,' + base64 } }
+        ]
+      }],
+      model: 'openai',
+      seed: seed
+    })
+  });
+  if (!res.ok) throw new Error('AI Error: ' + res.status);
+  const text = await res.text();
+  return text.trim();
+}
+
     let imageBase64 = null, imageMime = 'image/jpeg';
     let extractedColors = [];
 
@@ -140,13 +163,7 @@ Format EXACTLY as JSON:
 }`;
 
         try {
-            const res = await fetch('/analyze-image', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ imageBase64, mimeType: imageMime, instruction })
-            });
-            const data = await res.json();
-            const raw = data.prompt || '';
+            const raw = await analyzeWithAI(imageBase64, imageMime, instruction);
             const jsonMatch = raw.match(/\{[\s\S]*\}/);
             if (!jsonMatch) throw new Error('JSON parse failed');
             const parsed = JSON.parse(jsonMatch[0]);
