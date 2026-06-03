@@ -143,18 +143,9 @@
         const formData = new FormData();
         formData.append('image_file', originalFile);
 
-        try {
-            const res = await fetch('/remove-background', { method: 'POST', body: formData });
-            if (res.ok) {
-                const blob = await res.blob();
-                removedDataUrl = URL.createObjectURL(blob);
-                document.getElementById('removedImg').src = removedDataUrl;
-            } else { throw new Error('API failed'); }
-        } catch (e) {
-            // Client-side fallback: show image with edge mask simulation
-            removedDataUrl = await clientSideRemove(originalFile);
-            document.getElementById('removedImg').src = removedDataUrl;
-        }
+        // Use client-side canvas BG removal directly
+        removedDataUrl = await clientSideRemove(originalFile);
+        document.getElementById('removedImg').src = removedDataUrl;
 
         status.style.display = 'none';
         btn.disabled = false;
