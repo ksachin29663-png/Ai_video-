@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Video Downloader - सचिन एआई</title>
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',sans-serif}
+        body{background:#05080f;color:#e1e7f0;min-height:100vh;display:flex;flex-direction:column}
+        header{background:linear-gradient(135deg,#0a0e1a,#0d1b2e);border-bottom:1px solid rgba(0,200,255,0.15);padding:13px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
+        .back-btn{color:#00c8ff;text-decoration:none;font-size:1.2rem}
+        .htitle{font-size:1rem;font-weight:700;color:#00c8ff}
+        .hsub{font-size:0.7rem;color:#64748b;margin-top:2px}
+        main{flex:1;display:flex;flex-direction:column;align-items:center;padding:20px 14px 60px;gap:16px}
+        .card{width:100%;max-width:600px;background:rgba(255,255,255,0.04);border:1px solid rgba(0,200,255,0.15);border-radius:18px;padding:20px}
+
+        /* Supported badges */
+        .badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;justify-content:center}
+        .badge{padding:5px 12px;border-radius:20px;font-size:.72rem;font-weight:600;border:1px solid}
+        .badge.yt{background:rgba(255,0,0,0.1);border-color:rgba(255,0,0,0.3);color:#ff6b6b}
+
+        /* Input */
+        .input-wrap{display:flex;gap:8px;align-items:stretch}
+        .url-input{flex:1;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px 16px;color:#e1e7f0;font-size:.92rem;font-family:inherit;outline:none;transition:border-color .2s}
+        .url-input:focus{border-color:rgba(0,200,255,0.4)}
+        .url-input::placeholder{color:#334155}
+        .fetch-btn{padding:14px 20px;border-radius:12px;border:none;background:linear-gradient(135deg,#00c8ff,#0080ff);color:#fff;font-size:.9rem;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;transition:opacity .2s}
+        .fetch-btn:disabled{opacity:.5;cursor:not-allowed}
+        .fetch-btn:not(:disabled):active{opacity:.85}
+
+        /* Paste btn */
+        .paste-btn{width:100%;margin-top:10px;padding:10px;border-radius:10px;border:1px dashed rgba(0,200,255,0.25);background:transparent;color:#475569;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s}
+        .paste-btn:hover{border-color:rgba(0,200,255,0.5);color:#00c8ff}
+
+        /* Spinner */
+        .spin-wrap{display:none;flex-direction:column;align-items:center;gap:10px;padding:20px}
+        .spin-wrap.on{display:flex}
+        .ring{width:44px;height:44px;border:3px solid rgba(0,200,255,0.1);border-top-color:#00c8ff;border-radius:50%;animation:spin .8s linear infinite}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .spin-lbl{color:#00c8ff;font-size:.85rem}
+
+        /* Video info */
+        .vinfo{display:none;margin-top:16px}
+        .vinfo.on{display:block}
+        .thumb-row{display:flex;gap:14px;align-items:flex-start;margin-bottom:14px}
+        .thumb{width:120px;height:68px;border-radius:10px;object-fit:cover;flex-shrink:0;border:1px solid rgba(255,255,255,0.08)}
+        .vmeta{flex:1;min-width:0}
+        .vtitle{font-size:.9rem;font-weight:700;color:#e1e7f0;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+        .vauthor{font-size:.75rem;color:#64748b;margin-top:4px}
+        .vdur{font-size:.72rem;color:#475569;margin-top:3px}
+
+        /* Formats */
+        .flabel{font-size:.72rem;font-weight:700;color:#00c8ff;text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px}
+        .flist{display:flex;flex-direction:column;gap:8px}
+        .fitem{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:12px 14px;gap:10px}
+        .fqual{font-size:.88rem;font-weight:600;color:#e1e7f0}
+        .fmeta{font-size:.72rem;color:#64748b;margin-top:2px}
+        .dl-btn{padding:8px 16px;border-radius:9px;border:none;background:linear-gradient(135deg,#00c8ff,#0080ff);color:#fff;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0;transition:opacity .2s}
+        .dl-btn:hover{opacity:.85}
+        .dl-btn.loading{opacity:.6;cursor:not-allowed}
+
+        /* Error */
+        .err-box{background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.25);border-radius:12px;padding:14px 16px;color:#fbbf24;font-size:.82rem;display:none;margin-top:12px;line-height:1.5}
+        .err-box.on{display:block}
+
+        /* How to use */
+        .how{width:100%;max-width:600px}
+        .how-title{font-size:.8rem;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;text-align:center}
+        .steps{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+        .step{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px 14px;text-align:center;flex:1;min-width:120px;max-width:160px}
+        .step-num{font-size:1.3rem;margin-bottom:6px}
+        .step-txt{font-size:.72rem;color:#64748b;line-height:1.4}
+
+        #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1e293b;color:#e1e7f0;padding:10px 20px;border-radius:10px;font-size:.82rem;opacity:0;transition:all .3s;z-index:999;white-space:nowrap;border:1px solid rgba(255,255,255,0.08)}
+        #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="/" class="back-btn">←</a>
+    <div>
+        <div class="htitle">📥 Free Video Downloader</div>
+        <div class="hsub">कोई भी Video Link डालो और Download करो</div>
+    </div>
+</header>
+
+<main>
+    <!-- Main card -->
+    <div class="card">
+        <div class="badges">
+            <span class="badge yt">▶ YouTube</span>
+        </div>
+
+        <div class="input-wrap">
+            <input class="url-input" id="urlInput" type="url" placeholder="https://youtube.com/watch?v=... यहाँ link paste करें">
+            <button class="fetch-btn" id="fetchBtn" onclick="fetchInfo()">🔍 खोजो</button>
+        </div>
+        <button class="paste-btn" onclick="pasteUrl()">📋 Clipboard से Paste करें</button>
+
+        <!-- Spinner -->
+        <div class="spin-wrap" id="spinner">
+            <div class="ring"></div>
+            <div class="spin-lbl">Video की जानकारी ला रहा है...</div>
+        </div>
+
+        <!-- Error -->
+        <div class="err-box" id="errBox"></div>
+
+        <!-- Video info + formats -->
+        <div class="vinfo" id="vinfo">
+            <div class="thumb-row">
+                <img class="thumb" id="vthumb" src="" alt="">
+                <div class="vmeta">
+                    <div class="vtitle" id="vtitle"></div>
+                    <div class="vauthor" id="vauthor"></div>
+                    <div class="vdur" id="vdur"></div>
+                </div>
+            </div>
+            <div class="flabel">📥 Download करें</div>
+            <div class="flist" id="flist"></div>
+        </div>
+    </div>
+
+    <!-- How to use -->
+    <div class="how">
+        <div class="how-title">कैसे use करें?</div>
+        <div class="steps">
+            <div class="step"><div class="step-num">🔗</div><div class="step-txt">YouTube का link copy करें</div></div>
+            <div class="step"><div class="step-num">📋</div><div class="step-txt">यहाँ paste करके खोजें</div></div>
+            <div class="step"><div class="step-num">📥</div><div class="step-txt">Quality चुनें और download करें</div></div>
+        </div>
+    </div>
+</main>
+
+<div id="toast"></div>
+
+<script>
+const API_BASE = window.location.origin.includes('github.io')
+    ? 'https://' + window.location.hostname.replace('.github.io', '') + '.replit.app'
+    : window.location.origin;
+
+let currentUrl = '';
+let currentTitle = '';
+
+async function pasteUrl() {
+    try {
+        const text = await navigator.clipboard.readText();
+        if (text.startsWith('http')) {
+            document.getElementById('urlInput').value = text;
+            toast('✅ Paste हो गया!');
+        } else {
+            toast('⚠️ Clipboard में link नहीं मिली');
+        }
+    } catch {
+        toast('⚠️ Paste के लिए input box में click करें और Ctrl+V दबाएं');
+    }
+}
+
+async function fetchInfo() {
+    const url = document.getElementById('urlInput').value.trim();
+    if (!url) { toast('⚠️ पहले link paste करें'); return; }
+
+    currentUrl = url;
+    document.getElementById('fetchBtn').disabled = true;
+    document.getElementById('spinner').classList.add('on');
+    document.getElementById('vinfo').classList.remove('on');
+    document.getElementById('errBox').classList.remove('on');
+
+    try {
+        const res = await fetch(`${API_BASE}/api/video-info?url=${encodeURIComponent(url)}`);
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed');
+        showInfo(data);
+    } catch(e) {
+        showError(e.message || 'Video नहीं मिली। सही YouTube link डालें।');
+    } finally {
+        document.getElementById('fetchBtn').disabled = false;
+        document.getElementById('spinner').classList.remove('on');
+    }
+}
+
+function fmtDur(s) {
+    s = parseInt(s);
+    const h = Math.floor(s/3600), m = Math.floor((s%3600)/60), sec = s%60;
+    if (h) return `${h}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+    return `${m}:${String(sec).padStart(2,'0')}`;
+}
+
+function showInfo(data) {
+    currentTitle = data.title;
+    document.getElementById('vthumb').src = data.thumbnail || '';
+    document.getElementById('vtitle').textContent = data.title;
+    document.getElementById('vauthor').textContent = '📺 ' + (data.author || '');
+    document.getElementById('vdur').textContent = data.duration ? '⏱ ' + fmtDur(data.duration) : '';
+
+    const flist = document.getElementById('flist');
+    flist.innerHTML = '';
+
+    (data.formats || []).forEach(f => {
+        const isAudio = f.quality.includes('Audio');
+        const item = document.createElement('div');
+        item.className = 'fitem';
+        item.innerHTML = `
+            <div>
+                <div class="fqual">${isAudio ? '🎵' : '🎬'} ${f.quality}</div>
+                <div class="fmeta">${f.container?.toUpperCase() || 'MP4'} · ${f.size}</div>
+            </div>
+            <button class="dl-btn" onclick="download(${f.itag}, this)">💾 Download</button>
+        `;
+        flist.appendChild(item);
+    });
+
+    document.getElementById('vinfo').classList.add('on');
+}
+
+function showError(msg) {
+    const box = document.getElementById('errBox');
+    box.textContent = '⚠️ ' + msg;
+    box.classList.add('on');
+}
+
+async function download(itag, btn) {
+    btn.textContent = '⏳...';
+    btn.classList.add('loading');
+    btn.disabled = true;
+
+    try {
+        const dlUrl = `${API_BASE}/api/video-download?url=${encodeURIComponent(currentUrl)}&itag=${itag}&title=${encodeURIComponent(currentTitle)}`;
+        const a = document.createElement('a');
+        a.href = dlUrl;
+        a.download = (currentTitle || 'video') + '.mp4';
+        a.click();
+        toast('⬇️ Download शुरू हो गया!');
+        setTimeout(() => { btn.textContent = '💾 Download'; btn.classList.remove('loading'); btn.disabled = false; }, 3000);
+    } catch {
+        toast('⚠️ Download नहीं हो सका, दोबारा try करें');
+        btn.textContent = '💾 Download'; btn.classList.remove('loading'); btn.disabled = false;
+    }
+}
+
+document.getElementById('urlInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') fetchInfo();
+});
+
+function toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>
