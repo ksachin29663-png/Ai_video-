@@ -8,243 +8,126 @@
         *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',sans-serif}
         body{background:#05080f;color:#e1e7f0;min-height:100vh;display:flex;flex-direction:column}
         header{background:linear-gradient(135deg,#0a0e1a,#0d1b2e);border-bottom:1px solid rgba(0,200,255,0.15);padding:13px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
-        .back-btn{color:#00c8ff;text-decoration:none;font-size:1.2rem}
-        .htitle{font-size:1rem;font-weight:700;color:#00c8ff}
-        .hsub{font-size:0.7rem;color:#64748b;margin-top:2px}
-        main{flex:1;display:flex;flex-direction:column;align-items:center;padding:20px 14px 60px;gap:16px}
-        .card{width:100%;max-width:600px;background:rgba(255,255,255,0.04);border:1px solid rgba(0,200,255,0.15);border-radius:18px;padding:20px}
-        .badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;justify-content:center}
-        .badge{padding:5px 12px;border-radius:20px;font-size:.72rem;font-weight:600;border:1px solid}
-        .badge.yt{background:rgba(255,0,0,0.1);border-color:rgba(255,0,0,0.3);color:#ff6b6b}
-        .badge.ig{background:rgba(200,60,200,0.1);border-color:rgba(200,60,200,0.3);color:#e879f9}
-        .badge.tt{background:rgba(0,0,0,0.2);border-color:rgba(255,255,255,0.15);color:#e1e7f0}
-        .badge.tw{background:rgba(29,155,240,0.1);border-color:rgba(29,155,240,0.3);color:#38bdf8}
-        .input-wrap{display:flex;gap:8px;align-items:stretch}
-        .url-input{flex:1;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px 16px;color:#e1e7f0;font-size:.92rem;font-family:inherit;outline:none;transition:border-color .2s}
-        .url-input:focus{border-color:rgba(0,200,255,0.4)}
-        .url-input::placeholder{color:#334155}
-        .fetch-btn{padding:14px 20px;border-radius:12px;border:none;background:linear-gradient(135deg,#00c8ff,#0080ff);color:#fff;font-size:.9rem;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;transition:opacity .2s}
-        .fetch-btn:disabled{opacity:.5;cursor:not-allowed}
-        .paste-btn{width:100%;margin-top:10px;padding:10px;border-radius:10px;border:1px dashed rgba(0,200,255,0.25);background:transparent;color:#475569;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s}
-        .paste-btn:hover{border-color:rgba(0,200,255,0.5);color:#00c8ff}
-        .spin-wrap{display:none;flex-direction:column;align-items:center;gap:10px;padding:20px}
-        .spin-wrap.on{display:flex}
-        .ring{width:44px;height:44px;border:3px solid rgba(0,200,255,0.1);border-top-color:#00c8ff;border-radius:50%;animation:spin .8s linear infinite}
-        @keyframes spin{to{transform:rotate(360deg)}}
-        .spin-lbl{color:#00c8ff;font-size:.85rem;text-align:center}
-        .vinfo{display:none;margin-top:16px}
-        .vinfo.on{display:block}
-        .thumb-wrap{width:100%;border-radius:12px;overflow:hidden;margin-bottom:14px;background:#080c18;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center}
-        .thumb-wrap img{width:100%;height:100%;object-fit:cover}
-        .vtitle{font-size:.95rem;font-weight:700;color:#e1e7f0;line-height:1.4;margin-bottom:4px}
-        .vauthor{font-size:.75rem;color:#64748b;margin-bottom:14px}
-        .flabel{font-size:.72rem;font-weight:700;color:#00c8ff;text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px}
-        .flist{display:flex;flex-direction:column;gap:8px}
-        .fitem{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:12px 14px;gap:10px}
-        .fqual{font-size:.88rem;font-weight:600;color:#e1e7f0}
-        .fmeta{font-size:.72rem;color:#64748b;margin-top:2px}
-        .dl-btn{padding:8px 16px;border-radius:9px;border:none;background:linear-gradient(135deg,#00c8ff,#0080ff);color:#fff;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0;transition:opacity .2s;text-decoration:none;display:inline-block}
-        .dl-btn:hover{opacity:.85}
-        .err-box{background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.25);border-radius:12px;padding:14px 16px;color:#fbbf24;font-size:.82rem;display:none;margin-top:12px;line-height:1.6}
-        .err-box.on{display:block}
+        .back{color:#00c8ff;text-decoration:none;font-size:1.2rem;padding:4px}
+        .ht{font-size:1rem;font-weight:700;color:#00c8ff}
+        .hs{font-size:.7rem;color:#64748b;margin-top:2px}
+        main{flex:1;display:flex;flex-direction:column;align-items:center;padding:18px 14px 60px;gap:14px}
+        .card{width:100%;max-width:600px;background:rgba(255,255,255,.04);border:1px solid rgba(0,200,255,.15);border-radius:18px;padding:18px}
+        /* Platform badges */
+        .platforms{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;justify-content:center}
+        .plat{padding:6px 14px;border-radius:20px;font-size:.72rem;font-weight:600;border:1px solid;cursor:pointer}
+        .plat-yt{background:rgba(255,0,0,.1);border-color:rgba(255,0,0,.3);color:#ff6b6b}
+        .plat-ig{background:rgba(200,60,200,.1);border-color:rgba(200,60,200,.3);color:#e879f9}
+        .plat-tt{background:rgba(0,0,0,.2);border-color:rgba(255,255,255,.15);color:#e1e7f0}
+        .plat-tw{background:rgba(29,155,240,.1);border-color:rgba(29,155,240,.3);color:#38bdf8}
+        .plat-fb{background:rgba(24,119,242,.1);border-color:rgba(24,119,242,.3);color:#60a5fa}
+        /* Input */
+        .inrow{display:flex;gap:8px}
+        .urlin{flex:1;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 16px;color:#e1e7f0;font-size:.9rem;font-family:inherit;outline:none;transition:border-color .2s}
+        .urlin:focus{border-color:rgba(0,200,255,.4)}
+        .urlin::placeholder{color:#334155}
+        .sbtn{padding:14px 18px;border-radius:12px;border:none;background:linear-gradient(135deg,#00c8ff,#0080ff);color:#fff;font-size:.88rem;font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit;transition:opacity .2s}
+        .sbtn:disabled{opacity:.5;cursor:not-allowed}
+        .pastebtn{width:100%;margin-top:10px;padding:10px;border-radius:10px;border:1px dashed rgba(0,200,255,.2);background:transparent;color:#475569;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .2s}
+        .pastebtn:hover{border-color:rgba(0,200,255,.5);color:#00c8ff}
+        /* Results */
+        .res{display:none;margin-top:16px}
+        .res.on{display:block}
+        .vthumb{width:100%;border-radius:12px;overflow:hidden;background:#080c18;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+        .vthumb img{width:100%;height:100%;object-fit:cover}
+        .vtitle{font-size:.95rem;font-weight:700;color:#e1e7f0;line-height:1.4;margin-bottom:3px}
+        .vauthor{font-size:.73rem;color:#64748b;margin-bottom:14px}
+        .dlbl{font-size:.72rem;font-weight:700;color:#00c8ff;text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px}
+        .dlist{display:flex;flex-direction:column;gap:8px}
+        .ditem{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:12px 14px;gap:10px}
+        .dname{font-size:.88rem;font-weight:600;color:#e1e7f0}
+        .dmeta{font-size:.7rem;color:#64748b;margin-top:2px}
+        .dlbtn{padding:9px 18px;border-radius:9px;border:none;background:linear-gradient(135deg,#00c8ff,#0080ff);color:#fff;font-size:.78rem;font-weight:700;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-block;font-family:inherit}
+        .dlbtn:hover{opacity:.85}
+        /* Error */
+        .errbox{display:none;background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.2);border-radius:12px;padding:14px;color:#fbbf24;font-size:.82rem;margin-top:12px;line-height:1.6}
+        .errbox.on{display:block}
+        /* Loading */
+        .loading{display:none;flex-direction:column;align-items:center;gap:10px;padding:20px}
+        .loading.on{display:flex}
+        .ring{width:40px;height:40px;border:3px solid rgba(0,200,255,.08);border-top-color:#00c8ff;border-radius:50%;animation:rot .8s linear infinite}
+        @keyframes rot{to{transform:rotate(360deg)}}
+        .llbl{color:#00c8ff;font-size:.85rem}
+        /* How to use */
         .how{width:100%;max-width:600px}
-        .how-title{font-size:.8rem;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;text-align:center}
-        .steps{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-        .step{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px 14px;text-align:center;flex:1;min-width:120px;max-width:160px}
-        .step-num{font-size:1.3rem;margin-bottom:6px}
-        .step-txt{font-size:.72rem;color:#64748b;line-height:1.4}
-        #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1e293b;color:#e1e7f0;padding:10px 20px;border-radius:10px;font-size:.82rem;opacity:0;transition:all .3s;z-index:999;white-space:nowrap;border:1px solid rgba(255,255,255,0.08)}
+        .how-t{font-size:.75rem;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.5px;text-align:center;margin-bottom:10px}
+        .steps{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+        .step{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:12px;text-align:center;flex:1;min-width:110px;max-width:150px}
+        .step-ico{font-size:1.3rem;margin-bottom:6px}
+        .step-t{font-size:.7rem;color:#64748b;line-height:1.4}
+        /* Toast */
+        #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1e293b;border:1px solid rgba(255,255,255,.08);color:#e1e7f0;padding:10px 20px;border-radius:10px;font-size:.82rem;opacity:0;transition:all .3s;z-index:999;white-space:nowrap}
         #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
     </style>
 </head>
 <body>
 <header>
-    <a href="/" class="back-btn">←</a>
+    <a href="/" class="back">←</a>
     <div>
-        <div class="htitle">📥 Free Video Downloader</div>
-        <div class="hsub">YouTube, Instagram, TikTok — कोई भी link डालो</div>
+        <div class="ht">📥 Free Video Downloader</div>
+        <div class="hs">YouTube, Instagram, TikTok, Twitter — कोई भी Video Download करें</div>
     </div>
 </header>
 <main>
     <div class="card">
-        <div class="badges">
-            <span class="badge yt">▶ YouTube</span>
-            <span class="badge ig">📸 Instagram</span>
-            <span class="badge tt">🎵 TikTok</span>
-            <span class="badge tw">🐦 Twitter</span>
+        <div class="platforms">
+            <span class="plat plat-yt">▶ YouTube</span>
+            <span class="plat plat-ig">📸 Instagram</span>
+            <span class="plat plat-tt">♪ TikTok</span>
+            <span class="plat plat-tw">𝕏 Twitter</span>
+            <span class="plat plat-fb">f Facebook</span>
         </div>
-        <div class="input-wrap">
-            <input class="url-input" id="urlInput" type="url" placeholder="https://youtube.com/watch?v=... यहाँ paste करें">
-            <button class="fetch-btn" id="fetchBtn" onclick="fetchInfo()">🔍 खोजो</button>
+        <div class="inrow">
+            <input class="urlin" id="urlin" type="url" placeholder="Video का link यहाँ paste करें...">
+            <button class="sbtn" id="sbtn" onclick="findVideo()">🔍 खोजो</button>
         </div>
-        <button class="paste-btn" onclick="pasteUrl()">📋 Clipboard से Paste करें</button>
-        <div class="spin-wrap" id="spinner">
+        <button class="pastebtn" onclick="pasteUrl()">📋 Clipboard से Paste करें</button>
+        <div class="loading" id="loading">
             <div class="ring"></div>
-            <div class="spin-lbl" id="spinLbl">Video ढूंढ रहा है...</div>
+            <div class="llbl">Video ढूंढ रहा है...</div>
         </div>
-        <div class="err-box" id="errBox"></div>
-        <div class="vinfo" id="vinfo">
-            <div class="thumb-wrap"><img id="vthumb" src="" alt="thumbnail"></div>
+        <div class="errbox" id="errbox"></div>
+        <div class="res" id="res">
+            <div class="vthumb"><img id="vthumb" src="" alt="thumbnail"></div>
             <div class="vtitle" id="vtitle"></div>
             <div class="vauthor" id="vauthor"></div>
-            <div class="flabel">📥 Quality चुनें और Download करें</div>
-            <div class="flist" id="flist"></div>
+            <div class="dlbl">📥 Download करने के लिए एक service चुनें</div>
+            <div class="dlist" id="dlist"></div>
         </div>
     </div>
+
     <div class="how">
-        <div class="how-title">कैसे use करें?</div>
+        <div class="how-t">कैसे USE करें?</div>
         <div class="steps">
-            <div class="step"><div class="step-num">🔗</div><div class="step-txt">Video का link copy करें</div></div>
-            <div class="step"><div class="step-num">📋</div><div class="step-txt">यहाँ paste करके खोजें</div></div>
-            <div class="step"><div class="step-num">📥</div><div class="step-txt">Quality चुनें और download करें</div></div>
+            <div class="step"><div class="step-ico">🔗</div><div class="step-t">Video का link copy करें</div></div>
+            <div class="step"><div class="step-ico">📋</div><div class="step-t">यहाँ paste करके खोजें</div></div>
+            <div class="step"><div class="step-ico">📥</div><div class="step-t">Download button click करें</div></div>
         </div>
     </div>
 </main>
 <div id="toast"></div>
-<script>
-let currentUrl = '';
 
+<script>
 async function pasteUrl() {
     try {
-        const text = await navigator.clipboard.readText();
-        if (text && text.startsWith('http')) {
-            document.getElementById('urlInput').value = text;
-            toast('✅ Paste हो गया!');
-        } else toast('⚠️ Clipboard में कोई link नहीं मिली');
+        const t = await navigator.clipboard.readText();
+        if(t && t.startsWith('http')){ document.getElementById('urlin').value=t; toast('✅ Paste हो गया!'); }
+        else toast('⚠️ कोई link नहीं मिली Clipboard में');
     } catch { toast('⚠️ Input box में click करके Ctrl+V दबाएं'); }
 }
 
-async function fetchInfo() {
-    const url = document.getElementById('urlInput').value.trim();
-    if (!url || !url.startsWith('http')) { toast('⚠️ सही link paste करें'); return; }
-    currentUrl = url;
-
-    const btn = document.getElementById('fetchBtn');
-    btn.disabled = true;
-    showSpinner('Video ढूंढ रहा है...');
-    hideError();
-    document.getElementById('vinfo').classList.remove('on');
-
-    try {
-        // Try cobalt.tools API (supports YouTube, Instagram, TikTok, Twitter etc.)
-        const res = await fetch('https://api.cobalt.tools/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-            body: JSON.stringify({ url })
-        });
-        const data = await res.json();
-
-        if (data.status === 'redirect' || data.status === 'tunnel' || data.url) {
-            showDirectDownload(data);
-        } else if (data.status === 'picker' && data.picker) {
-            showPicker(data.picker);
-        } else if (data.status === 'error') {
-            throw new Error(data.error?.code || 'Video नहीं मिली');
-        } else {
-            throw new Error('Unexpected response');
-        }
-    } catch (e) {
-        // Fallback: Try YouTube oEmbed for info + direct redirect links
-        if (url.includes('youtube.com') || url.includes('youtu.be')) {
-            await tryYoutubeFallback(url);
-        } else {
-            showError('⚠️ यह link काम नहीं की। YouTube, Instagram या TikTok का link try करें।\n\nError: ' + e.message);
-        }
-    } finally {
-        hideSpinner();
-        btn.disabled = false;
-    }
-}
-
-function showDirectDownload(data) {
-    const flist = document.getElementById('flist');
-    flist.innerHTML = '';
-
-    // Show thumbnail if available
-    if (data.thumb) {
-        document.getElementById('vthumb').src = data.thumb;
-    }
-    document.getElementById('vtitle').textContent = data.filename || 'Video';
-    document.getElementById('vauthor').textContent = '';
-
-    const qualities = [
-        { label: '🎬 Best Quality (Auto)', url: data.url || data.tunnel, ext: 'mp4' },
-    ];
-    if (data.audio) qualities.push({ label: '🎵 Audio Only', url: data.audio, ext: 'mp3' });
-
-    qualities.forEach(q => {
-        if (!q.url) return;
-        const item = document.createElement('div');
-        item.className = 'fitem';
-        item.innerHTML = `
-            <div><div class="fqual">${q.label}</div><div class="fmeta">Free Download</div></div>
-            <a class="dl-btn" href="${q.url}" download target="_blank">💾 Download</a>
-        `;
-        flist.appendChild(item);
-    });
-
-    document.getElementById('vinfo').classList.add('on');
-}
-
-function showPicker(items) {
-    const flist = document.getElementById('flist');
-    flist.innerHTML = '';
-    document.getElementById('vtitle').textContent = 'Videos मिले — एक चुनें';
-    document.getElementById('vauthor').textContent = '';
-
-    if (items[0]?.thumb) document.getElementById('vthumb').src = items[0].thumb;
-
-    items.slice(0, 10).forEach((item, i) => {
-        const div = document.createElement('div');
-        div.className = 'fitem';
-        div.innerHTML = `
-            <div><div class="fqual">📹 Video ${i+1}</div><div class="fmeta">Free Download</div></div>
-            <a class="dl-btn" href="${item.url}" download target="_blank">💾 Download</a>
-        `;
-        flist.appendChild(div);
-    });
-
-    document.getElementById('vinfo').classList.add('on');
-}
-
-async function tryYoutubeFallback(url) {
-    try {
-        // Get video info via oEmbed
-        const vid = extractYTId(url);
-        if (!vid) throw new Error('Invalid YouTube URL');
-
-        const oembedUrl = `https://www.youtube.com/oembed?url=https://youtube.com/watch?v=${vid}&format=json`;
-        const r = await fetch(oembedUrl);
-        const info = await r.json();
-
-        document.getElementById('vthumb').src = `https://img.youtube.com/vi/${vid}/hqdefault.jpg`;
-        document.getElementById('vtitle').textContent = info.title || 'YouTube Video';
-        document.getElementById('vauthor').textContent = '📺 ' + (info.author_name || '');
-
-        const flist = document.getElementById('flist');
-        flist.innerHTML = '';
-
-        // Provide download links via multiple free services
-        const services = [
-            { name: '⬇️ Download via SaveFrom', url: `https://en.savefrom.net/#url=https://youtube.com/watch?v=${vid}` },
-            { name: '⬇️ Download via Y2Mate', url: `https://www.y2mate.com/youtube/${vid}` },
-            { name: '⬇️ Download via SSYouTube', url: `https://ssyoutube.com/watch?v=${vid}` },
-        ];
-
-        services.forEach(s => {
-            const item = document.createElement('div');
-            item.className = 'fitem';
-            item.innerHTML = `
-                <div><div class="fqual">${s.name}</div><div class="fmeta">New tab में खुलेगा → Download करें</div></div>
-                <a class="dl-btn" href="${s.url}" target="_blank" rel="noopener">खोलें →</a>
-            `;
-            flist.appendChild(item);
-        });
-
-        document.getElementById('vinfo').classList.add('on');
-    } catch(e) {
-        showError('⚠️ YouTube video info नहीं मिली। URL check करें।');
-    }
+function detectPlatform(url) {
+    if(/youtube\.com|youtu\.be/.test(url)) return 'youtube';
+    if(/instagram\.com/.test(url)) return 'instagram';
+    if(/tiktok\.com/.test(url)) return 'tiktok';
+    if(/twitter\.com|x\.com/.test(url)) return 'twitter';
+    if(/facebook\.com|fb\.watch/.test(url)) return 'facebook';
+    return 'other';
 }
 
 function extractYTId(url) {
@@ -252,20 +135,119 @@ function extractYTId(url) {
     return m ? m[1] : null;
 }
 
-function showSpinner(msg) {
-    document.getElementById('spinLbl').textContent = msg;
-    document.getElementById('spinner').classList.add('on');
+function getServices(platform, url) {
+    const enc = encodeURIComponent(url);
+    switch(platform) {
+        case 'youtube': {
+            const vid = extractYTId(url);
+            return [
+                { name:'⬇️ SaveFrom.net', meta:'Best — HD Quality', url:`https://en.savefrom.net/#url=${enc}` },
+                { name:'⬇️ Y2Mate.com', meta:'Fast — MP4/MP3 सब', url:`https://www.y2mate.com/en948/youtube/${vid||''}` },
+                { name:'⬇️ SSYouTube.com', meta:'URL में "ss" add करता है', url:`https://www.ssyoutube.com/watch?v=${vid||''}` },
+                { name:'🎵 MP3 Download', meta:'Audio Only — Music के लिए', url:`https://yt1s.com/youtube-to-mp3?q=${enc}` },
+            ];
+        }
+        case 'instagram':
+            return [
+                { name:'⬇️ SnapInsta', meta:'Instagram Reels/Posts', url:`https://snapinsta.app/` },
+                { name:'⬇️ SaveIG', meta:'Fast Instagram Downloader', url:`https://saveig.app/?url=${enc}` },
+                { name:'⬇️ Instafinsta', meta:'Photos & Videos', url:`https://instafinsta.com/?url=${enc}` },
+            ];
+        case 'tiktok':
+            return [
+                { name:'⬇️ SSSTik', meta:'TikTok No Watermark', url:`https://ssstik.io/?url=${enc}` },
+                { name:'⬇️ TikMate', meta:'HD Quality Download', url:`https://tikmate.online/?url=${enc}` },
+                { name:'⬇️ MusicalDown', meta:'Music + Video', url:`https://musicaldown.com/?url=${enc}` },
+            ];
+        case 'twitter':
+            return [
+                { name:'⬇️ TwitterVid', meta:'Twitter/X Videos', url:`https://twittervid.com/?url=${enc}` },
+                { name:'⬇️ TwDown', meta:'Fast Twitter Downloader', url:`https://twdown.net/?url=${enc}` },
+                { name:'⬇️ SaveTwitter', meta:'High Quality', url:`https://savetwitter.net/?url=${enc}` },
+            ];
+        case 'facebook':
+            return [
+                { name:'⬇️ FBDown', meta:'Facebook Videos', url:`https://fbdown.net/?url=${enc}` },
+                { name:'⬇️ SaveFrom.net', meta:'Facebook & More', url:`https://en.savefrom.net/#url=${enc}` },
+                { name:'⬇️ FDownloader', meta:'HD/SD Quality', url:`https://fdownloader.net/?url=${enc}` },
+            ];
+        default:
+            return [
+                { name:'⬇️ SaveFrom.net', meta:'Most platforms support', url:`https://en.savefrom.net/#url=${enc}` },
+                { name:'⬇️ 9xBuddy', meta:'Universal Downloader', url:`https://9xbuddy.in/download?url=${enc}` },
+            ];
+    }
 }
-function hideSpinner() { document.getElementById('spinner').classList.remove('on'); }
-function showError(msg) { const b = document.getElementById('errBox'); b.textContent = msg; b.classList.add('on'); }
-function hideError() { document.getElementById('errBox').classList.remove('on'); }
 
-document.getElementById('urlInput').addEventListener('keydown', e => { if (e.key === 'Enter') fetchInfo(); });
+async function findVideo() {
+    const url = document.getElementById('urlin').value.trim();
+    if(!url || !url.startsWith('http')){ toast('⚠️ सही link paste करें'); return; }
+
+    const btn=document.getElementById('sbtn');
+    btn.disabled=true;
+    document.getElementById('loading').classList.add('on');
+    document.getElementById('res').classList.remove('on');
+    document.getElementById('errbox').classList.remove('on');
+
+    const platform = detectPlatform(url);
+
+    // For YouTube: get real title + thumbnail via oEmbed
+    if(platform==='youtube') {
+        try {
+            const vid = extractYTId(url);
+            if(vid) {
+                const r = await fetch(`https://www.youtube.com/oembed?url=https://youtube.com/watch?v=${vid}&format=json`);
+                if(r.ok) {
+                    const d = await r.json();
+                    document.getElementById('vtitle').textContent = d.title || 'YouTube Video';
+                    document.getElementById('vauthor').textContent = '📺 ' + (d.author_name || '');
+                    document.getElementById('vthumb').src = `https://img.youtube.com/vi/${vid}/hqdefault.jpg`;
+                } else throw new Error('oembed failed');
+            }
+        } catch {
+            document.getElementById('vtitle').textContent = 'YouTube Video';
+            document.getElementById('vauthor').textContent = '📺 YouTube';
+            const vid=extractYTId(url);
+            if(vid) document.getElementById('vthumb').src=`https://img.youtube.com/vi/${vid}/hqdefault.jpg`;
+        }
+    } else {
+        // Generic for other platforms
+        const names = { instagram:'Instagram', tiktok:'TikTok', twitter:'Twitter/X', facebook:'Facebook', other:'Video' };
+        const icons = { instagram:'📸', tiktok:'♪', twitter:'𝕏', facebook:'f', other:'🎬' };
+        document.getElementById('vtitle').textContent = (icons[platform]||'🎬') + ' ' + (names[platform]||'Video') + ' Downloader';
+        document.getElementById('vauthor').textContent = url.length > 50 ? url.slice(0,50)+'...' : url;
+        document.getElementById('vthumb').src = '';
+    }
+
+    // Build download service list
+    const services = getServices(platform, url);
+    const dlist = document.getElementById('dlist');
+    dlist.innerHTML = '';
+    services.forEach(s => {
+        const el = document.createElement('div');
+        el.className='ditem';
+        el.innerHTML=`
+            <div>
+                <div class="dname">${s.name}</div>
+                <div class="dmeta">${s.meta}</div>
+            </div>
+            <a class="dlbtn" href="${s.url}" target="_blank" rel="noopener noreferrer">📥 Download</a>
+        `;
+        dlist.appendChild(el);
+    });
+
+    document.getElementById('loading').classList.remove('on');
+    document.getElementById('res').classList.add('on');
+    btn.disabled=false;
+    toast('✅ Download options मिले!');
+}
+
+document.getElementById('urlin').addEventListener('keydown', e=>{ if(e.key==='Enter') findVideo(); });
 
 function toast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg; t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2500);
+    const t=document.getElementById('toast');
+    t.textContent=msg; t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'), 2600);
 }
 </script>
 </body>
