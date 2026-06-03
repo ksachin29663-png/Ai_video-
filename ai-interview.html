@@ -62,6 +62,21 @@ footer{text-align:center;padding:16px;color:#334155;font-size:.75rem}</style></h
 </main>
 <footer>&copy; 2025 सचिन एआई फोटो स्टूडियो</footer>
 <script>
+
+async function callAI(prompt) {
+  const seed = Math.floor(Math.random() * 99999);
+  const encodedPrompt = encodeURIComponent(prompt);
+  const url = 'https://text.pollinations.ai/' + encodedPrompt + '?model=openai&seed=' + seed;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('API error: ' + res.status);
+  const text = await res.text();
+  if (!text || text.trim().length < 5) throw new Error('Response खाली है, दोबारा try करो');
+  return text.trim();
+}
+
+
+
+
 const state={round:'HR Round',exp:'Fresher (0-1 year)'};
 function pick(el,key){document.querySelectorAll('[onclick*="pick(this,\''+key+'\'"]').forEach(e=>e.classList.remove('active'));el.classList.add('active');state[key]=el.dataset.val;}
 async function generate(){
@@ -85,9 +100,8 @@ A2: [Answer]
 
 Include: Tell me about yourself, Strengths/Weaknesses, Why this company, Salary negotiation, Situational questions. Give practical, honest answers. Write in Hindi.`;
   try{
-    const r=await fetch('/generate-content',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
-    const d=await r.json();if(!r.ok)throw new Error(d.error||'Error');
-    renderQA(d.result);
+    const _aiResult = await callAI(prompt);
+    renderQA(_aiResult);
     document.getElementById('resultCard').style.display='block';
     document.getElementById('resultCard').scrollIntoView({behavior:'smooth'});
   }catch(e){const err=document.getElementById('err');err.textContent='❌ '+e.message;err.style.display='block';}
