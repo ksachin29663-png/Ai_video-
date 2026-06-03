@@ -604,25 +604,28 @@
 <script>
 // ======= CONFIG =======
 // Multiple URL patterns — fallback from simplest to complex
+// Replit proxy server — fetches images server-side (bypasses ISP blocks completely)
+const PROXY = 'https://2103bc84-547c-4c58-81cb-4978332a549f-00-3so91rlkoak3b.sisko.replit.dev';
+
 function buildUrls(prompt, neg, w, h) {
     const enc = encodeURIComponent(prompt);
+    const penc = encodeURIComponent(prompt.slice(0, 400));
     const seed = Math.floor(Math.random()*9999999);
-    const seed2 = Math.floor(Math.random()*9999999);
     return [
-        // 1. Simplest — no model, no extra params (most reliable)
+        // 1. OUR SERVER PROXY — server-side fetch, ISP cannot block (most reliable!)
+        `${PROXY}/proxy-image?prompt=${penc}&w=${w}&h=${h}&seed=${seed}`,
+        // 2. Proxy with smaller size
+        `${PROXY}/proxy-image?prompt=${penc}&w=512&h=512&seed=${seed+1}`,
+        // 3. Direct Pollinations — no model (fast)
         `https://image.pollinations.ai/prompt/${enc}?width=${w}&height=${h}&nologo=true&seed=${seed}`,
-        // 2. With turbo model
-        `https://image.pollinations.ai/prompt/${enc}?width=${w}&height=${h}&nologo=true&seed=${seed2}&model=turbo`,
-        // 3. With flux model
-        `https://image.pollinations.ai/prompt/${enc}?width=${w}&height=${h}&nologo=true&seed=${Math.floor(Math.random()*9999999)}&model=flux`,
-        // 4. Smaller size fallback
-        `https://image.pollinations.ai/prompt/${enc}?width=${Math.min(w,768)}&height=${Math.min(h,768)}&nologo=true&seed=${Math.floor(Math.random()*9999999)}`,
-        // 5. Even smaller
-        `https://image.pollinations.ai/prompt/${enc}?width=512&height=512&nologo=true&seed=${Math.floor(Math.random()*9999999)}`,
-        // 6. flux-realism
-        `https://image.pollinations.ai/prompt/${enc}?width=512&height=512&nologo=true&seed=${Math.floor(Math.random()*9999999)}&model=flux-realism`,
-        // 7. Absolute fallback — different endpoint format
-        `https://pollinations.ai/p/${enc}?width=512&height=512&seed=${Math.floor(Math.random()*9999999)}&nologo=true`
+        // 4. Direct Pollinations — turbo
+        `https://image.pollinations.ai/prompt/${enc}?width=${w}&height=${h}&nologo=true&seed=${seed+1}&model=turbo`,
+        // 5. Direct Pollinations — flux
+        `https://image.pollinations.ai/prompt/${enc}?width=512&height=512&nologo=true&seed=${seed+2}&model=flux`,
+        // 6. Direct Pollinations — smaller
+        `https://image.pollinations.ai/prompt/${enc}?width=512&height=512&nologo=true&seed=${seed+3}`,
+        // 7. Different endpoint
+        `https://pollinations.ai/p/${enc}?width=512&height=512&seed=${seed+4}&nologo=true`
     ];
 }
 
