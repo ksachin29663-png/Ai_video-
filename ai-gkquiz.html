@@ -80,6 +80,21 @@ footer{text-align:center;padding:16px;color:#334155;font-size:.75rem}</style></h
 </main>
 <footer>&copy; 2025 सचिन एआई फोटो स्टूडियो</footer>
 <script>
+
+async function callAI(prompt) {
+  const seed = Math.floor(Math.random() * 99999);
+  const encodedPrompt = encodeURIComponent(prompt);
+  const url = 'https://text.pollinations.ai/' + encodedPrompt + '?model=openai&seed=' + seed;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('API error: ' + res.status);
+  const text = await res.text();
+  if (!text || text.trim().length < 5) throw new Error('Response खाली है, दोबारा try करो');
+  return text.trim();
+}
+
+
+
+
 const state={cat:'Indian History',diff:'Easy'};
 let quizData=[],score=0,answered=0,total=0;
 function pick(el,key){document.querySelectorAll('[onclick*="pick(this,\''+key+'\'"]').forEach(e=>e.classList.remove('active'));el.classList.add('active');state[key]=el.dataset.val;}
@@ -106,9 +121,8 @@ Rules:
 
 Return ONLY the JSON array, nothing else.`;
   try{
-    const r=await fetch('/generate-content',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
-    const d=await r.json();if(!r.ok)throw new Error(d.error||'Error');
-    let text=d.result.trim();
+    const _aiResult = await callAI(prompt);
+    let text=_aiResult.trim();
     const start=text.indexOf('[');const end=text.lastIndexOf(']');
     if(start===-1||end===-1)throw new Error('Quiz data invalid');
     quizData=JSON.parse(text.slice(start,end+1));
