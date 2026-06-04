@@ -5,6 +5,7 @@ Allow: /
 Allow: /index.html
 Allow: /text-to-image.html
 Allow: /bg-remove.html
+Allow: /blog.html
 Allow: /bg-changer.html
 Allow: /photo-restore.html
 Allow: /ai-remini.html

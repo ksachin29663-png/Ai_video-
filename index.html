@@ -455,7 +455,7 @@ footer a{color:var(--muted);text-decoration:none;margin:0 8px;}footer a:hover{co
 <footer>
   <div class="fl">
     <a href="about.html">About</a><a href="contact.html">Contact</a>
-    <a href="blog.html">Blog</a><a href="privacy-policy.html">Privacy</a><a href="terms.html">Terms</a>
+    <a href="blog.html">Blog</a><a href="privacy-policy.html">Privacy</a><a href="terms.html">Terms</a><a href="disclaimer.html">Disclaimer</a>
   </div>
   <div>© 2025 Sachin AI Studio — 36 Free AI Tools</div>
 </footer>
@@ -491,6 +491,26 @@ document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
   cat=t.dataset.c;
   filter();
 }));
+</script>
+<!-- Cookie Consent Banner -->
+<div id="cookie-banner" style="position:fixed;bottom:0;left:0;right:0;background:rgba(14,17,23,0.95);backdrop-filter:blur(10px);border-top:1px solid var(--border);padding:15px 20px;z-index:1000;display:none;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;">
+  <div style="font-size:0.85rem;color:var(--text);max-width:800px;">
+    🍪 हम अपनी वेबसाइट पर आपको सबसे अच्छा अनुभव देने के लिए कुकीज़ का उपयोग करते हैं। हमारी <a href="privacy-policy.html" style="color:var(--accent);text-decoration:underline;">प्राइवेसी पॉलिसी</a> पढ़ें।
+  </div>
+  <button onclick="acceptCookies()" style="background:linear-gradient(135deg,#6366f1,#22d3ee);border:none;color:#fff;padding:8px 20px;border-radius:20px;font-size:0.85rem;font-weight:700;cursor:pointer;">ठीक है</button>
+</div>
+
+<script>
+function acceptCookies() {
+  localStorage.setItem('cookiesAccepted', 'true');
+  document.getElementById('cookie-banner').style.display = 'none';
+}
+
+window.onload = function() {
+  if (!localStorage.getItem('cookiesAccepted')) {
+    document.getElementById('cookie-banner').style.display = 'flex';
+  }
+}
 </script>
 </body>
 </html>
