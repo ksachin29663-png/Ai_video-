@@ -270,14 +270,20 @@
         switchTab('code');
 
         try {
-            const res = await fetch('/generate-code', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ description: prompt, language: currentLang })
-            });
-            if (!res.ok) throw new Error('Server error: ' + res.status);
-            const data = await res.json();
-            if (data.error) throw new Error(data.error);
+            const langInstructions = {html:'Write complete HTML with CSS+JS. Return ONLY raw HTML code, no markdown, no explanation.',css:'Write CSS. Return ONLY raw CSS code.',javascript:'Write JavaScript ES6+. Return ONLY raw JS code.',python:'Write Python. Return ONLY raw Python code.',react:'Write React JSX component. Return ONLY raw JSX code.',nodejs:'Write Node.js code. Return ONLY raw code.',sql:'Write SQL. Return ONLY raw SQL.',java:'Write Java. Return ONLY raw Java.',cpp:'Write C++. Return ONLY raw C++ code.',php:'Write PHP. Return ONLY raw PHP code.'};
+            const sysPrompt = langInstructions[currentLang] || 'Write clean code. Return ONLY the raw code, no markdown, no explanation.';
+            const fullPrompt = sysPrompt + '\n\nTask: ' + prompt;
+            let code = '';
+            for(let attempt=0;attempt<3;attempt++){
+                const seed=Math.floor(Math.random()*99999);
+                const r=await fetch('https://text.pollinations.ai/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:fullPrompt}],model:'openai',seed})});
+                if(r.status===429&&attempt<2){await new Promise(x=>setTimeout(x,3000*(attempt+1)));continue;}
+                if(!r.ok) throw new Error('API error '+r.status);
+                code=await r.text();
+                if(code&&code.length>5) break;
+            }
+            code=code.replace(/^```[\w]*\n?/gm,'').replace(/^```$/gm,'').trim();
+            const data={code,language:currentLang};
 
             currentCode = data.code;
             displayCode(currentCode, currentLang);
