@@ -9,104 +9,117 @@ let gTTS; try { gTTS = require('gtts'); } catch(e) { gTTS = null; }
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
 app.use(cors({ origin: '*' }));
 app.use(express.json({ limit: '50mb' }));
-
 if (!fs.existsSync(path.join(__dirname, 'uploads'))) fs.mkdirSync(path.join(__dirname, 'uploads'));
 const upload = multer({ dest: path.join(__dirname, 'uploads/') });
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-const REMOVE_BG_API_KEY = process.env.REMOVE_BG_API_KEY;
+const GEMINI_KEY = process.env.GEMINI_API_KEY;
+const OPENAI_KEY = process.env.OPENAI_API_KEY;
+const REMOVEBG_KEY = process.env.REMOVE_BG_API_KEY;
 
-// ---- Gemini with retry ----
-async function callGemini(prompt, retries = 3) {
-  if (!GEMINI_API_KEY) throw new Error('NO_KEY');
+// ============ AI HELPER — Pollinations first, Gemini fallback ============
+async function callAI(messages, retries = 2) {
+  // Try Pollinations first (no key needed)
   for (let i = 0; i <= retries; i++) {
     try {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
-      const res = await fetch(url, {
+      const seed = Math.floor(Math.random() * 99999);
+      const r = await fetch('https://text.pollinations.ai/', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+        headers: { 'Content-Type': 'application/json', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
+        body: JSON.stringify({ messages, model: 'openai', seed }),
+        signal: AbortSignal.timeout(25000)
       });
-      if (res.status === 429) {
-        if (i < retries) { await new Promise(r => setTimeout(r, 2000 * (i + 1))); continue; }
-        throw new Error('RATE_LIMIT');
-      }
-      if (!res.ok) { const e = await res.text(); throw new Error('API_ERROR:' + res.status); }
-      const data = await res.json();
-      const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!text) throw new Error('EMPTY');
-      return text;
-    } catch(e) {
-      if (i === retries) throw e;
-      if (e.message === 'RATE_LIMIT' || e.message === 'NO_KEY' || e.message === 'EMPTY') throw e;
-      await new Promise(r => setTimeout(r, 1500 * (i + 1)));
+      if (r.status === 429 && i < retries) { await new Promise(x => setTimeout(x, 3000 * (i + 1))); continue; }
+      if (!r.ok) throw new Error('poll_fail_' + r.status);
+      const txt = await r.text();
+      if (txt && txt.length > 3) return txt;
+      throw new Error('empty');
+    } catch (e) {
+      if (i < retries) { await new Promise(x => setTimeout(x, 2000)); continue; }
     }
+  }
+  // Fallback: Gemini
+  if (!GEMINI_KEY) throw new Error('NO_KEY');
+  const prompt = messages.map(m => m.content).join('\n');
+  for (let i = 0; i <= retries; i++) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`;
+      const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
+      if (r.status === 429 && i < retries) { await new Promise(x => setTimeout(x, 3000 * (i + 1))); continue; }
+      if (!r.ok) throw new Error('gemini_' + r.status);
+      const d = await r.json();
+      const txt = d?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (txt) return txt;
+      throw new Error('empty');
+    } catch (e) { if (i === retries) throw e; await new Promise(x => setTimeout(x, 2000)); }
   }
 }
 
-function errResp(res, err) {
-  const msg = err.message || '';
-  if (msg === 'NO_KEY') return res.json({ error: 'no_key', result: '⚠️ GEMINI_API_KEY नहीं है। Replit Secrets में add करें।', reply: '⚠️ GEMINI_API_KEY नहीं है।' });
-  if (msg === 'RATE_LIMIT') return res.json({ error: 'rate_limit', result: '⏳ बहुत requests आ गई हैं। 30 सेकंड बाद try करें।', reply: '⏳ बहुत requests आ गई हैं। 30 सेकंड बाद try करें।' });
-  return res.json({ error: 'api_error', result: '❌ Error: ' + msg.slice(0,100), reply: '❌ Error हुआ, दोबारा try करें।' });
+function errJson(res, e) {
+  const m = String(e?.message || e || '');
+  if (m.includes('NO_KEY')) return res.json({ error: 'no_key', result: '⚠️ API Key नहीं है।', reply: '⚠️ Setup required.' });
+  if (m.includes('429') || m.includes('rate') || m.includes('RATE') || m.includes('quota')) 
+    return res.json({ error: 'rate_limit', result: '⏳ AI busy है — 30 सेकंड बाद try करें।', reply: '⏳ AI busy है।' });
+  return res.json({ error: 'err', result: '❌ ' + m.slice(0, 120), reply: '❌ Error — दोबारा try करें।' });
 }
 
-// ---- Routes ----
+// ============ ROUTES ============
 app.post('/ai-chat', async (req, res) => {
   const { message } = req.body;
   if (!message) return res.status(400).json({ error: 'Message required' });
-  try { res.json({ reply: await callGemini(message) }); } catch(e) { errResp(res, e); }
+  try {
+    const reply = await callAI([{ role: 'system', content: 'You are a helpful Hindi AI assistant. Always reply in Hindi.' }, { role: 'user', content: message }]);
+    res.json({ reply });
+  } catch(e) { errJson(res, e); }
 });
 
 app.post('/generate-content', async (req, res) => {
   const { prompt } = req.body;
   if (!prompt) return res.status(400).json({ error: 'Prompt required' });
-  try { res.json({ result: await callGemini(prompt) }); } catch(e) { errResp(res, e); }
+  try { res.json({ result: await callAI([{ role: 'user', content: prompt }]) }); }
+  catch(e) { errJson(res, e); }
 });
 
 app.post('/generate-code', async (req, res) => {
   const { description, language } = req.body;
   if (!description) return res.status(400).json({ error: 'Description required' });
-  const langMap = { html:'Write complete HTML with CSS+JS. ONLY raw HTML, no markdown.', css:'Write CSS. ONLY raw CSS.', javascript:'Write JS ES6+. ONLY raw JS.', python:'Write Python. ONLY raw Python.', react:'Write React component. ONLY raw JSX.', nodejs:'Write Node.js code. ONLY raw code.', sql:'Write SQL. ONLY raw SQL.', java:'Write Java. ONLY raw Java.', cpp:'Write C++. ONLY raw C++.', php:'Write PHP. ONLY raw PHP.' };
-  const sys = langMap[language] || 'Write clean code. ONLY raw code, no markdown.';
+  const inst = { html:'Write complete HTML+CSS+JS. Return ONLY raw HTML.', css:'Return ONLY raw CSS.', javascript:'Return ONLY raw JS.', python:'Return ONLY raw Python.', react:'Return ONLY raw JSX.', nodejs:'Return ONLY raw Node.js.', sql:'Return ONLY raw SQL.', java:'Return ONLY raw Java.', cpp:'Return ONLY raw C++.', php:'Return ONLY raw PHP.' };
+  const sys = inst[language] || 'Return ONLY the raw code, no markdown.';
   try {
-    let code = await callGemini(`${sys}\n\nRequest: ${description}\n\nReturn ONLY the code, no explanation.`);
+    let code = await callAI([{ role: 'user', content: sys + '\n\nTask: ' + description }]);
     code = code.replace(/^```[\w]*\n?/gm, '').replace(/^```$/gm, '').trim();
     res.json({ code, language });
-  } catch(e) { errResp(res, e); }
+  } catch(e) { errJson(res, e); }
 });
 
 app.post('/analyze-image', async (req, res) => {
   const { imageBase64, mimeType, instruction } = req.body;
   if (!imageBase64 || !instruction) return res.status(400).json({ error: 'Missing fields' });
-  if (!GEMINI_API_KEY) return errResp(res, new Error('NO_KEY'));
-  try {
-    for (let i = 0; i <= 2; i++) {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+  if (!GEMINI_KEY) return errJson(res, new Error('NO_KEY'));
+  for (let i = 0; i <= 2; i++) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`;
       const r = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ contents:[{ parts:[{ inline_data:{ mime_type: mimeType||'image/jpeg', data: imageBase64 }},{ text: instruction }]}]}) });
-      if (r.status === 429 && i < 2) { await new Promise(x=>setTimeout(x,2000*(i+1))); continue; }
-      if (!r.ok) throw new Error('API_ERROR:' + r.status);
+      if (r.status === 429 && i < 2) { await new Promise(x=>setTimeout(x,3000*(i+1))); continue; }
+      if (!r.ok) throw new Error('gemini_' + r.status);
       const d = await r.json();
-      const prompt = d?.candidates?.[0]?.content?.parts?.[0]?.text || 'No response';
-      return res.json({ prompt, result: prompt });
-    }
-  } catch(e) { errResp(res, e); }
+      const result = d?.candidates?.[0]?.content?.parts?.[0]?.text || 'No response';
+      return res.json({ prompt: result, result });
+    } catch(e) { if (i === 2) return errJson(res, e); await new Promise(x=>setTimeout(x,2000)); }
+  }
 });
 
 app.post('/remove-background', upload.single('image_file'), async (req, res) => {
   if (!req.file) return res.status(400).send('No file');
   const fp = req.file.path;
   try {
-    if (REMOVE_BG_API_KEY) {
+    if (REMOVEBG_KEY) {
       const FormData = require('form-data');
       const fd = new FormData();
       fd.append('image_file', fs.createReadStream(fp));
-      const r = await fetch('https://api.remove.bg/v1.0/removebg', { method:'POST', headers:{'X-Api-Key':REMOVE_BG_API_KEY,...fd.getHeaders()}, body:fd });
-      if (r.ok) { const buf=await r.arrayBuffer(); res.set('Content-Type','image/png'); return res.send(Buffer.from(buf)); }
+      const r = await fetch('https://api.remove.bg/v1.0/removebg', { method:'POST', headers:{'X-Api-Key':REMOVEBG_KEY,...fd.getHeaders()}, body:fd });
+      if (r.ok) { const buf = await r.arrayBuffer(); res.set('Content-Type','image/png'); return res.send(Buffer.from(buf)); }
     }
     res.status(200).send('client-side-fallback');
   } catch(e) { res.status(200).send('client-side-fallback'); }
@@ -116,17 +129,15 @@ app.post('/remove-background', upload.single('image_file'), async (req, res) => 
 app.post('/generate-video-script', async (req, res) => {
   const { topic, style, duration } = req.body;
   if (!topic) return res.status(400).json({ error: 'Topic required' });
-  const styleNames = { cinematic:'Cinematic', anime:'Anime', '3d':'3D CGI', realistic:'Realistic', watercolor:'Watercolor' };
-  const sn = styleNames[style] || 'Cinematic';
-  const sc = Math.max(3,Math.min(parseInt(duration)||7,8));
+  const sc = Math.max(3, Math.min(parseInt(duration)||7, 8));
   const wc = Math.floor(sc*3*2.2);
-  const prompt = `Topic: "${topic}"\nStyle: ${sn}\nWords: ~${wc}\n\nWrite a complete Hindi voiceover script in Devanagari. Return ONLY the Hindi text, no headings, no English.`;
-  try { res.json({ script: await callGemini(prompt) }); } catch(e) { errResp(res, e); }
+  const prompt = `Topic: "${topic}"\nStyle: ${style||'Cinematic'}\nWords: ~${wc}\n\nWrite a complete Hindi voiceover script in Devanagari. Return ONLY the Hindi text, no headings, no English.`;
+  try { res.json({ script: await callAI([{ role: 'user', content: prompt }]) }); }
+  catch(e) { errJson(res, e); }
 });
 
 const videoJobs = {};
 setInterval(() => { const t=Date.now()-30*60*1000; for(const id in videoJobs){ if(videoJobs[id].createdAt<t){ const j=videoJobs[id]; if(j.outputPath&&fs.existsSync(j.outputPath)) try{fs.unlinkSync(j.outputPath);}catch(e){} delete videoJobs[id]; } } }, 10*60*1000);
-
 app.get('/video-job/:id', (req,res) => { const j=videoJobs[req.params.id]; if(!j) return res.status(404).json({error:'Not found'}); res.json({status:j.status,step:j.step,progress:j.progress,error:j.error||null,downloadUrl:j.status==='done'?`/video-download/${req.params.id}`:null}); });
 app.get('/video-download/:id', (req,res) => { const j=videoJobs[req.params.id]; if(!j||j.status!=='done'||!fs.existsSync(j.outputPath)) return res.status(404).json({error:'Not ready'}); res.setHeader('Content-Type','video/mp4'); res.setHeader('Content-Disposition','attachment; filename="video.mp4"'); res.sendFile(j.outputPath,{root:'/'},(e)=>{ if(!e) setTimeout(()=>{try{fs.unlinkSync(j.outputPath);}catch(e){} delete videoJobs[req.params.id];},10000); }); });
 
@@ -157,12 +168,12 @@ async function runVideoJob(jobId,photos,{prompt,script,style,duration}) {
   try {
     set('🎙️ Voiceover बन रहा है...',5);
     try{
-      if(!OPENAI_API_KEY) throw new Error('no key');
-      const r=await fetch('https://api.openai.com/v1/audio/speech',{method:'POST',headers:{'Authorization':'Bearer '+OPENAI_API_KEY,'Content-Type':'application/json'},body:JSON.stringify({model:'tts-1',input:(script||prompt).slice(0,4096),voice:'nova',response_format:'mp3'})});
+      if(!OPENAI_KEY) throw new Error('no key');
+      const r=await fetch('https://api.openai.com/v1/audio/speech',{method:'POST',headers:{'Authorization':'Bearer '+OPENAI_KEY,'Content-Type':'application/json'},body:JSON.stringify({model:'tts-1',input:(script||prompt).slice(0,4096),voice:'nova',response_format:'mp3'})});
       if(!r.ok) throw new Error('OpenAI fail');
       fs.writeFileSync(ap,Buffer.from(await r.arrayBuffer()));
     }catch(e){
-      if(!gTTS) throw new Error('No TTS');
+      if(!gTTS) throw new Error('No TTS available');
       await new Promise((res,rej)=>{ const g=new gTTS((script||prompt).slice(0,500),'hi'); g.save(ap,e=>e?rej(e):res()); });
     }
     if(!fs.existsSync(ap)||fs.statSync(ap).size<100) throw new Error('Voice empty');
@@ -198,16 +209,11 @@ async function runVideoJob(jobId,photos,{prompt,script,style,duration}) {
   }
 }
 
-app.get('/health', (req,res)=>res.json({status:'ok',gemini:!!GEMINI_API_KEY,openai:!!OPENAI_API_KEY,removebg:!!REMOVE_BG_API_KEY}));
+app.get('/health', (req,res)=>res.json({status:'ok',gemini:!!GEMINI_KEY,openai:!!OPENAI_KEY,removebg:!!REMOVEBG_KEY}));
 app.use(express.static(path.join(__dirname)));
-app.get('*',(req,res)=>{
-  const p=req.path.replace(/^\//,'')||'index.html';
-  const fp=path.join(__dirname,p.includes('.')?p:p+'.html');
-  if(fs.existsSync(fp)) res.sendFile(fp);
-  else res.sendFile(path.join(__dirname,'index.html'));
-});
+app.get('*',(req,res)=>{ const p=req.path.replace(/^\//,'')||'index.html'; const fp=path.join(__dirname,p.includes('.')?p:p+'.html'); if(fs.existsSync(fp)) res.sendFile(fp); else res.sendFile(path.join(__dirname,'index.html')); });
 
 app.listen(PORT,'0.0.0.0',()=>{
-  console.log(`✅ Sachin AI Studio: http://0.0.0.0:${PORT}`);
-  console.log(`   Gemini: ${GEMINI_API_KEY?'✅':'❌ MISSING'} | OpenAI: ${OPENAI_API_KEY?'✅':'⚠️ optional'}`);
+  console.log(`✅ Server: http://0.0.0.0:${PORT}`);
+  console.log(`   AI: Pollinations (primary) + Gemini ${GEMINI_KEY?'✅':'❌'} (fallback)`);
 });
