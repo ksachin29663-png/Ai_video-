@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Image Compressor & KB Resizer</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --accent: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --text: #f8fafc;
+            --text-dim: #94a3b8;
+            --border: #334155;
+            --success: #22c55e;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 15px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container { width: 100%; max-width: 700px; }
+
+        header { text-align: center; margin-bottom: 25px; }
+        header h1 { font-size: 1.8rem; color: var(--accent); margin-bottom: 8px; }
+        header p { color: var(--text-dim); font-size: 0.9rem; }
+
+        .main-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover { border-color: var(--accent); background: rgba(56, 189, 248, 0.05); }
+        .upload-area i { font-size: 2.5rem; display: block; margin-bottom: 10px; }
+        
+        #fileInput { display: none; }
+
+        .controls {
+            display: grid;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 12px;
+        }
+
+        .control-group { display: flex; flex-direction: column; gap: 8px; }
+        .control-label { display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 500; }
+        .control-label span { color: var(--accent); }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            background: var(--border);
+            border-radius: 5px;
+            outline: none;
+            accent-color: var(--accent);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: rgba(15, 23, 42, 0.5);
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .stat-label { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 4px; }
+        .stat-value { font-size: 1rem; font-weight: 700; }
+
+        .preview-container {
+            margin-top: 20px;
+            display: none;
+            text-align: center;
+        }
+
+        .preview-img {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary { background: var(--accent); color: var(--bg); }
+        .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .btn-success { background: var(--success); color: white; margin-top: 10px; }
+
+        @media (max-width: 480px) {
+            header h1 { font-size: 1.5rem; }
+            .upload-area { padding: 30px 15px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Advanced Image Compressor</h1>
+        <p>Compress & Resize images instantly in your browser</p>
+    </header>
+
+    <div class="main-card">
+        <div class="upload-area" id="dropZone" onclick="document.getElementById('fileInput').click()">
+            <span style="font-size: 40px;">🖼️</span>
+            <p style="margin-top: 10px;">Tap to select or drag & drop image</p>
+            <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: 5px;">Supports JPG, PNG, WEBP</p>
+            <input type="file" id="fileInput" accept="image/*">
+        </div>
+
+        <div id="editorSection" style="display: none;">
+            <div class="controls">
+                <div class="control-group">
+                    <div class="control-label">Quality <span><span id="qualityVal">80</span>%</span></div>
+                    <input type="range" id="qualityInput" min="1" max="100" value="80">
+                </div>
+                <div class="control-group">
+                    <div class="control-label">Scale <span><span id="scaleVal">100</span>%</span></div>
+                    <input type="range" id="scaleInput" min="10" max="100" value="100">
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-label">Original Size</div>
+                    <div class="stat-value" id="origSize">-</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Compressed Size</div>
+                    <div class="stat-value" id="compSize" style="color: var(--accent);">-</div>
+                </div>
+            </div>
+
+            <div class="preview-container" id="previewContainer">
+                <img id="previewImg" class="preview-img">
+                <button class="btn btn-success" id="downloadBtn">⬇️ Download Compressed Image</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const fileInput = document.getElementById('fileInput');
+    const qualityInput = document.getElementById('qualityInput');
+    const scaleInput = document.getElementById('scaleInput');
+    const qualityVal = document.getElementById('qualityVal');
+    const scaleVal = document.getElementById('scaleVal');
+    const origSize = document.getElementById('origSize');
+    const compSize = document.getElementById('compSize');
+    const previewImg = document.getElementById('previewImg');
+    const editorSection = document.getElementById('editorSection');
+    const previewContainer = document.getElementById('previewContainer');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    let originalImage = null;
+    let originalFileName = "";
+
+    fileInput.addEventListener('change', handleFile);
+
+    function handleFile(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        originalFileName = file.name.split('.')[0];
+        origSize.textContent = formatBytes(file.size);
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            originalImage = new Image();
+            originalImage.onload = () => {
+                editorSection.style.display = 'block';
+                compressImage();
+            };
+            originalImage.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function compressImage() {
+        if (!originalImage) return;
+
+        const quality = qualityInput.value / 100;
+        const scale = scaleInput.value / 100;
+
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        const width = originalImage.width * scale;
+        const height = originalImage.height * scale;
+
+        canvas.width = width;
+        canvas.height = height;
+
+        ctx.drawImage(originalImage, 0, 0, width, height);
+
+        // Convert to blob to check size
+        canvas.toBlob((blob) => {
+            if (!blob) return;
+            
+            const url = URL.createObjectURL(blob);
+            previewImg.src = url;
+            compSize.textContent = formatBytes(blob.size);
+            previewContainer.style.display = 'block';
+
+            downloadBtn.onclick = () => {
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `${originalFileName}_compressed.jpg`;
+                link.click();
+            };
+        }, 'image/jpeg', quality);
+    }
+
+    qualityInput.addEventListener('input', () => {
+        qualityVal.textContent = qualityInput.value;
+        compressImage();
+    });
+
+    scaleInput.addEventListener('input', () => {
+        scaleVal.textContent = scaleInput.value;
+        compressImage();
+    });
+
+    function formatBytes(bytes, decimals = 2) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const dm = decimals < 0 ? 0 : decimals;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    }
+
+    // Drag and Drop
+    const dropZone = document.getElementById('dropZone');
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    dropZone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        fileInput.files = files;
+        handleFile({ target: { files: files } });
+    });
+</script>
+
+</body>
+</html>
