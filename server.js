@@ -20,7 +20,7 @@ const upload = multer({ dest: path.join(__dirname, 'uploads/') });
 // ==================== आपकी तीनों शक्तिशाली API Keys ====================
 const OPENAI_KEY = "Sk-proj-YtqRTnQr1aVs9zFJDUAzaFLfPg1ZRlaPgQVILq6iNkYbDPNkquT9A92V0etVicWzeega0XC3KNT3BlbkFJiX1bhTS_rR-PthftL_nqPTye_nDa5ku6s4r54bjUhoBPAXdZPJGXPcp95h-R2JPKCBauA3npEA";
 const GROQ_KEY = "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";
-const GEMINI_KEY = "AQ.Ab8RN6Lbsnw3Euczij_P-vSIFrDYVk-enkxJahJhhlwptB79uQ";
+const GEMINI_KEY = "AQ.Ab8RN6KQFZVOxhCg9XWYvsLoc5K7cBl3QSldpLN0qfLBXV9xVA
 const REMOVEBG_KEY = process.env.REMOVEBG_KEY || ""; // अगर भविष्य में बैकग्राउंड रिमूवर यूज़ करना हो
 
 // ==================== AI HELPER - सुपरफास्ट फ़ालबैक इंजन ====================
