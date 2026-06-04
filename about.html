@@ -1,244 +1,148 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <link rel="shortcut icon" href="/favicon.png">
-    <link rel="apple-touch-icon" sizes="192x192" href="/logo192.png">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3019468976412219" crossorigin="anonymous"></script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>हमारे बारे में — सचिन एआई फोटो स्टूडियो</title>
-    <meta name="description" content="सचिन एआई फोटो स्टूडियो के बारे में जानें — 38 Free AI Tools, Made in India, बिल्कुल मुफ्त।">
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background: #080c16; color: #e1e7f0; min-height: 100vh; }
-
-        header {
-            background: linear-gradient(135deg, #0a0e1a, #0d1b2e);
-            border-bottom: 1px solid rgba(0,255,204,0.2);
-            padding: 14px 20px;
-            display: flex; align-items: center; gap: 14px;
-            position: sticky; top: 0; z-index: 100;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-        }
-        .back { color: #00ffcc; text-decoration: none; font-size: 1.3rem; }
-        .header-text { display: flex; flex-direction: column; }
-        .header-title { font-size: 1.05rem; font-weight: 700; color: #00ffcc; }
-        .header-sub { font-size: 0.75rem; color: #64748b; }
-
-        .hero-banner {
-            background: linear-gradient(135deg, #0a0e1a 0%, #0f1f35 50%, #100a1f 100%);
-            padding: 50px 20px 40px;
-            text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            position: relative; overflow: hidden;
-        }
-        .hero-banner::before {
-            content: '🎨';
-            position: absolute;
-            font-size: 12rem; opacity: 0.03;
-            top: -20px; right: -20px;
-        }
-        .hero-banner h1 { font-size: 2rem; font-weight: 800; line-height: 1.3; margin-bottom: 12px; }
-        .hero-banner h1 span { color: #00ffcc; }
-        .hero-banner p { color: #64748b; font-size: 0.9rem; max-width: 520px; margin: 0 auto; line-height: 1.6; }
-        .badge {
-            display: inline-block; margin-top: 16px;
-            background: rgba(0,255,204,0.1); border: 1px solid rgba(0,255,204,0.25);
-            color: #00ffcc; font-size: 0.75rem; font-weight: 700;
-            padding: 5px 16px; border-radius: 20px; letter-spacing: 0.5px;
-        }
-
-        .container { max-width: 860px; margin: 0 auto; padding: 40px 16px 60px; }
-
-        .section-card {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 16px; padding: 28px;
-            margin-bottom: 20px;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-        .section-card:hover {
-            border-color: rgba(0,255,204,0.2);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-        }
-        .section-icon { font-size: 2rem; margin-bottom: 14px; display: block; }
-        .section-title { font-size: 1.1rem; font-weight: 800; color: #00ffcc; margin-bottom: 12px; }
-        .section-text { font-size: 0.88rem; color: #94a3b8; line-height: 1.9; }
-        .section-text strong { color: #e1e7f0; }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 14px; margin-top: 20px;
-        }
-        .stat-box {
-            background: rgba(0,255,204,0.05);
-            border: 1px solid rgba(0,255,204,0.15);
-            border-radius: 14px; padding: 20px;
-            text-align: center;
-        }
-        .stat-val { font-size: 2rem; font-weight: 900; color: #00ffcc; }
-        .stat-lbl { font-size: 0.78rem; color: #64748b; margin-top: 4px; }
-
-        .tools-list {
-            display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px;
-        }
-        .tool-tag {
-            background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.25);
-            color: #a78bfa; font-size: 0.75rem; font-weight: 600;
-            padding: 5px 12px; border-radius: 20px;
-        }
-
-        .team-card {
-            display: flex; align-items: center; gap: 18px;
-            background: rgba(0,255,204,0.04);
-            border: 1px solid rgba(0,255,204,0.12);
-            border-radius: 14px; padding: 20px; margin-top: 14px;
-        }
-        .team-avatar {
-            width: 60px; height: 60px; border-radius: 50%;
-            background: linear-gradient(135deg, #00ffcc, #7c3aed);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.6rem; flex-shrink: 0;
-        }
-        .team-name { font-size: 1rem; font-weight: 700; color: #e1e7f0; }
-        .team-role { font-size: 0.78rem; color: #00ffcc; margin-top: 2px; }
-        .team-bio { font-size: 0.8rem; color: #64748b; margin-top: 6px; line-height: 1.6; }
-
-        footer {
-            text-align: center; padding: 24px;
-            border-top: 1px solid rgba(255,255,255,0.06);
-            color: #334155; font-size: 0.8rem;
-        }
-        footer a { color: #00ffcc; text-decoration: none; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us — Sachin AI Studio | 36 Free AI Tools</title>
+<meta name="description" content="Sachin AI Studio के बारे में जानें — 36 Free AI Tools जो आपकी life आसान बनाते हैं। हमारा mission, story और team।">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3019468976412219" crossorigin="anonymous"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--bg:#07090f;--card:#0e1117;--border:rgba(255,255,255,0.07);--accent:#6366f1;--text:#f1f5f9;--muted:#64748b;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+header{position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border);background:rgba(7,9,15,.9);backdrop-filter:blur(20px);}
+nav{max-width:1100px;margin:0 auto;padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-size:1.1rem;font-weight:900;text-decoration:none;background:linear-gradient(90deg,#818cf8,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+nav a{color:var(--muted);font-size:.8rem;text-decoration:none;margin-left:18px;}nav a:hover{color:#fff;}
+.wrap{max-width:820px;margin:0 auto;padding:40px 20px 80px;}
+.hero-sec{text-align:center;padding:40px 0 50px;}
+.hero-sec h1{font-size:2.4rem;font-weight:900;margin-bottom:14px;}
+.hero-sec h1 span{background:linear-gradient(135deg,#818cf8,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero-sec p{color:var(--muted);font-size:1rem;line-height:1.8;max-width:600px;margin:0 auto;}
+.ad-box{text-align:center;margin:24px 0;}
+.section{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:32px 28px;margin-bottom:20px;}
+.section h2{font-size:1.2rem;font-weight:800;margin-bottom:16px;color:#e2e8f0;}
+.section h2 span{background:linear-gradient(90deg,#818cf8,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.section p{color:#94a3b8;font-size:.9rem;line-height:1.9;margin-bottom:12px;}
+.section p:last-child{margin-bottom:0;}
+.tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;}
+.tool-item{background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.15);border-radius:8px;padding:10px 14px;font-size:.8rem;color:#a5b4fc;}
+.tool-item strong{display:block;color:#e2e8f0;margin-bottom:2px;font-size:.85rem;}
+.stats-row{display:flex;flex-wrap:wrap;gap:16px;margin-top:20px;}
+.stat-card{flex:1;min-width:120px;text-align:center;background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);border-radius:10px;padding:16px;}
+.stat-n{font-size:2rem;font-weight:900;background:linear-gradient(90deg,#818cf8,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.stat-l{font-size:.72rem;color:var(--muted);margin-top:3px;}
+.mission-list{list-style:none;margin-top:12px;}
+.mission-list li{color:#94a3b8;font-size:.88rem;padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:10px;line-height:1.6;}
+.mission-list li:last-child{border-bottom:none;}
+.mission-list li::before{content:'✓';color:#10b981;font-weight:700;flex-shrink:0;margin-top:1px;}
+.team-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:16px;margin-top:12px;}
+.team-card h3{font-size:.95rem;font-weight:700;color:#e2e8f0;}
+.team-card p{font-size:.8rem;color:var(--muted);margin-top:4px;line-height:1.6;}
+.cta-section{text-align:center;padding:32px 28px;}
+.cta-btn{display:inline-block;padding:12px 28px;background:linear-gradient(135deg,#6366f1,#22d3ee);color:#fff;border-radius:99px;text-decoration:none;font-weight:700;font-size:.9rem;margin-top:10px;}
+footer{text-align:center;border-top:1px solid var(--border);padding:28px 20px;color:var(--muted);font-size:.78rem;}
+footer a{color:var(--muted);margin:0 8px;text-decoration:none;}footer a:hover{color:#fff;}
+@media(max-width:600px){.tools-grid{grid-template-columns:1fr;}.hero-sec h1{font-size:1.8rem;}}
+</style>
 </head>
 <body>
+<header><nav>
+  <a href="index.html" class="logo">⚡ Sachin AI</a>
+  <div><a href="index.html">Home</a><a href="contact.html">Contact</a><a href="privacy-policy.html">Privacy</a></div>
+</nav></header>
 
-<header>
-    <a href="index.html" class="back">←</a>
-    <div class="header-text">
-        <div class="header-title">ℹ️ हमारे बारे में</div>
-        <div class="header-sub">About Sachin AI Photo Studio</div>
-    </div>
-</header>
-
-<div class="hero-banner">
-    <h1>सचिन <span>एआई</span> फोटो स्टूडियो</h1>
-    <p>भारत का सबसे बड़ा Free AI Tools Platform — 38 Tools, एक ही जगह, बिल्कुल मुफ्त।</p>
-    <div class="badge">🇮🇳 Made in India · 100% Free</div>
+<div class="wrap">
+<div class="hero-sec">
+  <h1>About <span>Sachin AI Studio</span></h1>
+  <p>हम एक India-based AI tools platform हैं जो हर किसी को Free में Powerful AI Technology देना चाहते हैं — Students से Creators तक।</p>
 </div>
 
-<div class="container">
+<div class="ad-box">
+  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3019468976412219" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+</div>
 
-    <div class="section-card">
-        <span class="section-icon">🚀</span>
-        <div class="section-title">हमारा मिशन</div>
-        <div class="section-text">
-            <strong>सचिन एआई फोटो स्टूडियो</strong> का मिशन है — AI की ताकत को हर भारतीय तक पहुंचाना, बिल्कुल मुफ्त।<br><br>
-            हम चाहते हैं कि छोटे शहरों और गांवों के लोग भी latest AI technology का फायदा उठा सकें — चाहे वो फोटो edit करनी हो, AI से video बनानी हो, या अपना resume तैयार करना हो।<br><br>
-            <strong>"Technology सबके लिए — कोई login नहीं, कोई charge नहीं।"</strong>
-        </div>
-    </div>
+<div class="section">
+  <h2>🎯 हमारा <span>Mission</span></h2>
+  <p>Sachin AI Studio का mission है — AI Technology को हर भारतीय तक पहुँचाना। चाहे वो किसान हो, Student हो, या Businessman — AI सबके लिए है।</p>
+  <p>हमारे सभी 36 tools बिल्कुल Free हैं। कोई hidden charge नहीं, कोई subscription नहीं। बस आओ और use करो।</p>
+  <ul class="mission-list">
+    <li>AI Technology को Hindi में accessible बनाना</li>
+    <li>Students को Free में AI tools देकर उनकी study help करना</li>
+    <li>Small businesses और creators को AI से empower करना</li>
+    <li>India में Digital AI literacy बढ़ाना</li>
+    <li>हर tool को mobile-friendly और fast बनाना</li>
+  </ul>
+</div>
 
-    <div class="section-card">
-        <span class="section-icon">📊</span>
-        <div class="section-title">हमारे Numbers</div>
-        <div class="stats-grid">
-            <div class="stat-box">
-                <div class="stat-val">38</div>
-                <div class="stat-lbl">AI Tools</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-val">500+</div>
-                <div class="stat-lbl">Photo Filters</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-val">100%</div>
-                <div class="stat-lbl">Free Forever</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-val">🇮🇳</div>
-                <div class="stat-lbl">Made in India</div>
-            </div>
-        </div>
-    </div>
+<div class="section">
+  <h2>📊 हमारे <span>Numbers</span></h2>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-n">36</div><div class="stat-l">Free AI Tools</div></div>
+    <div class="stat-card"><div class="stat-n">100%</div><div class="stat-l">Free हमेशा</div></div>
+    <div class="stat-card"><div class="stat-n">6+</div><div class="stat-l">Categories</div></div>
+    <div class="stat-card"><div class="stat-n">24/7</div><div class="stat-l">Available</div></div>
+  </div>
+</div>
 
-    <div class="section-card">
-        <span class="section-icon">🛠️</span>
-        <div class="section-title">हमारे 38 AI Tools</div>
-        <div class="section-text">हम इन categories में tools provide करते हैं:</div>
-        <div class="tools-list">
-            <span class="tool-tag">✨ Text to Image</span>
-            <span class="tool-tag">🖼️ BG Remover</span>
-            <span class="tool-tag">🔮 Photo Restore</span>
-            <span class="tool-tag">🧹 Object Eraser</span>
-            <span class="tool-tag">🤖 AI Avatar</span>
-            <span class="tool-tag">🎬 AI Video</span>
-            <span class="tool-tag">✏️ AI Sketch</span>
-            <span class="tool-tag">💄 Beauty Enhancer</span>
-            <span class="tool-tag">💻 AI Code</span>
-            <span class="tool-tag">📝 Caption Generator</span>
-            <span class="tool-tag">😂 Meme Creator</span>
-            <span class="tool-tag">🎨 Color Palette</span>
-            <span class="tool-tag">💬 Quote Cards</span>
-            <span class="tool-tag">🎭 AI Shayari</span>
-            <span class="tool-tag">📄 Resume Builder</span>
-            <span class="tool-tag">💼 Business Ideas</span>
-            <span class="tool-tag">✈️ Travel Planner</span>
-            <span class="tool-tag">😂 Joke Generator</span>
-            <span class="tool-tag">🔮 Horoscope</span>
-            <span class="tool-tag">🍳 Recipe Generator</span>
-            <span class="tool-tag">📚 Study Notes</span>
-            <span class="tool-tag">📰 News Analyzer</span>
-            <span class="tool-tag">🌐 Translator</span>
-            <span class="tool-tag">📖 Story Writer</span>
-            <span class="tool-tag">✉️ Letter Writer</span>
-            <span class="tool-tag">🎯 Interview Prep</span>
-            <span class="tool-tag">🏥 Health Advisor</span>
-            <span class="tool-tag">🧠 GK Quiz</span>
-            <span class="tool-tag">✨ Remini Enhancer</span>
-            <span class="tool-tag">🎬 Film Filters</span>
-        </div>
-    </div>
+<div class="section">
+  <h2>🛠️ हमारे <span>AI Tools</span></h2>
+  <p>हमारे tools 6 categories में हैं। हर tool professionally बनाया गया है और real AI का use करता है:</p>
+  <div class="tools-grid">
+    <div class="tool-item"><strong>🖼️ Image AI (12 Tools)</strong>Background Remove, Photo Restore, AI Upscaler, Beauty Filter और बहुत कुछ</div>
+    <div class="tool-item"><strong>✍️ Text AI (9 Tools)</strong>AI Chat, Story Writer, Translator, Resume Builder, Letter Writer</div>
+    <div class="tool-item"><strong>🎬 Video AI (2 Tools)</strong>AI Video Maker, Video Downloader — Free में Videos बनाओ</div>
+    <div class="tool-item"><strong>🎉 Fun Tools (7 Tools)</strong>Shayari, Jokes, Horoscope, Meme, GK Quiz, Recipe</div>
+    <div class="tool-item"><strong>🛠️ Utility (5 Tools)</strong>Code Generator, Business Advisor, Interview Prep, Health Advisor</div>
+    <div class="tool-item"><strong>🎨 Design (1 Tool)</strong>AI Color Palette — Perfect Design Colors बनाओ</div>
+  </div>
+</div>
 
-    <div class="section-card">
-        <span class="section-icon">👤</span>
-        <div class="section-title">Founder & Developer</div>
-        <div class="team-card">
-            <div class="team-avatar">👨‍💻</div>
-            <div>
-                <div class="team-name">Sachin</div>
-                <div class="team-role">Founder · Developer · Creator</div>
-                <div class="team-bio">
-                    एक passionate developer जो चाहते हैं कि भारत के हर इंसान तक AI technology मुफ्त में पहुंचे। 
-                    यह पूरा platform उन्होंने अकेले design, develop और deploy किया है।
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="section">
+  <h2>⚡ हम कौनसी <span>Technology</span> Use करते हैं?</h2>
+  <p>Sachin AI Studio Google Gemini AI, Pollinations AI, और दूसरी advanced AI technologies use करता है। यह सभी tools real AI से powered हैं — यह कोई fake या copy-paste results नहीं हैं।</p>
+  <p><strong>Google Gemini AI:</strong> हमारे text-based tools जैसे AI Chat, Shayari, Story Writer, Code Generator सब Gemini 2.0 Flash model use करते हैं — जो Google का latest और most powerful free AI model है।</p>
+  <p><strong>Pollinations AI:</strong> हमारा Text-to-Image tool Pollinations AI use करता है जो completely free है। आप जो भी लिखो — वो तुरंत image बन जाती है।</p>
+  <p><strong>Canvas API:</strong> Background Remover tool browser के built-in Canvas technology use करता है — इसलिए यह server पर नहीं, आपके phone/computer पर ही होता है। आपकी photo कहीं upload नहीं होती।</p>
+</div>
 
-    <div class="section-card">
-        <span class="section-icon">🔗</span>
-        <div class="section-title">Quick Links</div>
-        <div class="section-text">
-            <a href="index.html" style="color:#00ffcc;">🏠 होम — सभी 38 AI Tools</a><br><br>
-            <a href="contact.html" style="color:#00ffcc;">📧 Contact Us — हमसे संपर्क करें</a><br><br>
-            <a href="terms.html" style="color:#00ffcc;">📋 Terms & Conditions</a><br><br>
-            <a href="privacy-policy.html" style="color:#00ffcc;">🔒 Privacy Policy</a>
-        </div>
-    </div>
+<div class="section">
+  <h2>👨‍💻 हमारी <span>Team</span></h2>
+  <div class="team-card">
+    <h3>Sachin — Founder & Developer</h3>
+    <p>Sachin एक passionate developer और AI enthusiast हैं। उन्होंने यह platform इसलिए बनाया ताकि हर भारतीय बिना पैसे खर्च किए AI tools use कर सके। वो believe करते हैं कि Technology सबके लिए होनी चाहिए — सिर्फ अमीरों के लिए नहीं।</p>
+  </div>
+  <div class="team-card" style="margin-top:12px;">
+    <h3>Support Team</h3>
+    <p>हमारी छोटी सी team हर रोज़ tools को improve करती है, bugs fix करती है, और नए features add करती है। अगर कोई tool काम न करे तो हमें contact करें — हम जल्दी fix करते हैं।</p>
+  </div>
+</div>
 
+<div class="section">
+  <h2>❓ अक्सर पूछे जाने वाले <span>सवाल</span></h2>
+  <p><strong>Q: क्या सभी tools सच में Free हैं?</strong><br>हाँ! सभी 36 tools बिल्कुल Free हैं। कोई hidden charge नहीं, कोई credit card नहीं चाहिए।</p>
+  <p><strong>Q: क्या मेरी photos safe हैं?</strong><br>हाँ। हम आपकी photos store नहीं करते। जो images आप upload करते हैं वो process होने के बाद delete हो जाती हैं।</p>
+  <p><strong>Q: Tools काम क्यों नहीं कर रहे?</strong><br>कभी-कभी AI server की limit hit हो जाती है। 30 सेकंड बाद try करो — यह normal है free service में।</p>
+  <p><strong>Q: नए tools कब आएंगे?</strong><br>हम हर month नए tools add करते हैं। Website को bookmark करो और regularly check करते रहो।</p>
+  <p><strong>Q: क्या Mobile पर काम करते हैं?</strong><br>हाँ! सभी tools पूरी तरह mobile-friendly हैं। Android और iPhone दोनों पर perfect काम करते हैं।</p>
+</div>
+
+<div class="section cta-section">
+  <h2>🚀 Ready to Use <span>AI?</span></h2>
+  <p style="color:var(--muted);">अभी हमारे 36 Free AI Tools try करो — कोई signup नहीं चाहिए!</p>
+  <a href="index.html" class="cta-btn">सभी Tools देखो →</a>
+</div>
+
+</div>
+
+<div style="max-width:820px;margin:0 auto;padding:0 20px 20px;">
+  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3019468976412219" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
 </div>
 
 <footer>
-    &copy; 2025 सचिन एआई फोटो स्टूडियो — सभी अधिकार सुरक्षित<br>
-    <a href="/privacy-policy.html">🔒 Privacy Policy</a> ·
-    <a href="/contact.html">📧 Contact</a> ·
-    <a href="/terms.html">📋 Terms</a>
+  <div>© 2025 Sachin AI Studio — Made with ❤️ in India</div>
+  <div style="margin-top:8px;"><a href="index.html">Home</a><a href="privacy-policy.html">Privacy</a><a href="terms.html">Terms</a><a href="contact.html">Contact</a></div>
 </footer>
-
-</body>
-</html>
+</body></html>
