@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Trending Hashtag Generator</title>
+    <style>
+        :root {
+            --bg-color: #0f0f0f;
+            --card-bg: #1e1e1e;
+            --accent-color: #ff0000;
+            --text-primary: #ffffff;
+            --text-secondary: #aaaaaa;
+            --border-color: #333333;
+            --success-color: #2ba640;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--accent-color);
+        }
+
+        header p {
+            color: var(--text-secondary);
+        }
+
+        .search-section {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .search-bar {
+            position: relative;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            background: #2a2a2a;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--accent-color);
+        }
+
+        .category-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .tab {
+            padding: 8px 16px;
+            background: #2a2a2a;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .tab.active {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--accent-color); color: white; }
+        .btn-secondary { background-color: #333; color: white; }
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn:active { transform: translateY(0); }
+
+        .hashtag-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .hashtag-item {
+            background: var(--card-bg);
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .hashtag-item.selected {
+            background: rgba(255, 0, 0, 0.1);
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .hashtag-item:hover {
+            border-color: var(--accent-color);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--success-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: none;
+            z-index: 1000;
+        }
+
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.5rem; }
+            .hashtag-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+            .btn { font-size: 0.9rem; padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1># YouTube Hashtag Generator</h1>
+        <p>Find and copy trending hashtags for your videos</p>
+    </header>
+
+    <div class="search-section">
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search hashtags (e.g. gaming, vlog)...">
+        </div>
+        <div class="category-tabs" id="categoryTabs">
+            <div class="tab active" data-category="All">All</div>
+            <div class="tab" data-category="Gaming">Gaming</div>
+            <div class="tab" data-category="Cricket">Cricket</div>
+            <div class="tab" data-category="Tech">Tech</div>
+            <div class="tab" data-category="Vlog">Vlog</div>
+            <div class="tab" data-category="News">News</div>
+            <div class="tab" data-category="Entertainment">Entertainment</div>
+            <div class="tab" data-category="Comedy">Comedy</div>
+            <div class="tab" data-category="Shorts">Shorts</div>
+            <div class="tab" data-category="Cooking">Cooking</div>
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <button class="btn btn-primary" id="copyAllBtn">📋 Copy All Visible</button>
+        <button class="btn btn-secondary" id="copySelectedBtn">✅ Copy Selected (0)</button>
+    </div>
+
+    <div class="hashtag-grid" id="hashtagGrid">
+        <!-- Hashtags will be injected here -->
+    </div>
+</div>
+
+<div class="toast" id="toast">Copied to clipboard!</div>
+
+<script>
+    const hashtagData = {
+        Gaming: ["#gaming", "#gamer", "#livegaming", "#gametutorial", "#gamingcommunity", "#ps5", "#xbox", "#pcgaming", "#mobilegaming", "#freefire", "#pubg", "#minecraft", "#roblox", "#fortnite", "#valorant", "#gta5", "#gamingclips", "#gameplay", "#esports", "#streaming", "#twitch", "#nintendo", "#retrogaming", "#indiegames", "#gamingnews", "#gamingmemes", "#cod", "#apexlegends", "#leagueoflegends", "#dota2", "#amongus", "#cyberpunk2077", "#eldenring", "#genshinimpact", "#gamingsetup", "#gameroom", "#gaminglife", "#gamestagram", "#gamersunite", "#gamingposts"],
+        Cricket: ["#cricket", "#ipl", "#t20worldcup", "#cricketnews", "#crickethighlights", "#viratkohli", "#msdhoni", "#rohitsharma", "#cricketfever", "#cricketlover", "#cricketmatch", "#bcci", "#icc", "#cricketfans", "#teamindia", "#cricketworld", "#cricketlife", "#cricketmemes", "#cricketrecords", "#cricketstats", "#dream11", "#fantasycricket", "#cricketer", "#cricketlove", "#cricketgram", "#cricketupdate", "#cricketreels", "#cricketvideo", "#stadium", "#cricketmatchday"],
+        Tech: ["#tech", "#technology", "#gadgets", "#unboxing", "#techreview", "#smartphone", "#ai", "#artificialintelligence", "#futuretech", "#coding", "#programming", "#software", "#hardware", "#iphone", "#android", "#techtips", "#techupdates", "#innovation", "#cybersecurity", "#data", "#cloud", "#developer", "#webdev", "#appdev", "#blockchain", "#crypto", "#metaverse", "#robotics", "#electronics", "#smartwatch", "#laptops", "#techworld", "#technews", "#gadgetlover", "#techgeek"],
+        Vlog: ["#vlog", "#dailyvlog", "#travelvlog", "#familyvlog", "#vlogger", "#vlogging", "#vloglife", "#minivlog", "#vlogmusic", "#vlogcamera", "#travel", "#lifestyle", "#adventure", "#explore", "#wanderlust", "#vacation", "#roadtrip", "#citylife", "#nature", "#vloggers", "#youtubeindia", "#vlogmas", "#vloging", "#vlogday", "#adayinmylife", "#morningroutine", "#nightroutine", "#travelgram", "#vloger", "#lifeupdates"],
+        News: ["#news", "#breakingnews", "#latestnews", "#headlines", "#currentaffairs", "#worldnews", "#politics", "#india", "#localnews", "#newsupdate", "#newsanchor", "#journalism", "#media", "#trendingnews", "#viralnews", "#internationalnews", "#businessnews", "#technews", "#sportsnews", "#entertainmentnews", "#newsfeed", "#newsalert", "#newsroom", "#newsflash", "#newsday", "#factcheck", "#topnews", "#newsflash", "#newsgram", "#newsindia"],
+        Entertainment: ["#entertainment", "#bollywood", "#hollywood", "#movies", "#celebrity", "#webseries", "#netflix", "#trending", "#viral", "#musicvideo", "#cinema", "#trailers", "#gossip", "#awardshow", "#popculture", "#stardom", "#film", "#actor", "#actress", "#superstar", "#fanbase", "#movieclips", "#boxoffice", "#behindthescenes", "#premiere", "#songs", "#remix", "#dance", "#performance", "#shows"],
+        Comedy: ["#comedy", "#funny", "#memes", "#humor", "#jokes", "#fun", "#laugh", "#prank", "#standupcomedy", "#funnyvideo", "#comedian", "#lol", "#hilarious", "#roast", "#sarcasm", "#funnymoments", "#comedyvideo", "#comedycentral", "#sketchcomedy", "#parody", "#irony", "#witty", "#laughter", "#smile", "#funnyreels", "#comedyshow", "#comedylife", "#funnyquotes", "#memepage", "#instacomedy"],
+        Shorts: ["#shorts", "#youtubeshorts", "#shortsvideo", "#ytshorts", "#trending", "#viral", "#shortsfired", "#shortsfeed", "#shortstrending", "#shortsbeta", "#shortstory", "#shortscomedy", "#shortsdance", "#shortsmusic", "#shortsviral", "#shortschallenge", "#shortsindia", "#shortstiktok", "#shortstips", "#shortshacks", "#shortsart", "#shortscooking", "#shortsfacts", "#shortsgaming", "#shortsnews"],
+        Cooking: ["#cooking", "#food", "#recipe", "#foodie", "#kitchen", "#homemade", "#delicious", "#chef", "#cookingathome", "#foodporn", "#healthyfood", "#yummy", "#streetfood", "#dessert", "#breakfast", "#lunch", "#dinner", "#baking", "#vegetarian", "#nonvegetarian", "#indianfood", "#spice", "#cookingtips", "#foodvlog", "#foodblogger", "#tasty", "#instafood", "#foodlover", "#cookingtime", "#foodgram"]
+    };
+
+    // Expand data with generic trending tags
+    const genericTags = ["#youtube", "#youtuber", "#subscribe", "#video", "#trending", "#viral", "#foryou", "#explore", "#contentcreator", "#subscribetomychannel", "#newvideo", "#youtubecontent", "#youtubeindia", "#popular", "#mustwatch", "#watchthis", "#awesome", "#bestvideo", "#amazing", "#top10"];
+    
+    // Flatten all tags for 'All' category and search
+    let allTags = [];
+    Object.values(hashtagData).forEach(categoryTags => {
+        allTags = [...allTags, ...categoryTags];
+    });
+    allTags = [...new Set([...allTags, ...genericTags])];
+
+    const hashtagGrid = document.getElementById('hashtagGrid');
+    const searchInput = document.getElementById('searchInput');
+    const categoryTabs = document.getElementById('categoryTabs');
+    const copyAllBtn = document.getElementById('copyAllBtn');
+    const copySelectedBtn = document.getElementById('copySelectedBtn');
+    const toast = document.getElementById('toast');
+
+    let selectedTags = new Set();
+    let currentCategory = 'All';
+
+    function renderHashtags(filterText = '') {
+        hashtagGrid.innerHTML = '';
+        let tagsToDisplay = currentCategory === 'All' ? allTags : (hashtagData[currentCategory] || []);
+        
+        if (filterText) {
+            tagsToDisplay = tagsToDisplay.filter(tag => tag.toLowerCase().includes(filterText.toLowerCase()));
+        }
+
+        tagsToDisplay.forEach(tag => {
+            const div = document.createElement('div');
+            div.className = 'hashtag-item' + (selectedTags.has(tag) ? ' selected' : '');
+            div.textContent = tag;
+            div.onclick = () => toggleTag(tag, div);
+            hashtagGrid.appendChild(div);
+        });
+    }
+
+    function toggleTag(tag, element) {
+        if (selectedTags.has(tag)) {
+            selectedTags.delete(tag);
+            element.classList.remove('selected');
+        } else {
+            selectedTags.add(tag);
+            element.classList.add('selected');
+        }
+        updateSelectedButton();
+    }
+
+    function updateSelectedButton() {
+        copySelectedBtn.textContent = `✅ Copy Selected (${selectedTags.size})`;
+    }
+
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            showToast();
+        });
+    }
+
+    function showToast() {
+        toast.style.display = 'block';
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 2000);
+    }
+
+    searchInput.addEventListener('input', (e) => {
+        renderHashtags(e.target.value);
+    });
+
+    categoryTabs.addEventListener('click', (e) => {
+        if (e.target.classList.contains('tab')) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            e.target.classList.add('active');
+            currentCategory = e.target.dataset.category;
+            renderHashtags(searchInput.value);
+        }
+    });
+
+    copyAllBtn.addEventListener('click', () => {
+        const visibleTags = Array.from(hashtagGrid.querySelectorAll('.hashtag-item')).map(el => el.textContent);
+        if (visibleTags.length > 0) {
+            copyToClipboard(visibleTags.join(' '));
+        }
+    });
+
+    copySelectedBtn.addEventListener('click', () => {
+        if (selectedTags.size > 0) {
+            copyToClipboard(Array.from(selectedTags).join(' '));
+        }
+    });
+
+    // Initial render
+    renderHashtags();
+</script>
+
+</body>
+</html>
