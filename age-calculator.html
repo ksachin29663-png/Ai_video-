@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age & Milestone Clock - Sachin AI</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --accent: #ec4899;
+            --text: #f8fafc;
+            --border: #334155;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 12px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px 0;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 24px;
+        }
+
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5);
+        }
+
+        input[type="date"] {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 15px;
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 24px;
+            outline: none;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-label { font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; margin-bottom: 5px; }
+        .stat-value { font-size: 1.2rem; font-weight: 800; color: var(--accent); }
+
+        .milestone {
+            margin-top: 24px;
+            padding: 15px;
+            background: rgba(236, 72, 153, 0.1);
+            border: 1px dashed var(--accent);
+            border-radius: 12px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">Sachin AI Studio</div>
+    <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">Age & Birthday Milestone Clock</div>
+</header>
+
+<div class="container">
+    <label style="display: block; margin-bottom: 10px; font-weight: 600; color: #94a3b8;">Select Your Birth Date</label>
+    <input type="date" id="dob" value="2000-01-01">
+
+    <div id="results" style="display: none;">
+        <div class="stat-box" style="width: 100%; margin-bottom: 15px;">
+            <div class="stat-label">Current Age</div>
+            <div class="stat-value" id="age-main" style="font-size: 1.8rem;">--</div>
+        </div>
+
+        <div class="result-grid">
+            <div class="stat-box"><div class="stat-label">Months</div><div class="stat-value" id="age-months">--</div></div>
+            <div class="stat-box"><div class="stat-label">Weeks</div><div class="stat-value" id="age-weeks">--</div></div>
+            <div class="stat-box"><div class="stat-label">Days</div><div class="stat-value" id="age-days">--</div></div>
+            <div class="stat-box"><div class="stat-label">Hours</div><div class="stat-value" id="age-hours">--</div></div>
+        </div>
+
+        <div class="milestone">
+            <div class="stat-label" style="color: var(--accent);">Next Birthday Countdown</div>
+            <div class="stat-value" id="next-birthday">--</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const dobInput = document.getElementById('dob');
+    const results = document.getElementById('results');
+
+    function update() {
+        const birthDate = new Date(dobInput.value);
+        if (isNaN(birthDate)) return;
+        results.style.display = 'block';
+
+        const now = new Date();
+        const diff = now - birthDate;
+
+        const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+        const months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30.44));
+        const weeks = Math.floor(diff / (1000 * 60 * 60 * 24 * 7));
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+
+        document.getElementById('age-main').textContent = `${years} Years`;
+        document.getElementById('age-months').textContent = months.toLocaleString();
+        document.getElementById('age-weeks').textContent = weeks.toLocaleString();
+        document.getElementById('age-days').textContent = days.toLocaleString();
+        document.getElementById('age-hours').textContent = hours.toLocaleString();
+
+        // Next Birthday
+        let nextBday = new Date(now.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+        if (nextBday < now) nextBday.setFullYear(now.getFullYear() + 1);
+        const timeToBday = nextBday - now;
+        const daysToBday = Math.floor(timeToBday / (1000 * 60 * 60 * 24));
+        const hoursToBday = Math.floor((timeToBday % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        document.getElementById('next-birthday').textContent = `${daysToBday} Days, ${hoursToBday} Hours`;
+    }
+
+    dobInput.oninput = update;
+    update();
+    setInterval(update, 60000); // Update every minute
+</script>
+
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMI & Loan Calculator - Sachin AI</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --accent: #10b981;
+            --text: #f8fafc;
+            --border: #334155;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 12px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px 0;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 24px;
+        }
+
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5);
+        }
+
+        .input-group { margin-bottom: 20px; }
+        label { display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 8px; font-weight: 600; }
+
+        input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--accent); }
+
+        .result-card {
+            margin-top: 24px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--accent);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .emi-value { font-size: 2rem; font-weight: 800; color: var(--accent); margin: 10px 0; }
+        .details { display: flex; justify-content: space-between; margin-top: 15px; font-size: 0.85rem; color: #94a3b8; }
+        .details b { color: white; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">Sachin AI Studio</div>
+    <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">Smart EMI & Loan Calculator</div>
+</header>
+
+<div class="container">
+    <div class="input-group">
+        <label>Loan Amount (₹)</label>
+        <input type="number" id="amount" value="100000">
+    </div>
+    <div class="input-group">
+        <label>Interest Rate (% P.A.)</label>
+        <input type="number" id="rate" value="10.5" step="0.1">
+    </div>
+    <div class="input-group">
+        <label>Tenure (Months)</label>
+        <input type="number" id="tenure" value="12">
+    </div>
+
+    <div class="result-card">
+        <div style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Monthly EMI</div>
+        <div class="emi-value" id="emi">₹ 0</div>
+        <div class="details">
+            <div>Total Interest: <b id="total-interest">₹ 0</b></div>
+            <div>Total Pay: <b id="total-pay">₹ 0</b></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const amountInp = document.getElementById('amount');
+    const rateInp = document.getElementById('rate');
+    const tenureInp = document.getElementById('tenure');
+
+    function calculate() {
+        const p = parseFloat(amountInp.value);
+        const r = parseFloat(rateInp.value) / 12 / 100;
+        const n = parseFloat(tenureInp.value);
+
+        if (p > 0 && r > 0 && n > 0) {
+            const emi = (p * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+            const totalPay = emi * n;
+            const totalInt = totalPay - p;
+
+            document.getElementById('emi').textContent = "₹ " + Math.round(emi).toLocaleString();
+            document.getElementById('total-interest').textContent = "₹ " + Math.round(totalInt).toLocaleString();
+            document.getElementById('total-pay').textContent = "₹ " + Math.round(totalPay).toLocaleString();
+        }
+    }
+
+    [amountInp, rateInp, tenureInp].forEach(el => el.oninput = calculate);
+    calculate();
+</script>
+
+</body>
+</html>
