@@ -3,7 +3,7 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="shortcut icon" href="/favicon.png">
     <link rel="apple-touch-icon" sizes="192x192" href="/logo192.png">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3019468976412219" crossorigin="anonymous"></script><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>AI Letter Writer - सचिन एआई</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3019468976412219" crossorigin="anonymous"></script><script src="https://js.puter.com/v2/"></script><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>AI Letter Writer - सचिन एआई</title>
 <style>*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',sans-serif}body{background:#060810;color:#e1e7f0;min-height:100vh;display:flex;flex-direction:column}header{background:linear-gradient(135deg,#0a0e1a,#080e1a);border-bottom:1px solid rgba(129,140,248,.4);padding:14px 20px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100}.back{color:#818cf8;text-decoration:none;font-size:1.3rem}.pt{font-size:1.05rem;font-weight:700;color:#818cf8}.ps{font-size:.75rem;color:#64748b}main{flex:1;padding:20px 16px;display:flex;flex-direction:column;align-items:center;gap:14px}
 .card{width:100%;max-width:640px;background:rgba(255,255,255,.04);border:1px solid rgba(129,140,248,.2);border-radius:18px;padding:20px}.ct{font-size:.82rem;font-weight:700;color:#818cf8;margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px}
 label{font-size:.8rem;color:#94a3b8;font-weight:600;display:block;margin-bottom:5px;margin-top:10px}textarea,input,select{width:100%;padding:11px;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#fff;font-size:.87rem;font-family:inherit;outline:none}textarea{resize:vertical;min-height:70px}textarea:focus,input:focus,select:focus{border-color:#818cf8}select option{background:#0a0e1a}
@@ -70,16 +70,53 @@ footer{text-align:center;padding:16px;color:#334155;font-size:.75rem}</style></h
 
 async function callAI(prompt) {
   const seed = Math.floor(Math.random() * 99999);
-  const encodedPrompt = encodeURIComponent(prompt);
-  const res = await fetch('https://text.pollinations.ai/', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({messages:[{role:'user',content:prompt}], model:'openai', seed})
-  });
-  if (!res.ok) if(res.status===429)throw new Error('rate_limit'); throw new Error('API error: '+res.status);
-  const text = await res.text();
-  if (!text || text.trim().length < 5) throw new Error('Response खाली है, दोबारा try करो');
-  return text.trim();
+  try {
+    const res = await fetch('https://text.pollinations.ai/', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({messages:[{role:'user',content:prompt}], model:'openai', seed})
+    });
+    if (res.ok) {
+      const text = await res.text();
+      if (text && text.trim().length >= 5) return text.trim();
+    }
+  } catch (e) {
+    console.error('Pollinations fetch failed:', e);
+  }
+
+  try {
+    if (typeof puter !== 'undefined') {
+      const puterRes = await puter.ai.chat(prompt, { model: 'gpt-4o-mini' });
+      return puterRes.toString().trim();
+    }
+  } catch (e) {
+    console.error('Puter fallback failed:', e);
+  }
+  
+  throw new Error('rate_limit');
+},
+      body: JSON.stringify({messages:[{role:'user',content:prompt}], model:'openai', seed})
+    });
+    if (res.ok) {
+      const text = await res.text();
+      if (text && text.trim().length >= 5) return text.trim();
+    }
+    if (res.status !== 429) console.warn('Pollinations error:', res.status);
+  } catch (e) {
+    console.error('Pollinations fetch failed:', e);
+  }
+
+  // Fallback to Puter.js if Pollinations fails or rate limits
+  try {
+    if (typeof puter !== 'undefined') {
+      const puterRes = await puter.ai.chat(prompt, { model: 'gpt-4o-mini' });
+      return puterRes.toString().trim();
+    }
+  } catch (e) {
+    console.error('Puter fallback failed:', e);
+  }
+  
+  throw new Error('rate_limit');
 }
 
 

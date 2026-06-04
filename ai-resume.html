@@ -12,7 +12,7 @@ label{font-size:.8rem;color:#94a3b8;font-weight:600;display:block;margin-bottom:
 .result-box{display:none;background:rgba(0,0,0,.45);border:1px solid rgba(52,211,153,.25);border-radius:12px;padding:18px;font-size:.85rem;line-height:1.8;white-space:pre-wrap;word-break:break-word;max-height:500px;overflow-y:auto;font-family:'Courier New',monospace}
 .row-btns{display:flex;gap:10px;margin-top:10px}.sm-btn{flex:1;padding:10px;border-radius:10px;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);color:#34d399;font-size:.82rem;font-weight:700;cursor:pointer;font-family:inherit}.sm-btn:hover{background:rgba(52,211,153,.2)}
 .err{color:#fca5a5;font-size:.82rem;display:none;margin-top:8px;padding:10px;background:rgba(239,68,68,.08);border-radius:8px}
-footer{text-align:center;padding:16px;color:#334155;font-size:.75rem}</style></head>
+footer{text-align:center;padding:16px;color:#334155;font-size:.75rem}</style><script src="https://js.puter.com/v2/"></script></head>
 <body>
 <header><a href="index.html" class="back">←</a><div><div class="pt">📄 AI Resume Builder</div><div class="ps">अपनी details दो — Professional Resume तैयार होगा</div></div></header>
 <main>
@@ -56,10 +56,31 @@ footer{text-align:center;padding:16px;color:#334155;font-size:.75rem}</style></h
 
 async function callAI(prompt) {
   const seed = Math.floor(Math.random() * 99999);
-  const encodedPrompt = encodeURIComponent(prompt);
-  const res = await fetch('https://text.pollinations.ai/', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
+  try {
+    const res = await fetch('https://text.pollinations.ai/', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({messages:[{role:'user',content:prompt}], model:'openai', seed})
+    });
+    if (res.ok) {
+      const text = await res.text();
+      if (text && text.trim().length >= 5) return text.trim();
+    }
+  } catch (e) {
+    console.error('Pollinations fetch failed:', e);
+  }
+
+  try {
+    if (typeof puter !== 'undefined') {
+      const puterRes = await puter.ai.chat(prompt, { model: 'gpt-4o-mini' });
+      return puterRes.toString().trim();
+    }
+  } catch (e) {
+    console.error('Puter fallback failed:', e);
+  }
+  
+  throw new Error('rate_limit');
+},
     body: JSON.stringify({messages:[{role:'user',content:prompt}], model:'openai', seed})
   });
   if (!res.ok) if(res.status===429)throw new Error('rate_limit'); throw new Error('API error: '+res.status);

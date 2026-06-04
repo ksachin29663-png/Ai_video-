@@ -46,7 +46,7 @@
         .dl-btn:hover { background: rgba(255,255,255,0.1); }
         footer { text-align: center; padding: 20px; color: #334155; font-size: 0.78rem; }
     </style>
-</head>
+<script src="https://js.puter.com/v2/"></script></head>
 <body>
 <header>
     <a href="index.html" class="back-btn">←</a>
@@ -122,9 +122,30 @@
 
 async function callAI(prompt) {
   const seed = Math.floor(Math.random() * 99999);
-  const res = await fetch('https://text.pollinations.ai/' + encodeURIComponent(prompt) + '?model=openai&seed=' + seed);
-  if (!res.ok) throw new Error('AI Error: ' + res.status);
-  return (await res.text()).trim();
+  try {
+    const res = await fetch('https://text.pollinations.ai/', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({messages:[{role:'user',content:prompt}], model:'openai', seed})
+    });
+    if (res.ok) {
+      const text = await res.text();
+      if (text && text.trim().length >= 5) return text.trim();
+    }
+  } catch (e) {
+    console.error('Pollinations fetch failed:', e);
+  }
+
+  try {
+    if (typeof puter !== 'undefined') {
+      const puterRes = await puter.ai.chat(prompt, { model: 'gpt-4o-mini' });
+      return puterRes.toString().trim();
+    }
+  } catch (e) {
+    console.error('Puter fallback failed:', e);
+  }
+  
+  throw new Error('rate_limit');
 }
 
     const GRADIENTS = {
