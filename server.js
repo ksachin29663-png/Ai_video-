@@ -39,21 +39,34 @@ async function callAI(messages, retries = 2) {
       if (i < retries) { await new Promise(x => setTimeout(x, 2000)); continue; }
     }
   }
-  // Fallback: Gemini
-  if (!GEMINI_KEY) throw new Error('NO_KEY');
+  // Fallback: OpenAI or Gemini
   const prompt = messages.map(m => m.content).join('\n');
-  for (let i = 0; i <= retries; i++) {
+  if (OPENAI_KEY) {
     try {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`;
-      const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
-      if (r.status === 429 && i < retries) { await new Promise(x => setTimeout(x, 3000 * (i + 1))); continue; }
-      if (!r.ok) throw new Error('gemini_' + r.status);
+      const r = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${OPENAI_KEY}` },
+        body: JSON.stringify({ model: 'gpt-3.5-turbo', messages })
+      });
       const d = await r.json();
-      const txt = d?.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (txt) return txt;
-      throw new Error('empty');
-    } catch (e) { if (i === retries) throw e; await new Promise(x => setTimeout(x, 2000)); }
+      if (d.choices?.[0]?.message?.content) return d.choices[0].message.content;
+    } catch (e) { console.error('OpenAI fallback failed', e); }
   }
+
+  if (GEMINI_KEY) {
+    for (let i = 0; i <= retries; i++) {
+      try {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`;
+        const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
+        if (r.status === 429 && i < retries) { await new Promise(x => setTimeout(x, 3000 * (i + 1))); continue; }
+        if (!r.ok) throw new Error('gemini_' + r.status);
+        const d = await r.json();
+        const txt = d?.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (txt) return txt;
+      } catch (e) { if (i === retries) break; await new Promise(x => setTimeout(x, 2000)); }
+    }
+  }
+  throw new Error('NO_API_KEY_OR_FAILED');
 }
 
 function errJson(res, e) {
