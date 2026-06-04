@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown Previewer - Sachin AI</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        :root {
+            --bg: #07090f;
+            --card: #0e1117;
+            --accent: #6366f1;
+            --accent2: #22d3ee;
+            --text: #f1f5f9;
+            --muted: #64748b;
+            --border: rgba(255,255,255,0.06);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            margin-top: 20px;
+        }
+        
+        header h1 {
+            font-size: 2rem;
+            color: var(--accent2);
+            margin-bottom: 5px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            flex: 1;
+        }
+        
+        .editor-box, .preview-box {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        .box-header {
+            background: rgba(99,102,241,0.1);
+            border-bottom: 1px solid var(--border);
+            padding: 15px;
+            font-weight: 600;
+            color: var(--accent2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .editor-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.3);
+            border: none;
+            color: var(--text);
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            resize: none;
+            outline: none;
+            padding: 0;
+        }
+        
+        textarea::placeholder {
+            color: var(--muted);
+        }
+        
+        .preview-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: rgba(0,0,0,0.1);
+        }
+        
+        .preview-content {
+            line-height: 1.8;
+        }
+        
+        .preview-content h1 {
+            font-size: 2rem;
+            margin: 20px 0 10px;
+            color: var(--accent2);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 10px;
+        }
+        
+        .preview-content h2 {
+            font-size: 1.7rem;
+            margin: 18px 0 8px;
+            color: var(--accent2);
+        }
+        
+        .preview-content h3 {
+            font-size: 1.4rem;
+            margin: 15px 0 7px;
+            color: var(--accent2);
+        }
+        
+        .preview-content h4, .preview-content h5, .preview-content h6 {
+            font-size: 1.1rem;
+            margin: 12px 0 6px;
+            color: var(--accent2);
+        }
+        
+        .preview-content p {
+            margin: 10px 0;
+        }
+        
+        .preview-content code {
+            background: rgba(99,102,241,0.2);
+            color: #a5b4fc;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .preview-content pre {
+            background: rgba(0,0,0,0.5);
+            border-left: 3px solid var(--accent);
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        
+        .preview-content pre code {
+            background: none;
+            color: #a5b4fc;
+            padding: 0;
+            border-radius: 0;
+        }
+        
+        .preview-content ul, .preview-content ol {
+            margin: 10px 0 10px 20px;
+        }
+        
+        .preview-content li {
+            margin: 5px 0;
+        }
+        
+        .preview-content blockquote {
+            border-left: 4px solid var(--accent);
+            background: rgba(99,102,241,0.1);
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            color: var(--muted);
+        }
+        
+        .preview-content a {
+            color: var(--accent2);
+            text-decoration: none;
+            border-bottom: 1px dashed var(--accent2);
+        }
+        
+        .preview-content a:hover {
+            text-decoration: underline;
+        }
+        
+        .preview-content strong {
+            color: var(--accent2);
+            font-weight: 700;
+        }
+        
+        .preview-content em {
+            color: var(--accent2);
+            font-style: italic;
+        }
+        
+        .preview-content hr {
+            border: none;
+            border-top: 2px solid var(--border);
+            margin: 20px 0;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            padding: 10px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 10px;
+            background: rgba(99,102,241,0.2);
+            border: 1px solid var(--accent);
+            color: var(--accent2);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        
+        .btn:hover {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #10b981;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            display: none;
+            z-index: 1000;
+        }
+        
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(99,102,241,0.05);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent2);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📝 Markdown Previewer</h1>
+        <p style="color: var(--muted); margin-top: 5px;">लाइव मार्कडाउन प्रीव्यू</p>
+    </header>
+    
+    <div class="container">
+        <div class="editor-box">
+            <div class="box-header">
+                ✏️ Editor
+                <button class="btn" style="flex: 0; padding: 5px 10px; font-size: 0.8rem;" onclick="clearEditor()">Clear</button>
+            </div>
+            <div class="editor-area">
+                <textarea id="markdown" placeholder="यहाँ Markdown लिखें...
+# Heading 1
+## Heading 2
+
+**Bold Text** और *Italic Text*
+
+- List item 1
+- List item 2
+
+[Link](https://example.com)
+
+\`\`\`
+Code block
+\`\`\`
+
+> Blockquote
+" oninput="updatePreview()"></textarea>
+            </div>
+            <div class="button-group">
+                <button class="btn" onclick="downloadMarkdown()">📥 Download</button>
+                <button class="btn" onclick="copyMarkdown()">📋 Copy</button>
+            </div>
+        </div>
+        
+        <div class="preview-box">
+            <div class="box-header">👁️ Preview</div>
+            <div class="preview-area">
+                <div class="preview-content" id="preview"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="toast" id="toast">✓ Copied to clipboard!</div>
+    
+    <script>
+        function updatePreview() {
+            const markdown = document.getElementById('markdown').value;
+            const html = marked.parse(markdown);
+            document.getElementById('preview').innerHTML = html;
+        }
+        
+        function clearEditor() {
+            if (confirm('क्या आप सुनिश्चित हैं?')) {
+                document.getElementById('markdown').value = '';
+                updatePreview();
+            }
+        }
+        
+        function copyMarkdown() {
+            const markdown = document.getElementById('markdown').value;
+            navigator.clipboard.writeText(markdown).then(() => {
+                const toast = document.getElementById('toast');
+                toast.style.display = 'block';
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 2000);
+            });
+        }
+        
+        function downloadMarkdown() {
+            const markdown = document.getElementById('markdown').value;
+            const blob = new Blob([markdown], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'document.md';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        // Initialize
+        updatePreview();
+    </script>
+</body>
+</html>

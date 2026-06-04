@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit Converter - Sachin AI</title>
+    <style>
+        :root {
+            --bg: #07090f;
+            --card: #0e1117;
+            --accent: #6366f1;
+            --accent2: #22d3ee;
+            --text: #f1f5f9;
+            --muted: #64748b;
+            --border: rgba(255,255,255,0.06);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            margin-top: 20px;
+        }
+        
+        header h1 {
+            font-size: 2rem;
+            color: var(--accent2);
+            margin-bottom: 5px;
+        }
+        
+        .container {
+            max-width: 700px;
+            width: 100%;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        .category-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 10px 18px;
+            background: rgba(99,102,241,0.1);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 600;
+            color: var(--muted);
+        }
+        
+        .tab:hover, .tab.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        
+        .converter-box {
+            background: rgba(99,102,241,0.05);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .input-wrapper {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        input[type="number"] {
+            flex: 1;
+            padding: 12px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 1rem;
+            outline: none;
+        }
+        
+        input[type="number"]:focus {
+            border-color: var(--accent2);
+            box-shadow: 0 0 10px rgba(34,211,238,0.2);
+        }
+        
+        select {
+            padding: 12px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 1rem;
+            cursor: pointer;
+            outline: none;
+            min-width: 150px;
+        }
+        
+        select:focus {
+            border-color: var(--accent2);
+        }
+        
+        .swap-btn {
+            background: var(--accent2);
+            color: var(--bg);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .swap-btn:hover {
+            transform: rotate(180deg);
+            box-shadow: 0 5px 15px rgba(34,211,238,0.4);
+        }
+        
+        .result-box {
+            background: rgba(34,211,238,0.1);
+            border: 2px solid var(--accent2);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .result-label {
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+        
+        .result-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent2);
+            font-family: 'Courier New', monospace;
+        }
+        
+        .result-unit {
+            color: var(--muted);
+            margin-top: 8px;
+            font-size: 0.95rem;
+        }
+        
+        @media (max-width: 600px) {
+            .container { padding: 20px; }
+            .input-wrapper { flex-direction: column; }
+            .swap-btn { width: 100%; }
+            select { min-width: auto; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📏 Unit Converter</h1>
+        <p style="color: var(--muted); margin-top: 5px;">किसी भी इकाई को तुरंत बदलें</p>
+    </header>
+    
+    <div class="container">
+        <div class="category-tabs">
+            <button class="tab active" onclick="switchCategory('length')">📐 Length</button>
+            <button class="tab" onclick="switchCategory('weight')">⚖️ Weight</button>
+            <button class="tab" onclick="switchCategory('temp')">🌡️ Temperature</button>
+            <button class="tab" onclick="switchCategory('volume')">🥤 Volume</button>
+        </div>
+        
+        <div class="converter-box">
+            <div class="input-group">
+                <label class="input-label">From</label>
+                <div class="input-wrapper">
+                    <input type="number" id="inputValue" placeholder="Enter value" value="1" oninput="convert()">
+                    <select id="fromUnit" onchange="convert()"></select>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin: 15px 0;">
+                <button class="swap-btn" onclick="swapUnits()" title="Swap">⇅</button>
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">To</label>
+                <div class="input-wrapper">
+                    <input type="number" id="outputValue" placeholder="Result" readonly>
+                    <select id="toUnit" onchange="convert()"></select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="result-box">
+            <div class="result-label">Result</div>
+            <div class="result-value" id="resultValue">1</div>
+            <div class="result-unit" id="resultUnit">meter</div>
+        </div>
+    </div>
+    
+    <script>
+        const conversions = {
+            length: {
+                units: ['meter', 'kilometer', 'centimeter', 'millimeter', 'mile', 'yard', 'foot', 'inch'],
+                toMeter: {
+                    meter: 1,
+                    kilometer: 1000,
+                    centimeter: 0.01,
+                    millimeter: 0.001,
+                    mile: 1609.34,
+                    yard: 0.9144,
+                    foot: 0.3048,
+                    inch: 0.0254
+                }
+            },
+            weight: {
+                units: ['kilogram', 'gram', 'milligram', 'pound', 'ounce', 'ton'],
+                toKilogram: {
+                    kilogram: 1,
+                    gram: 0.001,
+                    milligram: 0.000001,
+                    pound: 0.453592,
+                    ounce: 0.0283495,
+                    ton: 1000
+                }
+            },
+            temp: {
+                units: ['Celsius', 'Fahrenheit', 'Kelvin'],
+                convert: true
+            },
+            volume: {
+                units: ['liter', 'milliliter', 'gallon', 'pint', 'cup', 'tablespoon'],
+                toLiter: {
+                    liter: 1,
+                    milliliter: 0.001,
+                    gallon: 3.78541,
+                    pint: 0.473176,
+                    cup: 0.236588,
+                    tablespoon: 0.0147868
+                }
+            }
+        };
+        
+        let currentCategory = 'length';
+        
+        function switchCategory(category) {
+            currentCategory = category;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            updateUnits();
+            convert();
+        }
+        
+        function updateUnits() {
+            const units = conversions[currentCategory].units;
+            const fromSelect = document.getElementById('fromUnit');
+            const toSelect = document.getElementById('toUnit');
+            
+            fromSelect.innerHTML = '';
+            toSelect.innerHTML = '';
+            
+            units.forEach(unit => {
+                fromSelect.innerHTML += `<option value="${unit}">${unit}</option>`;
+                toSelect.innerHTML += `<option value="${unit}">${unit}</option>`;
+            });
+            
+            if (units.length > 1) {
+                toSelect.value = units[1];
+            }
+        }
+        
+        function convert() {
+            const value = parseFloat(document.getElementById('inputValue').value) || 0;
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            
+            let result = 0;
+            
+            if (currentCategory === 'temp') {
+                result = convertTemperature(value, fromUnit, toUnit);
+            } else if (currentCategory === 'length') {
+                const toMeter = conversions.length.toMeter;
+                result = (value * toMeter[fromUnit]) / toMeter[toUnit];
+            } else if (currentCategory === 'weight') {
+                const toKg = conversions.weight.toKilogram;
+                result = (value * toKg[fromUnit]) / toKg[toUnit];
+            } else if (currentCategory === 'volume') {
+                const toLiter = conversions.volume.toLiter;
+                result = (value * toLiter[fromUnit]) / toLiter[toUnit];
+            }
+            
+            result = parseFloat(result.toFixed(6));
+            document.getElementById('outputValue').value = result;
+            document.getElementById('resultValue').textContent = result;
+            document.getElementById('resultUnit').textContent = toUnit;
+        }
+        
+        function convertTemperature(value, from, to) {
+            let celsius;
+            
+            if (from === 'Celsius') celsius = value;
+            else if (from === 'Fahrenheit') celsius = (value - 32) * 5/9;
+            else if (from === 'Kelvin') celsius = value - 273.15;
+            
+            if (to === 'Celsius') return celsius;
+            else if (to === 'Fahrenheit') return (celsius * 9/5) + 32;
+            else if (to === 'Kelvin') return celsius + 273.15;
+        }
+        
+        function swapUnits() {
+            const fromUnit = document.getElementById('fromUnit');
+            const toUnit = document.getElementById('toUnit');
+            const temp = fromUnit.value;
+            fromUnit.value = toUnit.value;
+            toUnit.value = temp;
+            convert();
+        }
+        
+        // Initialize
+        updateUnits();
+        convert();
+    </script>
+</body>
+</html>
