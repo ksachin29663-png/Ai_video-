@@ -59,7 +59,7 @@ async function callAI(prompt) {
   const encodedPrompt = encodeURIComponent(prompt);
   const url = 'https://text.pollinations.ai/' + encodedPrompt + '?model=openai&seed=' + seed;
   const res = await fetch(url);
-  if (!res.ok) throw new Error('API error: ' + res.status);
+  if (!res.ok) if(res.status===429)throw new Error('rate_limit'); throw new Error('API error: '+res.status);
   const text = await res.text();
   if (!text || text.trim().length < 5) throw new Error('Response खाली है, दोबारा try करो');
   return text.trim();
