@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fancy Fonts & Bio Stylist - Sachin AI</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --accent: #8b5cf6;
+            --accent-glow: rgba(139, 92, 246, 0.4);
+            --text: #f8fafc;
+            --text-dim: #94a3b8;
+            --border: #334155;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 12px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            max-width: 650px;
+            padding: 20px 0;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 24px;
+        }
+
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; }
+        .tagline { font-size: 0.85rem; color: var(--text-dim); margin-top: 4px; }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5);
+        }
+
+        input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 18px;
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 24px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-glow); }
+
+        .font-list { display: grid; gap: 12px; }
+
+        .font-item {
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.2s;
+        }
+
+        .font-item:hover { border-color: var(--accent); background: rgba(139, 92, 246, 0.05); }
+
+        .font-text { font-size: 1.1rem; overflow-x: auto; white-space: nowrap; margin-right: 10px; }
+
+        .copy-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .copy-btn:active { transform: scale(0.95); }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            background: #22c55e;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: none;
+            animation: slideUp 0.3s;
+        }
+
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">Sachin AI Studio</div>
+    <div class="tagline">Fancy Fonts & Biography Stylist</div>
+</header>
+
+<div class="container">
+    <input type="text" id="fontInput" placeholder="Type your text here..." value="Sachin AI Studio">
+    <div class="font-list" id="fontList"></div>
+</div>
+
+<div class="toast" id="toast">Copied to clipboard!</div>
+
+<script>
+    const input = document.getElementById('fontInput');
+    const list = document.getElementById('fontList');
+    const toast = document.getElementById('toast');
+
+    const styles = [
+        { name: "Bold", map: (t) => t.split('').map(c => boldMap[c] || c).join('') },
+        { name: "Italic", map: (t) => t.split('').map(c => italicMap[c] || c).join('') },
+        { name: "Script", map: (t) => t.split('').map(c => scriptMap[c] || c).join('') },
+        { name: "Bubble", map: (t) => t.split('').map(c => bubbleMap[c] || c).join('') },
+        { name: "Square", map: (t) => t.split('').map(c => squareMap[c] || c).join('') },
+        { name: "Mirror", map: (t) => t.split('').reverse().join('') }
+    ];
+
+    // Character Maps (Simplified for demo, real ones would be larger)
+    const boldMap = {'a':'𝐚','b':'𝐛','c':'𝐜','d':'𝐝','e':'𝐞','f':'𝐟','g':'𝐠','h':'𝐡','i':'𝐢','j':'𝐣','k':'𝐤','l':'𝐥','m':'𝐦','n':'𝐧','o':'𝐨','p':'𝐩','q':'𝐪','r':'𝐫','s':'𝐬','t':'𝐭','u':'𝐮','v':'𝐯','w':'𝐰','x':'𝐱','y':'𝐲','z':'𝐳'};
+    const italicMap = {'a':'𝘢','b':'𝘣','c':'𝘤','d':'𝘥','e':'𝘦','f':'𝘧','g':'𝘨','h':'𝘩','i':'𝘪','j':'𝘫','k':'𝘬','l':'𝘭','m':'𝘮','n':'𝘯','o':'𝘰','p':'𝘱','q':'𝘲','r':'𝘳','s':'𝘴','t':'𝘵','u':'𝘶','v':'𝘷','w':'𝘸','x':'𝘹','y':'𝘺','z':'𝘻'};
+    const bubbleMap = {'a':'ⓐ','b':'ⓑ','c':'ⓒ','d':'ⓓ','e':'ⓔ','f':'ⓕ','g':'ⓖ','h':'ⓗ','i':'ⓘ','j':'ⓙ','k':'ⓚ','l':'ⓛ','m':'ⓜ','n':'ⓝ','o':'ⓞ','p':'ⓟ','q':'ⓠ','r':'ⓡ','s':'ⓢ','t':'ⓣ','u':'ⓤ','v':'ⓥ','w':'ⓦ','x':'ⓧ','y':'ⓨ','z':'ⓩ'};
+    const squareMap = {'a':'🄰','b':'🄱','c':'🄲','d':'🄳','e':'🄴','f':'🄵','g':'🄿','h':'🄷','i':'🄸','j':'🄹','k':'🄺','l':'🄻','m':'🄼','n':'🄽','o':'🄾','p':'🄿','q':'🅀','r':'🅁','s':'🅂','t':'🅃','u':'🅄','v':'🅅','w':'🅆','x':'🅇','y':'🅈','z':'🅉'};
+    const scriptMap = {'a':'𝒶','b':'𝒷','c':'𝒸','d':'𝒹','e':'𝑒','f':'𝒻','g':'𝑔','h':'𝒽','i':'𝒾','j':'𝒿','k':'𝓀','l':'𝓁','m':'𝓂','n':'𝓃','o':'𝑜','p':'𝓅','q':'𝓆','r':'𝓇','s':'𝓈','t':'𝓉','u':'𝓊','v':'𝓋','w':'𝓌','x':'𝓍','y':'𝓎','z':'𝓏'};
+
+    function render() {
+        const text = input.value.toLowerCase();
+        list.innerHTML = styles.map(s => `
+            <div class="font-item">
+                <div class="font-text">${s.map(text)}</div>
+                <button class="copy-btn" onclick="copy('${s.map(text)}')">Copy</button>
+            </div>
+        `).join('');
+    }
+
+    function copy(text) {
+        navigator.clipboard.writeText(text);
+        toast.style.display = 'block';
+        setTimeout(() => toast.style.display = 'none', 2000);
+    }
+
+    input.oninput = render;
+    render();
+</script>
+
+</body>
+</html>

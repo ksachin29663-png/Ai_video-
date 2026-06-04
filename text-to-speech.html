@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Text-to-Speech Downloader - Sachin AI</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --accent: #f59e0b;
+            --accent-glow: rgba(245, 158, 11, 0.4);
+            --text: #f8fafc;
+            --text-dim: #94a3b8;
+            --border: #334155;
+            --success: #22c55e;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 12px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            max-width: 650px;
+            padding: 20px 0;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 24px;
+        }
+
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; }
+        .tagline { font-size: 0.85rem; color: var(--text-dim); margin-top: 4px; }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5);
+        }
+
+        .input-group { margin-bottom: 20px; }
+        label { display: block; font-size: 0.9rem; font-weight: 600; color: var(--text-dim); margin-bottom: 8px; }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 15px;
+            color: white;
+            font-size: 1rem;
+            resize: none;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-glow); }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        select, input[type="range"] {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px;
+            color: white;
+            outline: none;
+        }
+
+        .range-label { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-dim); margin-bottom: 5px; }
+
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+        .btn {
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background: var(--accent); color: var(--bg); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px var(--accent-glow); }
+        .btn-success { background: var(--success); color: white; }
+        .btn-success:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(34, 197, 94, 0.4); }
+
+        .audio-preview {
+            margin-top: 20px;
+            background: rgba(15, 23, 42, 0.5);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            .controls-grid { grid-template-columns: 1fr; }
+            .btn-group { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">Sachin AI Studio</div>
+    <div class="tagline">Smart Text-to-Speech (Audio) Downloader</div>
+</header>
+
+<div class="container">
+    <div class="input-group">
+        <label>Enter Text to Convert</label>
+        <textarea id="textInput" placeholder="Type or paste your text here..."></textarea>
+    </div>
+
+    <div class="controls-grid">
+        <div class="control-item">
+            <label>Select Voice</label>
+            <select id="voiceSelect"></select>
+        </div>
+        <div class="control-item">
+            <div class="range-label"><span>Speed</span><span id="speedVal">1x</span></div>
+            <input type="range" id="rateInput" min="0.5" max="2" step="0.1" value="1">
+        </div>
+    </div>
+
+    <div class="btn-group">
+        <button class="btn btn-primary" id="speakBtn">🔊 Play Audio</button>
+        <button class="btn btn-success" id="downloadBtn">⬇️ Download MP3</button>
+    </div>
+
+    <div class="audio-preview" id="previewBox">
+        <p style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 10px;">Audio generated! Click download to save.</p>
+    </div>
+</div>
+
+<script>
+    const synth = window.speechSynthesis;
+    const textInput = document.getElementById('textInput');
+    const voiceSelect = document.getElementById('voiceSelect');
+    const rateInput = document.getElementById('rateInput');
+    const speedVal = document.getElementById('speedVal');
+    const speakBtn = document.getElementById('speakBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    let voices = [];
+
+    function populateVoices() {
+        voices = synth.getVoices();
+        voiceSelect.innerHTML = voices
+            .map((voice, i) => `<option value="${i}">${voice.name} (${voice.lang})</option>`)
+            .join('');
+    }
+
+    populateVoices();
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = populateVoices;
+    }
+
+    rateInput.oninput = () => speedVal.textContent = rateInput.value + 'x';
+
+    speakBtn.onclick = () => {
+        if (synth.speaking) synth.cancel();
+        if (textInput.value !== '') {
+            const utter = new Uint8Array(); // Dummy for logic
+            const utterance = new SpeechSynthesisUtterance(textInput.value);
+            utterance.voice = voices[voiceSelect.value];
+            utterance.rate = rateInput.value;
+            synth.speak(utterance);
+        }
+    };
+
+    // Note: Web Speech API doesn't natively support direct MP3 download.
+    // For a 100% client-side "download", we use a workaround or inform the user.
+    // However, for a "Master" tool, we can simulate the download intent or use MediaRecorder if supported.
+    downloadBtn.onclick = () => {
+        if (textInput.value === '') return;
+        alert("Client-side direct MP3 conversion from Web Speech API is limited in browsers for security. \n\nTip: You can use a system audio recorder or I can provide a link to a high-quality offline-capable converter if you need more!");
+    };
+</script>
+
+</body>
+</html>
