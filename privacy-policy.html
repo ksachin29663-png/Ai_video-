@@ -1,466 +1,156 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <link rel="shortcut icon" href="/favicon.png">
-    <link rel="apple-touch-icon" sizes="192x192" href="/logo192.png">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy — सचिन एआई फोटो स्टूडियो</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background: #080c16; color: #e1e7f0; min-height: 100vh; }
-
-        header {
-            background: linear-gradient(135deg, #0a0e1a, #0d1b2e);
-            border-bottom: 1px solid rgba(0,255,204,0.2);
-            padding: 18px 20px;
-            text-align: center;
-            position: sticky; top: 0; z-index: 100;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-        }
-        .logo {
-            font-size: 1.4rem; font-weight: 900; color: #00ffcc;
-            text-shadow: 0 0 20px rgba(0,255,204,0.4);
-            text-decoration: none; display: inline-block;
-        }
-        .logo span { color: #7c3aed; }
-        .tagline { font-size: 0.75rem; color: #64748b; margin-top: 4px; letter-spacing: 1px; text-transform: uppercase; }
-
-        .hero-banner {
-            background: linear-gradient(135deg, #0a0e1a 0%, #0f1f35 50%, #100a1f 100%);
-            padding: 50px 20px 40px;
-            text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            position: relative;
-            overflow: hidden;
-        }
-        .hero-banner::before {
-            content: '🔒';
-            position: absolute;
-            font-size: 12rem;
-            opacity: 0.03;
-            top: -20px; right: -20px;
-        }
-        .hero-banner h1 {
-            font-size: 2rem; font-weight: 800; line-height: 1.3;
-            margin-bottom: 12px;
-        }
-        .hero-banner h1 span { color: #00ffcc; }
-        .hero-banner p { color: #64748b; font-size: 0.9rem; max-width: 520px; margin: 0 auto; line-height: 1.6; }
-        .updated-badge {
-            display: inline-block;
-            margin-top: 16px;
-            background: rgba(0,255,204,0.1);
-            border: 1px solid rgba(0,255,204,0.25);
-            color: #00ffcc;
-            font-size: 0.75rem; font-weight: 700;
-            padding: 5px 16px; border-radius: 20px;
-            letter-spacing: 0.5px;
-        }
-
-        .container {
-            max-width: 860px;
-            margin: 0 auto;
-            padding: 40px 16px 60px;
-        }
-
-        .section-card {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 16px;
-            padding: 28px 28px;
-            margin-bottom: 20px;
-            position: relative;
-            overflow: hidden;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-        .section-card:hover {
-            border-color: rgba(0,255,204,0.2);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-        }
-        .section-card .accent-line {
-            position: absolute;
-            left: 0; top: 0; bottom: 0;
-            width: 4px;
-            border-radius: 16px 0 0 16px;
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 18px;
-        }
-        .section-icon {
-            font-size: 1.8rem;
-            flex-shrink: 0;
-        }
-        .section-title {
-            font-size: 1.1rem;
-            font-weight: 800;
-            line-height: 1.3;
-        }
-        .section-subtitle {
-            font-size: 0.78rem;
-            font-weight: 600;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            margin-bottom: 4px;
-        }
-
-        .section-body {
-            font-size: 0.9rem;
-            color: #94a3b8;
-            line-height: 1.75;
-            padding-left: 4px;
-        }
-        .section-body p { margin-bottom: 10px; }
-        .section-body p:last-child { margin-bottom: 0; }
-
-        .info-list {
-            list-style: none;
-            margin-top: 12px;
-        }
-        .info-list li {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            margin-bottom: 10px;
-            font-size: 0.9rem;
-            color: #94a3b8;
-            line-height: 1.6;
-        }
-        .info-list li::before {
-            content: '▸';
-            color: #00ffcc;
-            flex-shrink: 0;
-            margin-top: 2px;
-            font-size: 0.85rem;
-        }
-
-        .highlight-box {
-            background: rgba(0,255,204,0.06);
-            border: 1px solid rgba(0,255,204,0.2);
-            border-radius: 10px;
-            padding: 14px 18px;
-            margin-top: 14px;
-            font-size: 0.88rem;
-            color: #a7f3d0;
-            line-height: 1.65;
-        }
-        .highlight-box strong { color: #00ffcc; }
-
-        .warning-box {
-            background: rgba(245,158,11,0.07);
-            border: 1px solid rgba(245,158,11,0.25);
-            border-radius: 10px;
-            padding: 14px 18px;
-            margin-top: 14px;
-            font-size: 0.88rem;
-            color: #fde68a;
-            line-height: 1.65;
-        }
-
-        /* Accent colors per card */
-        .c-green  .accent-line { background: linear-gradient(to bottom, #00ffcc, #10b981); }
-        .c-purple .accent-line { background: linear-gradient(to bottom, #7c3aed, #a78bfa); }
-        .c-amber  .accent-line { background: linear-gradient(to bottom, #f59e0b, #fbbf24); }
-        .c-blue   .accent-line { background: linear-gradient(to bottom, #38bdf8, #06b6d4); }
-        .c-green  .section-subtitle { color: #00ffcc; }
-        .c-purple .section-subtitle { color: #a78bfa; }
-        .c-amber  .section-subtitle { color: #f59e0b; }
-        .c-blue   .section-subtitle { color: #38bdf8; }
-        .c-red    .accent-line { background: linear-gradient(to bottom, #ef4444, #f87171); }
-        .c-red    .section-subtitle { color: #f87171; }
-        .c-teal   .accent-line { background: linear-gradient(to bottom, #14b8a6, #2dd4bf); }
-        .c-teal   .section-subtitle { color: #2dd4bf; }
-
-        .divider {
-            text-align: center;
-            padding: 10px 0 24px;
-            font-size: 0.8rem;
-            color: #334155;
-            letter-spacing: 3px;
-        }
-
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 14px;
-            margin-top: 14px;
-        }
-        .contact-item {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 12px;
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .contact-item .ci-icon { font-size: 1.6rem; }
-        .contact-item .ci-label { font-size: 0.72rem; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
-        .contact-item .ci-value { font-size: 0.88rem; color: #e1e7f0; font-weight: 600; word-break: break-all; }
-        .contact-item .ci-value a { color: #00ffcc; text-decoration: none; }
-
-        footer {
-            text-align: center; padding: 30px;
-            border-top: 1px solid rgba(255,255,255,0.06);
-            color: #334155; font-size: 0.8rem;
-        }
-        footer a { color: #00ffcc; text-decoration: none; }
-        footer a:hover { text-decoration: underline; }
-
-        @media (max-width: 600px) {
-            .hero-banner h1 { font-size: 1.5rem; }
-            .section-card { padding: 20px 16px; }
-            .section-title { font-size: 1rem; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — Sachin AI Studio</title>
+<meta name="description" content="Sachin AI Studio की Privacy Policy — हम आपका data कैसे protect करते हैं, cookies और AdSense के बारे में पूरी जानकारी।">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3019468976412219" crossorigin="anonymous"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--bg:#07090f;--card:#0e1117;--border:rgba(255,255,255,0.07);--text:#f1f5f9;--muted:#64748b;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);}
+header{position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border);background:rgba(7,9,15,.9);backdrop-filter:blur(20px);}
+nav{max-width:1100px;margin:0 auto;padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-size:1.1rem;font-weight:900;text-decoration:none;background:linear-gradient(90deg,#818cf8,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+nav a{color:var(--muted);font-size:.8rem;text-decoration:none;margin-left:18px;}nav a:hover{color:#fff;}
+.wrap{max-width:820px;margin:0 auto;padding:40px 20px 80px;}
+h1{font-size:2rem;font-weight:900;margin-bottom:8px;}
+h1 span{background:linear-gradient(135deg,#818cf8,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.update{color:var(--muted);font-size:.8rem;margin-bottom:32px;}
+.section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:16px;}
+.section h2{font-size:1rem;font-weight:700;color:#e2e8f0;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.section p,.section li{color:#94a3b8;font-size:.875rem;line-height:1.9;margin-bottom:8px;}
+.section ul{margin-left:18px;margin-top:6px;}
+.section li{margin-bottom:4px;}
+.highlight{background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);border-radius:8px;padding:12px 16px;margin:10px 0;font-size:.85rem;color:#a5b4fc;}
+.ad-box{text-align:center;margin:24px 0;}
+footer{text-align:center;border-top:1px solid var(--border);padding:24px;color:var(--muted);font-size:.78rem;}
+footer a{color:var(--muted);margin:0 8px;text-decoration:none;}footer a:hover{color:#fff;}
+</style>
 </head>
 <body>
+<header><nav>
+  <a href="index.html" class="logo">⚡ Sachin AI</a>
+  <div><a href="index.html">Home</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+</nav></header>
 
-<header>
-    <a href="/" class="logo">🎨 सचिन <span>एआई</span> फोटो स्टूडियो</a>
-    <div class="tagline">36 Next-Level AI Tools — सब कुछ मुफ़्त</div>
-</header>
+<div class="wrap">
+<h1>Privacy <span>Policy</span></h1>
+<div class="update">आखिरी update: 4 June 2025 | यह policy English और Hindi दोनों में applicable है।</div>
 
-<div class="hero-banner">
-    <h1>🔒 <span>Privacy Policy</span></h1>
-    <p>हम आपकी प्राइवेसी को गंभीरता से लेते हैं। यह पॉलिसी बताती है कि हम आपका डेटा कैसे इकट्ठा करते हैं, उसका उपयोग कैसे करते हैं और उसे कैसे सुरक्षित रखते हैं।</p>
-    <div class="updated-badge">📅 Last Updated: June 2025</div>
+<div class="ad-box">
+  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3019468976412219" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
 </div>
 
-<div class="container">
-
-    <!-- Section 1: Introduction -->
-    <div class="section-card c-green">
-        <div class="accent-line"></div>
-        <div class="section-header">
-            <div class="section-icon">📋</div>
-            <div>
-                <div class="section-subtitle">Section 01</div>
-                <div class="section-title">परिचय (Introduction)</div>
-            </div>
-        </div>
-        <div class="section-body">
-            <p><strong style="color:#e1e7f0;">सचिन एआई फोटो स्टूडियो (36 AI Tools)</strong> में आपका स्वागत है। हमारी वेबसाइट <strong style="color:#00ffcc;">https://aiwebsite36tootcreatephoto.online/</strong> पर उपलब्ध सभी सेवाओं का उपयोग करते समय आप इस Privacy Policy से सहमत होते हैं।</p>
-            <p>यह Privacy Policy आपको बताती है कि हम कौन-सी जानकारी एकत्र करते हैं, उसका उपयोग किस लिए करते हैं और आपके अधिकार क्या हैं। कृपया इसे ध्यान से पढ़ें।</p>
-        </div>
-    </div>
-
-    <div class="divider">· · ·</div>
-
-    <!-- Section 2: Data Collection -->
-    <div class="section-card c-purple">
-        <div class="accent-line"></div>
-        <div class="section-header">
-            <div class="section-icon">👤</div>
-            <div>
-                <div class="section-subtitle">Section 02</div>
-                <div class="section-title">हम कौन-सा डेटा इकट्ठा करते हैं?</div>
-            </div>
-        </div>
-        <div class="section-body">
-            <p>जब आप हमारी वेबसाइट पर अकाउंट बनाते हैं, तो हम निम्नलिखित जानकारी एकत्र करते हैं:</p>
-            <ul class="info-list">
-                <li><strong style="color:#e1e7f0;">पूरा नाम (Full Name)</strong> — अकाउंट पहचान के लिए</li>
-                <li><strong style="color:#e1e7f0;">ईमेल एड्रेस (Email Address)</strong> — अकाउंट वेरिफिकेशन और संचार के लिए</li>
-                <li><strong style="color:#e1e7f0;">मोबाइल नंबर (Mobile Number)</strong> — OTP वेरिफिकेशन और सुरक्षा के लिए</li>
-                <li><strong style="color:#e1e7f0;">उपयोग डेटा (Usage Data)</strong> — हमारी सेवाओं को बेहतर बनाने के लिए (pages visited, tools used)</li>
-            </ul>
-            <div class="highlight-box">
-                <strong>📌 नोट:</strong> हम केवल वही जानकारी लेते हैं जो सेवा प्रदान करने के लिए ज़रूरी है। हम कभी भी अनावश्यक डेटा इकट्ठा नहीं करते।
-            </div>
-        </div>
-    </div>
-
-    <div class="divider">· · ·</div>
-
-    <!-- Section 3: OTP Login -->
-    <div class="section-card c-amber">
-        <div class="accent-line"></div>
-        <div class="section-header">
-            <div class="section-icon">🔐</div>
-            <div>
-                <div class="section-subtitle">Section 03</div>
-                <div class="section-title">OTP सेवा और सुरक्षा (Login Security)</div>
-            </div>
-        </div>
-        <div class="section-body">
-            <p>हम आपकी अकाउंट सुरक्षा के लिए <strong style="color:#fbbf24;">OTP (One Time Password)</strong> सिस्टम का उपयोग करते हैं।</p>
-            <ul class="info-list">
-                <li>लॉगिन या साइनअप के समय आपके रजिस्टर्ड मोबाइल नंबर या ईमेल पर एक OTP भेजा जाता है।</li>
-                <li>OTP सिर्फ कुछ मिनटों के लिए वैध होता है और एक बार उपयोग के बाद समाप्त हो जाता है।</li>
-                <li>यह सेवा केवल आपकी पहचान सत्यापित करने के लिए है — किसी अन्य उद्देश्य के लिए नहीं।</li>
-                <li>OTP कभी भी किसी के साथ शेयर न करें। हम आपसे कभी OTP नहीं माँगते।</li>
-            </ul>
-            <div class="highlight-box">
-                <strong>🛡️ सुरक्षा:</strong> OTP से लॉगिन यह सुनिश्चित करता है कि आपके अकाउंट में केवल आप ही लॉगिन कर सकते हैं।
-            </div>
-        </div>
-    </div>
-
-    <div class="divider">· · ·</div>
-
-    <!-- Section 4: Ads & Cookies -->
-    <div class="section-card c-blue">
-        <div class="accent-line"></div>
-        <div class="section-header">
-            <div class="section-icon">📢</div>
-            <div>
-                <div class="section-subtitle">Section 04</div>
-                <div class="section-title">विज्ञापन और कुकीज़ (Ads & Cookies)</div>
-            </div>
-        </div>
-        <div class="section-body">
-            <p>हमारी वेबसाइट पर <strong style="color:#38bdf8;">Google AdSense</strong> और अन्य थर्ड-पार्टी विज्ञापन नेटवर्क का उपयोग किया जाता है।</p>
-            <ul class="info-list">
-                <li><strong style="color:#e1e7f0;">Google AdSense:</strong> Google अपने विज्ञापन दिखाने के लिए DART कुकीज़ का उपयोग करता है जो आपकी पिछली विजिट्स के आधार पर ads दिखाता है।</li>
-                <li><strong style="color:#e1e7f0;">थर्ड-पार्टी विज्ञापन:</strong> हमारे विज्ञापन पार्टनर Cookies, Web Beacons जैसी तकनीकों का उपयोग कर सकते हैं।</li>
-                <li><strong style="color:#e1e7f0;">कुकीज़ (Cookies):</strong> ये छोटी फाइलें हैं जो आपके ब्राउज़र में सेव होती हैं और आपके अनुभव को बेहतर बनाती हैं।</li>
-                <li>आप अपने ब्राउज़र की Settings में जाकर कुकीज़ को कभी भी डिसेबल कर सकते हैं।</li>
-            </ul>
-            <div class="warning-box">
-                ⚠️ Google के कुकीज़ उपयोग के बारे में अधिक जानकारी के लिए Google की Privacy Policy देखें: <strong>google.com/policies/privacy</strong>
-            </div>
-        </div>
-    </div>
-
-    <div class="divider">· · ·</div>
-
-    <!-- Section 5: Data Protection -->
-    <div class="section-card c-green">
-        <div class="accent-line"></div>
-        <div class="section-header">
-            <div class="section-icon">🛡️</div>
-            <div>
-                <div class="section-subtitle">Section 05</div>
-                <div class="section-title">डेटा सुरक्षा और थर्ड-पार्टी शेयरिंग</div>
-            </div>
-        </div>
-        <div class="section-body">
-            <p>हम आपकी व्यक्तिगत जानकारी की सुरक्षा को सर्वोच्च प्राथमिकता देते हैं।</p>
-            <ul class="info-list">
-                <li>आपका <strong style="color:#e1e7f0;">नाम, ईमेल और मोबाइल नंबर</strong> किसी भी थर्ड पार्टी के साथ साझा नहीं किया जाता।</li>
-                <li>हम आपका डेटा कभी भी बेचते, किराए पर देते या व्यावसायिक उद्देश्यों के लिए उपयोग नहीं करते।</li>
-                <li>आपकी जानकारी <strong style="color:#e1e7f0;">Encrypted (SSL/TLS)</strong> कनेक्शन के ज़रिए ट्रांसफर होती है।</li>
-                <li>हमारे सर्वर पर डेटा सुरक्षित तरीके से स्टोर किया जाता है।</li>
-                <li>सिर्फ क़ानूनी आदेश (Court Order) के मामले में ही हम डेटा शेयर करने के लिए बाध्य हो सकते हैं।</li>
-            </ul>
-            <div class="highlight-box">
-                <strong>✅ हमारा वादा:</strong> आपका डेटा पूरी तरह सुरक्षित है। हम इसे किसी भी थर्ड पार्टी के साथ <strong>कभी नहीं</strong> बेचते या शेयर नहीं करते।
-            </div>
-        </div>
-    </div>
-
-    <div class="divider">· · ·</div>
-
-    <!-- Section 6: User Rights -->
-    <div class="section-card c-teal">
-        <div class="accent-line"></div>
-        <div class="section-header">
-            <div class="section-icon">⚖️</div>
-            <div>
-                <div class="section-subtitle">Section 06</div>
-                <div class="section-title">आपके अधिकार (Your Rights)</div>
-            </div>
-        </div>
-        <div class="section-body">
-            <p>हमारी सेवाओं का उपयोग करने वाले प्रत्येक यूज़र को निम्नलिखित अधिकार प्राप्त हैं:</p>
-            <ul class="info-list">
-                <li><strong style="color:#e1e7f0;">Access का अधिकार:</strong> आप जानकारी माँग सकते हैं कि हमारे पास आपका कौन-सा डेटा है।</li>
-                <li><strong style="color:#e1e7f0;">Correction का अधिकार:</strong> गलत जानकारी को सही करवाने का अधिकार।</li>
-                <li><strong style="color:#e1e7f0;">Deletion का अधिकार:</strong> अपना अकाउंट और डेटा डिलीट करवाने का अधिकार।</li>
-                <li><strong style="color:#e1e7f0;">Opt-out का अधिकार:</strong> मार्केटिंग ईमेल से unsubscribe करने का अधिकार।</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="divider">· · ·</div>
-
-    <!-- Section 7: Children's Privacy -->
-    <div class="section-card c-red">
-        <div class="accent-line"></div>
-        <div class="section-header">
-            <div class="section-icon">👶</div>
-            <div>
-                <div class="section-subtitle">Section 07</div>
-                <div class="section-title">बच्चों की प्राइवेसी (Children's Privacy)</div>
-            </div>
-        </div>
-        <div class="section-body">
-            <p>हमारी सेवाएं <strong style="color:#f87171;">13 वर्ष से कम आयु</strong> के बच्चों के लिए नहीं हैं।</p>
-            <p>यदि आप एक माता-पिता हैं और आपको पता चलता है कि आपके बच्चे ने हमें व्यक्तिगत जानकारी दी है, तो कृपया हमसे संपर्क करें। हम उस जानकारी को तुरंत हटा देंगे।</p>
-        </div>
-    </div>
-
-    <div class="divider">· · ·</div>
-
-    <!-- Section 8: Policy Changes -->
-    <div class="section-card c-amber">
-        <div class="accent-line"></div>
-        <div class="section-header">
-            <div class="section-icon">🔄</div>
-            <div>
-                <div class="section-subtitle">Section 08</div>
-                <div class="section-title">पॉलिसी में बदलाव (Policy Updates)</div>
-            </div>
-        </div>
-        <div class="section-body">
-            <p>हम समय-समय पर इस Privacy Policy को अपडेट कर सकते हैं। किसी भी बदलाव की जानकारी इसी पेज पर "Last Updated" तारीख के साथ दी जाएगी।</p>
-            <p>हम आपको महत्वपूर्ण बदलावों की जानकारी ईमेल या वेबसाइट नोटिफिकेशन के ज़रिए भी देंगे।</p>
-        </div>
-    </div>
-
-    <div class="divider">· · ·</div>
-
-    <!-- Section 9: Contact -->
-    <div class="section-card c-purple">
-        <div class="accent-line"></div>
-        <div class="section-header">
-            <div class="section-icon">📬</div>
-            <div>
-                <div class="section-subtitle">Section 09</div>
-                <div class="section-title">संपर्क करें (Contact Us)</div>
-            </div>
-        </div>
-        <div class="section-body">
-            <p>इस Privacy Policy से संबंधित किसी भी सवाल या शिकायत के लिए कृपया हमसे संपर्क करें:</p>
-            <div class="contact-grid">
-                <div class="contact-item">
-                    <div class="ci-icon">🌐</div>
-                    <div>
-                        <div class="ci-label">Website</div>
-                        <div class="ci-value"><a href="https://aiwebsite36tootcreatephoto.online/" target="_blank">aiwebsite36tootcreatephoto.online</a></div>
-                    </div>
-                </div>
-                <div class="contact-item">
-                    <div class="ci-icon">🏢</div>
-                    <div>
-                        <div class="ci-label">Studio</div>
-                        <div class="ci-value">सचिन एआई फोटो स्टूडियो</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div style="text-align:center; margin-top:36px;">
-        <a href="/" style="display:inline-block; background:linear-gradient(135deg,#00ffcc,#10b981); color:#080c16; font-weight:800; font-size:0.95rem; padding:14px 36px; border-radius:40px; text-decoration:none; letter-spacing:0.5px; box-shadow:0 4px 20px rgba(0,255,204,0.25);">
-            ← वापस होम पेज पर जाएं
-        </a>
-    </div>
-
+<div class="section">
+  <h2>📋 Introduction (परिचय)</h2>
+  <p>Sachin AI Studio ("हम", "हमारा", "website") आपकी privacy को seriously लेता है। यह Privacy Policy बताती है कि जब आप हमारी website <strong>sachinstudio.in</strong> (और इसके subdomains) use करते हैं, तो हम कौनसी information collect करते हैं, कैसे use करते हैं, और कैसे protect करते हैं।</p>
+  <p>इस website को use करके आप इस Privacy Policy से agree करते हैं। अगर आप agree नहीं करते, तो कृपया website use न करें।</p>
 </div>
 
+<div class="section">
+  <h2>📊 हम कौनसी Information Collect करते हैं?</h2>
+  <p><strong>1. Automatically Collected Information:</strong></p>
+  <ul>
+    <li>आपका IP Address (approximate location के लिए)</li>
+    <li>Browser type और version</li>
+    <li>आपने कौन से pages visit किए और कितने time के लिए</li>
+    <li>Device type (mobile, tablet, desktop)</li>
+    <li>Referring website (आप किस website से आए)</li>
+  </ul>
+  <p><strong>2. User-Provided Information:</strong></p>
+  <ul>
+    <li>Contact form में आपका name, email, message</li>
+    <li>AI tools में आप जो text input करते हैं (temporary, processed नहीं होती)</li>
+  </ul>
+  <p><strong>3. Images (अगर आप upload करते हैं):</strong></p>
+  <div class="highlight">⚠️ Important: आपकी uploaded images हमारे server पर temporarily process होती हैं और immediately delete हो जाती हैं। हम कोई image store नहीं करते।</div>
+</div>
+
+<div class="section">
+  <h2>🍪 Cookies Policy</h2>
+  <p>हम और हमारे advertising partners (Google AdSense) cookies use करते हैं। Cookies छोटी text files होती हैं जो आपके browser में save होती हैं।</p>
+  <p><strong>हम कौनसी cookies use करते हैं:</strong></p>
+  <ul>
+    <li><strong>Essential Cookies:</strong> Website को properly function करने के लिए जरूरी</li>
+    <li><strong>Analytics Cookies:</strong> Google Analytics — website traffic analyze करने के लिए</li>
+    <li><strong>Advertising Cookies:</strong> Google AdSense — relevant ads दिखाने के लिए</li>
+    <li><strong>Preference Cookies:</strong> आपकी language और settings याद रखने के लिए</li>
+  </ul>
+  <p>आप अपने browser settings में cookies disable कर सकते हैं, लेकिन इससे website के कुछ features काम नहीं कर सकते।</p>
+</div>
+
+<div class="section">
+  <h2>📢 Google AdSense और Advertising</h2>
+  <p>हमारी website Google AdSense use करती है जो Google LLC द्वारा provide किया जाता है। AdSense automatically आपको relevant ads दिखाता है।</p>
+  <p><strong>Google AdSense के बारे में:</strong></p>
+  <ul>
+    <li>Google आपके browser में cookies set करता है</li>
+    <li>Google आपकी previous browsing history के आधार पर ads दिखाता है</li>
+    <li>यह data Google की Privacy Policy के according handle होता है</li>
+    <li>Google DoubleClick DART cookies use करता है ads serve करने के लिए</li>
+  </ul>
+  <p>आप Google का Ad Settings page visit करके personalized ads opt-out कर सकते हैं: <strong>g.co/adsettings</strong></p>
+  <p>Third-party ad servers या ad networks भी cookies use कर सकते हैं। हमारा इन cookies पर कोई control नहीं है।</p>
+</div>
+
+<div class="section">
+  <h2>🔐 Data Security (सुरक्षा)</h2>
+  <p>आपकी security हमारी priority है। हम निम्नलिखित measures use करते हैं:</p>
+  <ul>
+    <li>HTTPS encryption — आपका सारा data encrypted रहता है</li>
+    <li>Images automatically delete — upload के बाद तुरंत</li>
+    <li>No personal data storage — हम personal information store नहीं करते</li>
+    <li>Secure API connections — सभी AI API calls secure हैं</li>
+  </ul>
+  <p>हालाँकि, internet पर कोई भी method 100% secure नहीं है। हम best practices use करते हैं लेकिन absolute security guarantee नहीं दे सकते।</p>
+</div>
+
+<div class="section">
+  <h2>👶 Children की Privacy (बच्चों की सुरक्षा)</h2>
+  <p>हमारी website 13 साल से कम उम्र के बच्चों के लिए नहीं है। हम जानबूझकर 13 साल से कम उम्र के बच्चों से personal information collect नहीं करते।</p>
+  <p>अगर आप parent/guardian हैं और आपको लगता है कि आपके बच्चे ने हमें personal information दी है, तो हमसे contact करें — हम उसे delete कर देंगे।</p>
+</div>
+
+<div class="section">
+  <h2>🔗 Third-Party Links</h2>
+  <p>हमारी website में third-party websites के links हो सकते हैं। हम इन websites की privacy practices के लिए responsible नहीं हैं। हम recommend करते हैं कि आप उन websites की privacy policies भी पढ़ें।</p>
+</div>
+
+<div class="section">
+  <h2>✏️ आपके Rights (आपके अधिकार)</h2>
+  <p>आपके पास निम्नलिखित rights हैं:</p>
+  <ul>
+    <li><strong>Access:</strong> जानने का अधिकार कि हम आपके बारे में क्या data रखते हैं</li>
+    <li><strong>Correction:</strong> गलत information correct करवाने का अधिकार</li>
+    <li><strong>Deletion:</strong> अपना data delete करवाने का अधिकार</li>
+    <li><strong>Opt-out:</strong> Personalized ads से opt-out करने का अधिकार</li>
+  </ul>
+  <p>इन rights को exercise करने के लिए हमसे contact करें।</p>
+</div>
+
+<div class="section">
+  <h2>🔄 Policy Changes</h2>
+  <p>हम समय-समय पर इस Privacy Policy को update कर सकते हैं। कोई भी significant change होने पर हम इस page पर "Last Updated" date बदल देंगे। Regular रूप से इस page को check करते रहें।</p>
+</div>
+
+<div class="section">
+  <h2>📞 Contact Us (हमसे संपर्क करें)</h2>
+  <p>अगर इस Privacy Policy के बारे में कोई सवाल है तो हमसे contact करें:</p>
+  <p><strong>Email:</strong> sachinsaini22599@gmail.com</p>
+  <p><strong>Website:</strong> <a href="contact.html" style="color:#818cf8;">Contact Form</a></p>
+  <p>हम 24-48 hours के अंदर reply करते हैं।</p>
+</div>
+
+<div class="ad-box">
+  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3019468976412219" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+</div>
+
+</div>
 <footer>
-    <p>© 2025 सचिन एआई फोटो स्टूडियो — <a href="/">Home</a> · <a href="/privacy-policy.html">Privacy Policy</a></p>
-    <p style="margin-top:6px;">Website: <a href="https://aiwebsite36tootcreatephoto.online/">aiwebsite36tootcreatephoto.online</a></p>
+  © 2025 Sachin AI Studio | <a href="index.html">Home</a><a href="about.html">About</a><a href="terms.html">Terms</a><a href="contact.html">Contact</a>
 </footer>
-
-</body>
-</html>
+</body></html>
