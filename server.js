@@ -18,99 +18,95 @@ if (!fs.existsSync(path.join(__dirname, 'uploads'))) {
 const upload = multer({ dest: path.join(__dirname, 'uploads/') });
 
 // ==================== आपकी नई और अपडेटेड API Keys ====================
-const OPENAI_KEY = "Sk-proj-YtqRTnQr1aVs9zFJDUAzaFLfPg1ZRlaPgQVILq6iNkYbDPNkquT9A92V0etVicWzeega0XC3KNT3BlbkFJiX1bhTS_rR-PthftL_nqPTye_nDa5ku6s4r54bjUhoBPAXdZPJGXPcp95h-R2JPKCBauA3npEA";
-const GROQ_KEY = "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";
-const GEMINI_KEY = "AQ.Ab8RN6KQFZVOxhCg9XWYvsLoc5K7cBl3QSldpLN0qfLBXV9xVA"; // नई चालू जेमिनी API Key
+require('dotenv').config();
+const OPENAI_KEY = process.env.OPENAI_API_KEY;
+const GROQ_KEY = process.env.GROQ_API_KEY;
+const GEMINI_KEY = process.env.GEMINI_API_KEY; // नई चालू जेमिनी API Key
 const REMOVEBG_KEY = process.env.REMOVEBG_KEY || ""; 
 
-// ==================== AI HELPER - सुपरफास्ट फ़ालबैक इंजन ====================
+// ==================== AI HELPER - स्मार्ट फ़ालबैक इंजन ====================
+// यह इंजन एक API फेल होने पर दूसरी पर स्विच हो जाता है ताकि सर्विस न रुके।
 async function callAI(messages, retries = 2) {
-    // 1. सबसे पहले Pollinations AI 
-    for (let i = 0; i < retries; i++) {
-        try {
-            const seed = Math.floor(Math.random() * 99999);
-            const r = await fetch('https://text.pollinations.ai/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'User-Agent': 'Mozilla/5.0'
-                },
-                body: JSON.stringify({ messages, model: 'openai', seed }),
-                signal: AbortSignal.timeout(15000)
-            });
-            if (r.status === 429 && i < 2) { await new Promise(x => setTimeout(x, 2000)); continue; }
-            if (!r.ok) throw new Error('poll_fail_' + r.status);
-            const txt = await r.text();
-            if (txt && txt.length > 1) return txt;
-            throw new Error('empty');
-        } catch (e) {
-            if (i < retries) { await new Promise(x => setTimeout(x, 1500)); continue; }
-        }
-    }
-
-    // 2. बैकअप 1: Groq Cloud (सुपरफास्ट लार्ज लैंग्वेज मॉडल)
-    if (GROQ_KEY) {
-        try {
-            const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${GROQ_KEY}`
-                },
-                body: JSON.stringify({
-                    model: 'llama3-8b-8192',
-                    messages: messages
-                })
-            });
-            const d = await r.json();
-            if (d.choices && d.choices[0]?.message?.content) return d.choices[0].message.content;
-        } catch (e) {
-            console.error('Groq backup failed, moving to OpenAI...', e.message);
-        }
-    }
-
-    // 3. बैकअप 2: OpenAI 
     const prompt = messages.map(m => m.content).join("\n");
-    if (OPENAI_KEY) {
-        try {
-            const r = await fetch('https://api.openai.com/v1/chat/completions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${OPENAI_KEY}`
-                },
-                body: JSON.stringify({ model: 'gpt-3.5-turbo', messages })
-            });
-            const d = await r.json();
-            if (d.choices && d.choices[0]?.message?.content) return d.choices[0].message.content;
-        } catch (e) {
-            console.error('OpenAI backup failed, moving to Gemini...', e.message);
-        }
-    }
-
-    // 4. बैकअप 3: Google Gemini (आपकी नई वर्किंग की)
-    if (GEMINI_KEY) {
-        for (let i = 0; i < retries; i++) {
-            try {
+    
+    // फ़ालबैक के लिए APIs की लिस्ट और उनके फंक्शन्स
+    const apiChain = [
+        {
+            name: 'Groq Cloud',
+            key: GROQ_KEY,
+            fn: async () => {
+                const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${GROQ_KEY}` },
+                    body: JSON.stringify({ model: 'llama3-8b-8192', messages })
+                });
+                const d = await r.json();
+                if (d.choices && d.choices[0]?.message?.content) return d.choices[0].message.content;
+                throw new Error(d.error?.message || 'Groq failed');
+            }
+        },
+        {
+            name: 'OpenAI (ChatGPT)',
+            key: OPENAI_KEY,
+            fn: async () => {
+                const r = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${OPENAI_KEY}` },
+                    body: JSON.stringify({ model: 'gpt-3.5-turbo', messages })
+                });
+                const d = await r.json();
+                if (d.choices && d.choices[0]?.message?.content) return d.choices[0].message.content;
+                throw new Error(d.error?.message || 'OpenAI failed');
+            }
+        },
+        {
+            name: 'Google Gemini',
+            key: GEMINI_KEY,
+            fn: async () => {
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`;
                 const r = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
                 });
-                if (r.status === 429 && i < 2) { await new Promise(x => setTimeout(x, 2000)); continue; }
-                if (!r.ok) throw new Error('gemini_fail_' + r.status);
                 const d = await r.json();
                 const txt = d.candidates?.[0]?.content?.parts?.[0]?.text;
                 if (txt) return txt;
-            } catch (e) {
-                if (i === retries - 1) break;
-                await new Promise(x => setTimeout(x, 2000));
+                throw new Error(d.error?.message || 'Gemini failed');
             }
+        },
+        {
+            name: 'Pollinations AI (Free)',
+            key: 'ALWAYS_AVAILABLE',
+            fn: async () => {
+                const seed = Math.floor(Math.random() * 99999);
+                const r = await fetch('https://text.pollinations.ai/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'User-Agent': 'Mozilla/5.0' },
+                    body: JSON.stringify({ messages, model: 'openai', seed }),
+                    signal: AbortSignal.timeout(15000)
+                });
+                const txt = await r.text();
+                if (txt && txt.length > 1) return txt;
+                throw new Error('Pollinations empty');
+            }
+        }
+    ];
+
+    // हर API को बारी-बारी से ट्राई करें
+    for (const api of apiChain) {
+        if (!api.key) continue;
+        console.log(`Trying ${api.name}...`);
+        try {
+            return await api.fn();
+        } catch (e) {
+            console.error(`${api.name} failed:`, e.message);
+            // अगर यह आखिरी API नहीं है, तो अगले पर जाएँ
+            continue;
         }
     }
 
-    throw new Error('NO_API_KEY_OR_FAILED');
+    throw new Error('ALL_APIS_FAILED_OR_LIMIT_REACHED');
 }
 
 function errJson(res, e) {
