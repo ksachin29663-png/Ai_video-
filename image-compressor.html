@@ -3,295 +3,334 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Image Compressor & KB Resizer</title>
+    <title>Advanced Image Compressor & KB Resizer - Sachin AI</title>
     <style>
         :root {
             --bg: #0f172a;
             --card: #1e293b;
             --accent: #38bdf8;
-            --accent-hover: #0ea5e9;
+            --accent-glow: rgba(56, 189, 248, 0.4);
             --text: #f8fafc;
             --text-dim: #94a3b8;
             --border: #334155;
             --success: #22c55e;
+            --danger: #ef4444;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, sans-serif; }
         
         body {
             background-color: var(--bg);
             color: var(--text);
-            padding: 15px;
+            padding: 12px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        .container { width: 100%; max-width: 700px; }
-
-        header { text-align: center; margin-bottom: 25px; }
-        header h1 { font-size: 1.8rem; color: var(--accent); margin-bottom: 8px; }
-        header p { color: var(--text-dim); font-size: 0.9rem; }
-
-        .main-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+        header {
+            width: 100%;
+            max-width: 650px;
+            padding: 20px 0;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 24px;
         }
 
-        .upload-area {
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; }
+        .tagline { font-size: 0.85rem; color: var(--text-dim); margin-top: 4px; }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5);
+        }
+
+        .upload-box {
             border: 2px dashed var(--border);
-            border-radius: 12px;
+            border-radius: 16px;
             padding: 40px 20px;
             text-align: center;
             cursor: pointer;
-            transition: 0.3s;
-            margin-bottom: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(15, 23, 42, 0.3);
+            position: relative;
+            overflow: hidden;
         }
 
-        .upload-area:hover { border-color: var(--accent); background: rgba(56, 189, 248, 0.05); }
-        .upload-area i { font-size: 2.5rem; display: block; margin-bottom: 10px; }
-        
+        .upload-box:hover { border-color: var(--accent); background: rgba(56, 189, 248, 0.05); transform: translateY(-2px); }
+        .upload-box i { font-size: 3rem; display: block; margin-bottom: 12px; }
+        .upload-text { font-weight: 600; font-size: 1.1rem; }
+        .upload-sub { font-size: 0.8rem; color: var(--text-dim); margin-top: 6px; }
+
         #fileInput { display: none; }
 
-        .controls {
+        .editor-view { display: none; margin-top: 24px; }
+
+        .controls-grid {
             display: grid;
             gap: 20px;
-            margin-bottom: 20px;
-            padding: 15px;
             background: rgba(15, 23, 42, 0.5);
-            border-radius: 12px;
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            margin-bottom: 24px;
         }
 
-        .control-group { display: flex; flex-direction: column; gap: 8px; }
-        .control-label { display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 500; }
-        .control-label span { color: var(--accent); }
+        .control-item { display: flex; flex-direction: column; gap: 10px; }
+        .label-row { display: flex; justify-content: space-between; align-items: center; }
+        .label-text { font-size: 0.9rem; font-weight: 600; color: var(--text-dim); }
+        .label-val { font-size: 0.9rem; font-weight: 700; color: var(--accent); background: rgba(56, 189, 248, 0.1); padding: 2px 8px; border-radius: 6px; }
 
         input[type="range"] {
             width: 100%;
             height: 6px;
             background: var(--border);
-            border-radius: 5px;
+            border-radius: 10px;
+            appearance: none;
             outline: none;
             accent-color: var(--accent);
         }
 
-        .stats-grid {
+        .stats-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
+            gap: 16px;
+            margin-bottom: 24px;
         }
 
-        .stat-box {
-            background: rgba(15, 23, 42, 0.5);
-            padding: 12px;
-            border-radius: 10px;
-            text-align: center;
+        .stat-card {
+            background: rgba(15, 23, 42, 0.4);
+            padding: 16px;
+            border-radius: 14px;
             border: 1px solid var(--border);
-        }
-
-        .stat-label { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 4px; }
-        .stat-value { font-size: 1rem; font-weight: 700; }
-
-        .preview-container {
-            margin-top: 20px;
-            display: none;
             text-align: center;
         }
 
-        .preview-img {
-            max-width: 100%;
-            max-height: 300px;
-            border-radius: 8px;
+        .stat-label { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+        .stat-value { font-size: 1.1rem; font-weight: 800; }
+
+        .preview-area {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
             border: 1px solid var(--border);
-            margin-bottom: 15px;
+            margin-bottom: 24px;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
         }
+
+        #previewImg { max-width: 100%; max-height: 400px; display: block; }
+
+        .btn-group { display: flex; flex-direction: column; gap: 12px; }
 
         .btn {
             width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
+            padding: 16px;
+            border-radius: 12px;
             font-size: 1rem;
             font-weight: 700;
+            border: none;
             cursor: pointer;
-            transition: 0.3s;
+            transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
         }
 
-        .btn-primary { background: var(--accent); color: var(--bg); }
-        .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
-        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-primary { background: var(--accent); color: var(--bg); box-shadow: 0 4px 15px var(--accent-glow); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--accent-glow); }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+        .btn-outline:hover { background: rgba(255,255,255,0.05); }
 
-        .btn-success { background: var(--success); color: white; margin-top: 10px; }
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            background: var(--success);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 1000;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
         @media (max-width: 480px) {
-            header h1 { font-size: 1.5rem; }
-            .upload-area { padding: 30px 15px; }
+            .container { padding: 16px; }
+            .stats-row { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>Advanced Image Compressor</h1>
-        <p>Compress & Resize images instantly in your browser</p>
-    </header>
+<header>
+    <div class="logo">Sachin AI Studio</div>
+    <div class="tagline">Advanced Image Compressor & KB Resizer</div>
+</header>
 
-    <div class="main-card">
-        <div class="upload-area" id="dropZone" onclick="document.getElementById('fileInput').click()">
-            <span style="font-size: 40px;">🖼️</span>
-            <p style="margin-top: 10px;">Tap to select or drag & drop image</p>
-            <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: 5px;">Supports JPG, PNG, WEBP</p>
-            <input type="file" id="fileInput" accept="image/*">
+<div class="container">
+    <div class="upload-box" id="dropZone" onclick="document.getElementById('fileInput').click()">
+        <span style="font-size: 3rem;">📸</span>
+        <div class="upload-text">Select Image to Compress</div>
+        <div class="upload-sub">Supports JPG, PNG, WEBP (Max 20MB)</div>
+        <input type="file" id="fileInput" accept="image/*">
+    </div>
+
+    <div class="editor-view" id="editorView">
+        <div class="controls-grid">
+            <div class="control-item">
+                <div class="label-row">
+                    <span class="label-text">Compression Quality</span>
+                    <span class="label-val" id="qVal">80%</span>
+                </div>
+                <input type="range" id="qInput" min="1" max="100" value="80">
+            </div>
+            <div class="control-item">
+                <div class="label-row">
+                    <span class="label-text">Resize Scale</span>
+                    <span class="label-val" id="sVal">100%</span>
+                </div>
+                <input type="range" id="sInput" min="10" max="100" value="100">
+            </div>
         </div>
 
-        <div id="editorSection" style="display: none;">
-            <div class="controls">
-                <div class="control-group">
-                    <div class="control-label">Quality <span><span id="qualityVal">80</span>%</span></div>
-                    <input type="range" id="qualityInput" min="1" max="100" value="80">
-                </div>
-                <div class="control-group">
-                    <div class="control-label">Scale <span><span id="scaleVal">100</span>%</span></div>
-                    <input type="range" id="scaleInput" min="10" max="100" value="100">
-                </div>
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-label">Original Size</div>
+                <div class="stat-value" id="oSize">0 KB</div>
             </div>
+            <div class="stat-card" style="border-color: var(--accent);">
+                <div class="stat-label" style="color: var(--accent);">Target Size</div>
+                <div class="stat-value" id="cSize" style="color: var(--accent);">0 KB</div>
+            </div>
+        </div>
 
-            <div class="stats-grid">
-                <div class="stat-box">
-                    <div class="stat-label">Original Size</div>
-                    <div class="stat-value" id="origSize">-</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">Compressed Size</div>
-                    <div class="stat-value" id="compSize" style="color: var(--accent);">-</div>
-                </div>
-            </div>
+        <div class="preview-area">
+            <img id="previewImg" alt="Preview">
+        </div>
 
-            <div class="preview-container" id="previewContainer">
-                <img id="previewImg" class="preview-img">
-                <button class="btn btn-success" id="downloadBtn">⬇️ Download Compressed Image</button>
-            </div>
+        <div class="btn-group">
+            <button class="btn btn-primary" id="downloadBtn">⬇️ Download Compressed Image</button>
+            <button class="btn btn-outline" onclick="location.reload()">🔄 Start New</button>
         </div>
     </div>
 </div>
 
+<div class="toast" id="toast">Image Compressed Successfully!</div>
+
 <script>
     const fileInput = document.getElementById('fileInput');
-    const qualityInput = document.getElementById('qualityInput');
-    const scaleInput = document.getElementById('scaleInput');
-    const qualityVal = document.getElementById('qualityVal');
-    const scaleVal = document.getElementById('scaleVal');
-    const origSize = document.getElementById('origSize');
-    const compSize = document.getElementById('compSize');
+    const editorView = document.getElementById('editorView');
+    const uploadBox = document.getElementById('dropZone');
+    const qInput = document.getElementById('qInput');
+    const sInput = document.getElementById('sInput');
+    const qVal = document.getElementById('qVal');
+    const sVal = document.getElementById('sVal');
+    const oSizeText = document.getElementById('oSize');
+    const cSizeText = document.getElementById('cSize');
     const previewImg = document.getElementById('previewImg');
-    const editorSection = document.getElementById('editorSection');
-    const previewContainer = document.getElementById('previewContainer');
     const downloadBtn = document.getElementById('downloadBtn');
+    const toast = document.getElementById('toast');
 
-    let originalImage = null;
-    let originalFileName = "";
+    let originalImg = null;
+    let fileName = "compressed_image";
 
-    fileInput.addEventListener('change', handleFile);
-
-    function handleFile(e) {
+    fileInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
-        if (!file) return;
+        if (file) processFile(file);
+    });
 
-        originalFileName = file.name.split('.')[0];
-        origSize.textContent = formatBytes(file.size);
-
+    function processFile(file) {
+        fileName = file.name.split('.')[0];
+        oSizeText.textContent = formatBytes(file.size);
+        
         const reader = new FileReader();
-        reader.onload = (event) => {
-            originalImage = new Image();
-            originalImage.onload = () => {
-                editorSection.style.display = 'block';
-                compressImage();
+        reader.onload = (e) => {
+            originalImg = new Image();
+            originalImg.onload = () => {
+                uploadBox.style.display = 'none';
+                editorView.style.display = 'block';
+                updateCompression();
             };
-            originalImage.src = event.target.result;
+            originalImg.src = e.target.result;
         };
         reader.readAsDataURL(file);
     }
 
-    function compressImage() {
-        if (!originalImage) return;
+    function updateCompression() {
+        if (!originalImg) return;
 
-        const quality = qualityInput.value / 100;
-        const scale = scaleInput.value / 100;
+        const quality = qInput.value / 100;
+        const scale = sInput.value / 100;
+        
+        qVal.textContent = qInput.value + '%';
+        sVal.textContent = sInput.value + '%';
 
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
 
-        const width = originalImage.width * scale;
-        const height = originalImage.height * scale;
+        const width = originalImg.width * scale;
+        const height = originalImg.height * scale;
 
         canvas.width = width;
         canvas.height = height;
+        ctx.drawImage(originalImg, 0, 0, width, height);
 
-        ctx.drawImage(originalImage, 0, 0, width, height);
-
-        // Convert to blob to check size
         canvas.toBlob((blob) => {
-            if (!blob) return;
-            
             const url = URL.createObjectURL(blob);
             previewImg.src = url;
-            compSize.textContent = formatBytes(blob.size);
-            previewContainer.style.display = 'block';
-
+            cSizeText.textContent = formatBytes(blob.size);
+            
             downloadBtn.onclick = () => {
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = `${originalFileName}_compressed.jpg`;
-                link.click();
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${fileName}_sachin_ai.jpg`;
+                a.click();
+                showToast();
             };
         }, 'image/jpeg', quality);
     }
 
-    qualityInput.addEventListener('input', () => {
-        qualityVal.textContent = qualityInput.value;
-        compressImage();
-    });
+    qInput.oninput = updateCompression;
+    sInput.oninput = updateCompression;
 
-    scaleInput.addEventListener('input', () => {
-        scaleVal.textContent = scaleInput.value;
-        compressImage();
-    });
-
-    function formatBytes(bytes, decimals = 2) {
+    function formatBytes(bytes) {
         if (bytes === 0) return '0 Bytes';
         const k = 1024;
-        const dm = decimals < 0 ? 0 : decimals;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const sizes = ['Bytes', 'KB', 'MB'];
         const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
 
-    // Drag and Drop
-    const dropZone = document.getElementById('dropZone');
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-        dropZone.addEventListener(eventName, preventDefaults, false);
+    function showToast() {
+        toast.style.display = 'block';
+        setTimeout(() => toast.style.display = 'none', 3000);
+    }
+
+    // Drag & Drop
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(e => {
+        uploadBox.addEventListener(e, (evt) => {
+            evt.preventDefault();
+            evt.stopPropagation();
+        });
     });
 
-    function preventDefaults(e) {
-        e.preventDefault();
-        e.stopPropagation();
-    }
-
-    dropZone.addEventListener('drop', (e) => {
-        const dt = e.dataTransfer;
-        const files = dt.files;
-        fileInput.files = files;
-        handleFile({ target: { files: files } });
+    uploadBox.addEventListener('drop', (e) => {
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) processFile(file);
     });
 </script>
 
