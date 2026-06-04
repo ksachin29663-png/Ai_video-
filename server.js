@@ -17,15 +17,15 @@ if (!fs.existsSync(path.join(__dirname, 'uploads'))) {
 }
 const upload = multer({ dest: path.join(__dirname, 'uploads/') });
 
-// ==================== आपकी तीनों शक्तिशाली API Keys ====================
+// ==================== आपकी नई और अपडेटेड API Keys ====================
 const OPENAI_KEY = "Sk-proj-YtqRTnQr1aVs9zFJDUAzaFLfPg1ZRlaPgQVILq6iNkYbDPNkquT9A92V0etVicWzeega0XC3KNT3BlbkFJiX1bhTS_rR-PthftL_nqPTye_nDa5ku6s4r54bjUhoBPAXdZPJGXPcp95h-R2JPKCBauA3npEA";
 const GROQ_KEY = "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";
-const GEMINI_KEY = "AQ.Ab8RN6KQFZVOxhCg9XWYvsLoc5K7cBl3QSldpLN0qfLBXV9xVA
-const REMOVEBG_KEY = process.env.REMOVEBG_KEY || ""; // अगर भविष्य में बैकग्राउंड रिमूवर यूज़ करना हो
+const GEMINI_KEY = "AQ.Ab8RN6KQFZVOxhCg9XWYvsLoc5K7cBl3QSldpLN0qfLBXV9xVA"; // नई चालू जेमिनी API Key
+const REMOVEBG_KEY = process.env.REMOVEBG_KEY || ""; 
 
 // ==================== AI HELPER - सुपरफास्ट फ़ालबैक इंजन ====================
 async function callAI(messages, retries = 2) {
-    // 1. सबसे पहले Pollinations AI (यह पूरी तरह फ़्री और फ़ास्ट है)
+    // 1. सबसे पहले Pollinations AI 
     for (let i = 0; i < retries; i++) {
         try {
             const seed = Math.floor(Math.random() * 99999);
@@ -48,7 +48,7 @@ async function callAI(messages, retries = 2) {
         }
     }
 
-    // 2. बैकअप 1: Groq Cloud (यह दुनिया का सबसे तेज़ AI इंजन है, इसे मैंने नया जोड़ा है)
+    // 2. बैकअप 1: Groq Cloud (सुपरफास्ट लार्ज लैंग्वेज मॉडल)
     if (GROQ_KEY) {
         try {
             const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -69,7 +69,7 @@ async function callAI(messages, retries = 2) {
         }
     }
 
-    // 3. बैकअप 2: OpenAI (आपकी प्रीमियम की का इस्तेमाल)
+    // 3. बैकअप 2: OpenAI 
     const prompt = messages.map(m => m.content).join("\n");
     if (OPENAI_KEY) {
         try {
@@ -88,7 +88,7 @@ async function callAI(messages, retries = 2) {
         }
     }
 
-    // 4. बैकअप 3: Google Gemini (आपकी तीसरी API Key)
+    // 4. बैकअप 3: Google Gemini (आपकी नई वर्किंग की)
     if (GEMINI_KEY) {
         for (let i = 0; i < retries; i++) {
             try {
@@ -169,7 +169,7 @@ app.post('/analyze-image', async (req, res) => {
     if (!imageBase64 || !instruction) return res.status(400).json({ error: 'Missing fields' });
     if (!GEMINI_KEY) return errJson(res, new Error('NO_KEY'));
 
-    // इमेज एनालिसिस के लिए हम सीधा आपके जेमिनी की (Gemini Key) का उपयोग करेंगे
+    // इमेज एनालिसिस के लिए अब आपकी यह नई जेमिनी की का उपयोग होगा
     for (let i = 0; i < 3; i++) {
         try {
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`;
@@ -380,4 +380,4 @@ app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Full-Powered Server running on port ${PORT}`);
     console.log(`📡 Connected APIs: Pollinations, Groq Cloud, OpenAI, and Gemini.`);
 });
-                                        
+                   
