@@ -85,19 +85,32 @@
         mainScroller.scrollTop = mainScroller.scrollHeight;
     }
 
+    async function callAI(prompt, retries=2) {
+        for(let i=0;i<=retries;i++){
+            try{
+                const seed=Math.floor(Math.random()*99999);
+                const res=await fetch('https://text.pollinations.ai/',{
+                    method:'POST',
+                    headers:{'Content-Type':'application/json'},
+                    body:JSON.stringify({messages:[{role:'system',content:'You are a helpful Hindi AI assistant. Always reply in Hindi.'},{role:'user',content:prompt}],model:'openai',seed})
+                });
+                if(res.status===429&&i<retries){await new Promise(r=>setTimeout(r,3000*(i+1)));continue;}
+                if(!res.ok) throw new Error('API error '+res.status);
+                const txt=await res.text();
+                if(!txt||txt.length<2) throw new Error('Empty');
+                return txt;
+            }catch(e){if(i===retries)throw e;await new Promise(r=>setTimeout(r,2000));}
+        }
+    }
+
     async function fetchAIResponse(prompt) {
         typingIndicator.style.display = 'block';
         mainScroller.scrollTop = mainScroller.scrollHeight;
         try {
-            const res = await fetch('/ai-chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: prompt })
-            });
-            const data = await res.json();
-            appendMessage(data.reply || 'कोई जवाब नहीं मिला।', 'ai');
+            const reply = await callAI(prompt);
+            appendMessage(reply || 'कोई जवाब नहीं मिला।', 'ai');
         } catch (error) {
-            appendMessage('सर्वर से जुड़ने में दिक्कत हुई। फिर से कोशिश करें!', 'ai');
+            appendMessage('⏳ AI busy है, 30 सेकंड बाद try करें: ' + error.message, 'ai');
         } finally {
             typingIndicator.style.display = 'none';
         }
