@@ -3,603 +3,488 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sachin AI Studio — 39 Free AI Tools</title>
-<link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
-<link rel="shortcut icon" href="favicon.png">
-<meta name="description" content="39 FREE AI Tools — Background हटाओ, फोटो Restore करो, AI Video बनाओ, Sketch, Avatar, Shayari और बहुत कुछ — बिल्कुल मुफ्त!">
-<meta name="robots" content="index, follow">
+<title>Sachin AI Studio — 36 Free AI Tools</title>
+<link rel="icon" href="favicon.png">
+<meta name="description" content="36 FREE AI Tools — AI Chat, Photo, Video, Shayari, Background Remove और बहुत कुछ — बिल्कुल मुफ्त!">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3019468976412219" crossorigin="anonymous"></script>
 <style>
-:root {
-  --bg: #030712;
-  --bg2: #0d1117;
-  --border: rgba(255,255,255,0.07);
-  --text: #e2e8f0;
-  --sub: #64748b;
-  --r: 16px;
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#07090f;
+  --card:#0e1117;
+  --card2:#141820;
+  --border:rgba(255,255,255,0.06);
+  --accent:#6366f1;
+  --accent2:#22d3ee;
+  --green:#10b981;
+  --pink:#f472b6;
+  --orange:#f97316;
+  --text:#f1f5f9;
+  --muted:#64748b;
+  --r:14px;
 }
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+html{scroll-behavior:smooth;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
 
-/* ── ANIMATED BACKGROUND ── */
-body::before{content:'';position:fixed;inset:0;z-index:0;
-  background:
-    radial-gradient(ellipse 90% 60% at 10% 10%, rgba(124,58,237,.22) 0%, transparent 55%),
-    radial-gradient(ellipse 70% 50% at 90% 5%, rgba(6,182,212,.18) 0%, transparent 50%),
-    radial-gradient(ellipse 80% 60% at 50% 100%, rgba(244,63,94,.15) 0%, transparent 55%),
-    radial-gradient(ellipse 60% 40% at 5% 70%, rgba(16,185,129,.12) 0%, transparent 50%),
-    radial-gradient(ellipse 50% 40% at 95% 60%, rgba(245,158,11,.10) 0%, transparent 45%);
-  pointer-events:none;}
+/* BG MESH */
+.bg-mesh{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 50% at 0% 0%,rgba(99,102,241,.18) 0%,transparent 55%),
+  radial-gradient(ellipse 60% 40% at 100% 0%,rgba(34,211,238,.14) 0%,transparent 50%),
+  radial-gradient(ellipse 50% 40% at 50% 100%,rgba(244,114,182,.12) 0%,transparent 55%),
+  radial-gradient(ellipse 40% 30% at 0% 80%,rgba(16,185,129,.1) 0%,transparent 50%);}
 
-/* ── TOP AD BAR ── */
-.ad-top{position:relative;z-index:2;text-align:center;padding:0;background:rgba(0,0,0,.3);border-bottom:1px solid var(--border);line-height:0;font-size:0;}
-.ad-top ins{display:block!important;min-height:0!important;height:auto!important;}
-.ad-mid{position:relative;z-index:1;text-align:center;padding:4px 20px;max-width:900px;margin:0 auto 8px;min-height:0;}
+/* NAV */
+header{position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border);background:rgba(7,9,15,.9);backdrop-filter:blur(20px);}
+nav{max-width:1300px;margin:0 auto;padding:0 20px;height:58px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-size:1.15rem;font-weight:900;text-decoration:none;
+  background:linear-gradient(90deg,#818cf8,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.nav-links{display:flex;gap:6px;}
+.nav-links a{color:var(--muted);font-size:.78rem;padding:5px 12px;border-radius:20px;border:1px solid var(--border);text-decoration:none;transition:.2s;}
+.nav-links a:hover,.nav-links a.active{color:#fff;border-color:rgba(99,102,241,.5);background:rgba(99,102,241,.1);}
+.nav-login{background:linear-gradient(135deg,#6366f1,#22d3ee)!important;border-color:transparent!important;color:#fff!important;}
 
-/* ── NAV ── */
-nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;
-  padding:0 20px;height:60px;
-  background:rgba(3,7,18,.85);backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);}
-.nav-logo{font-size:1.2rem;font-weight:900;letter-spacing:-0.5px;text-decoration:none;
-  background:linear-gradient(90deg,#a78bfa,#38bdf8,#f472b6);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.nav-right{display:flex;gap:8px;align-items:center;}
-.nav-btn{color:var(--sub);text-decoration:none;font-size:.8rem;
-  padding:6px 14px;border-radius:20px;border:1px solid var(--border);transition:.2s;}
-.nav-btn:hover{color:#fff;border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.05);}
-.nav-login{background:linear-gradient(135deg,#7c3aed,#2563eb)!important;border-color:transparent!important;color:#fff!important;}
+/* HERO */
+.hero{position:relative;z-index:1;text-align:center;padding:56px 20px 24px;}
+.hero-pill{display:inline-flex;align-items:center;gap:8px;padding:5px 16px;border-radius:99px;
+  border:1px solid rgba(99,102,241,.4);background:rgba(99,102,241,.1);font-size:.72rem;font-weight:700;
+  color:#818cf8;letter-spacing:.5px;margin-bottom:20px;text-transform:uppercase;}
+.dot{width:6px;height:6px;border-radius:50%;background:#818cf8;box-shadow:0 0 8px #818cf8;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{font-size:clamp(2.2rem,6vw,4rem);font-weight:900;line-height:1.1;letter-spacing:-1px;}
+.hero h1 em{font-style:normal;background:linear-gradient(135deg,#818cf8,#22d3ee,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero p{color:var(--muted);font-size:.98rem;margin:14px auto 28px;max-width:500px;line-height:1.7;}
+.stats{display:flex;justify-content:center;gap:36px;flex-wrap:wrap;margin-bottom:36px;}
+.stat-n{font-size:1.8rem;font-weight:900;background:linear-gradient(90deg,#818cf8,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;}
+.stat-l{font-size:.7rem;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:.5px;}
 
-/* ── HERO ── */
-.hero{position:relative;z-index:1;text-align:center;padding:64px 20px 32px;}
-.hero-badge{display:inline-flex;align-items:center;gap:6px;margin-bottom:18px;
-  padding:6px 18px;border-radius:20px;font-size:.75rem;font-weight:700;
-  background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.45);color:#c4b5fd;letter-spacing:.5px;}
-.badge-dot{width:7px;height:7px;border-radius:50%;background:#7c3aed;box-shadow:0 0 8px #7c3aed;animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.3)}}
-.hero h1{font-size:clamp(2rem,6vw,3.8rem);font-weight:900;line-height:1.1;margin-bottom:16px;}
-.hero h1 .grad{background:linear-gradient(135deg,#a78bfa 0%,#38bdf8 35%,#f472b6 65%,#fb923c 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.hero p{font-size:1.05rem;color:var(--sub);max-width:540px;margin:0 auto 32px;line-height:1.7;}
-.hero-stats{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;margin-bottom:40px;}
-.stat{text-align:center;}
-.stat-num{font-size:2rem;font-weight:900;background:linear-gradient(90deg,#a78bfa,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.stat-lbl{font-size:.75rem;color:var(--sub);margin-top:2px;text-transform:uppercase;letter-spacing:.5px;}
+/* SEARCH */
+.search-bar{position:relative;z-index:1;max-width:500px;margin:0 auto 28px;padding:0 20px;}
+.search-bar input{width:100%;padding:13px 18px 13px 46px;border-radius:50px;border:1.5px solid var(--border);
+  background:rgba(255,255,255,.04);color:var(--text);font-size:.9rem;outline:none;font-family:inherit;transition:.25s;}
+.search-bar input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,.15);}
+.search-bar input::placeholder{color:var(--muted);}
+.search-icon{position:absolute;left:34px;top:50%;transform:translateY(-50%);font-size:1rem;pointer-events:none;}
 
-/* ── SEARCH ── */
-.search-wrap{position:relative;z-index:1;max-width:520px;margin:0 auto 48px;padding:0 20px;}
-.search-inner{position:relative;}
-.search-inner input{width:100%;padding:14px 20px 14px 50px;border-radius:50px;
-  border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);
-  color:#fff;font-size:.95rem;outline:none;transition:all .25s;font-family:inherit;}
-.search-inner input:focus{border-color:#7c3aed;background:rgba(124,58,237,.08);box-shadow:0 0 0 4px rgba(124,58,237,.15);}
-.search-inner input::placeholder{color:var(--sub);}
-.search-icon{position:absolute;left:18px;top:50%;transform:translateY(-50%);font-size:1.1rem;pointer-events:none;}
+/* TABS */
+.tabs{position:relative;z-index:1;display:flex;gap:7px;flex-wrap:wrap;justify-content:center;padding:0 16px;margin-bottom:28px;}
+.tab{padding:6px 15px;border-radius:99px;border:1px solid var(--border);background:transparent;
+  color:var(--muted);font-size:.75rem;font-weight:600;cursor:pointer;font-family:inherit;transition:.2s;}
+.tab:hover,.tab.on{border-color:rgba(99,102,241,.5);background:rgba(99,102,241,.12);color:#a5b4fc;}
 
-/* ── CATEGORY TABS ── */
-.cats{position:relative;z-index:1;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;
-  max-width:900px;margin:0 auto 36px;padding:0 20px;}
-.cat-btn{padding:7px 16px;border-radius:20px;border:1px solid var(--border);
-  background:transparent;color:var(--sub);font-size:.78rem;font-weight:600;cursor:pointer;
-  transition:all .2s;font-family:inherit;}
-.cat-btn:hover,.cat-btn.active{border-color:rgba(124,58,237,.6);background:rgba(124,58,237,.15);color:#c4b5fd;}
+/* AD */
+.ad-wrap{position:relative;z-index:1;text-align:center;max-width:960px;margin:0 auto 20px;padding:0 16px;}
 
-/* ── MID AD ── */
-.ad-mid{position:relative;z-index:1;text-align:center;padding:16px 20px;max-width:900px;margin:0 auto 24px;}
+/* GRID */
+.wrap{position:relative;z-index:1;max-width:1300px;margin:0 auto;padding:0 16px 80px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(245px,1fr));gap:14px;}
 
-/* ── GRID ── */
-.grid{position:relative;z-index:1;display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-  gap:16px;padding:0 20px 80px;max-width:1400px;margin:0 auto;}
+/* CARD */
+.card{display:block;text-decoration:none;color:inherit;border-radius:var(--r);padding:18px 16px 16px;
+  background:var(--card);border:1px solid var(--border);
+  transition:transform .2s,box-shadow .2s,border-color .2s;position:relative;overflow:hidden;}
+.card::after{content:'';position:absolute;inset:0;border-radius:var(--r);opacity:0;transition:opacity .25s;background:var(--glow,rgba(99,102,241,.08));}
+.card:hover{transform:translateY(-3px);border-color:var(--gc,rgba(99,102,241,.3));box-shadow:0 12px 32px rgba(0,0,0,.5);}
+.card:hover::after{opacity:1;}
+.card[style*="none"]{display:none!important;}
+.c-ico{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:11px;}
+.c-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.c-title{font-size:.88rem;font-weight:700;color:#e2e8f0;}
+.c-no{font-size:.62rem;color:var(--muted);font-weight:600;}
+.c-desc{font-size:.75rem;color:var(--muted);line-height:1.55;margin-bottom:12px;min-height:30px;}
+.c-foot{display:flex;align-items:center;justify-content:space-between;}
+.badge{font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:99px;letter-spacing:.2px;}
+.b-hot{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#fca5a5;}
+.b-new{background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);color:#6ee7b7;}
+.b-free{background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.25);color:#a5b4fc;}
+.b-pro{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);color:#fcd34d;}
+.arrow{color:var(--muted);font-size:.8rem;transition:.2s;}
+.card:hover .arrow{color:#fff;transform:translateX(4px);}
 
-/* ── CARD ── */
-.card{display:block;text-decoration:none;color:inherit;
-  background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);
-  padding:20px 18px 18px;position:relative;overflow:hidden;
-  transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;cursor:pointer;}
-.card::before{content:'';position:absolute;inset:0;border-radius:var(--r);opacity:0;transition:opacity .25s;
-  background:var(--glow,rgba(120,80,255,.1));}
-.card:hover{transform:translateY(-4px) scale(1.012);border-color:rgba(255,255,255,.18);}
-.card:hover::before{opacity:1;}
-.card:hover{box-shadow:0 16px 40px rgba(0,0,0,.55),0 0 0 1px var(--gc,rgba(120,80,255,.25));}
-.card:nth-child(7n+1){--glow:rgba(124,58,237,.15);--gc:rgba(124,58,237,.4);}
-.card:nth-child(7n+2){--glow:rgba(6,182,212,.15);--gc:rgba(6,182,212,.4);}
-.card:nth-child(7n+3){--glow:rgba(244,63,94,.15);--gc:rgba(244,63,94,.4);}
-.card:nth-child(7n+4){--glow:rgba(16,185,129,.15);--gc:rgba(16,185,129,.4);}
-.card:nth-child(7n+5){--glow:rgba(245,158,11,.15);--gc:rgba(245,158,11,.4);}
-.card:nth-child(7n+6){--glow:rgba(239,68,68,.15);--gc:rgba(239,68,68,.4);}
-.card:nth-child(7n+7){--glow:rgba(99,102,241,.15);--gc:rgba(99,102,241,.4);}
-.card[style*="display:none"]{display:none!important;}
+/* NO RESULT */
+.no-res{display:none;text-align:center;padding:60px 20px;color:var(--muted);}
 
-.card-icon-wrap{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;
-  font-size:1.5rem;margin-bottom:12px;background:var(--ic-bg,rgba(124,58,237,.15));}
-.card-top-row{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:0;}
-.card-num{font-size:.65rem;font-weight:700;color:var(--sub);opacity:.5;letter-spacing:.5px;}
-.card-title{font-size:.93rem;font-weight:700;line-height:1.35;margin-bottom:6px;color:#f0f4ff;}
-.card-desc{font-size:.78rem;color:var(--sub);line-height:1.55;margin-bottom:14px;min-height:34px;}
-.card-footer{display:flex;align-items:center;justify-content:space-between;}
-.card-badge{font-size:.68rem;font-weight:600;padding:3px 9px;border-radius:20px;
-  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:var(--sub);}
-.badge-hot{background:rgba(239,68,68,.2);border-color:rgba(239,68,68,.4);color:#fca5a5;}
-.badge-new{background:rgba(16,185,129,.2);border-color:rgba(16,185,129,.4);color:#6ee7b7;}
-.badge-pro{background:rgba(245,158,11,.2);border-color:rgba(245,158,11,.4);color:#fcd34d;}
-.card-arrow{font-size:.8rem;color:var(--sub);transition:.2s;}
-.card:hover .card-arrow{transform:translateX(5px);color:#fff;}
+/* FOOTER */
+footer{position:relative;z-index:1;text-align:center;border-top:1px solid var(--border);padding:32px 20px;color:var(--muted);font-size:.78rem;}
+footer a{color:var(--muted);text-decoration:none;margin:0 8px;}footer a:hover{color:#fff;}
+.fl{margin-bottom:10px;}
 
-/* ── NO RESULTS ── */
-.no-results{position:relative;z-index:1;text-align:center;padding:60px 20px;color:var(--sub);display:none;}
-.no-results h3{font-size:1.2rem;margin-bottom:8px;}
+/* TOP BTN */
+#top{position:fixed;bottom:20px;right:20px;z-index:200;width:40px;height:40px;border-radius:50%;
+  background:var(--accent);border:none;color:#fff;font-size:1rem;cursor:pointer;
+  opacity:0;transform:translateY(6px);transition:.3s;box-shadow:0 4px 14px rgba(99,102,241,.4);}
+#top.show{opacity:1;transform:none;}
 
-/* ── FOOTER ── */
-footer{position:relative;z-index:1;text-align:center;padding:40px 20px;
-  border-top:1px solid var(--border);color:var(--sub);font-size:.82rem;}
-footer a{color:var(--sub);text-decoration:none;margin:0 8px;}
-footer a:hover{color:#fff;}
-.footer-links{margin-bottom:12px;}
-
-/* ── SCROLL TO TOP ── */
-#scrollTop{position:fixed;bottom:24px;right:24px;z-index:200;width:42px;height:42px;border-radius:50%;
-  background:linear-gradient(135deg,#7c3aed,#2563eb);border:none;color:#fff;font-size:1.1rem;
-  cursor:pointer;opacity:0;transform:translateY(8px);transition:.3s;box-shadow:0 4px 16px rgba(124,58,237,.4);}
-#scrollTop.show{opacity:1;transform:translateY(0);}
-
-@media(max-width:600px){
-  .hero{padding:48px 16px 24px;}
-  .hero-stats{gap:24px;}
-  .grid{grid-template-columns:1fr 1fr;gap:12px;padding:0 12px 60px;}
+/* MOBILE */
+@media(max-width:640px){
+  .hero{padding:40px 14px 20px;}
+  .stats{gap:20px;}
+  .grid{grid-template-columns:1fr 1fr;gap:10px;}
   .card{padding:14px 12px 12px;}
-  .card-icon-wrap{width:38px;height:38px;font-size:1.2rem;border-radius:10px;}
-  .cats{gap:6px;padding:0 12px;}
+  .c-ico{width:36px;height:36px;font-size:1.1rem;border-radius:8px;}
+  nav{padding:0 14px;}
+  .nav-links a{padding:4px 10px;font-size:.72rem;}
 }
-@media(max-width:360px){.grid{grid-template-columns:1fr;}}
+@media(max-width:380px){.grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
+<div class="bg-mesh"></div>
+
+<header>
+  <nav>
+    <a href="index.html" class="logo">⚡ Sachin AI</a>
+    <div class="nav-links">
+      <a href="about.html">About</a>
+      <a href="premium.html">💎 Pro</a>
+      <a href="auth.html" class="nav-login">Login</a>
+    </div>
+  </nav>
+</header>
 
 <!-- Top Ad -->
-<div class="ad-top">
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3019468976412219" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+<div class="ad-wrap" style="padding-top:8px;">
+  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3019468976412219" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
 </div>
 
-<!-- Nav -->
-<nav>
-  <a href="index.html" class="nav-logo">⚡ Sachin AI Studio</a>
-  <div class="nav-right">
-    <a href="about.html" class="nav-btn">About</a>
-    <a href="premium.html" class="nav-btn">💎 Premium</a>
-    <a href="auth.html" class="nav-btn nav-login">Login</a>
-  </div>
-</nav>
-
-<!-- Hero -->
 <div class="hero">
-  <div class="hero-badge"><span class="badge-dot"></span> 100% Free — No Registration</div>
-  <h1>सचिन <span class="grad">AI Studio</span></h1>
-  <p>39 शक्तिशाली AI Tools — एक ही जगह पर। Background हटाओ, फोटो Restore करो, Video बनाओ, Shayari लिखो और बहुत कुछ।</p>
-  <div class="hero-stats">
-    <div class="stat"><div class="stat-num">39+</div><div class="stat-lbl">AI Tools</div></div>
-    <div class="stat"><div class="stat-num">Free</div><div class="stat-lbl">हमेशा के लिए</div></div>
-    <div class="stat"><div class="stat-num">Fast</div><div class="stat-lbl">AI Powered</div></div>
+  <div class="hero-pill"><span class="dot"></span>100% Free — No Signup</div>
+  <h1>Sachin <em>AI Studio</em></h1>
+  <p>36 Powerful AI Tools — एक ही जगह। Photos, Videos, Chat, Shayari और बहुत कुछ।</p>
+  <div class="stats">
+    <div><div class="stat-n">36</div><div class="stat-l">AI Tools</div></div>
+    <div><div class="stat-n">Free</div><div class="stat-l">हमेशा</div></div>
+    <div><div class="stat-n">Fast</div><div class="stat-l">AI Powered</div></div>
   </div>
 </div>
 
-<!-- Search -->
-<div class="search-wrap">
-  <div class="search-inner">
-    <span class="search-icon">🔍</span>
-    <input type="text" id="searchBox" placeholder="Tool ढूंढें... जैसे: chat, image, video">
-  </div>
+<div class="search-bar">
+  <span class="search-icon">🔍</span>
+  <input type="text" id="srch" placeholder="Tool ढूंढें... background, chat, video...">
 </div>
 
-<!-- Category Tabs -->
-<div class="cats">
-  <button class="cat-btn active" data-cat="all">🌟 सभी Tools</button>
-  <button class="cat-btn" data-cat="image">🖼️ Image AI</button>
-  <button class="cat-btn" data-cat="text">✍️ Text / Content</button>
-  <button class="cat-btn" data-cat="video">🎬 Video</button>
-  <button class="cat-btn" data-cat="fun">🎉 Fun & Entertainment</button>
-  <button class="cat-btn" data-cat="utility">🛠️ Utility</button>
+<div class="tabs">
+  <button class="tab on" data-c="all">⭐ सभी</button>
+  <button class="tab" data-c="img">🖼️ Image</button>
+  <button class="tab" data-c="txt">✍️ Text</button>
+  <button class="tab" data-c="vid">🎬 Video</button>
+  <button class="tab" data-c="fun">🎉 Fun</button>
+  <button class="tab" data-c="util">🛠️ Tools</button>
 </div>
 
-<!-- Mid Ad -->
-<div class="ad-mid">
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3019468976412219" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+<div class="ad-wrap">
+  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3019468976412219" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
 </div>
 
-<!-- Grid -->
-<div class="grid" id="toolGrid">
+<div class="wrap">
+<div class="grid" id="grid">
 
-  <!-- IMAGE TOOLS -->
-  <a href="bg-remove.html" class="card" data-cat="image" data-search="background remove bg हटाओ transparent">
-    <div class="card-top-row"><div class="card-num">01</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(239,68,68,.15)">✂️</div>
-    <div class="card-title">Background Remover</div>
-    <div class="card-desc">फोटो का Background 5 सेकंड में हटाओ — बिल्कुल मुफ्त</div>
-    <div class="card-footer"><span class="card-badge badge-hot">🔥 Hot</span><span class="card-arrow">→</span></div>
-  </a>
+<!-- IMAGE TOOLS -->
+<a href="bg-remove.html" class="card" data-c="img" data-s="background remove bg transparent हटाओ" style="--glow:rgba(239,68,68,.1);--gc:rgba(239,68,68,.35);">
+  <div class="c-ico" style="background:rgba(239,68,68,.15);">✂️</div>
+  <div class="c-head"><div class="c-title">Background Remover</div><div class="c-no">01</div></div>
+  <div class="c-desc">5 सेकंड में Photo का Background हटाओ</div>
+  <div class="c-foot"><span class="badge b-hot">🔥 Hot</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="text-to-image.html" class="card" data-cat="image" data-search="text image generate photo ai बनाओ">
-    <div class="card-top-row"><div class="card-num">02</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(124,58,237,.15)">🎨</div>
-    <div class="card-title">AI Photo Generator</div>
-    <div class="card-desc">Text लिखो और AI से कोई भी Photo बनवाओ — Free</div>
-    <div class="card-footer"><span class="card-badge badge-hot">🔥 Hot</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="text-to-image.html" class="card" data-c="img" data-s="text image generate photo ai बनाओ create" style="--glow:rgba(99,102,241,.1);--gc:rgba(99,102,241,.35);">
+  <div class="c-ico" style="background:rgba(99,102,241,.15);">🎨</div>
+  <div class="c-head"><div class="c-title">AI Photo Generator</div><div class="c-no">02</div></div>
+  <div class="c-desc">Text लिखो — AI Photo बनाएगा। 100% Free</div>
+  <div class="c-foot"><span class="badge b-hot">🔥 Hot</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="photo-restore.html" class="card" data-cat="image" data-search="photo restore old पुरानी फोटो fix">
-    <div class="card-top-row"><div class="card-num">03</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(16,185,129,.15)">🔧</div>
-    <div class="card-title">Photo Restore</div>
-    <div class="card-desc">पुरानी धुंधली Photos को HD में Restore करो</div>
-    <div class="card-footer"><span class="card-badge badge-new">✨ New</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="photo-restore.html" class="card" data-c="img" data-s="photo restore old पुरानी fix repair" style="--glow:rgba(16,185,129,.1);--gc:rgba(16,185,129,.35);">
+  <div class="c-ico" style="background:rgba(16,185,129,.15);">🔧</div>
+  <div class="c-head"><div class="c-title">Photo Restore</div><div class="c-no">03</div></div>
+  <div class="c-desc">पुरानी धुंधली Photos को HD में Restore करो</div>
+  <div class="c-foot"><span class="badge b-new">✨ New</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="ai-upscaler.html" class="card" data-cat="image" data-search="upscale enhance hd quality बड़ा">
-    <div class="card-top-row"><div class="card-num">04</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(6,182,212,.15)">⬆️</div>
-    <div class="card-title">AI Image Upscaler</div>
-    <div class="card-desc">छोटी Photo को 4x बड़ा और Sharp बनाओ</div>
-    <div class="card-footer"><span class="card-badge">Image AI</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="ai-upscaler.html" class="card" data-c="img" data-s="upscale enhance hd quality 4k बड़ा" style="--glow:rgba(34,211,238,.1);--gc:rgba(34,211,238,.35);">
+  <div class="c-ico" style="background:rgba(34,211,238,.15);">⬆️</div>
+  <div class="c-head"><div class="c-title">AI Image Upscaler</div><div class="c-no">04</div></div>
+  <div class="c-desc">Photo को 4x HD Sharp बनाओ</div>
+  <div class="c-foot"><span class="badge b-free">Image AI</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="bg-changer.html" class="card" data-cat="image" data-search="background change color replace बदलो">
-    <div class="card-top-row"><div class="card-num">05</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(245,158,11,.15)">🎭</div>
-    <div class="card-title">Background Changer</div>
-    <div class="card-desc">Photo का Background बदलो — कोई भी Color या Image</div>
-    <div class="card-footer"><span class="card-badge">Image AI</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="bg-changer.html" class="card" data-c="img" data-s="background change color replace बदलो studio" style="--glow:rgba(245,158,11,.1);--gc:rgba(245,158,11,.35);">
+  <div class="c-ico" style="background:rgba(245,158,11,.15);">🎭</div>
+  <div class="c-head"><div class="c-title">Background Changer</div><div class="c-no">05</div></div>
+  <div class="c-desc">Background बदलो — कोई भी Color या Image</div>
+  <div class="c-foot"><span class="badge b-free">Image AI</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="ai-beauty.html" class="card" data-cat="image" data-search="beauty enhance face skin smooth">
-    <div class="card-top-row"><div class="card-num">06</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(244,63,94,.15)">💄</div>
-    <div class="card-title">AI Beauty Enhancer</div>
-    <div class="card-desc">AI से Face को Natural तरीके से Enhance करो</div>
-    <div class="card-footer"><span class="card-badge badge-new">✨ New</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="ai-beauty.html" class="card" data-c="img" data-s="beauty enhance face skin smooth filter" style="--glow:rgba(244,114,182,.1);--gc:rgba(244,114,182,.35);">
+  <div class="c-ico" style="background:rgba(244,114,182,.15);">💄</div>
+  <div class="c-head"><div class="c-title">AI Beauty Filter</div><div class="c-no">06</div></div>
+  <div class="c-desc">Face को Natural तरीके से Enhance करो</div>
+  <div class="c-foot"><span class="badge b-new">✨ New</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="ai-avatar.html" class="card" data-cat="image" data-search="avatar profile picture cartoon">
-    <div class="card-top-row"><div class="card-num">07</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(99,102,241,.15)">👤</div>
-    <div class="card-title">AI Avatar Creator</div>
-    <div class="card-desc">अपना AI Avatar बनाओ — Professional या Cartoon</div>
-    <div class="card-footer"><span class="card-badge">Image AI</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="ai-avatar.html" class="card" data-c="img" data-s="avatar profile picture cartoon ai" style="--glow:rgba(99,102,241,.1);--gc:rgba(99,102,241,.35);">
+  <div class="c-ico" style="background:rgba(99,102,241,.15);">👤</div>
+  <div class="c-head"><div class="c-title">AI Avatar Creator</div><div class="c-no">07</div></div>
+  <div class="c-desc">AI Avatar बनाओ — Professional या Cartoon</div>
+  <div class="c-foot"><span class="badge b-free">Image AI</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="ai-avatar-pro.html" class="card" data-cat="image" data-search="avatar pro hd professional">
-    <div class="card-top-row"><div class="card-num">08</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(245,158,11,.15)">⭐</div>
-    <div class="card-title">AI Avatar Pro</div>
-    <div class="card-desc">Ultra HD Professional AI Avatars बनाओ</div>
-    <div class="card-footer"><span class="card-badge badge-pro">⭐ Pro</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="ai-sketch.html" class="card" data-c="img" data-s="sketch pencil drawing art कला" style="--glow:rgba(16,185,129,.1);--gc:rgba(16,185,129,.35);">
+  <div class="c-ico" style="background:rgba(16,185,129,.15);">✏️</div>
+  <div class="c-head"><div class="c-title">AI Sketch Maker</div><div class="c-no">08</div></div>
+  <div class="c-desc">Photo को Pencil Sketch में बदलो</div>
+  <div class="c-foot"><span class="badge b-free">Art</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="ai-sketch.html" class="card" data-cat="image" data-search="sketch pencil drawing कला art">
-    <div class="card-top-row"><div class="card-num">09</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(16,185,129,.15)">✏️</div>
-    <div class="card-title">AI Sketch Maker</div>
-    <div class="card-desc">Photo को Pencil Sketch में बदलो</div>
-    <div class="card-footer"><span class="card-badge">Art</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="ai-remini.html" class="card" data-c="img" data-s="remini enhance restore face blur clear" style="--glow:rgba(99,102,241,.1);--gc:rgba(99,102,241,.35);">
+  <div class="c-ico" style="background:rgba(99,102,241,.15);">✨</div>
+  <div class="c-head"><div class="c-title">AI Remini</div><div class="c-no">09</div></div>
+  <div class="c-desc">Blurry Photos को Crystal Clear बनाओ</div>
+  <div class="c-foot"><span class="badge b-hot">🔥 Hot</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="ai-remini.html" class="card" data-cat="image" data-search="remini enhance restore face">
-    <div class="card-top-row"><div class="card-num">10</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(124,58,237,.15)">✨</div>
-    <div class="card-title">AI Remini Enhancer</div>
-    <div class="card-desc">Blurry Photos को Crystal Clear बनाओ</div>
-    <div class="card-footer"><span class="card-badge badge-hot">🔥 Hot</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="magic-eraser-pro.html" class="card" data-c="img" data-s="magic eraser remove object delete unwanted" style="--glow:rgba(16,185,129,.1);--gc:rgba(16,185,129,.35);">
+  <div class="c-ico" style="background:rgba(16,185,129,.15);">🪄</div>
+  <div class="c-head"><div class="c-title">Magic Eraser Pro</div><div class="c-no">10</div></div>
+  <div class="c-desc">Photo से कोई भी Object मिटाओ जादू की तरह</div>
+  <div class="c-foot"><span class="badge b-new">✨ New</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="ai-relight.html" class="card" data-cat="image" data-search="relight lighting photo studio">
-    <div class="card-top-row"><div class="card-num">11</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(245,158,11,.15)">💡</div>
-    <div class="card-title">AI Relight Studio</div>
-    <div class="card-desc">Photo की Lighting बदलो — Studio Effect</div>
-    <div class="card-footer"><span class="card-badge">Image AI</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="image-to-prompt.html" class="card" data-c="img" data-s="image text prompt describe analyze vision" style="--glow:rgba(34,211,238,.1);--gc:rgba(34,211,238,.35);">
+  <div class="c-ico" style="background:rgba(34,211,238,.15);">🔍</div>
+  <div class="c-head"><div class="c-title">Image to Prompt</div><div class="c-no">11</div></div>
+  <div class="c-desc">Image देखकर AI Prompt Generate करो</div>
+  <div class="c-foot"><span class="badge b-free">AI Vision</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="ai-variations.html" class="card" data-cat="image" data-search="variations multiple styles versions">
-    <div class="card-top-row"><div class="card-num">12</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(6,182,212,.15)">🔄</div>
-    <div class="card-title">AI Image Variations</div>
-    <div class="card-desc">एक Image से अलग-अलग AI Variations बनाओ</div>
-    <div class="card-footer"><span class="card-badge">Image AI</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="object-eraser.html" class="card" data-c="img" data-s="object eraser remove item photo" style="--glow:rgba(245,158,11,.1);--gc:rgba(245,158,11,.35);">
+  <div class="c-ico" style="background:rgba(245,158,11,.15);">🗑️</div>
+  <div class="c-head"><div class="c-title">Object Eraser</div><div class="c-no">12</div></div>
+  <div class="c-desc">Photo से unwanted Objects हटाओ आसानी से</div>
+  <div class="c-foot"><span class="badge b-free">Image AI</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="ai-film-filters.html" class="card" data-cat="image" data-search="film filter vintage cinematic effect">
-    <div class="card-top-row"><div class="card-num">13</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(244,63,94,.15)">🎞️</div>
-    <div class="card-title">AI Film Filters</div>
-    <div class="card-desc">Cinematic Film Filters लगाओ Photos पर</div>
-    <div class="card-footer"><span class="card-badge">Art</span><span class="card-arrow">→</span></div>
-  </a>
+<!-- TEXT TOOLS -->
+<a href="ai-chat.html" class="card" data-c="txt" data-s="chat conversation ai assistant question सवाल" style="--glow:rgba(34,211,238,.1);--gc:rgba(34,211,238,.35);">
+  <div class="c-ico" style="background:rgba(34,211,238,.15);">🤖</div>
+  <div class="c-head"><div class="c-title">AI Chat</div><div class="c-no">13</div></div>
+  <div class="c-desc">AI से कुछ भी पूछो — Hindi में Smart Answers</div>
+  <div class="c-foot"><span class="badge b-hot">🔥 Hot</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="magic-eraser-pro.html" class="card" data-cat="image" data-search="magic eraser remove object delete">
-    <div class="card-top-row"><div class="card-num">14</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(16,185,129,.15)">🪄</div>
-    <div class="card-title">Magic Eraser Pro</div>
-    <div class="card-desc">Photo से कोई भी Object मिटाओ जादू की तरह</div>
-    <div class="card-footer"><span class="card-badge badge-new">✨ New</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="ai-story.html" class="card" data-c="txt" data-s="story kahani creative writing लिखो" style="--glow:rgba(16,185,129,.1);--gc:rgba(16,185,129,.35);">
+  <div class="c-ico" style="background:rgba(16,185,129,.15);">📖</div>
+  <div class="c-head"><div class="c-title">AI Story Writer</div><div class="c-no">14</div></div>
+  <div class="c-desc">AI से मनचाही कहानी लिखवाओ — Hindi में</div>
+  <div class="c-foot"><span class="badge b-free">Text AI</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="object-eraser.html" class="card" data-cat="image" data-search="object eraser remove item">
-    <div class="card-top-row"><div class="card-num">15</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(99,102,241,.15)">🗑️</div>
-    <div class="card-title">Object Eraser</div>
-    <div class="card-desc">Photo से unwanted Objects हटाओ आसानी से</div>
-    <div class="card-footer"><span class="card-badge">Image AI</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="ai-code.html" class="card" data-c="util" data-s="code developer html python javascript programming" style="--glow:rgba(99,102,241,.1);--gc:rgba(99,102,241,.35);">
+  <div class="c-ico" style="background:rgba(99,102,241,.15);">💻</div>
+  <div class="c-head"><div class="c-title">AI Code Generator</div><div class="c-no">15</div></div>
+  <div class="c-desc">किसी भी Language में Code Generate करो</div>
+  <div class="c-foot"><span class="badge b-new">✨ New</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="image-expander.html" class="card" data-cat="image" data-search="expand extend outpaint image बड़ा">
-    <div class="card-top-row"><div class="card-num">16</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(245,158,11,.15)">↔️</div>
-    <div class="card-title">Image Expander</div>
-    <div class="card-desc">Image को किसी भी Direction में Expand करो</div>
-    <div class="card-footer"><span class="card-badge badge-new">✨ New</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="ai-translator.html" class="card" data-c="util" data-s="translate translation language अनुवाद" style="--glow:rgba(34,211,238,.1);--gc:rgba(34,211,238,.35);">
+  <div class="c-ico" style="background:rgba(34,211,238,.15);">🌐</div>
+  <div class="c-head"><div class="c-title">AI Translator</div><div class="c-no">16</div></div>
+  <div class="c-desc">100+ Languages में Translate करो</div>
+  <div class="c-foot"><span class="badge b-free">Utility</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="image-to-prompt.html" class="card" data-cat="image" data-search="image to text prompt describe">
-    <div class="card-top-row"><div class="card-num">17</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(124,58,237,.15)">🔍</div>
-    <div class="card-title">Image to Prompt</div>
-    <div class="card-desc">Image देखकर AI Prompt Generate करो</div>
-    <div class="card-footer"><span class="card-badge">AI Vision</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="ai-resume.html" class="card" data-c="util" data-s="resume cv job professional बनाओ career" style="--glow:rgba(16,185,129,.1);--gc:rgba(16,185,129,.35);">
+  <div class="c-ico" style="background:rgba(16,185,129,.15);">📄</div>
+  <div class="c-head"><div class="c-title">AI Resume Builder</div><div class="c-no">17</div></div>
+  <div class="c-desc">Professional Resume मिनटों में बनाओ</div>
+  <div class="c-foot"><span class="badge b-free">Career</span><span class="arrow">→</span></div>
+</a>
 
-  <!-- TEXT / CONTENT TOOLS -->
-  <a href="ai-chat.html" class="card" data-cat="text" data-search="chat conversation question ai बात करो">
-    <div class="card-top-row"><div class="card-num">18</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(6,182,212,.15)">🤖</div>
-    <div class="card-title">AI Chat Assistant</div>
-    <div class="card-desc">AI से कुछ भी पूछो — Smart Answers in Hindi</div>
-    <div class="card-footer"><span class="card-badge badge-hot">🔥 Hot</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="ai-caption.html" class="card" data-c="txt" data-s="caption social media instagram post facebook" style="--glow:rgba(244,114,182,.1);--gc:rgba(244,114,182,.35);">
+  <div class="c-ico" style="background:rgba(244,114,182,.15);">📱</div>
+  <div class="c-head"><div class="c-title">AI Caption</div><div class="c-no">18</div></div>
+  <div class="c-desc">Instagram, Facebook के लिए Captions बनाओ</div>
+  <div class="c-foot"><span class="badge b-free">Social</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="ai-shayari.html" class="card" data-cat="fun" data-search="shayari poem hindi kavita शायरी">
-    <div class="card-top-row"><div class="card-num">19</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(244,63,94,.15)">❤️</div>
-    <div class="card-title">AI Shayari Generator</div>
-    <div class="card-desc">AI से Romantic, Sad, Motivational शायरी बनवाओ</div>
-    <div class="card-footer"><span class="card-badge badge-hot">🔥 Hot</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="ai-letter.html" class="card" data-c="txt" data-s="letter email formal application पत्र leave" style="--glow:rgba(245,158,11,.1);--gc:rgba(245,158,11,.35);">
+  <div class="c-ico" style="background:rgba(245,158,11,.15);">✉️</div>
+  <div class="c-head"><div class="c-title">AI Letter Writer</div><div class="c-no">19</div></div>
+  <div class="c-desc">Application, Leave Letter AI से लिखो</div>
+  <div class="c-foot"><span class="badge b-free">Text AI</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="ai-story.html" class="card" data-cat="text" data-search="story kahani creative लिखो writing">
-    <div class="card-top-row"><div class="card-num">20</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(16,185,129,.15)">📖</div>
-    <div class="card-title">AI Story Writer</div>
-    <div class="card-desc">AI से मनचाही कहानी लिखवाओ — Hindi में</div>
-    <div class="card-footer"><span class="card-badge">Text AI</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="ai-studynotes.html" class="card" data-c="txt" data-s="study notes education पढ़ाई school college" style="--glow:rgba(34,211,238,.1);--gc:rgba(34,211,238,.35);">
+  <div class="c-ico" style="background:rgba(34,211,238,.15);">📚</div>
+  <div class="c-head"><div class="c-title">AI Study Notes</div><div class="c-no">20</div></div>
+  <div class="c-desc">किसी भी Topic के Notes AI से बनाओ</div>
+  <div class="c-foot"><span class="badge b-free">Education</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="ai-code.html" class="card" data-cat="utility" data-search="code developer html python javascript programming">
-    <div class="card-top-row"><div class="card-num">21</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(99,102,241,.15)">💻</div>
-    <div class="card-title">AI Code Generator</div>
-    <div class="card-desc">किसी भी Language में Code Generate करो instantly</div>
-    <div class="card-footer"><span class="card-badge badge-new">✨ New</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="ai-news.html" class="card" data-c="txt" data-s="news latest current खबर summary" style="--glow:rgba(99,102,241,.1);--gc:rgba(99,102,241,.35);">
+  <div class="c-ico" style="background:rgba(99,102,241,.15);">📰</div>
+  <div class="c-head"><div class="c-title">AI News Analyzer</div><div class="c-no">21</div></div>
+  <div class="c-desc">News को Hindi में Summary पाओ</div>
+  <div class="c-foot"><span class="badge b-free">News</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="ai-translator.html" class="card" data-cat="utility" data-search="translate translation language अनुवाद">
-    <div class="card-top-row"><div class="card-num">22</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(6,182,212,.15)">🌐</div>
-    <div class="card-title">AI Translator</div>
-    <div class="card-desc">किसी भी Language में Translate करो — 100+ Languages</div>
-    <div class="card-footer"><span class="card-badge">Utility</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="ai-recipe.html" class="card" data-c="fun" data-s="recipe food खाना cooking रेसिपी" style="--glow:rgba(245,158,11,.1);--gc:rgba(245,158,11,.35);">
+  <div class="c-ico" style="background:rgba(245,158,11,.15);">🍳</div>
+  <div class="c-head"><div class="c-title">AI Recipe Chef</div><div class="c-no">22</div></div>
+  <div class="c-desc">सब्जियों से Recipe AI से पूछो</div>
+  <div class="c-foot"><span class="badge b-free">Food</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="ai-resume.html" class="card" data-cat="utility" data-search="resume cv job professional बनाओ">
-    <div class="card-top-row"><div class="card-num">23</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(16,185,129,.15)">📄</div>
-    <div class="card-title">AI Resume Builder</div>
-    <div class="card-desc">Professional Resume AI से बनाओ मिनटों में</div>
-    <div class="card-footer"><span class="card-badge">Career</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="ai-travel.html" class="card" data-c="fun" data-s="travel trip plan घूमना tour budget" style="--glow:rgba(16,185,129,.1);--gc:rgba(16,185,129,.35);">
+  <div class="c-ico" style="background:rgba(16,185,129,.15);">✈️</div>
+  <div class="c-head"><div class="c-title">AI Travel Planner</div><div class="c-no">23</div></div>
+  <div class="c-desc">Trip Plan करो — Hotels, Routes, Budget</div>
+  <div class="c-foot"><span class="badge b-free">Travel</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="ai-caption.html" class="card" data-cat="text" data-search="caption social media instagram post">
-    <div class="card-top-row"><div class="card-num">24</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(244,63,94,.15)">📱</div>
-    <div class="card-title">AI Caption Generator</div>
-    <div class="card-desc">Instagram, Facebook के लिए Captions बनाओ</div>
-    <div class="card-footer"><span class="card-badge">Social</span><span class="card-arrow">→</span></div>
-  </a>
+<!-- FUN TOOLS -->
+<a href="ai-shayari.html" class="card" data-c="fun" data-s="shayari poem hindi kavita romantic sad शायरी" style="--glow:rgba(244,114,182,.1);--gc:rgba(244,114,182,.35);">
+  <div class="c-ico" style="background:rgba(244,114,182,.15);">❤️</div>
+  <div class="c-head"><div class="c-title">AI Shayari</div><div class="c-no">24</div></div>
+  <div class="c-desc">Romantic, Sad, Motivational शायरी बनाओ</div>
+  <div class="c-foot"><span class="badge b-hot">🔥 Hot</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="ai-letter.html" class="card" data-cat="text" data-search="letter email formal application पत्र">
-    <div class="card-top-row"><div class="card-num">25</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(245,158,11,.15)">✉️</div>
-    <div class="card-title">AI Letter Writer</div>
-    <div class="card-desc">Application, Complaint, Leave Letter AI से लिखो</div>
-    <div class="card-footer"><span class="card-badge">Text AI</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="ai-jokes.html" class="card" data-c="fun" data-s="jokes funny comedy हँसी मज़ाक" style="--glow:rgba(245,158,11,.1);--gc:rgba(245,158,11,.35);">
+  <div class="c-ico" style="background:rgba(245,158,11,.15);">😂</div>
+  <div class="c-head"><div class="c-title">AI Jokes</div><div class="c-no">25</div></div>
+  <div class="c-desc">Hindi Jokes और Comedy Generate करो</div>
+  <div class="c-foot"><span class="badge b-free">Fun</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="ai-studynotes.html" class="card" data-cat="text" data-search="study notes education पढ़ाई notes">
-    <div class="card-top-row"><div class="card-num">26</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(6,182,212,.15)">📚</div>
-    <div class="card-title">AI Study Notes</div>
-    <div class="card-desc">किसी भी Topic के Notes AI से बनाओ</div>
-    <div class="card-footer"><span class="card-badge">Education</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="ai-quote.html" class="card" data-c="fun" data-s="quotes motivational inspirational सुविचार" style="--glow:rgba(244,114,182,.1);--gc:rgba(244,114,182,.35);">
+  <div class="c-ico" style="background:rgba(244,114,182,.15);">💭</div>
+  <div class="c-head"><div class="c-title">AI Quotes</div><div class="c-no">26</div></div>
+  <div class="c-desc">Motivational Quotes और Suvichar पाओ</div>
+  <div class="c-foot"><span class="badge b-free">Fun</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="ai-recipe.html" class="card" data-cat="fun" data-search="recipe food खाना cooking रेसिपी">
-    <div class="card-top-row"><div class="card-num">27</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(245,158,11,.15)">🍳</div>
-    <div class="card-title">AI Recipe Generator</div>
-    <div class="card-desc">घर की सब्जियों से Recipe AI से पूछो</div>
-    <div class="card-footer"><span class="card-badge">Food</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="ai-horoscope.html" class="card" data-c="fun" data-s="horoscope kundali rashifal भविष्य राशि" style="--glow:rgba(99,102,241,.1);--gc:rgba(99,102,241,.35);">
+  <div class="c-ico" style="background:rgba(99,102,241,.15);">🔮</div>
+  <div class="c-head"><div class="c-title">AI Horoscope</div><div class="c-no">27</div></div>
+  <div class="c-desc">AI से राशिफल और Future Reading पाओ</div>
+  <div class="c-foot"><span class="badge b-free">Fun</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="ai-travel.html" class="card" data-cat="fun" data-search="travel trip plan घूमना tour">
-    <div class="card-top-row"><div class="card-num">28</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(16,185,129,.15)">✈️</div>
-    <div class="card-title">AI Travel Planner</div>
-    <div class="card-desc">AI से Trip Plan करो — Hotels, Routes, Budget</div>
-    <div class="card-footer"><span class="card-badge">Travel</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="ai-meme.html" class="card" data-c="fun" data-s="meme funny viral social internet" style="--glow:rgba(245,158,11,.1);--gc:rgba(245,158,11,.35);">
+  <div class="c-ico" style="background:rgba(245,158,11,.15);">😜</div>
+  <div class="c-head"><div class="c-title">AI Meme Generator</div><div class="c-no">28</div></div>
+  <div class="c-desc">Viral Memes AI से बनाओ — Share करो</div>
+  <div class="c-foot"><span class="badge b-new">✨ New</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="ai-business.html" class="card" data-cat="utility" data-search="business idea startup plan व्यापार">
-    <div class="card-top-row"><div class="card-num">29</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(99,102,241,.15)">💼</div>
-    <div class="card-title">AI Business Advisor</div>
-    <div class="card-desc">Business Ideas और Plans AI से पाओ</div>
-    <div class="card-footer"><span class="card-badge">Business</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="ai-gkquiz.html" class="card" data-c="fun" data-s="gk quiz knowledge test सामान्य ज्ञान" style="--glow:rgba(16,185,129,.1);--gc:rgba(16,185,129,.35);">
+  <div class="c-ico" style="background:rgba(16,185,129,.15);">🧠</div>
+  <div class="c-head"><div class="c-title">AI GK Quiz</div><div class="c-no">29</div></div>
+  <div class="c-desc">AI से GK Quiz खेलो — दिमाग तेज करो</div>
+  <div class="c-foot"><span class="badge b-free">Quiz</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="ai-interview.html" class="card" data-cat="utility" data-search="interview job question prepare नौकरी">
-    <div class="card-top-row"><div class="card-num">30</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(124,58,237,.15)">🎯</div>
-    <div class="card-title">AI Interview Prep</div>
-    <div class="card-desc">Interview Questions और Answers AI से तैयार करो</div>
-    <div class="card-footer"><span class="card-badge">Career</span><span class="card-arrow">→</span></div>
-  </a>
+<!-- VIDEO & UTILITY -->
+<a href="ai-video.html" class="card" data-c="vid" data-s="video generate create बनाओ cinematic 4k" style="--glow:rgba(99,102,241,.1);--gc:rgba(99,102,241,.35);">
+  <div class="c-ico" style="background:rgba(99,102,241,.15);">🎬</div>
+  <div class="c-head"><div class="c-title">AI Video Maker</div><div class="c-no">30</div></div>
+  <div class="c-desc">AI से Cinematic Videos बनाओ — Hindi Voice</div>
+  <div class="c-foot"><span class="badge b-hot">🔥 Hot</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="ai-health.html" class="card" data-cat="utility" data-search="health fitness diet doctor सेहत">
-    <div class="card-top-row"><div class="card-num">31</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(16,185,129,.15)">❤️‍🩹</div>
-    <div class="card-title">AI Health Advisor</div>
-    <div class="card-desc">Health Tips, Diet Plan AI से पाओ</div>
-    <div class="card-footer"><span class="card-badge">Health</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="video-downloader.html" class="card" data-c="vid" data-s="video download youtube instagram social" style="--glow:rgba(239,68,68,.1);--gc:rgba(239,68,68,.35);">
+  <div class="c-ico" style="background:rgba(239,68,68,.15);">⬇️</div>
+  <div class="c-head"><div class="c-title">Video Downloader</div><div class="c-no">31</div></div>
+  <div class="c-desc">YouTube, Instagram Videos Download करो</div>
+  <div class="c-foot"><span class="badge b-free">Utility</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="ai-news.html" class="card" data-cat="text" data-search="news latest current खबर">
-    <div class="card-top-row"><div class="card-num">32</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(6,182,212,.15)">📰</div>
-    <div class="card-title">AI News Summarizer</div>
-    <div class="card-desc">Latest News को Hindi में Summary पाओ</div>
-    <div class="card-footer"><span class="card-badge">News</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="ai-business.html" class="card" data-c="util" data-s="business idea startup plan व्यापार" style="--glow:rgba(34,211,238,.1);--gc:rgba(34,211,238,.35);">
+  <div class="c-ico" style="background:rgba(34,211,238,.15);">💼</div>
+  <div class="c-head"><div class="c-title">AI Business Advisor</div><div class="c-no">32</div></div>
+  <div class="c-desc">Business Ideas और Plans AI से पाओ</div>
+  <div class="c-foot"><span class="badge b-free">Business</span><span class="arrow">→</span></div>
+</a>
 
-  <!-- FUN TOOLS -->
-  <a href="ai-jokes.html" class="card" data-cat="fun" data-search="jokes funny comedy हँसी मज़ाक">
-    <div class="card-top-row"><div class="card-num">33</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(245,158,11,.15)">😂</div>
-    <div class="card-title">AI Jokes Generator</div>
-    <div class="card-desc">Hindi Jokes और Comedy AI से Generate करो</div>
-    <div class="card-footer"><span class="card-badge">Fun</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="ai-interview.html" class="card" data-c="util" data-s="interview job question prepare नौकरी career" style="--glow:rgba(99,102,241,.1);--gc:rgba(99,102,241,.35);">
+  <div class="c-ico" style="background:rgba(99,102,241,.15);">🎯</div>
+  <div class="c-head"><div class="c-title">AI Interview Prep</div><div class="c-no">33</div></div>
+  <div class="c-desc">Interview Questions AI से तैयार करो</div>
+  <div class="c-foot"><span class="badge b-free">Career</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="ai-quote.html" class="card" data-cat="fun" data-search="quotes motivational inspirational सुविचार">
-    <div class="card-top-row"><div class="card-num">34</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(244,63,94,.15)">💭</div>
-    <div class="card-title">AI Quote Generator</div>
-    <div class="card-desc">Motivational Quotes और Suvichar पाओ</div>
-    <div class="card-footer"><span class="card-badge">Fun</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="ai-health.html" class="card" data-c="util" data-s="health fitness diet doctor सेहत tips" style="--glow:rgba(16,185,129,.1);--gc:rgba(16,185,129,.35);">
+  <div class="c-ico" style="background:rgba(16,185,129,.15);">❤️‍🩹</div>
+  <div class="c-head"><div class="c-title">AI Health Advisor</div><div class="c-no">34</div></div>
+  <div class="c-desc">Health Tips, Diet Plan AI से पाओ</div>
+  <div class="c-foot"><span class="badge b-free">Health</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="ai-horoscope.html" class="card" data-cat="fun" data-search="horoscope kundali rashifal भविष्य">
-    <div class="card-top-row"><div class="card-num">35</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(99,102,241,.15)">🔮</div>
-    <div class="card-title">AI Horoscope</div>
-    <div class="card-desc">AI से राशिफल और Future Reading पाओ</div>
-    <div class="card-footer"><span class="card-badge">Fun</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="ai-palette.html" class="card" data-c="util" data-s="color palette design scheme रंग" style="--glow:rgba(244,114,182,.1);--gc:rgba(244,114,182,.35);">
+  <div class="c-ico" style="background:rgba(244,114,182,.15);">🎨</div>
+  <div class="c-head"><div class="c-title">AI Color Palette</div><div class="c-no">35</div></div>
+  <div class="c-desc">Design के लिए Perfect Color Palette बनाओ</div>
+  <div class="c-foot"><span class="badge b-free">Design</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="ai-meme.html" class="card" data-cat="fun" data-search="meme funny viral social internet">
-    <div class="card-top-row"><div class="card-num">36</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(245,158,11,.15)">😜</div>
-    <div class="card-title">AI Meme Generator</div>
-    <div class="card-desc">Viral Memes AI से बनाओ — Share करो</div>
-    <div class="card-footer"><span class="card-badge badge-new">✨ New</span><span class="card-arrow">→</span></div>
-  </a>
+<a href="image-expander.html" class="card" data-c="img" data-s="expand image extend outpaint बड़ा wider" style="--glow:rgba(245,158,11,.1);--gc:rgba(245,158,11,.35);">
+  <div class="c-ico" style="background:rgba(245,158,11,.15);">↔️</div>
+  <div class="c-head"><div class="c-title">Image Expander</div><div class="c-no">36</div></div>
+  <div class="c-desc">Image को किसी भी Direction में Expand करो</div>
+  <div class="c-foot"><span class="badge b-new">✨ New</span><span class="arrow">→</span></div>
+</a>
 
-  <a href="ai-gkquiz.html" class="card" data-cat="fun" data-search="gk quiz knowledge test सामान्य ज्ञान">
-    <div class="card-top-row"><div class="card-num">37</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(16,185,129,.15)">🧠</div>
-    <div class="card-title">AI GK Quiz</div>
-    <div class="card-desc">AI से GK Quiz खेलो — दिमाग तेज करो</div>
-    <div class="card-footer"><span class="card-badge">Quiz</span><span class="card-arrow">→</span></div>
-  </a>
-
-  <!-- VIDEO TOOLS -->
-  <a href="ai-video.html" class="card" data-cat="video" data-search="video generate create बनाओ cinematic">
-    <div class="card-top-row"><div class="card-num">38</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(124,58,237,.15)">🎬</div>
-    <div class="card-title">AI 4K Video Maker</div>
-    <div class="card-desc">AI से Cinematic Videos बनाओ — Hindi Voiceover</div>
-    <div class="card-footer"><span class="card-badge badge-hot">🔥 Hot</span><span class="card-arrow">→</span></div>
-  </a>
-
-  <a href="video-downloader.html" class="card" data-cat="video" data-search="video download youtube social">
-    <div class="card-top-row"><div class="card-num">39</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(244,63,94,.15)">⬇️</div>
-    <div class="card-title">Video Downloader</div>
-    <div class="card-desc">YouTube, Instagram Videos Download करो</div>
-    <div class="card-footer"><span class="card-badge">Utility</span><span class="card-arrow">→</span></div>
-  </a>
-
-  <!-- UTILITY -->
-  <a href="ai-palette.html" class="card" data-cat="utility" data-search="color palette design scheme रंग">
-    <div class="card-top-row"><div class="card-num">40</div></div>
-    <div class="card-icon-wrap" style="--ic-bg:rgba(99,102,241,.15)">🎨</div>
-    <div class="card-title">AI Color Palette</div>
-    <div class="card-desc">Design के लिए Perfect Color Palette बनाओ</div>
-    <div class="card-footer"><span class="card-badge">Design</span><span class="card-arrow">→</span></div>
-  </a>
-
-</div>
-
-<div class="no-results" id="noResults">
-  <h3>😕 कोई Tool नहीं मिला</h3>
-  <p>दूसरे keywords try करो</p>
-</div>
+</div><!-- /grid -->
+<div class="no-res" id="nores">😕 कोई Tool नहीं मिला — दूसरे words try करो</div>
+</div><!-- /wrap -->
 
 <!-- Bottom Ad -->
-<div style="position:relative;z-index:1;text-align:center;padding:16px 20px;max-width:900px;margin:0 auto;">
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3019468976412219" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+<div class="ad-wrap" style="padding-bottom:12px;">
+  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3019468976412219" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
 </div>
 
-<!-- Footer -->
 <footer>
-  <div class="footer-links">
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-    <a href="privacy-policy.html">Privacy Policy</a>
-    <a href="terms.html">Terms</a>
-    <a href="sitemap.xml">Sitemap</a>
+  <div class="fl">
+    <a href="about.html">About</a><a href="contact.html">Contact</a>
+    <a href="privacy-policy.html">Privacy</a><a href="terms.html">Terms</a>
   </div>
-  <p>© 2025 Sachin AI Studio — 39 Free AI Tools</p>
+  <div>© 2025 Sachin AI Studio — 36 Free AI Tools</div>
 </footer>
 
-<button id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<button id="top" onclick="scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script>
-// Scroll to top
-window.addEventListener('scroll', () => {
-  document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 300);
-});
+window.addEventListener('scroll',()=>document.getElementById('top').classList.toggle('show',scrollY>300));
 
-// Search
-const searchBox = document.getElementById('searchBox');
-const cards = document.querySelectorAll('.card');
-const noResults = document.getElementById('noResults');
-let activeCat = 'all';
+const cards=[...document.querySelectorAll('.card')];
+const nores=document.getElementById('nores');
+let cat='all';
 
-function filterCards() {
-  const q = searchBox.value.toLowerCase().trim();
-  let visible = 0;
-  cards.forEach(card => {
-    const search = (card.dataset.search || '').toLowerCase();
-    const title = (card.querySelector('.card-title')?.textContent || '').toLowerCase();
-    const desc = (card.querySelector('.card-desc')?.textContent || '').toLowerCase();
-    const cat = card.dataset.cat || '';
-    const matchSearch = !q || search.includes(q) || title.includes(q) || desc.includes(q);
-    const matchCat = activeCat === 'all' || cat === activeCat;
-    const show = matchSearch && matchCat;
-    card.style.display = show ? '' : 'none';
-    if (show) visible++;
+function filter(){
+  const q=document.getElementById('srch').value.toLowerCase().trim();
+  let v=0;
+  cards.forEach(c=>{
+    const s=(c.dataset.s||'').toLowerCase();
+    const t=(c.querySelector('.c-title')?.textContent||'').toLowerCase();
+    const d=(c.querySelector('.c-desc')?.textContent||'').toLowerCase();
+    const cc=c.dataset.c||'';
+    const ok=(!q||s.includes(q)||t.includes(q)||d.includes(q))&&(cat==='all'||cc===cat);
+    c.style.display=ok?'':'none';
+    if(ok)v++;
   });
-  noResults.style.display = visible === 0 ? 'block' : 'none';
+  nores.style.display=v===0?'block':'none';
 }
 
-searchBox.addEventListener('input', filterCards);
-
-// Category tabs
-document.querySelectorAll('.cat-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    activeCat = btn.dataset.cat;
-    filterCards();
-  });
-});
+document.getElementById('srch').addEventListener('input',filter);
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+  t.classList.add('on');
+  cat=t.dataset.c;
+  filter();
+}));
 </script>
 </body>
 </html>
