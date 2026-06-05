@@ -1,110 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EMI & Loan Calculator - Sachin AI</title>
+    <title>EMI & Loan Calculator Online - लोन की किस्तों की गणना करें | Sachin AI Studio</title>
+    <meta name="description" content="मुफ्त EMI कैलकुलेटर टूल। होम लोन, कार लोन और पर्सनल लोन की मासिक किस्तों, कुल ब्याज और कुल भुगतान की सटीक गणना करें। 100% सुरक्षित और तेज़।">
+    <meta name="keywords" content="emi calculator, loan calculator, home loan emi, personal loan emi, calculate emi online hindi">
     <style>
-        :root {
-            --bg: #0f172a;
-            --card: #1e293b;
-            --accent: #10b981;
-            --text: #f8fafc;
-            --border: #334155;
-        }
-
+        :root { --bg: #0f172a; --card: #1e293b; --accent: #10b981; --text: #f8fafc; --border: #334155; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            padding: 12px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        header {
-            width: 100%;
-            max-width: 500px;
-            padding: 20px 0;
-            text-align: center;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 24px;
-        }
-
-        .logo { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
-
-        .container {
-            width: 100%;
-            max-width: 500px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 24px;
-            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5);
-        }
-
+        body { background-color: var(--bg); color: var(--text); padding: 12px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+        header { width: 100%; max-width: 800px; padding: 20px 0; text-align: center; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+        .logo { font-size: 1.8rem; font-weight: 800; color: var(--accent); text-decoration: none; }
+        .container { width: 100%; max-width: 500px; background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 24px; box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5); }
         .input-group { margin-bottom: 20px; }
         label { display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 8px; font-weight: 600; }
-
-        input {
-            width: 100%;
-            background: rgba(15, 23, 42, 0.5);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 12px;
-            color: white;
-            font-size: 1rem;
-            outline: none;
-        }
-
+        input { width: 100%; background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border); border-radius: 10px; padding: 12px; color: white; font-size: 1rem; outline: none; }
         input:focus { border-color: var(--accent); }
-
-        .result-card {
-            margin-top: 24px;
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid var(--accent);
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .emi-value { font-size: 2rem; font-weight: 800; color: var(--accent); margin: 10px 0; }
+        .result-card { margin-top: 24px; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--accent); border-radius: 15px; padding: 20px; text-align: center; }
+        .emi-value { font-size: 2.2rem; font-weight: 800; color: var(--accent); margin: 10px 0; }
         .details { display: flex; justify-content: space-between; margin-top: 15px; font-size: 0.85rem; color: #94a3b8; }
         .details b { color: white; }
+        .info-section { max-width: 800px; margin-top: 50px; padding: 30px; background: var(--card); border-radius: 20px; border: 1px solid var(--border); }
+        .info-section h2 { color: var(--accent); margin-bottom: 20px; }
+        .info-section p { margin-bottom: 15px; line-height: 1.8; color: #cbd5e1; }
+        .info-section ul { margin-left: 20px; margin-bottom: 20px; color: #cbd5e1; }
+        .info-section li { margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo">Sachin AI Studio</div>
-    <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">Smart EMI & Loan Calculator</div>
+    <a href="index.html" class="logo">Sachin AI Studio</a>
+    <div style="font-size: 0.9rem; color: #94a3b8; margin-top: 4px;">Professional Loan & EMI Management Tool</div>
 </header>
 
 <div class="container">
     <div class="input-group">
-        <label>Loan Amount (₹)</label>
+        <label>लोन की राशि (Loan Amount - ₹)</label>
         <input type="number" id="amount" value="100000">
     </div>
     <div class="input-group">
-        <label>Interest Rate (% P.A.)</label>
+        <label>ब्याज दर (Interest Rate - % P.A.)</label>
         <input type="number" id="rate" value="10.5" step="0.1">
     </div>
     <div class="input-group">
-        <label>Tenure (Months)</label>
+        <label>अवधि (Tenure - Months)</label>
         <input type="number" id="tenure" value="12">
     </div>
 
     <div class="result-card">
-        <div style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Monthly EMI</div>
+        <div style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">मासिक किस्त (Monthly EMI)</div>
         <div class="emi-value" id="emi">₹ 0</div>
         <div class="details">
-            <div>Total Interest: <b id="total-interest">₹ 0</b></div>
-            <div>Total Pay: <b id="total-pay">₹ 0</b></div>
+            <div>कुल ब्याज: <b id="total-interest">₹ 0</b></div>
+            <div>कुल भुगतान: <b id="total-pay">₹ 0</b></div>
         </div>
     </div>
+</div>
+
+<div class="info-section">
+    <h2>EMI कैलकुलेटर क्या है और यह कैसे काम करता है?</h2>
+    <p>EMI का मतलब 'Equated Monthly Installment' है। यह वह निश्चित राशि है जो आप हर महीने अपने बैंक या ऋणदाता को तब तक देते हैं जब तक कि आपका लोन पूरी तरह से चुका नहीं दिया जाता। सचिन एआई स्टूडियो का EMI कैलकुलेटर आपको अपनी वित्तीय योजना बनाने में मदद करता है ताकि आप जान सकें कि हर महीने आपकी जेब पर कितना बोझ पड़ेगा।</p>
+    
+    <h3>EMI कैलकुलेटर के लाभ:</h3>
+    <ul>
+        <li><strong>त्वरित परिणाम:</strong> जटिल गणितीय गणनाओं के बजाय, बस तीन मान डालें और तुरंत परिणाम प्राप्त करें।</li>
+        <li><strong>वित्तीय स्पष्टता:</strong> आपको पता चलता है कि आप मूल राशि (Principal) के अलावा कितना अतिरिक्त ब्याज दे रहे हैं।</li>
+        <li><strong>विभिन्न विकल्पों की तुलना:</strong> आप ब्याज दर और अवधि बदलकर देख सकते हैं कि कौन सा लोन विकल्प आपके बजट में फिट बैठता है।</li>
+        <li><strong>होम और कार लोन के लिए बेस्ट:</strong> चाहे आप घर खरीदना चाहते हों या कार, यह टूल हर प्रकार के लोन के लिए सटीक है।</li>
+    </ul>
+
+    <h3>EMI की गणना का सूत्र (Formula):</h3>
+    <p>EMI की गणना इस सूत्र का उपयोग करके की जाती है: <strong>E = P x r x (1 + r)^n / ((1 + r)^n - 1)</strong></p>
+    <p>जहाँ: <br>
+    E = EMI <br>
+    P = मूल राशि (Principal Loan Amount) <br>
+    r = मासिक ब्याज दर (वार्षिक दर / 12 / 100) <br>
+    n = महीनों की संख्या (Loan Tenure)</p>
+    
+    <p>सचिन एआई स्टूडियो आपकी गोपनीयता का सम्मान करता है। यह टूल पूरी तरह से क्लाइंट-साइड है, जिसका अर्थ है कि आपकी वित्तीय जानकारी हमारे सर्वर तक कभी नहीं पहुँचती है।</p>
 </div>
 
 <script>
@@ -122,9 +97,9 @@
             const totalPay = emi * n;
             const totalInt = totalPay - p;
 
-            document.getElementById('emi').textContent = "₹ " + Math.round(emi).toLocaleString();
-            document.getElementById('total-interest').textContent = "₹ " + Math.round(totalInt).toLocaleString();
-            document.getElementById('total-pay').textContent = "₹ " + Math.round(totalPay).toLocaleString();
+            document.getElementById('emi').textContent = "₹ " + Math.round(emi).toLocaleString('en-IN');
+            document.getElementById('total-interest').textContent = "₹ " + Math.round(totalInt).toLocaleString('en-IN');
+            document.getElementById('total-pay').textContent = "₹ " + Math.round(totalPay).toLocaleString('en-IN');
         }
     }
 
@@ -132,11 +107,9 @@
     calculate();
 </script>
 
+<footer style="margin-top: 50px; padding: 20px; color: #94a3b8; text-align: center; border-top: 1px solid var(--border); width: 100%;">
+    &copy; 2026 Sachin AI Studio. सुरक्षित और मुफ्त वित्तीय उपकरण।
+</footer>
 
-    <div style="max-width: 500px; margin: 30px auto; padding: 20px; color: #94a3b8; line-height: 1.6; border-top: 1px solid #334155;">
-        <h2 style="color: #fff; font-size: 1.2rem; margin-bottom: 15px;">EMI कैलकुलेटर का उपयोग क्यों करें?</h2>
-        <p style="font-size: 0.9rem;">सचिन एआई स्टूडियो का EMI कैलकुलेटर आपको अपने लोन की मासिक किस्तों की सटीक गणना करने में मदद करता है। यह टूल होम लोन, कार लोन और पर्सनल लोन के लिए एकदम सही है। इसमें आप ब्याज दर और लोन की अवधि के अनुसार अपनी योजना बना सकते हैं।</p>
-        <p style="font-size: 0.9rem; margin-top: 10px;">सचिन एआई स्टूडियो के सभी टूल्स 100% फ्री और सुरक्षित हैं। हम आपका कोई भी डेटा अपने सर्वर पर स्टोर नहीं करते हैं।</p>
-    </div>
 </body>
 </html>

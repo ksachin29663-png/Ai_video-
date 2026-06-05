@@ -3,373 +3,134 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sachin AI Studio — Offline Professional Tools</title>
+<title>Sachin AI Studio — Professional Online Tools & Resources</title>
 <link rel="icon" href="favicon.png">
-<meta name="description" content="FREE Professional Tools — EMI Calculator, Age Calculator, QR Master, Image Compressor और बहुत कुछ — बिल्कुल मुफ्त!">
+<meta name="description" content="मुफ्त प्रोफेशनल ऑनलाइन टूल्स - EMI कैलकुलेटर, Age कैलकुलेटर, इमेज कंप्रेसर, क्रिकेट इनसाइक्लोपीडिया और बहुत कुछ। 100% सुरक्षित और AdSense फ्रेंडली।">
+<meta name="keywords" content="professional tools, emi calculator, age calculator, image compressor, cricket history, free online tools hindi">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3019468976412219" crossorigin="anonymous"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-:root{
-  --bg:#07090f;
-  --card:#0e1117;
-  --card2:#141820;
-  --border:rgba(255,255,255,0.06);
-  --accent:#6366f1;
-  --accent2:#22d3ee;
-  --green:#10b981;
-  --pink:#f472b6;
-  --orange:#f97316;
-  --text:#f1f5f9;
-  --muted:#64748b;
-  --r:14px;
-}
+:root{ --bg:#07090f; --card:#0e1117; --card2:#141820; --border:rgba(255,255,255,0.06); --accent:#6366f1; --accent2:#22d3ee; --text:#f1f5f9; --muted:#64748b; --r:14px; }
 html{scroll-behavior:smooth;}
 body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
-
-/* BG MESH */
-.bg-mesh{position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:radial-gradient(ellipse 70% 50% at 0% 0%,rgba(99,102,241,.18) 0%,transparent 55%),
-  radial-gradient(ellipse 60% 40% at 100% 0%,rgba(34,211,238,.14) 0%,transparent 50%),
-  radial-gradient(ellipse 50% 40% at 50% 100%,rgba(244,114,182,.12) 0%,transparent 55%),
-  radial-gradient(ellipse 40% 30% at 0% 80%,rgba(16,185,129,.1) 0%,transparent 50%);}
-
-/* NAV */
+.bg-mesh{position:fixed;inset:0;z-index:0;pointer-events:none; background:radial-gradient(ellipse 70% 50% at 0% 0%,rgba(99,102,241,.18) 0%,transparent 55%), radial-gradient(ellipse 60% 40% at 100% 0%,rgba(34,211,238,.14) 0%,transparent 50%);}
 header{position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border);background:rgba(7,9,15,.9);backdrop-filter:blur(20px);}
 nav{max-width:1300px;margin:0 auto;padding:0 20px;height:58px;display:flex;align-items:center;justify-content:space-between;}
-.logo{font-size:1.15rem;font-weight:900;text-decoration:none;
-  background:linear-gradient(90deg,#818cf8,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.logo{font-size:1.15rem;font-weight:900;text-decoration:none; background:linear-gradient(90deg,#818cf8,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .nav-links{display:flex;gap:6px;}
 .nav-links a{color:var(--muted);font-size:.78rem;padding:5px 12px;border-radius:20px;border:1px solid var(--border);text-decoration:none;transition:.2s;}
 .nav-links a:hover,.nav-links a.active{color:#fff;border-color:rgba(99,102,241,.5);background:rgba(99,102,241,.1);}
-.nav-login{background:linear-gradient(135deg,#6366f1,#22d3ee)!important;border-color:transparent!important;color:#fff!important;}
-
-/* HERO */
 .hero{position:relative;z-index:1;text-align:center;padding:56px 20px 24px;}
-.hero-pill{display:inline-flex;align-items:center;gap:8px;padding:5px 16px;border-radius:99px;
-  border:1px solid rgba(99,102,241,.4);background:rgba(99,102,241,.1);font-size:.72rem;font-weight:700;
-  color:#818cf8;letter-spacing:.5px;margin-bottom:20px;text-transform:uppercase;}
-.dot{width:6px;height:6px;border-radius:50%;background:#818cf8;box-shadow:0 0 8px #818cf8;animation:blink 2s infinite;}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 .hero h1{font-size:clamp(2.2rem,6vw,4rem);font-weight:900;line-height:1.1;letter-spacing:-1px;}
 .hero h1 em{font-style:normal;background:linear-gradient(135deg,#818cf8,#22d3ee,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.hero p{color:var(--muted);font-size:.98rem;margin:14px auto 28px;max-width:500px;line-height:1.7;}
-.stats{display:flex;justify-content:center;gap:36px;flex-wrap:wrap;margin-bottom:36px;}
-.stat-n{font-size:1.8rem;font-weight:900;background:linear-gradient(90deg,#818cf8,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;}
-.stat-l{font-size:.7rem;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:.5px;}
-
-/* SEARCH */
+.hero p{color:var(--muted);font-size:.98rem;margin:14px auto 28px;max-width:600px;line-height:1.7;}
 .search-bar{position:relative;z-index:1;max-width:500px;margin:0 auto 28px;padding:0 20px;}
-.search-bar input{width:100%;padding:13px 18px 13px 46px;border-radius:50px;border:1.5px solid var(--border);
-  background:rgba(255,255,255,.04);color:var(--text);font-size:.9rem;outline:none;font-family:inherit;transition:.25s;}
+.search-bar input{width:100%;padding:13px 18px 13px 46px;border-radius:50px;border:1.5px solid var(--border); background:rgba(255,255,255,.04);color:var(--text);font-size:.9rem;outline:none;transition:.25s;}
 .search-bar input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,.15);}
-.search-bar input::placeholder{color:var(--muted);}
-.search-icon{position:absolute;left:34px;top:50%;transform:translateY(-50%);font-size:1rem;pointer-events:none;}
-
-/* TABS */
-.tabs{position:relative;z-index:1;display:flex;gap:7px;flex-wrap:wrap;justify-content:center;padding:0 16px;margin-bottom:28px;}
-.tab{padding:6px 15px;border-radius:99px;border:1px solid var(--border);background:transparent;
-  color:var(--muted);font-size:.75rem;font-weight:600;cursor:pointer;font-family:inherit;transition:.2s;}
-.tab:hover,.tab.on{border-color:rgba(99,102,241,.5);background:rgba(99,102,241,.12);color:#a5b4fc;}
-
-/* AD */
-.ad-wrap{position:relative;z-index:1;text-align:center;max-width:960px;margin:0 auto 20px;padding:0 16px;}
-
-/* GRID */
 .wrap{position:relative;z-index:1;max-width:1300px;margin:0 auto;padding:0 16px 80px;}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(245px,1fr));gap:14px;}
-
-/* CARD */
-.card{display:block;text-decoration:none;color:inherit;border-radius:var(--r);padding:18px 16px 16px;
-  background:var(--card);border:1px solid var(--border);
-  transition:transform .2s,box-shadow .2s,border-color .2s;position:relative;overflow:hidden;}
-.card::after{content:'';position:absolute;inset:0;border-radius:var(--r);opacity:0;transition:opacity .25s;background:var(--glow,rgba(99,102,241,.08));}
-.card:hover{transform:translateY(-3px);border-color:var(--gc,rgba(99,102,241,.3));box-shadow:0 12px 32px rgba(0,0,0,.5);}
-.card:hover::after{opacity:1;}
-.card[style*="none"]{display:none!important;}
-.c-ico{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:11px;}
-.c-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
-.c-title{font-size:.88rem;font-weight:700;color:#e2e8f0;}
-.c-no{font-size:.62rem;color:var(--muted);font-weight:600;}
-.c-desc{font-size:.75rem;color:var(--muted);line-height:1.55;margin-bottom:12px;min-height:30px;}
-.c-foot{display:flex;align-items:center;justify-content:space-between;}
-.badge{font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:99px;letter-spacing:.2px;}
-.b-hot{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#fca5a5;}
-.b-new{background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);color:#6ee7b7;}
-.b-free{background:rgba(99,102,241,.12);border:1px solid var(--border);color:#a5b4fc;}
-.b-pro{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);color:#fcd34d;}
-.arrow{color:var(--muted);font-size:.8rem;transition:.2s;}
-.card:hover .arrow{color:#fff;transform:translateX(4px);}
-
-/* NO RESULT */
-.no-res{display:none;text-align:center;padding:60px 20px;color:var(--muted);}
-
-/* FOOTER */
-footer{position:relative;z-index:1;text-align:center;border-top:1px solid var(--border);padding:32px 20px;color:var(--muted);font-size:.78rem;}
-footer a{color:var(--muted);text-decoration:none;margin:0 8px;}footer a:hover{color:#fff;}
-.fl{margin-bottom:10px;}
-
-/* TOP BTN */
-#top{position:fixed;bottom:20px;right:20px;z-index:200;width:40px;height:40px;border-radius:50%;
-  background:var(--accent);border:none;color:#fff;font-size:1rem;cursor:pointer;
-  opacity:0;transform:translateY(6px);transition:.3s;box-shadow:0 4px 14px rgba(99,102,241,.4);}
-#top.show{opacity:1;transform:none;}
-
-/* MOBILE */
-@media(max-width:640px){
-  .hero{padding:40px 14px 20px;}
-  .stats{gap:20px;}
-  .grid{grid-template-columns:1fr 1fr;gap:10px;}
-  .card{padding:14px 12px 12px;}
-  .c-ico{width:36px;height:36px;font-size:1.1rem;border-radius:8px;}
-  nav{padding:0 14px;}
-  .nav-links a{padding:4px 10px;font-size:.72rem;}
-}
-@media(max-width:380px){.grid{grid-template-columns:1fr;}}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;}
+.card{display:block;text-decoration:none;color:inherit;border-radius:var(--r);padding:24px; background:var(--card);border:1px solid var(--border); transition:0.3s;}
+.card:hover{transform:translateY(-5px);border-color:var(--accent);box-shadow:0 12px 32px rgba(0,0,0,0.5);}
+.c-ico{font-size:2rem;margin-bottom:15px;}
+.c-title{font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:10px;}
+.c-desc{font-size:0.85rem;color:var(--muted);line-height:1.6;margin-bottom:15px;}
+.badge{font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:99px;background:rgba(99,102,241,.12);color:#a5b4fc;border:1px solid var(--border);}
+footer{text-align:center;padding:40px;color:var(--muted);border-top:1px solid var(--border);}
 </style>
 </head>
 <body>
 <div class="bg-mesh"></div>
-
 <header>
   <nav>
-    <a href="index.html" class="logo">⚡ Sachin AI</a>
+    <a href="index.html" class="logo">⚡ Sachin AI Studio</a>
     <div class="nav-links">
       <a href="about.html">About</a>
-      <a href="premium.html">💎 Pro</a>
-      <a href="auth.html" class="nav-login">Login</a>
+      <a href="premium.html">Pro</a>
     </div>
   </nav>
 </header>
 
 <div class="hero">
-  <div class="hero-pill"><span class="dot"></span>100% Free — No Signup</div>
-  <h1>Sachin <em>AI Studio</em></h1>
-  <p>Sachin AI Studio एक अत्याधुनिक प्लेटफार्म है जहाँ आपको प्रोफेशनल टूल्स मिलते हैं। यहाँ सब कुछ मुफ्त, सुरक्षित और आसान है।</p>
-  <div class="stats">
-    <div><div class="stat-n">21+</div><div class="stat-l">ऑफलाइन टूल्स</div></div>
-    <div><div class="stat-n">100%</div><div class="stat-l">मुफ्त सेवा</div></div>
-    <div><div class="stat-n">HD</div><div class="stat-l">हाई क्वालिटी</div></div>
-  </div>
+  <h1>Your Ultimate <em>Digital Toolkit</em></h1>
+  <p>Sachin AI Studio एक अत्याधुनिक प्लेटफार्म है जहाँ आपको उच्च गुणवत्ता वाले प्रोफेशनल टूल्स मिलते हैं। हमारे सभी टूल्स AdSense फ्रेंडली और हाई वैल्यू कंटेंट के साथ तैयार किए गए हैं।</p>
 </div>
 
 <div class="search-bar">
-  <span class="search-icon">🔍</span>
-  <input type="text" id="srch" placeholder="Tool ढूंढें... calculator, qr, image...">
-</div>
-
-<div class="tabs">
-  <button class="tab on" data-c="all">⭐ सभी</button>
-  <button class="tab" data-c="img">🖼️ Image</button>
-  <button class="tab" data-c="util">🛠️ Tools</button>
-  <button class="tab" data-c="other">📊 Other</button>
+  <input type="text" id="srch" placeholder="Tool ढूंढें... calculator, image, cricket...">
 </div>
 
 <div class="wrap">
-<div class="grid" id="grid">
-<a href="news-hub.html" class="card" data-c="other" data-s="live news hub 2026 global updates" style="--glow:rgba(34,211,238,.1);--gc:rgba(34,211,238,.35);">
-  <div class="c-ico" style="background:rgba(34,211,238,.15);">📰</div>
-  <div class="c-head"><div class="c-title">Live News Hub 2026</div><div class="c-no">LIVE</div></div>
-  <div class="c-desc">दुनिया भर की 2026 की ताज़ा ख़बरें और लाइव अपडेट्स।</div>
-  <div class="c-foot"><span class="badge b-hot">🔥 Live</span><span class="arrow">→</span></div>
-</a>
+  <div class="grid">
+    <a href="cricket-history.html" class="card">
+      <div class="c-ico">🏏</div>
+      <div class="c-title">Cricket Encyclopedia 2026</div>
+      <div class="c-desc">16वीं शताब्दी से 2026 तक का सम्पूर्ण क्रिकेट इतिहास, महान खिलाड़ियों की जीवनियाँ और विस्तृत आंकड़े।</div>
+      <span class="badge">High Value</span>
+    </a>
 
-<a href="cricket-history.html" class="card" data-c="other" data-s="cricket history encyclopedia 2026 stats" style="--glow:rgba(249,115,22,.1);--gc:rgba(249,115,22,.35);">
-  <div class="c-ico" style="background:rgba(249,115,22,.15);">🏏</div>
-  <div class="c-head"><div class="c-title">Cricket Encyclopedia</div><div class="c-no">2026</div></div>
-  <div class="c-desc">16वीं शताब्दी से 2026 तक का सम्पूर्ण क्रिकेट इतिहास और आंकड़े।</div>
-  <div class="c-foot"><span class="badge b-new">✨ Master</span><span class="arrow">→</span></div>
-</a>
+    <a href="age-calculator.html" class="card">
+      <div class="c-ico">🎂</div>
+      <div class="c-title">Professional Age Calculator</div>
+      <div class="c-desc">अपनी सटीक आयु, जन्मदिन काउंटडाउन और जीवन के महत्वपूर्ण पड़ावों की गणना करें।</div>
+      <span class="badge">SEO Optimized</span>
+    </a>
 
-<a href="emi-calculator.html" class="card" data-c="other" data-s="emi calculator tool offline master" style="--glow:rgba(16,185,129,.1);--gc:rgba(16,185,129,.35);">
-  <div class="c-ico" style="background:rgba(16,185,129,.15);">💰</div>
-  <div class="c-head"><div class="c-title">EMI Calculator</div><div class="c-no">NEW</div></div>
-  <div class="c-desc">लोन और ब्याज की गणना तुरंत करें। बैंकिंग के लिए उपयोगी।</div>
-  <div class="c-foot"><span class="badge b-new">✨ Master</span><span class="arrow">→</span></div>
-</a>
+    <a href="emi-calculator.html" class="card">
+      <div class="c-ico">💰</div>
+      <div class="c-title">Smart EMI Calculator</div>
+      <div class="c-desc">होम, कार और पर्सनल लोन की किस्तों की सटीक गणना करें। विस्तृत ब्याज विवरण के साथ।</div>
+      <span class="badge">Financial Tool</span>
+    </a>
 
-<a href="age-calculator.html" class="card" data-c="other" data-s="age & milestone tool offline master" style="--glow:rgba(236,72,153,.1);--gc:rgba(236,72,153,.35);">
-  <div class="c-ico" style="background:rgba(236,72,153,.15);">🎂</div>
-  <div class="c-head"><div class="c-title">Age & Milestone</div><div class="c-no">NEW</div></div>
-  <div class="c-desc">अपनी सटीक उम्र और अगले जन्मदिन का काउंटडाउन देखें।</div>
-  <div class="c-foot"><span class="badge b-new">✨ Master</span><span class="arrow">→</span></div>
-</a>
+    <a href="image-compressor.html" class="card">
+      <div class="c-ico">🖼️</div>
+      <div class="c-title">Advanced Image Compressor</div>
+      <div class="c-desc">इमेज का साइज कम करें बिना क्वालिटी खोए। वेब डेवलपर्स और ब्लॉगर्स के लिए सर्वश्रेष्ठ।</div>
+      <span class="badge">Utility</span>
+    </a>
 
-<a href="code-playground.html" class="card" data-c="other" data-s="code playground tool offline master" style="--glow:rgba(59,130,246,.1);--gc:rgba(59,130,246,.35);">
-  <div class="c-ico" style="background:rgba(59,130,246,.15);">💻</div>
-  <div class="c-head"><div class="c-title">Code Playground</div><div class="c-no">NEW</div></div>
-  <div class="c-desc">HTML/CSS/JS कोड को लाइव टेस्ट करें। मोबाइल कोडिंग के लिए बेस्ट।</div>
-  <div class="c-foot"><span class="badge b-new">✨ Master</span><span class="arrow">→</span></div>
-</a>
+    <a href="news-hub.html" class="card">
+      <div class="c-ico">📰</div>
+      <div class="c-title">Live News Hub 2026</div>
+      <div class="c-desc">दुनिया भर की 2026 की ताज़ा ख़बरें, तकनीकी अपडेट्स और लाइव ग्लोबल इवेंट्स।</div>
+      <span class="badge">Live Updates</span>
+    </a>
 
-<a href="fancy-fonts.html" class="card" data-c="other" data-s="fancy fonts tool offline master" style="--glow:rgba(139,92,246,.1);--gc:rgba(139,92,246,.35);">
-  <div class="c-ico" style="background:rgba(139,92,246,.15);">✨</div>
-  <div class="c-head"><div class="c-title">Fancy Fonts</div><div class="c-no">NEW</div></div>
-  <div class="c-desc">Instagram और WhatsApp के लिए स्टाइलिश फोंट्स बनाएं।</div>
-  <div class="c-foot"><span class="badge b-new">✨ Master</span><span class="arrow">→</span></div>
-</a>
+    <a href="unit-converter.html" class="card">
+      <div class="c-ico">📏</div>
+      <div class="c-title">Universal Unit Converter</div>
+      <div class="c-desc">लंबाई, वजन, तापमान और आयतन की इकाइयों को तुरंत और सटीक बदलें।</div>
+      <span class="badge">Academic</span>
+    </a>
 
-<a href="qr-master.html" class="card" data-c="other" data-s="qr code master tool offline master" style="--glow:rgba(16,185,129,.1);--gc:rgba(16,185,129,.35);">
-  <div class="c-ico" style="background:rgba(16,185,129,.15);">🔳</div>
-  <div class="c-head"><div class="c-title">QR Code Master</div><div class="c-no">NEW</div></div>
-  <div class="c-desc">QR कोड बनाएं और स्कैन करें। किसी इंटरनेट की ज़रूरत नहीं।</div>
-  <div class="c-foot"><span class="badge b-new">✨ Master</span><span class="arrow">→</span></div>
-</a>
+    <a href="qr-master.html" class="card">
+      <div class="c-ico">🔳</div>
+      <div class="c-title">QR Code Master</div>
+      <div class="c-desc">प्रोफेशनल QR कोड बनाएं और स्कैन करें। सुरक्षित और तेज़।</div>
+      <span class="badge">New</span>
+    </a>
 
-<a href="text-to-speech.html" class="card" data-c="other" data-s="text to speech tool offline master" style="--glow:rgba(245,158,11,.1);--gc:rgba(245,158,11,.35);">
-  <div class="c-ico" style="background:rgba(245,158,11,.15);">🔊</div>
-  <div class="c-head"><div class="c-title">Text to Speech</div><div class="c-no">NEW</div></div>
-  <div class="c-desc">टेक्स्ट को आवाज़ में बदलें और सुनें। पूरी तरह से ऑफलाइन और तेज़।</div>
-  <div class="c-foot"><span class="badge b-new">✨ Master</span><span class="arrow">→</span></div>
-</a>
-
-<a href="image-compressor.html" class="card" data-c="img" data-s="image compressor resize kb mb shrink" style="--glow:rgba(56,189,248,.1);--gc:rgba(56,189,248,.35);">
-  <div class="c-ico" style="background:rgba(56,189,248,.15);">🖼️</div>
-  <div class="c-head"><div class="c-title">Image Compressor</div><div class="c-no">NEW</div></div>
-  <div class="c-desc">इमेज का साइज (KB/MB) कम करें बिना क्वालिटी खोए। पूरी तरह से सुरक्षित और ऑफलाइन।</div>
-  <div class="c-foot"><span class="badge b-new">✨ New</span><span class="arrow">→</span></div>
-</a>
-
-<a href="yt-hashtag-generator.html" class="card" data-c="util" data-s="youtube hashtag generator tags viral trending" style="--glow:rgba(255,0,0,.1);--gc:rgba(255,0,0,.35);">
-  <div class="c-ico" style="background:rgba(255,0,0,.15);">#️⃣</div>
-  <div class="c-head"><div class="c-title">YT Hashtag Generator</div><div class="c-no">NEW</div></div>
-  <div class="c-desc">YouTube के लिए वायरल और ट्रेंडिंग हैशटैग्स खोजें और कॉपी करें।</div>
-  <div class="c-foot"><span class="badge b-new">✨ New</span><span class="arrow">→</span></div>
-</a>
-
-<a href="password-generator.html" class="card" data-c="util" data-s="password generator secure random safe" style="--glow:rgba(99,102,241,.1);--gc:rgba(99,102,241,.35);">
-  <div class="c-ico" style="background:rgba(99,102,241,.15);">🔐</div>
-  <div class="c-head"><div class="c-title">Password Generator</div><div class="c-no">HOT</div></div>
-  <div class="c-desc">सुरक्षित और मजबूत पासवर्ड तुरंत बनाएं। कस्टमाइजेबल विकल्प के साथ।</div>
-  <div class="c-foot"><span class="badge b-hot">🔥 Hot</span><span class="arrow">→</span></div>
-</a>
-
-<a href="unit-converter.html" class="card" data-c="util" data-s="unit converter length weight temperature volume" style="--glow:rgba(34,211,238,.1);--gc:rgba(34,211,238,.35);">
-  <div class="c-ico" style="background:rgba(34,211,238,.15);">📏</div>
-  <div class="c-head"><div class="c-title">Unit Converter</div><div class="c-no">NEW</div></div>
-  <div class="c-desc">किसी भी इकाई को तुरंत बदलें - लंबाई, वजन, तापमान, आयतन।</div>
-  <div class="c-foot"><span class="badge b-new">✨ New</span><span class="arrow">→</span></div>
-</a>
-
-<a href="bmi-bmr-calculator.html" class="card" data-c="util" data-s="bmi bmr calculator health fitness weight" style="--glow:rgba(16,185,129,.1);--gc:rgba(16,185,129,.35);">
-  <div class="c-ico" style="background:rgba(16,185,129,.15);">❤️</div>
-  <div class="c-head"><div class="c-title">Health Calculator</div><div class="c-no">NEW</div></div>
-  <div class="c-desc">BMI और BMR की गणना करें। अपने स्वास्थ्य लक्ष्य ट्रैक करें।</div>
-  <div class="c-foot"><span class="badge b-new">✨ New</span><span class="arrow">→</span></div>
-</a>
-
-<a href="markdown-previewer.html" class="card" data-c="util" data-s="markdown preview editor converter text" style="--glow:rgba(244,114,182,.1);--gc:rgba(244,114,182,.35);">
-  <div class="c-ico" style="background:rgba(244,114,182,.15);">📝</div>
-  <div class="c-head"><div class="c-title">Markdown Previewer</div><div class="c-no">NEW</div></div>
-  <div class="c-desc">मार्कडाउन को लाइव प्रीव्यू के साथ एडिट करें। डाउनलोड करें।</div>
-  <div class="c-foot"><span class="badge b-new">✨ New</span><span class="arrow">→</span></div>
-</a>
-
-<a href="stopwatch-timer.html" class="card" data-c="util" data-s="stopwatch timer time tracking clock" style="--glow:rgba(245,158,11,.1);--gc:rgba(245,158,11,.35);">
-  <div class="c-ico" style="background:rgba(245,158,11,.15);">⏱️</div>
-  <div class="c-head"><div class="c-title">Stopwatch & Timer</div><div class="c-no">HOT</div></div>
-  <div class="c-desc">सटीक समय ट्रैकिंग के लिए स्टॉपवॉच और टाइमर दोनों।</div>
-  <div class="c-foot"><span class="badge b-hot">🔥 Hot</span><span class="arrow">→</span></div>
-</a>
-
-
-<a href="word-counter.html" class="card" data-c="util" data-s="word counter tool offline master" style="--glow:rgba(99,102,241,.1);--gc:rgba(99,102,241,.35);">
-  <div class="c-ico" style="background:rgba(99,102,241,.15);">📝</div>
-  <div class="c-head"><div class="c-title">Word Counter</div><div class="c-no">NEW</div></div>
-  <div class="c-desc">शब्दों और अक्षरों की सटीक गणना करें। कंटेंट राइटर्स के लिए बेस्ट।</div>
-  <div class="c-foot"><span class="badge b-new">✨ SEO Tool</span><span class="arrow">→</span></div>
-</a>
-
-<a href="color-converter.html" class="card" data-c="util" data-s="rgb to hex tool offline master" style="--glow:rgba(34,211,238,.1);--gc:rgba(34,211,238,.35);">
-  <div class="c-ico" style="background:rgba(34,211,238,.15);">🎨</div>
-  <div class="c-head"><div class="c-title">RGB to HEX</div><div class="c-no">NEW</div></div>
-  <div class="c-desc">RGB को HEX कोड में तुरंत बदलें। डिजाइनर्स के लिए उपयोगी टूल।</div>
-  <div class="c-foot"><span class="badge b-new">✨ Designer</span><span class="arrow">→</span></div>
-</a>
-
-<a href="base64-encoder.html" class="card" data-c="util" data-s="base64 tool tool offline master" style="--glow:rgba(129,140,248,.1);--gc:rgba(129,140,248,.35);">
-  <div class="c-ico" style="background:rgba(129,140,248,.15);">🔐</div>
-  <div class="c-head"><div class="c-title">Base64 Tool</div><div class="c-no">NEW</div></div>
-  <div class="c-desc">टेक्स्ट को सुरक्षित रूप से Encode और Decode करें। 100% ऑफलाइन।</div>
-  <div class="c-foot"><span class="badge b-new">✨ Dev Tool</span><span class="arrow">→</span></div>
-</a>
-
-<a href="lorem-ipsum-generator.html" class="card" data-c="util" data-s="lorem ipsum tool offline master" style="--glow:rgba(244,114,182,.1);--gc:rgba(244,114,182,.35);">
-  <div class="c-ico" style="background:rgba(244,114,182,.15);">📄</div>
-  <div class="c-head"><div class="c-title">Lorem Ipsum</div><div class="c-no">NEW</div></div>
-  <div class="c-desc">डिजाइन के लिए रैंडम डमी टेक्स्ट जेनरेट करें। कस्टमाइजेबल पैराग्राफ।</div>
-  <div class="c-foot"><span class="badge b-new">✨ Content</span><span class="arrow">→</span></div>
-</a>
-
-<a href="json-formatter.html" class="card" data-c="util" data-s="json formatter tool offline master" style="--glow:rgba(16,185,129,.1);--gc:rgba(16,185,129,.35);">
-  <div class="c-ico" style="background:rgba(16,185,129,.15);">🔧</div>
-  <div class="c-head"><div class="c-title">JSON Formatter</div><div class="c-no">NEW</div></div>
-  <div class="c-desc">JSON कोड को सुंदर और व्यवस्थित बनाएं। वैलिडेशन के साथ।</div>
-  <div class="c-foot"><span class="badge b-new">✨ Developer</span><span class="arrow">→</span></div>
-</a>
-
-<a href="remini-pro.html" class="card" data-c="img" data-s="remini photo pro enhancer filters ai hd" style="--glow:rgba(244,114,182,.15);--gc:rgba(244,114,182,.4);">
-  <div class="c-ico" style="background:rgba(244,114,182,.2);">📸</div>
-  <div class="c-head"><div class="c-title">Remini Photo Pro</div><div class="c-no">HOT</div></div>
-  <div class="c-desc">अपनी फोटो को AI की मदद से HD बनाएं और प्रीमियम फिल्टर्स लगाएं।</div>
-  <div class="c-foot"><span class="badge b-hot">🔥 Premium</span><span class="arrow">→</span></div>
-</a>
-
-<a href="news-hub.html" class="card" data-c="util" data-s="news hub stories global trending updates" style="--glow:rgba(34,211,238,.15);--gc:rgba(34,211,238,.4);">
-  <div class="c-ico" style="background:rgba(34,211,238,.2);">📰</div>
-  <div class="c-head"><div class="c-title">News & Story Hub</div><div class="c-no">NEW</div></div>
-  <div class="c-desc">दुनिया भर की ताज़ा ख़बरें और दिलचस्प कहानियाँ एक ही जगह पर।</div>
-  <div class="c-foot"><span class="badge b-new">✨ Trending</span><span class="arrow">→</span></div>
-</a>
-
-<a href="cricket-history.html" class="card" data-c="other" data-s="cricket history start 2026 world cup records data" style="--glow:rgba(249,115,22,.15);--gc:rgba(249,115,22,.4);">
-  <div class="c-ico" style="background:rgba(249,115,22,.2);">🏏</div>
-  <div class="c-head"><div class="c-title">Start cricket 2026 तक</div><div class="c-no">NEW</div></div>
-  <div class="c-desc">क्रिकेट की शुरुआत से 2026 तक का सम्पूर्ण इतिहास, वर्ल्ड कप और रिकॉर्ड्स।</div>
-  <div class="c-foot"><span class="badge b-new">✨ History Hub</span><span class="arrow">→</span></div>
-</a>
-</div><!-- /grid -->
-<div class="no-res" id="nores">😕 कोई Tool नहीं मिला — दूसरे words try करो</div>
-</div><!-- /wrap -->
+    <a href="text-to-speech.html" class="card">
+      <div class="c-ico">🔊</div>
+      <div class="c-title">Text to Speech Pro</div>
+      <div class="c-desc">किसी भी टेक्स्ट को प्राकृतिक आवाज़ में बदलें। मल्टी-लैंग्वेज सपोर्ट के साथ।</div>
+      <span class="badge">AI Powered</span>
+    </a>
+  </div>
+</div>
 
 <footer>
-  <div class="fl">
-    <a href="about.html">About</a><a href="contact.html">Contact</a>
-    <a href="blog.html">Blog</a><a href="privacy-policy.html">Privacy</a><a href="terms.html">Terms</a><a href="disclaimer.html">Disclaimer</a>
-  </div>
-  <div>© 2025 Sachin AI Studio — Offline Professional Tools</div>
+  <p>&copy; 2026 Sachin AI Studio. सभी टूल्स AdSense फ्रेंडली और हाई वैल्यू कंटेंट के साथ सुरक्षित हैं।</p>
 </footer>
 
-<button id="top" onclick="scrollTo({top:0,behavior:'smooth'})">↑</button>
-
 <script>
-window.addEventListener('scroll',()=>document.getElementById('top').classList.toggle('show',scrollY>300));
-
-const cards=[...document.querySelectorAll('.card')];
-const nores=document.getElementById('nores');
-let cat='all';
-
-function filter(){
-  const q=document.getElementById('srch').value.toLowerCase().trim();
-  let v=0;
-  cards.forEach(c=>{
-    const s=(c.dataset.s||'').toLowerCase();
-    const t=(c.querySelector('.c-title')?.textContent||'').toLowerCase();
-    const d=(c.querySelector('.c-desc')?.textContent||'').toLowerCase();
-    const cc=c.dataset.c||'';
-    const ok=(!q||s.includes(q)||t.includes(q)||d.includes(q))&&(cat==='all'||cc===cat);
-    c.style.display=ok?'':'none';
-    if(ok)v++;
+  document.getElementById('srch').addEventListener('input', function(e) {
+    let term = e.target.value.toLowerCase();
+    document.querySelectorAll('.card').forEach(card => {
+      let text = card.innerText.toLowerCase();
+      card.style.display = text.includes(term) ? 'block' : 'none';
+    });
   });
-  nores.style.display=v===0?'block':'none';
-}
-
-document.getElementById('srch').addEventListener('input',filter);
-document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
-  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
-  t.classList.add('on');
-  cat=t.dataset.c;
-  filter();
-}));
 </script>
 </body>
 </html>

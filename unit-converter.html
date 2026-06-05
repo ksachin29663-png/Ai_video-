@@ -3,217 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unit Converter - Sachin AI</title>
+    <title>Online Unit Converter - इकाइयों को तुरंत बदलें | Sachin AI Studio</title>
+    <meta name="description" content="मुफ्त और तेज़ ऑनलाइन यूनिट कन्वर्टर। लंबाई, वजन, तापमान और आयतन की इकाइयों को आसानी से बदलें। 100% सटीक और सुरक्षित।">
+    <meta name="keywords" content="unit converter, length converter, weight converter, temperature converter, online converter hindi">
     <style>
-        :root {
-            --bg: #07090f;
-            --card: #0e1117;
-            --accent: #6366f1;
-            --accent2: #22d3ee;
-            --text: #f1f5f9;
-            --muted: #64748b;
-            --border: rgba(255,255,255,0.06);
-        }
-        
+        :root { --bg: #07090f; --card: #0e1117; --accent: #6366f1; --accent2: #22d3ee; --text: #f1f5f9; --muted: #64748b; --border: rgba(255,255,255,0.06); }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-        
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            margin-top: 20px;
-        }
-        
-        header h1 {
-            font-size: 2rem;
-            color: var(--accent2);
-            margin-bottom: 5px;
-        }
-        
-        .container {
-            max-width: 700px;
-            width: 100%;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-        }
-        
-        .category-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
-        
-        .tab {
-            padding: 10px 18px;
-            background: rgba(99,102,241,0.1);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-            font-weight: 600;
-            color: var(--muted);
-        }
-        
-        .tab:hover, .tab.active {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
-        }
-        
-        .converter-box {
-            background: rgba(99,102,241,0.05);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .input-group {
-            margin-bottom: 20px;
-        }
-        
-        .input-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--text);
-        }
-        
-        .input-wrapper {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        
-        input[type="number"] {
-            flex: 1;
-            padding: 12px;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text);
-            font-size: 1rem;
-            outline: none;
-        }
-        
-        input[type="number"]:focus {
-            border-color: var(--accent2);
-            box-shadow: 0 0 10px rgba(34,211,238,0.2);
-        }
-        
-        select {
-            padding: 12px;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text);
-            font-size: 1rem;
-            cursor: pointer;
-            outline: none;
-            min-width: 150px;
-        }
-        
-        select:focus {
-            border-color: var(--accent2);
-        }
-        
-        .swap-btn {
-            background: var(--accent2);
-            color: var(--bg);
-            border: none;
-            width: 45px;
-            height: 45px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1.2rem;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .swap-btn:hover {
-            transform: rotate(180deg);
-            box-shadow: 0 5px 15px rgba(34,211,238,0.4);
-        }
-        
-        .result-box {
-            background: rgba(34,211,238,0.1);
-            border: 2px solid var(--accent2);
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-        }
-        
-        .result-label {
-            color: var(--muted);
-            font-size: 0.9rem;
-            margin-bottom: 8px;
-        }
-        
-        .result-value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--accent2);
-            font-family: 'Courier New', monospace;
-        }
-        
-        .result-unit {
-            color: var(--muted);
-            margin-top: 8px;
-            font-size: 0.95rem;
-        }
-        
-        @media (max-width: 600px) {
-            .container { padding: 20px; }
-            .input-wrapper { flex-direction: column; }
-            .swap-btn { width: 100%; }
-            select { min-width: auto; width: 100%; }
-        }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        header { text-align: center; margin-bottom: 30px; margin-top: 20px; width: 100%; max-width: 800px; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
+        header h1 { font-size: 2.2rem; color: var(--accent2); margin-bottom: 5px; }
+        .container { max-width: 700px; width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: 15px; padding: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+        .category-tabs { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; justify-content: center; }
+        .tab { padding: 10px 18px; background: rgba(99,102,241,0.1); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; transition: 0.3s; font-weight: 600; color: var(--muted); }
+        .tab:hover, .tab.active { background: var(--accent); color: white; border-color: var(--accent); }
+        .converter-box { background: rgba(99,102,241,0.05); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .input-group { margin-bottom: 20px; }
+        .input-label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text); }
+        .input-wrapper { display: flex; gap: 10px; align-items: center; }
+        input[type="number"] { flex: 1; padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 1rem; outline: none; }
+        select { padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 1rem; cursor: pointer; outline: none; min-width: 150px; }
+        .swap-btn { background: var(--accent2); color: var(--bg); border: none; width: 45px; height: 45px; border-radius: 8px; cursor: pointer; font-size: 1.2rem; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
+        .result-box { background: rgba(34,211,238,0.1); border: 2px solid var(--accent2); border-radius: 10px; padding: 20px; text-align: center; }
+        .result-value { font-size: 2rem; font-weight: bold; color: var(--accent2); font-family: 'Courier New', monospace; }
+        .info-section { max-width: 800px; margin-top: 50px; padding: 30px; background: var(--card); border-radius: 20px; border: 1px solid var(--border); }
+        .info-section h2 { color: var(--accent2); margin-bottom: 20px; }
+        .info-section p { margin-bottom: 15px; line-height: 1.8; color: #cbd5e1; }
+        @media (max-width: 600px) { .input-wrapper { flex-direction: column; } .swap-btn { width: 100%; } select { width: 100%; } }
     </style>
 </head>
 <body>
     <header>
-        <h1>📏 Unit Converter</h1>
-        <p style="color: var(--muted); margin-top: 5px;">किसी भी इकाई को तुरंत बदलें</p>
+        <a href="index.html" style="text-decoration: none;"><h1>📏 Unit Converter Pro</h1></a>
+        <p style="color: var(--muted); margin-top: 5px;">किसी भी इकाई को तुरंत और सटीक बदलें</p>
     </header>
     
     <div class="container">
         <div class="category-tabs">
-            <button class="tab active" onclick="switchCategory('length')">📐 Length</button>
-            <button class="tab" onclick="switchCategory('weight')">⚖️ Weight</button>
-            <button class="tab" onclick="switchCategory('temp')">🌡️ Temperature</button>
-            <button class="tab" onclick="switchCategory('volume')">🥤 Volume</button>
+            <button class="tab active" onclick="switchCategory('length')">📐 लंबाई (Length)</button>
+            <button class="tab" onclick="switchCategory('weight')">⚖️ वजन (Weight)</button>
+            <button class="tab" onclick="switchCategory('temp')">🌡️ तापमान (Temp)</button>
+            <button class="tab" onclick="switchCategory('volume')">🥤 आयतन (Volume)</button>
         </div>
         
         <div class="converter-box">
             <div class="input-group">
-                <label class="input-label">From</label>
+                <label class="input-label">यहाँ से (From)</label>
                 <div class="input-wrapper">
                     <input type="number" id="inputValue" placeholder="Enter value" value="1" oninput="convert()">
                     <select id="fromUnit" onchange="convert()"></select>
                 </div>
             </div>
             
-            <div style="text-align: center; margin: 15px 0;">
+            <div style="text-align: center; margin: 15px 0; display: flex; justify-content: center;">
                 <button class="swap-btn" onclick="swapUnits()" title="Swap">⇅</button>
             </div>
             
             <div class="input-group">
-                <label class="input-label">To</label>
+                <label class="input-label">यहाँ तक (To)</label>
                 <div class="input-wrapper">
                     <input type="number" id="outputValue" placeholder="Result" readonly>
                     <select id="toUnit" onchange="convert()"></select>
@@ -222,57 +68,42 @@
         </div>
         
         <div class="result-box">
-            <div class="result-label">Result</div>
+            <div style="color: var(--muted); font-size: 0.9rem; margin-bottom: 8px;">परिणाम (Result)</div>
             <div class="result-value" id="resultValue">1</div>
-            <div class="result-unit" id="resultUnit">meter</div>
+            <div id="resultUnit" style="color: var(--muted); margin-top: 8px;">meter</div>
         </div>
+    </div>
+
+    <div class="info-section">
+        <h2>यूनिट कन्वर्टर का महत्व</h2>
+        <p>यूनिट कन्वर्टर एक अनिवार्य टूल है जिसका उपयोग विज्ञान, इंजीनियरिंग, शिक्षा और दैनिक जीवन में किया जाता है। अलग-अलग देशों और क्षेत्रों में माप की अलग-अलग प्रणालियाँ (जैसे मेट्रिक और इंपीरियल) उपयोग की जाती हैं। सचिन एआई स्टूडियो का यह टूल इन जटिल गणनाओं को सरल बनाता है।</p>
+        
+        <h3>मुख्य विशेषताएं:</h3>
+        <p><strong>1. बहुआयामी उपयोग:</strong> यह टूल लंबाई (मीटर, मील, इंच), वजन (किलोग्राम, पाउंड), तापमान (सेल्सियस, फारेनहाइट) और आयतन जैसी कई श्रेणियों को कवर करता है।</p>
+        <p><strong>2. वास्तविक समय में गणना:</strong> जैसे ही आप वैल्यू डालते हैं, परिणाम तुरंत दिखाई देता है।</p>
+        <p><strong>3. स्वैप फंक्शन:</strong> एक क्लिक में इकाइयों को आपस में बदलें।</p>
+        <p><strong>4. 100% सटीक:</strong> हमारे सूत्र अंतरराष्ट्रीय मानकों के अनुसार सेट किए गए हैं ताकि आपको हमेशा सही परिणाम मिले।</p>
+        
+        <p>चाहे आप स्कूल का होमवर्क कर रहे हों या किसी अंतरराष्ट्रीय प्रोजेक्ट पर काम कर रहे हों, हमारा यूनिट कन्वर्टर आपका समय बचाएगा। हमारे अन्य उपयोगी टूल्स जैसे Age Calculator और Image Compressor को भी आज़माएं।</p>
     </div>
     
     <script>
         const conversions = {
             length: {
                 units: ['meter', 'kilometer', 'centimeter', 'millimeter', 'mile', 'yard', 'foot', 'inch'],
-                toMeter: {
-                    meter: 1,
-                    kilometer: 1000,
-                    centimeter: 0.01,
-                    millimeter: 0.001,
-                    mile: 1609.34,
-                    yard: 0.9144,
-                    foot: 0.3048,
-                    inch: 0.0254
-                }
+                toMeter: { meter: 1, kilometer: 1000, centimeter: 0.01, millimeter: 0.001, mile: 1609.34, yard: 0.9144, foot: 0.3048, inch: 0.0254 }
             },
             weight: {
                 units: ['kilogram', 'gram', 'milligram', 'pound', 'ounce', 'ton'],
-                toKilogram: {
-                    kilogram: 1,
-                    gram: 0.001,
-                    milligram: 0.000001,
-                    pound: 0.453592,
-                    ounce: 0.0283495,
-                    ton: 1000
-                }
+                toKilogram: { kilogram: 1, gram: 0.001, milligram: 0.000001, pound: 0.453592, ounce: 0.0283495, ton: 1000 }
             },
-            temp: {
-                units: ['Celsius', 'Fahrenheit', 'Kelvin'],
-                convert: true
-            },
+            temp: { units: ['Celsius', 'Fahrenheit', 'Kelvin'], convert: true },
             volume: {
                 units: ['liter', 'milliliter', 'gallon', 'pint', 'cup', 'tablespoon'],
-                toLiter: {
-                    liter: 1,
-                    milliliter: 0.001,
-                    gallon: 3.78541,
-                    pint: 0.473176,
-                    cup: 0.236588,
-                    tablespoon: 0.0147868
-                }
+                toLiter: { liter: 1, milliliter: 0.001, gallon: 3.78541, pint: 0.473176, cup: 0.236588, tablespoon: 0.0147868 }
             }
         };
-        
         let currentCategory = 'length';
-        
         function switchCategory(category) {
             currentCategory = category;
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -280,32 +111,22 @@
             updateUnits();
             convert();
         }
-        
         function updateUnits() {
             const units = conversions[currentCategory].units;
             const fromSelect = document.getElementById('fromUnit');
             const toSelect = document.getElementById('toUnit');
-            
-            fromSelect.innerHTML = '';
-            toSelect.innerHTML = '';
-            
+            fromSelect.innerHTML = ''; toSelect.innerHTML = '';
             units.forEach(unit => {
                 fromSelect.innerHTML += `<option value="${unit}">${unit}</option>`;
                 toSelect.innerHTML += `<option value="${unit}">${unit}</option>`;
             });
-            
-            if (units.length > 1) {
-                toSelect.value = units[1];
-            }
+            if (units.length > 1) toSelect.value = units[1];
         }
-        
         function convert() {
             const value = parseFloat(document.getElementById('inputValue').value) || 0;
             const fromUnit = document.getElementById('fromUnit').value;
             const toUnit = document.getElementById('toUnit').value;
-            
             let result = 0;
-            
             if (currentCategory === 'temp') {
                 result = convertTemperature(value, fromUnit, toUnit);
             } else if (currentCategory === 'length') {
@@ -318,25 +139,20 @@
                 const toLiter = conversions.volume.toLiter;
                 result = (value * toLiter[fromUnit]) / toLiter[toUnit];
             }
-            
             result = parseFloat(result.toFixed(6));
             document.getElementById('outputValue').value = result;
             document.getElementById('resultValue').textContent = result;
             document.getElementById('resultUnit').textContent = toUnit;
         }
-        
         function convertTemperature(value, from, to) {
             let celsius;
-            
             if (from === 'Celsius') celsius = value;
             else if (from === 'Fahrenheit') celsius = (value - 32) * 5/9;
             else if (from === 'Kelvin') celsius = value - 273.15;
-            
             if (to === 'Celsius') return celsius;
             else if (to === 'Fahrenheit') return (celsius * 9/5) + 32;
             else if (to === 'Kelvin') return celsius + 273.15;
         }
-        
         function swapUnits() {
             const fromUnit = document.getElementById('fromUnit');
             const toUnit = document.getElementById('toUnit');
@@ -345,10 +161,11 @@
             toUnit.value = temp;
             convert();
         }
-        
-        // Initialize
         updateUnits();
         convert();
     </script>
+    <footer style="margin-top: 50px; padding: 20px; color: var(--muted); text-align: center; border-top: 1px solid var(--border); width: 100%;">
+        &copy; 2026 Sachin AI Studio. सटीक गणना, सरल जीवन।
+    </footer>
 </body>
 </html>

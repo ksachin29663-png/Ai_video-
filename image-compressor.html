@@ -1,206 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Image Compressor & KB Resizer - Sachin AI</title>
+    <title>Online Image Compressor - इमेज साइज कम करें | Sachin AI Studio</title>
+    <meta name="description" content="मुफ्त ऑनलाइन इमेज कंप्रेसर। JPG, PNG और WEBP इमेज का साइज KB में कम करें बिना क्वालिटी खोए। तेज़, सुरक्षित और AdSense फ्रेंडली।">
+    <meta name="keywords" content="image compressor, reduce image size kb, online photo compressor, compress image without losing quality hindi">
     <style>
-        :root {
-            --bg: #0f172a;
-            --card: #1e293b;
-            --accent: #38bdf8;
-            --accent-glow: rgba(56, 189, 248, 0.4);
-            --text: #f8fafc;
-            --text-dim: #94a3b8;
-            --border: #334155;
-            --success: #22c55e;
-            --danger: #ef4444;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, sans-serif; }
-        
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            padding: 12px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        header {
-            width: 100%;
-            max-width: 650px;
-            padding: 20px 0;
-            text-align: center;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 24px;
-        }
-
-        .logo { font-size: 1.5rem; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; }
-        .tagline { font-size: 0.85rem; color: var(--text-dim); margin-top: 4px; }
-
-        .container {
-            width: 100%;
-            max-width: 650px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 24px;
-            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5);
-        }
-
-        .upload-box {
-            border: 2px dashed var(--border);
-            border-radius: 16px;
-            padding: 40px 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background: rgba(15, 23, 42, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .upload-box:hover { border-color: var(--accent); background: rgba(56, 189, 248, 0.05); transform: translateY(-2px); }
-        .upload-box i { font-size: 3rem; display: block; margin-bottom: 12px; }
-        .upload-text { font-weight: 600; font-size: 1.1rem; }
-        .upload-sub { font-size: 0.8rem; color: var(--text-dim); margin-top: 6px; }
-
-        #fileInput { display: none; }
-
+        :root { --bg: #0f172a; --card: #1e293b; --accent: #38bdf8; --accent-glow: rgba(56, 189, 248, 0.4); --text: #f8fafc; --text-dim: #94a3b8; --border: #334155; --success: #22c55e; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg); color: var(--text); padding: 12px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+        header { width: 100%; max-width: 800px; padding: 20px 0; text-align: center; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+        .logo { font-size: 1.8rem; font-weight: 800; color: var(--accent); text-decoration: none; }
+        .container { width: 100%; max-width: 650px; background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 24px; box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5); }
+        .upload-box { border: 2px dashed var(--border); border-radius: 16px; padding: 40px 20px; text-align: center; cursor: pointer; transition: all 0.3s; background: rgba(15, 23, 42, 0.3); }
+        .upload-box:hover { border-color: var(--accent); background: rgba(56, 189, 248, 0.05); }
         .editor-view { display: none; margin-top: 24px; }
-
-        .controls-grid {
-            display: grid;
-            gap: 20px;
-            background: rgba(15, 23, 42, 0.5);
-            padding: 20px;
-            border-radius: 16px;
-            border: 1px solid var(--border);
-            margin-bottom: 24px;
-        }
-
+        .controls-grid { display: grid; gap: 20px; background: rgba(15, 23, 42, 0.5); padding: 20px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 24px; }
         .control-item { display: flex; flex-direction: column; gap: 10px; }
         .label-row { display: flex; justify-content: space-between; align-items: center; }
         .label-text { font-size: 0.9rem; font-weight: 600; color: var(--text-dim); }
         .label-val { font-size: 0.9rem; font-weight: 700; color: var(--accent); background: rgba(56, 189, 248, 0.1); padding: 2px 8px; border-radius: 6px; }
-
-        input[type="range"] {
-            width: 100%;
-            height: 6px;
-            background: var(--border);
-            border-radius: 10px;
-            appearance: none;
-            outline: none;
-            accent-color: var(--accent);
-        }
-
-        .stats-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .stat-card {
-            background: rgba(15, 23, 42, 0.4);
-            padding: 16px;
-            border-radius: 14px;
-            border: 1px solid var(--border);
-            text-align: center;
-        }
-
-        .stat-label { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
-        .stat-value { font-size: 1.1rem; font-weight: 800; }
-
-        .preview-area {
-            position: relative;
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            margin-bottom: 24px;
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 200px;
-        }
-
-        #previewImg { max-width: 100%; max-height: 400px; display: block; }
-
-        .btn-group { display: flex; flex-direction: column; gap: 12px; }
-
-        .btn {
-            width: 100%;
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 700;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .btn-primary { background: var(--accent); color: var(--bg); box-shadow: 0 4px 15px var(--accent-glow); }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--accent-glow); }
+        input[type="range"] { width: 100%; height: 6px; background: var(--border); border-radius: 10px; appearance: none; outline: none; accent-color: var(--accent); }
+        .stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+        .stat-card { background: rgba(15, 23, 42, 0.4); padding: 16px; border-radius: 14px; border: 1px solid var(--border); text-align: center; }
+        .preview-area { border-radius: 16px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 24px; background: #000; display: flex; justify-content: center; align-items: center; min-height: 200px; }
+        #previewImg { max-width: 100%; max-height: 400px; }
+        .btn { width: 100%; padding: 16px; border-radius: 12px; font-size: 1rem; font-weight: 700; border: none; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-primary { background: var(--accent); color: var(--bg); }
         .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
-        .btn-outline:hover { background: rgba(255,255,255,0.05); }
-
-        .toast {
-            position: fixed;
-            bottom: 24px;
-            background: var(--success);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-weight: 600;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            display: none;
-            z-index: 1000;
-            animation: slideUp 0.3s ease-out;
-        }
-
-        @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-        @media (max-width: 480px) {
-            .container { padding: 16px; }
-            .stats-row { grid-template-columns: 1fr; }
-        }
+        .info-section { max-width: 800px; margin-top: 50px; padding: 30px; background: var(--card); border-radius: 20px; border: 1px solid var(--border); }
+        .info-section h2 { color: var(--accent); margin-bottom: 20px; }
+        .info-section p { margin-bottom: 15px; line-height: 1.8; color: #cbd5e1; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo">Sachin AI Studio</div>
-    <div class="tagline">Advanced Image Compressor & KB Resizer</div>
+    <a href="index.html" class="logo">Sachin AI Studio</a>
+    <div style="font-size: 0.9rem; color: var(--text-dim); margin-top: 4px;">Advanced Image Compression Technology</div>
 </header>
 
 <div class="container">
     <div class="upload-box" id="dropZone" onclick="document.getElementById('fileInput').click()">
         <span style="font-size: 3rem;">📸</span>
-        <div class="upload-text">Select Image to Compress</div>
-        <div class="upload-sub">Supports JPG, PNG, WEBP (Max 20MB)</div>
-        <input type="file" id="fileInput" accept="image/*">
+        <div style="font-weight: 600; font-size: 1.1rem; margin-top: 10px;">इमेज अपलोड करें (Select Image)</div>
+        <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 6px;">Supports JPG, PNG, WEBP (Max 20MB)</div>
+        <input type="file" id="fileInput" accept="image/*" style="display: none;">
     </div>
 
     <div class="editor-view" id="editorView">
         <div class="controls-grid">
             <div class="control-item">
                 <div class="label-row">
-                    <span class="label-text">Compression Quality</span>
+                    <span class="label-text">क्वालिटी (Quality)</span>
                     <span class="label-val" id="qVal">80%</span>
                 </div>
                 <input type="range" id="qInput" min="1" max="100" value="80">
             </div>
             <div class="control-item">
                 <div class="label-row">
-                    <span class="label-text">Resize Scale</span>
+                    <span class="label-text">साइज स्केल (Resize)</span>
                     <span class="label-val" id="sVal">100%</span>
                 </div>
                 <input type="range" id="sInput" min="10" max="100" value="100">
@@ -209,12 +69,12 @@
 
         <div class="stats-row">
             <div class="stat-card">
-                <div class="stat-label">Original Size</div>
-                <div class="stat-value" id="oSize">0 KB</div>
+                <div style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase;">Original</div>
+                <div id="oSize" style="font-weight: 800;">0 KB</div>
             </div>
             <div class="stat-card" style="border-color: var(--accent);">
-                <div class="stat-label" style="color: var(--accent);">Target Size</div>
-                <div class="stat-value" id="cSize" style="color: var(--accent);">0 KB</div>
+                <div style="font-size: 0.75rem; color: var(--accent); text-transform: uppercase;">Compressed</div>
+                <div id="cSize" style="font-weight: 800; color: var(--accent);">0 KB</div>
             </div>
         </div>
 
@@ -222,14 +82,25 @@
             <img id="previewImg" alt="Preview">
         </div>
 
-        <div class="btn-group">
-            <button class="btn btn-primary" id="downloadBtn">⬇️ Download Compressed Image</button>
-            <button class="btn btn-outline" onclick="location.reload()">🔄 Start New</button>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+            <button class="btn btn-primary" id="downloadBtn">⬇️ डाउनलोड करें (Download)</button>
+            <button class="btn btn-outline" onclick="location.reload()">🔄 नया इमेज चुनें</button>
         </div>
     </div>
 </div>
 
-<div class="toast" id="toast">Image Compressed Successfully!</div>
+<div class="info-section">
+    <h2>इमेज कंप्रेसर का उपयोग क्यों करें?</h2>
+    <p>आज के डिजिटल युग में, वेबसाइट की लोडिंग स्पीड बहुत मायने रखती है। बड़ी इमेज फाइलें आपकी वेबसाइट को धीमा कर सकती हैं, जिससे यूजर अनुभव खराब होता है और SEO रैंकिंग गिर जाती है। सचिन एआई स्टूडियो का इमेज कंप्रेसर आपकी तस्वीरों के फाइल साइज को कम करता है ताकि वे वेब पर तेजी से लोड हो सकें।</p>
+    
+    <h3>मुख्य लाभ:</h3>
+    <p><strong>1. क्वालिटी बरकरार:</strong> हमारा स्मार्ट एल्गोरिदम इमेज के अनावश्यक डेटा को हटाता है, जिससे फाइल साइज कम होता है लेकिन विजुअल क्वालिटी बनी रहती है।</p>
+    <p><strong>2. प्राइवेसी:</strong> आपकी इमेज हमारे सर्वर पर कभी अपलोड नहीं होती। सारी प्रोसेसिंग आपके ब्राउज़र में होती है, जो इसे 100% सुरक्षित बनाता है।</p>
+    <p><strong>3. फॉर्मेट सपोर्ट:</strong> यह टूल JPG, PNG और आधुनिक WEBP फॉर्मेट को सपोर्ट करता है।</p>
+    <p><strong>4. कस्टमाइजेशन:</strong> आप अपनी जरूरत के अनुसार क्वालिटी और साइज को खुद कंट्रोल कर सकते हैं।</p>
+    
+    <p>चाहे आप एक ब्लॉगर हों, स्टूडेंट हों या प्रोफेशनल, यह टूल आपके काम को आसान बनाने के लिए बनाया गया है। हमारे अन्य टूल्स जैसे Age Calculator और EMI Calculator को भी चेक करें।</p>
+</div>
 
 <script>
     const fileInput = document.getElementById('fileInput');
@@ -243,10 +114,9 @@
     const cSizeText = document.getElementById('cSize');
     const previewImg = document.getElementById('previewImg');
     const downloadBtn = document.getElementById('downloadBtn');
-    const toast = document.getElementById('toast');
 
     let originalImg = null;
-    let fileName = "compressed_image";
+    let fileName = "compressed";
 
     fileInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
@@ -256,7 +126,6 @@
     function processFile(file) {
         fileName = file.name.split('.')[0];
         oSizeText.textContent = formatBytes(file.size);
-        
         const reader = new FileReader();
         reader.onload = (e) => {
             originalImg = new Image();
@@ -272,34 +141,26 @@
 
     function updateCompression() {
         if (!originalImg) return;
-
         const quality = qInput.value / 100;
         const scale = sInput.value / 100;
-        
         qVal.textContent = qInput.value + '%';
         sVal.textContent = sInput.value + '%';
-
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
-
         const width = originalImg.width * scale;
         const height = originalImg.height * scale;
-
         canvas.width = width;
         canvas.height = height;
         ctx.drawImage(originalImg, 0, 0, width, height);
-
         canvas.toBlob((blob) => {
             const url = URL.createObjectURL(blob);
             previewImg.src = url;
             cSizeText.textContent = formatBytes(blob.size);
-            
             downloadBtn.onclick = () => {
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `${fileName}_sachin_ai.jpg`;
+                a.download = `${fileName}_sachinstudio.jpg`;
                 a.click();
-                showToast();
             };
         }, 'image/jpeg', quality);
     }
@@ -314,31 +175,11 @@
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
-
-    function showToast() {
-        toast.style.display = 'block';
-        setTimeout(() => toast.style.display = 'none', 3000);
-    }
-
-    // Drag & Drop
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(e => {
-        uploadBox.addEventListener(e, (evt) => {
-            evt.preventDefault();
-            evt.stopPropagation();
-        });
-    });
-
-    uploadBox.addEventListener('drop', (e) => {
-        const file = e.dataTransfer.files[0];
-        if (file && file.type.startsWith('image/')) processFile(file);
-    });
 </script>
 
+<footer style="margin-top: 50px; padding: 20px; color: var(--text-dim); text-align: center; border-top: 1px solid var(--border); width: 100%;">
+    &copy; 2026 Sachin AI Studio. तेज़ और सुरक्षित इमेज प्रोसेसिंग।
+</footer>
 
-    <div style="max-width: 500px; margin: 30px auto; padding: 20px; color: #94a3b8; line-height: 1.6; border-top: 1px solid #334155;">
-        <h2 style="color: #fff; font-size: 1.2rem; margin-bottom: 15px;">इमेज साइज कम करें बिना क्वालिटी खोए</h2>
-        <p style="font-size: 0.9rem;">हमारा Image Compressor टूल आपकी तस्वीरों के फाइल साइज को कम करने के लिए बनाया गया है ताकि आप उन्हें आसानी से अपलोड कर सकें। यह ब्लॉगर्स और वेब डेवलपर्स के लिए एक अनिवार्य टूल है।</p>
-        <p style="font-size: 0.9rem; margin-top: 10px;">सचिन एआई स्टूडियो के सभी टूल्स 100% फ्री और सुरक्षित हैं। हम आपका कोई भी डेटा अपने सर्वर पर स्टोर नहीं करते हैं।</p>
-    </div>
 </body>
 </html>
