@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 Encoder & Decoder - Sachin AI Studio</title>
+    <style>
+        :root { --bg: #07090f; --card: #0e1117; --accent: #818cf8; --text: #f1f5f9; --muted: #64748b; --border: rgba(255,255,255,0.06); }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .container { width: 100%; max-width: 800px; background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h1 { font-size: 1.8rem; margin-bottom: 20px; text-align: center; color: var(--accent); }
+        .group { margin-bottom: 25px; }
+        label { display: block; font-size: 0.9rem; color: var(--muted); margin-bottom: 10px; font-weight: 600; }
+        textarea { width: 100%; height: 150px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; padding: 15px; color: #fff; font-size: 0.9rem; outline: none; resize: vertical; transition: 0.3s; }
+        textarea:focus { border-color: var(--accent); }
+        .btns { display: flex; gap: 15px; margin-bottom: 25px; }
+        button { flex: 1; padding: 12px; border-radius: 10px; border: none; cursor: pointer; font-weight: 700; transition: 0.2s; font-family: inherit; }
+        .btn-enc { background: var(--accent); color: #fff; }
+        .btn-dec { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--border); }
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
+        .content-area { margin-top: 40px; line-height: 1.8; color: #cbd5e1; }
+        .content-area h2 { color: #fff; margin-bottom: 15px; font-size: 1.4rem; border-left: 4px solid var(--accent); padding-left: 15px; }
+        footer { margin-top: 40px; color: var(--muted); font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Base64 Encoder & Decoder</h1>
+        
+        <div class="group">
+            <label>Input Text / Base64</label>
+            <textarea id="input" placeholder="यहाँ अपना टेक्स्ट या Base64 कोड डालें..."></textarea>
+        </div>
+
+        <div class="btns">
+            <button class="btn-enc" onclick="process(true)">Encode to Base64</button>
+            <button class="btn-dec" onclick="process(false)">Decode from Base64</button>
+        </div>
+
+        <div class="group">
+            <label>Result</label>
+            <textarea id="output" readonly placeholder="परिणाम यहाँ दिखाई देगा..."></textarea>
+        </div>
+
+        <div class="content-area">
+            <h2>Base64 क्या है?</h2>
+            <p>Base64 एक बाइनरी-टू-टेक्स्ट एन्कोडिंग स्कीम है जो बाइनरी डेटा को ASCII स्ट्रिंग फॉर्मेट में बदलती है। इसका उपयोग अक्सर डेटा को ऐसे माध्यमों से भेजने के लिए किया जाता है जो केवल टेक्स्ट को सपोर्ट करते हैं, जैसे कि ईमेल या HTML।</p>
+            
+            <h2>सचिन एआई स्टूडियो Base64 टूल क्यों?</h2>
+            <p>हमारा टूल 100% क्लाइंट-साइड है, जिसका अर्थ है कि आपका डेटा कभी भी हमारे सर्वर पर नहीं भेजा जाता है। यह डेवलपर्स के लिए संवेदनशील जानकारी को सुरक्षित रूप से एन्कोड और डिकोड करने का सबसे सुरक्षित तरीका है।</p>
+        </div>
+    </div>
+    
+    <footer>© 2025 Sachin AI Studio - Developer Tools</footer>
+
+    <script>
+        function process(encode) {
+            const input = document.getElementById('input').value;
+            const output = document.getElementById('output');
+            try {
+                if (encode) {
+                    output.value = btoa(unescape(encodeURIComponent(input)));
+                } else {
+                    output.value = decodeURIComponent(escape(atob(input)));
+                }
+            } catch (e) {
+                output.value = "Error: Invalid input for " + (encode ? "encoding" : "decoding");
+            }
+        }
+    </script>
+</body>
+</html>

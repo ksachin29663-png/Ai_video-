@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lorem Ipsum Generator - Sachin AI Studio</title>
+    <style>
+        :root { --bg: #07090f; --card: #0e1117; --accent: #f472b6; --text: #f1f5f9; --muted: #64748b; --border: rgba(255,255,255,0.06); }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .container { width: 100%; max-width: 700px; background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h1 { font-size: 1.8rem; margin-bottom: 20px; text-align: center; color: var(--accent); }
+        .controls { display: flex; gap: 15px; align-items: flex-end; margin-bottom: 25px; flex-wrap: wrap; }
+        .input-group { flex: 1; min-width: 150px; }
+        label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 8px; font-weight: 600; }
+        input[type="number"] { width: 100%; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 8px; padding: 10px; color: #fff; outline: none; }
+        button { background: var(--accent); color: #fff; border: none; padding: 10px 25px; border-radius: 8px; font-weight: 700; cursor: pointer; height: 42px; }
+        .output-area { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 12px; padding: 20px; min-height: 200px; line-height: 1.6; color: #cbd5e1; white-space: pre-wrap; margin-bottom: 20px; }
+        .copy-btn { background: rgba(255,255,255,0.05); color: var(--muted); border: 1px solid var(--border); padding: 8px 15px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; float: right; }
+        .content-area { margin-top: 40px; line-height: 1.8; color: #cbd5e1; clear: both; }
+        .content-area h2 { color: #fff; margin-bottom: 15px; font-size: 1.4rem; border-left: 4px solid var(--accent); padding-left: 15px; }
+        footer { margin-top: 40px; color: var(--muted); font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Lorem Ipsum Generator</h1>
+        
+        <div class="controls">
+            <div class="input-group">
+                <label>पैराग्राफ की संख्या</label>
+                <input type="number" id="count" value="3" min="1" max="20">
+            </div>
+            <button onclick="generate()">जेनरेट करें</button>
+        </div>
+
+        <button class="copy-btn" onclick="copyText()">कॉपी करें</button>
+        <div class="output-area" id="output"></div>
+
+        <div class="content-area">
+            <h2>Lorem Ipsum क्या है?</h2>
+            <p>Lorem Ipsum केवल प्रिंटिंग और टाइपसेटिंग उद्योग का डमी टेक्स्ट है। 1500 के दशक के बाद से यह मानक डमी टेक्स्ट रहा है। इसका उपयोग तब किया जाता है जब कोई डिजाइनर किसी पेज के लेआउट को देखना चाहता है बिना वास्तविक कंटेंट के।</p>
+            
+            <h2>इस जेनरेटर का उपयोग क्यों करें?</h2>
+            <p>सचिन एआई स्टूडियो का Lorem Ipsum जेनरेटर आपको अपनी आवश्यकतानुसार सटीक पैराग्राफ जेनरेट करने की अनुमति देता है। यह वेब डिजाइनरों और ग्राफिक्स डिजाइनरों के लिए एक अनिवार्य टूल है।</p>
+        </div>
+    </div>
+    
+    <footer>© 2025 Sachin AI Studio - Content Tools</footer>
+
+    <script>
+        const lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
+        function generate() {
+            const count = document.getElementById('count').value;
+            let result = "";
+            for(let i=0; i<count; i++) {
+                result += lorem + "\n\n";
+            }
+            document.getElementById('output').textContent = result.trim();
+        }
+
+        function copyText() {
+            const text = document.getElementById('output').textContent;
+            navigator.clipboard.writeText(text);
+            alert("कॉपी कर लिया गया!");
+        }
+
+        generate();
+    </script>
+</body>
+</html>

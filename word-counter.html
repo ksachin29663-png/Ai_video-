@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word & Character Counter - Sachin AI Studio</title>
+    <style>
+        :root { --bg: #07090f; --card: #0e1117; --accent: #6366f1; --text: #f1f5f9; --muted: #64748b; --border: rgba(255,255,255,0.06); }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .container { width: 100%; max-width: 800px; background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h1 { font-size: 1.8rem; margin-bottom: 10px; text-align: center; background: linear-gradient(90deg,#818cf8,#22d3ee); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        textarea { width: 100%; height: 250px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; padding: 15px; color: var(--text); font-size: 1rem; outline: none; resize: none; margin-bottom: 20px; transition: 0.3s; }
+        textarea:focus { border-color: var(--accent); background: rgba(255,255,255,0.05); }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .stat-box { background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); padding: 15px; border-radius: 12px; text-align: center; }
+        .stat-val { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
+        .stat-lbl { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; margin-top: 5px; }
+        .content-area { margin-top: 40px; line-height: 1.8; color: #cbd5e1; }
+        .content-area h2 { color: #fff; margin-bottom: 15px; font-size: 1.4rem; border-left: 4px solid var(--accent); padding-left: 15px; }
+        .content-area p { margin-bottom: 15px; }
+        footer { margin-top: 40px; color: var(--muted); font-size: 0.8rem; }
+        @media (max-width: 600px) { .container { padding: 20px; } .stat-val { font-size: 1.2rem; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Word & Character Counter</h1>
+        <p style="text-align: center; color: var(--muted); margin-bottom: 20px;">अपने टेक्स्ट के शब्दों और अक्षरों की तुरंत गणना करें।</p>
+        
+        <textarea id="textInput" placeholder="यहाँ अपना टेक्स्ट पेस्ट करें या लिखना शुरू करें..."></textarea>
+        
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-val" id="wordCount">0</div>
+                <div class="stat-lbl">Words</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-val" id="charCount">0</div>
+                <div class="stat-lbl">Characters</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-val" id="sentenceCount">0</div>
+                <div class="stat-lbl">Sentences</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-val" id="readTime">0 min</div>
+                <div class="stat-lbl">Reading Time</div>
+            </div>
+        </div>
+
+        <div class="content-area">
+            <h2>यह Word Counter टूल क्या है?</h2>
+            <p>Sachin AI Studio का Word Counter एक शक्तिशाली और मुफ्त ऑनलाइन टूल है जो आपको अपने लेख, निबंध या किसी भी टेक्स्ट की लंबाई को सटीक रूप से मापने में मदद करता है। यह टूल विशेष रूप से ब्लॉगर्स, छात्रों और कंटेंट राइटर्स के लिए डिज़ाइन किया गया है जिन्हें अपनी सामग्री को एक निश्चित शब्द सीमा के भीतर रखना होता है।</p>
+            
+            <h2>इस टूल का उपयोग कैसे करें?</h2>
+            <p>इसका उपयोग करना बहुत सरल है। बस ऊपर दिए गए बॉक्स में अपना टेक्स्ट टाइप करें या पेस्ट करें। जैसे ही आप लिखना शुरू करेंगे, हमारा टूल रीयल-टाइम में शब्दों, अक्षरों और वाक्यों की गणना करना शुरू कर देगा। आपको किसी भी बटन को दबाने की ज़रूरत नहीं है।</p>
+            
+            <h2>मुख्य विशेषताएं:</h2>
+            <ul>
+                <li><strong>रीयल-टाइम गणना:</strong> टाइप करते ही परिणाम देखें।</li>
+                <li><strong>पढ़ने का समय:</strong> यह बताता है कि आपके टेक्स्ट को पढ़ने में कितना समय लगेगा।</li>
+                <li><strong>पूरी तरह सुरक्षित:</strong> आपका डेटा आपके ब्राउज़र में ही रहता है, हम इसे सर्वर पर स्टोर नहीं करते।</li>
+                <li><strong>बिना इंटरनेट के:</strong> एक बार लोड होने के बाद यह ऑफलाइन भी काम करता है।</li>
+            </ul>
+        </div>
+    </div>
+    
+    <footer>© 2025 Sachin AI Studio - Professional Tools</footer>
+
+    <script>
+        const input = document.getElementById('textInput');
+        const wordCount = document.getElementById('wordCount');
+        const charCount = document.getElementById('charCount');
+        const sentenceCount = document.getElementById('sentenceCount');
+        const readTime = document.getElementById('readTime');
+
+        input.addEventListener('input', () => {
+            const text = input.value.trim();
+            
+            // Word count
+            const words = text ? text.split(/\s+/).length : 0;
+            wordCount.textContent = words;
+            
+            // Character count
+            charCount.textContent = text.length;
+            
+            // Sentence count
+            const sentences = text ? text.split(/[.!?]+/).filter(s => s.trim().length > 0).length : 0;
+            sentenceCount.textContent = sentences;
+            
+            // Reading time (avg 200 words per minute)
+            const time = Math.ceil(words / 200);
+            readTime.textContent = words > 0 ? `${time} min` : '0 min';
+        });
+    </script>
+</body>
+</html>
