@@ -3,16 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>शायरी हब — भारत की टॉप लेवल शायरी</title>
+<title>शायरी हब — भारत की टॉप लेवल शायरी | प्यार, दर्द, दोस्ती शायरी</title>
 <link rel="icon" href="favicon.png">
-<meta name="description" content="भारत की सबसे बेहतरीन शायरी का संग्रह - प्यार, दोस्ती, दर्द और प्रेरणादायक शायरी।">
-<meta name="keywords" content="शायरी, हिंदी शायरी, लव शायरी, सैड शायरी, दोस्ती शायरी, प्रेरणादायक शायरी, टॉप शायरी">
+<meta name="description" content="भारत की सबसे बेहतरीन शायरी का संग्रह - प्यार, दोस्ती, दर्द और प्रेरणादायक शायरी। हजारों शायरियाँ जो आप कॉपी कर सकते हैं। लव स्टोरी, दुखद कहानियाँ और सफलता की कहानियाँ।">
+<meta name="keywords" content="शायरी, हिंदी शायरी, लव शायरी, सैड शायरी, दोस्ती शायरी, प्रेरणादायक शायरी, टॉप शायरी, शायरी कॉपी, प्यार की शायरी, दर्द भरी शायरी">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3019468976412219" crossorigin="anonymous"></script>
+<!-- Auto Ads Code -->
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({
+          google_ad_client: "ca-pub-3019468976412219",
+          enable_page_level_ads: true
+     });
+</script>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
   :root{ --bg:#07090f; --card:#0e1117; --card2:#141820; --border:rgba(255,255,255,0.06); --accent:#6366f1; --accent2:#22d3ee; --text:#f1f5f9; --muted:#64748b; --r:14px; }
   html{scroll-behavior:smooth;}
-  body{font-family:\'Segoe UI\',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
   .bg-mesh{position:fixed;inset:0;z-index:0;pointer-events:none; background:radial-gradient(ellipse 70% 50% at 0% 0%,rgba(99,102,241,.18) 0%,transparent 55%), radial-gradient(ellipse 60% 40% at 100% 0%,rgba(34,211,238,.14) 0%,transparent 50%);}
   header{position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border);background:rgba(7,9,15,.9);backdrop-filter:blur(20px);}
   nav{max-width:1300px;margin:0 auto;padding:0 20px;height:58px;display:flex;align-items:center;justify-content:space-between;}
@@ -25,19 +32,30 @@
   .hero h1 em{font-style:normal;background:linear-gradient(135deg,#818cf8,#22d3ee,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
   .hero p{color:var(--muted);font-size:.98rem;margin:14px auto 28px;max-width:600px;line-height:1.7;}
   .wrap{position:relative;z-index:1;max-width:1300px;margin:0 auto;padding:0 16px 80px;}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;}
-  .card{display:block;text-decoration:none;color:inherit;border-radius:var(--r);padding:24px; background:var(--card);border:1px solid var(--border); transition:0.3s;}
-  .card:hover{transform:translateY(-5px);border-color:var(--accent);box-shadow:0 12px 32px rgba(0,0,0,0.5);}
-  .c-ico{font-size:2rem;margin-bottom:15px;}
-  .c-title{font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:10px;}
-  .c-desc{font-size:0.85rem;color:var(--muted);line-height:1.6;margin-bottom:15px;}
-  .badge{font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:99px;background:rgba(99,102,241,.12);color:#a5b4fc;border:1px solid var(--border);}
+  .category-filter{display:flex;gap:10px;margin-bottom:30px;flex-wrap:wrap;justify-content:center;}
+  .filter-btn{padding:8px 16px;border-radius:20px;border:1px solid var(--border);background:rgba(99,102,241,.1);color:var(--text);cursor:pointer;transition:.2s;font-size:.85rem;}
+  .filter-btn:hover,.filter-btn.active{border-color:var(--accent);background:rgba(99,102,241,.3);}
+  .shayari-section{margin-bottom:40px;}
+  .shayari-section h2{font-size:1.8rem;color:#fff;margin-bottom:20px;text-align:center;}
+  .shayari-card{background:var(--card2);padding:20px;border-radius:var(--r);margin-bottom:15px;border:1px solid var(--border);position:relative;}
+  .shayari-card p{font-size:1rem;line-height:1.8;margin-bottom:10px;}
+  .shayari-card .author{font-size:0.85rem;color:var(--accent);text-align:right;display:block;margin-bottom:10px;}
+  .copy-btn{padding:6px 12px;background:var(--accent);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:.8rem;transition:.2s;}
+  .copy-btn:hover{background:var(--accent2);}
+  .copy-btn.copied{background:#10b981;}
+  .story-card{background:var(--card);padding:24px;border-radius:var(--r);margin-bottom:20px;border:1px solid var(--border);}
+  .story-card h3{font-size:1.3rem;color:#fff;margin-bottom:10px;}
+  .story-card .story-type{display:inline-block;padding:4px 10px;background:rgba(99,102,241,.2);color:var(--accent);border-radius:20px;font-size:.8rem;margin-bottom:10px;}
+  .story-card p{font-size:0.95rem;line-height:1.8;color:var(--muted);margin-bottom:10px;}
+  .load-more{display:block;margin:30px auto;padding:12px 30px;background:var(--accent);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:.95rem;transition:.2s;}
+  .load-more:hover{background:var(--accent2);}
+  .info-box{background:rgba(99,102,241,.1);padding:20px;border-radius:var(--r);border-left:4px solid var(--accent);margin-bottom:30px;}
+  .info-box h3{color:#fff;margin-bottom:10px;}
+  .info-box p{color:var(--muted);line-height:1.6;}
   footer{text-align:center;padding:40px;color:var(--muted);border-top:1px solid var(--border);}
-  .shayari-section { margin-bottom: 40px; }
-  .shayari-section h2 { font-size: 1.8rem; color: #fff; margin-bottom: 20px; text-align: center; }
-  .shayari-card { background: var(--card2); padding: 20px; border-radius: var(--r); margin-bottom: 15px; border: 1px solid var(--border); }
-  .shayari-card p { font-size: 1rem; line-height: 1.8; margin-bottom: 10px; }
-  .shayari-card .author { font-size: 0.85rem; color: var(--accent); text-align: right; display: block; }
+  .toast{position:fixed;bottom:20px;right:20px;background:#10b981;color:#fff;padding:12px 20px;border-radius:6px;display:none;z-index:1000;}
+  .toast.show{display:block;animation:slideIn 0.3s ease-in-out;}
+  @keyframes slideIn{from{transform:translateX(400px);}to{transform:translateX(0);}}
 </style>
 </head>
 <body>
@@ -58,61 +76,140 @@
 
 <div class="hero">
   <h1>भारत की <em>टॉप लेवल शायरी</em></h1>
-  <p>यहां आपको प्यार, दोस्ती, दर्द और प्रेरणादायक शायरी का बेहतरीन संग्रह मिलेगा। अपनी भावनाओं को शब्दों में व्यक्त करें।</p>
+  <p>हजारों बेहतरीन शायरियाँ जो आपकी भावनाओं को शब्दों में ढाल देंगी। प्यार, दोस्ती, दर्द और प्रेरणा - सब कुछ एक जगह। हर शायरी को कॉपी करें और अपने प्रियजनों के साथ शेयर करें।</p>
 </div>
 
 <div class="wrap">
-  <div class="shayari-section">
-    <h2>प्यार भरी शायरी</h2>
-    <div class="shayari-card">
-      <p>नज़र जब मिली तो अफसाना बन गया, दिल जब मिला तो दीवाना बन गया।</p>
-      <span class="author">- अज्ञात</span>
-    </div>
-    <div class="shayari-card">
-      <p>तुम्हारी यादों को दिल से मिटाया नहीं, जो तुम न हो तो कुछ भी भाया नहीं।</p>
-      <span class="author">- अज्ञात</span>
-    </div>
+  <div class="info-box">
+    <h3>📖 शायरी हब के बारे में</h3>
+    <p>यह एक विशेष संग्रह है जहाँ आपको भारत की सबसे बेहतरीन और लोकप्रिय शायरियाँ मिलेंगी। हर शायरी को सावधानी से चुना गया है ताकि आपकी हर भावना को सही शब्दों में व्यक्त किया जा सके। आप किसी भी शायरी को एक क्लिक में कॉपी कर सकते हैं और अपने सोशल मीडिया, मैसेजिंग ऐप्स या किसी अन्य जगह पर शेयर कर सकते हैं। हमारे पास प्यार की शायरी, दर्द भरी शायरी, दोस्ती की शायरी और प्रेरणादायक शायरी का विशाल संग्रह है।</p>
   </div>
 
-  <div class="shayari-section">
-    <h2>दर्द भरी शायरी</h2>
-    <div class="shayari-card">
-      <p>दर्द की हद से गुज़रना अभी बाकी है, ना जाने कितना और बिखरना अभी बाकी है।</p>
-      <span class="author">- अज्ञात</span>
-    </div>
-    <div class="shayari-card">
-      <p>अकेले ही तय करने होते हैं कुछ सफर, हर सफर में हमसफर नहीं होते।</p>
-      <span class="author">- अज्ञात</span>
-    </div>
+  <div class="category-filter">
+    <button class="filter-btn active" data-category="all">सभी</button>
+    <button class="filter-btn" data-category="प्यार">प्यार</button>
+    <button class="filter-btn" data-category="दर्द">दर्द</button>
+    <button class="filter-btn" data-category="दोस्ती">दोस्ती</button>
+    <button class="filter-btn" data-category="प्रेरणादायक">प्रेरणादायक</button>
   </div>
 
-  <div class="shayari-section">
-    <h2>दोस्ती शायरी</h2>
-    <div class="shayari-card">
-      <p>दोस्ती वो नहीं जो जान देती है, दोस्ती वो भी नहीं जो मुस्कान देती है। असली दोस्ती तो वो है जो पानी में गिरा दोस्त, और पानी भी पीने को नहीं देती है।</p>
-      <span class="author">- अज्ञात</span>
-    </div>
-    <div class="shayari-card">
-      <p>दोस्त रूठे तो रब रूठे, फिर रूठे तो जग छूटे, अगर फिर रूठे तो दिल टूटे, और अगर फिर रूठे तो कसम से साथ छूटे।</p>
-      <span class="author">- अज्ञात</span>
-    </div>
-  </div>
+  <div id="shayari-container"></div>
+  <button class="load-more" id="loadMoreBtn">और शायरियाँ लोड करें</button>
 
-  <div class="shayari-section">
-    <h2>प्रेरणादायक शायरी</h2>
-    <div class="shayari-card">
-      <p>मंजिलें उन्हीं को मिलती हैं जिनके सपनों में जान होती है, पंखों से कुछ नहीं होता, हौसलों से उड़ान होती है।</p>
-      <span class="author">- अज्ञात</span>
-    </div>
-    <div class="shayari-card">
-      <p>जीतने वाले कुछ अलग काम नहीं करते, बस वो कामों को अलग तरीके से करते हैं।</p>
-      <span class="author">- अज्ञात</span>
-    </div>
+  <div class="shayari-section" style="margin-top:50px;">
+    <h2>💔 प्रेरणादायक कहानियाँ</h2>
+    <div id="stories-container"></div>
   </div>
 </div>
+
+<div class="toast" id="toast">✓ शायरी कॉपी हो गई!</div>
 
 <footer>
   <p>&copy; 2026 Sachin AI Studio. सभी टूल्स AdSense फ्रेंडली और हाई वैल्यू कंटेंट के साथ सुरक्षित हैं। | <a href="privacy_policy_new.html">Privacy Policy</a> | <a href="terms_of_service_new.html">Terms of Service</a> | <a href="about_us_new.html">About Us</a> | <a href="blog.html">Blog</a></p>
 </footer>
+
+<script>
+  let allShayari = [];
+  let allStories = [];
+  let currentCategory = 'all';
+  let displayedCount = 0;
+  const itemsPerLoad = 5;
+
+  // डेटा लोड करना
+  async function loadData() {
+    try {
+      const response = await fetch('shayari_data.json');
+      const data = await response.json();
+      allShayari = data.shayari;
+      allStories = data.stories;
+      displayShayari();
+      displayStories();
+    } catch (error) {
+      console.error('डेटा लोड करने में त्रुटि:', error);
+    }
+  }
+
+  // शायरी दिखाना
+  function displayShayari() {
+    const container = document.getElementById('shayari-container');
+    const filtered = currentCategory === 'all' 
+      ? allShayari 
+      : allShayari.filter(s => s.category === currentCategory);
+
+    container.innerHTML = '';
+    const toDisplay = filtered.slice(0, displayedCount + itemsPerLoad);
+    displayedCount = toDisplay.length;
+
+    toDisplay.forEach((shayari, index) => {
+      const card = document.createElement('div');
+      card.className = 'shayari-card';
+      card.innerHTML = `
+        <p>"${shayari.content}"</p>
+        <span class="author">- ${shayari.author}</span>
+        <button class="copy-btn" onclick="copyToClipboard('${shayari.content.replace(/'/g, "\\'")}', this)">📋 कॉपी करें</button>
+      `;
+      container.appendChild(card);
+    });
+
+    // लोड मोर बटन को दिखाना/छुपाना
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    loadMoreBtn.style.display = toDisplay.length < filtered.length ? 'block' : 'none';
+  }
+
+  // कहानियाँ दिखाना
+  function displayStories() {
+    const container = document.getElementById('stories-container');
+    container.innerHTML = '';
+    
+    allStories.forEach(story => {
+      const card = document.createElement('div');
+      card.className = 'story-card';
+      card.innerHTML = `
+        <span class="story-type">${story.type}</span>
+        <h3>${story.title}</h3>
+        <p>${story.content}</p>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  // कॉपी फंक्शन
+  function copyToClipboard(text, button) {
+    navigator.clipboard.writeText(text).then(() => {
+      button.textContent = '✓ कॉपी हो गई!';
+      button.classList.add('copied');
+      
+      // टोस्ट दिखाना
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+
+      // बटन को वापस नॉर्मल करना
+      setTimeout(() => {
+        button.textContent = '📋 कॉपी करें';
+        button.classList.remove('copied');
+      }, 2000);
+    });
+  }
+
+  // कैटेगरी फिल्टर
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      currentCategory = this.dataset.category;
+      displayedCount = 0;
+      displayShayari();
+    });
+  });
+
+  // लोड मोर बटन
+  document.getElementById('loadMoreBtn').addEventListener('click', () => {
+    displayShayari();
+  });
+
+  // पेज लोड होने पर डेटा लोड करना
+  window.addEventListener('load', loadData);
+</script>
 </body>
 </html>
