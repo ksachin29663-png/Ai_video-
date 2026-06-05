@@ -3,147 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Cricket Encyclopedia 2026 - सम्पूर्ण क्रिकेट इतिहास | Sachin AI Studio</title>
+    <title>The Great Cricket Encyclopedia 2026 - सचिन AI स्टूडियो</title>
     <style>
-        :root { --bg: #05070a; --card: #0f172a; --accent: #f97316; --text: #f1f5f9; --muted: #94a3b8; --border: rgba(255,255,255,0.08); --gold: #fbbf24; --link: #38bdf8; }
-        body { font-family: 'Inter', 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding: 0; margin: 0; line-height: 1.6; }
-        .hero { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1531415074968-036ba1b575da?auto=format&fit=crop&w=1600&q=80'); background-size: cover; background-position: center; height: 50vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; border-bottom: 4px solid var(--accent); }
-        .hero h1 { font-size: 3.5rem; margin-bottom: 10px; background: linear-gradient(90deg,#f97316,#fbbf24); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; text-transform: uppercase; }
+        :root { --bg: #020617; --card: #0f172a; --accent: #f97316; --text: #f1f5f9; --muted: #94a3b8; --border: rgba(255,255,255,0.06); --gold: #fbbf24; }
+        body { font-family: 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.8; margin: 0; }
         
-        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        /* Navigation */
+        .nav { background: rgba(2,6,23,0.95); backdrop-filter: blur(10px); padding: 15px 0; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--border); }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
+        .logo { font-weight: 900; font-size: 1.5rem; color: var(--accent); text-decoration: none; }
         
-        .section-title { font-size: 2.2rem; margin: 60px 0 30px; text-align: center; position: relative; padding-bottom: 15px; }
-        .section-title::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 80px; height: 4px; background: var(--accent); border-radius: 2px; }
-        
-        .article-content { background: var(--card); padding: 40px; border-radius: 30px; border: 1px solid var(--border); margin-bottom: 60px; }
-        .article-content h2 { color: var(--accent); font-size: 1.8rem; margin-top: 40px; border-left: 4px solid var(--accent); padding-left: 15px; }
-        .article-content p { font-size: 1.1rem; color: #cbd5e1; margin-bottom: 20px; text-align: justify; }
-        
-        .data-table { width: 100%; border-collapse: collapse; margin: 30px 0; background: rgba(255,255,255,0.02); border-radius: 15px; overflow: hidden; border: 1px solid var(--border); }
-        .data-table th, .data-table td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border); }
-        .data-table th { background: rgba(249,115,22,0.1); color: var(--accent); font-weight: 800; }
-        .data-table tr:hover { background: rgba(255,255,255,0.05); }
+        /* Hero Section */
+        .hero { height: 60vh; background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1531415074968-036ba1b575da?auto=format&fit=crop&w=1600&q=80'); background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border-bottom: 5px solid var(--accent); }
+        .hero h1 { font-size: 4rem; margin: 0; background: linear-gradient(to right, #f97316, #fbbf24); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; }
+        .hero p { font-size: 1.3rem; max-width: 800px; color: #cbd5e1; margin-top: 20px; }
 
-        .link-box { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin: 40px 0; }
-        .external-link { background: #1e293b; padding: 20px; border-radius: 15px; border: 1px solid var(--border); text-decoration: none; color: #fff; transition: 0.3s; display: flex; align-items: center; gap: 15px; }
-        .external-link:hover { transform: translateY(-5px); border-color: var(--link); background: #0f172a; }
-        .external-link i { font-size: 1.5rem; color: var(--link); }
-        .external-link div h4 { margin: 0; color: var(--link); }
-        .external-link div p { margin: 5px 0 0; font-size: 0.85rem; color: var(--muted); }
-
-        .highlight-box { background: linear-gradient(135deg, rgba(249,115,22,0.1), rgba(251,191,36,0.1)); padding: 30px; border-radius: 20px; border-left: 5px solid var(--accent); margin: 30px 0; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 60px 20px; }
         
-        footer { background: #000; padding: 40px; text-align: center; border-top: 1px solid var(--border); color: var(--muted); }
+        /* Content Sections */
+        .section { margin-bottom: 80px; }
+        .section-title { font-size: 2.5rem; color: var(--accent); margin-bottom: 30px; border-bottom: 2px solid var(--border); padding-bottom: 10px; }
+        .content-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 40px; margin-bottom: 40px; }
+        
+        h2 { font-size: 2rem; color: var(--gold); margin-top: 40px; }
+        h3 { font-size: 1.5rem; color: var(--accent); margin-top: 30px; }
+        p { margin-bottom: 20px; font-size: 1.1rem; color: #e2e8f0; text-align: justify; }
 
-        @media (max-width: 800px) {
-            .hero h1 { font-size: 2.2rem; }
-            .article-content { padding: 20px; }
-            .data-table { font-size: 0.85rem; }
+        /* Tables */
+        .data-table { width: 100%; border-collapse: collapse; margin: 30px 0; background: rgba(255,255,255,0.02); border-radius: 15px; overflow: hidden; }
+        .data-table th, .data-table td { padding: 18px; text-align: left; border-bottom: 1px solid var(--border); }
+        .data-table th { background: rgba(249,115,22,0.1); color: var(--accent); }
+
+        /* Biographies Grid */
+        .bio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 40px; }
+        .bio-card { background: #1e293b; padding: 30px; border-radius: 20px; border: 1px solid var(--border); }
+        .bio-card h4 { font-size: 1.4rem; color: var(--gold); margin: 0 0 15px; }
+
+        /* Highlight Box */
+        .highlight { background: linear-gradient(135deg, rgba(249,115,22,0.1), rgba(251,191,36,0.1)); padding: 30px; border-radius: 20px; border-left: 5px solid var(--accent); margin: 40px 0; }
+
+        /* Links */
+        .link-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .ext-link { background: #0f172a; padding: 20px; border-radius: 15px; border: 1px solid var(--border); text-decoration: none; color: #38bdf8; font-weight: 700; text-align: center; transition: 0.3s; }
+        .ext-link:hover { background: var(--accent); color: #000; }
+
+        footer { background: #000; padding: 60px 20px; text-align: center; border-top: 1px solid var(--border); color: var(--muted); }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .section-title { font-size: 1.8rem; }
+            .content-card { padding: 20px; }
         }
     </style>
 </head>
 <body>
 
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="index.html" class="logo">SACHIN AI STUDIO</a>
+            <div style="color: var(--muted); font-weight: 700;">CRICKET ENCYCLOPEDIA 2026</div>
+        </div>
+    </nav>
+
     <div class="hero">
-        <h1>Ultimate Cricket Data Hub 2026</h1>
-        <p>विश्व के सभी कप्तानों, खिलाड़ियों और ऐतिहासिक रिकॉर्ड्स का सम्पूर्ण डेटाबेस।</p>
+        <h1>The Great Cricket Saga</h1>
+        <p>क्रिकेट का एक ऐसा सफर जो सदियों पुराना है, और जिसका डेटा अनंत है। यहाँ आपको क्रिकेट के हर उस पहलू की जानकारी मिलेगी जिसने इस खेल को 'जेंटलमैन गेम' बनाया।</p>
     </div>
 
     <div class="container">
         
-        <div class="article-content">
-            <h2 class="section-title">सर्वकालिक महान कप्तानों का डेटा (All Formats)</h2>
-            <p>क्रिकेट के इतिहास में कप्तानी केवल टीम का नेतृत्व करना नहीं है, बल्कि बल्ले से उदाहरण पेश करना भी है। यहाँ दुनिया के उन कप्तानों की सूची है जिन्होंने अंतरराष्ट्रीय क्रिकेट (Test, ODI, T20) में बतौर कप्तान सबसे अधिक रन बनाए हैं (डेटा जून 2026 तक):</p>
-            
-            <table class="data-table">
-                <thead>
-                    <tr><th>कप्तान</th><th>देश</th><th>मैच</th><th>कुल रन (बतौर कप्तान)</th><th>औसत</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>रिकी पोंटिंग</td><td>ऑस्ट्रेलिया</td><td>324</td><td>15,440</td><td>45.54</td></tr>
-                    <tr><td>ग्रीम स्मिथ</td><td>दक्षिण अफ्रीका</td><td>286</td><td>14,878</td><td>42.38</td></tr>
-                    <tr><td>विराट कोहली</td><td>भारत</td><td>213</td><td>12,883</td><td>59.92</td></tr>
-                    <tr><td>स्टीफन फ्लेमिंग</td><td>न्यूजीलैंड</td><td>303</td><td>11,561</td><td>34.20</td></tr>
-                    <tr><td>महेंद्र सिंह धोनी</td><td>भारत</td><td>332</td><td>11,207</td><td>47.08</td></tr>
-                    <tr><td>बाबर आज़म</td><td>पाकिस्तान</td><td>152</td><td>6,624+</td><td>48.50</td></tr>
-                    <tr><td>केन विलियमसन</td><td>न्यूजीलैंड</td><td>180</td><td>8,450+</td><td>51.20</td></tr>
-                    <tr><td>रोहित शर्मा</td><td>भारत</td><td>131</td><td>4,470+</td><td>43.80</td></tr>
-                </tbody>
-            </table>
-
-            <div class="highlight-box">
-                <h3>2026 का रिकॉर्ड अपडेट: शुभमन गिल</h3>
-                <p>2025-26 के सीजन में शुभमन गिल ने एंडरसन-टेनडुलकर ट्रॉफी में एक सीरीज में कप्तान के तौर पर 743 रन बनाकर विराट कोहली के रिकॉर्ड को पीछे छोड़ दिया।</p>
+        <!-- Section 1: History Deep Dive -->
+        <div class="section">
+            <h2 class="section-title">1. क्रिकेट का महा-इतिहास (The Grand History)</h2>
+            <div class="content-card">
+                <p>क्रिकेट की जड़ें 16वीं शताब्दी के दक्षिण-पूर्वी इंग्लैंड में खोजी जा सकती हैं। इसे मूल रूप से 'क्रेकेट' (Creckett) कहा जाता था। 18वीं शताब्दी तक, यह इंग्लैंड का राष्ट्रीय खेल बन गया। 1787 में MCC की स्थापना ने खेल को नियमबद्ध किया।</p>
+                <p>19वीं शताब्दी में, क्रिकेट ब्रिटिश साम्राज्य के साथ भारत, ऑस्ट्रेलिया, वेस्टइंडीज और दक्षिण अफ्रीका पहुँचा। 1877 में पहला टेस्ट मैच खेला गया, जिसने अंतरराष्ट्रीय प्रतिस्पर्धा की नींव रखी। 1970 के दशक में एकदिवसीय क्रिकेट (ODI) के उदय ने खेल को और अधिक रोमांचक और वैश्विक बना दिया।</p>
+                <div class="highlight">
+                    <strong>ऐतिहासिक क्षण:</strong> 1983 में भारत की विश्व कप जीत ने क्रिकेट के केंद्र को इंग्लैंड से हटाकर एशिया की ओर मोड़ दिया। आज, भारत क्रिकेट का आर्थिक और सांस्कृतिक पावरहाउस है।
+                </div>
             </div>
-
-            <h2>रिटायर्ड खिलाड़ियों का महा-डेटाबेस</h2>
-            <p>2026 तक क्रिकेट के कई दिग्गजों ने खेल को अलविदा कह दिया है। सचिन तेंदुलकर (34,357 रन), कुमार संगकारा (28,016 रन) और रिकी पोंटिंग (27,483 रन) आज भी सर्वकालिक सूची में शीर्ष पर हैं। हाल ही में 2024-25 में रोहित शर्मा और विराट कोहली के T20 अंतरराष्ट्रीय से संन्यास के बाद क्रिकेट के एक युग का अंत हुआ।</p>
-            
-            <table class="data-table">
-                <thead>
-                    <tr><th>खिलाड़ी</th><th>कुल अंतरराष्ट्रीय रन</th><th>संन्यास का वर्ष</th><th>विशेष उपलब्धि</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>सचिन तेंदुलकर</td><td>34,357</td><td>2013</td><td>100 अंतरराष्ट्रीय शतक</td></tr>
-                    <tr><td>कुमार संगकारा</td><td>28,016</td><td>2015</td><td>4 लगातार विश्व कप शतक</td></tr>
-                    <tr><td>विराट कोहली</td><td>27,000+</td><td>2026 (Active/Partial)</td><td>सर्वाधिक ODI शतक (50)</td></tr>
-                    <tr><td>क्रिस गेल</td><td>19,593</td><td>2021</td><td>यूनिवर्स बॉस - 500+ छक्के</td></tr>
-                    <tr><td>एबी डिविलियर्स</td><td>20,014</td><td>2018</td><td>सबसे तेज़ ODI शतक (31 गेंद)</td></tr>
-                </tbody>
-            </table>
         </div>
 
-        <h2 class="section-title">सम्पूर्ण क्रिकेट डेटा के लिए महत्वपूर्ण लिंक्स</h2>
-        <p style="text-align: center; color: var(--muted);">चूँकि क्रिकेट का डेटा करोड़ों शब्दों में है और हर सेकंड बदलता है, आप नीचे दिए गए आधिकारिक स्रोतों से लाइव डेटा प्राप्त कर सकते हैं:</p>
-        
-        <div class="link-box">
-            <a href="https://www.espncricinfo.com/records" target="_blank" class="external-link">
-                <div>
-                    <h4>ESPNcricinfo Records</h4>
-                    <p>सभी टेस्ट, ODI और T20 रिकॉर्ड्स का सबसे बड़ा खजाना।</p>
+        <!-- Section 2: Legendary Biographies -->
+        <div class="section">
+            <h2 class="section-title">2. क्रिकेट के महानायक (Legendary Icons)</h2>
+            <div class="bio-grid">
+                <div class="bio-card">
+                    <h4>सर डॉन ब्रैडमैन</h4>
+                    <p>99.94 का टेस्ट औसत - एक ऐसा रिकॉर्ड जिसे तोड़ना नामुमकिन माना जाता है। उन्होंने क्रिकेट में बल्लेबाजी के मानकों को एक नए स्तर पर पहुँचाया।</p>
                 </div>
-            </a>
-            <a href="https://www.howstat.com/Cricket/Statistics/Players/PlayerMenu.asp" target="_blank" class="external-link">
-                <div>
-                    <h4>HowSTAT Player Analysis</h4>
-                    <p>खिलाड़ियों के प्रदर्शन का विस्तृत सांख्यिकीय विश्लेषण।</p>
+                <div class="bio-card">
+                    <h4>सचिन तेंदुलकर</h4>
+                    <p>'क्रिकेट के भगवान'। 100 अंतरराष्ट्रीय शतक और 34,000 से अधिक रन। उन्होंने दो दशकों तक करोड़ों भारतीयों की उम्मीदों को अपने कंधों पर ढोया।</p>
                 </div>
-            </a>
-            <a href="https://cricketarchive.com/" target="_blank" class="external-link">
-                <div>
-                    <h4>Cricket Archive</h4>
-                    <p>970,000+ स्कोरकार्ड्स और ऐतिहासिक खिलाड़ियों का डेटा।</p>
+                <div class="bio-card">
+                    <h4>एमएस धोनी</h4>
+                    <p>'कैप्टन कूल'। भारत को T20 विश्व कप (2007), ODI विश्व कप (2011) और चैंपियंस ट्रॉफी (2013) दिलाने वाले एकमात्र कप्तान।</p>
                 </div>
-            </a>
-            <a href="https://www.icc-cricket.com/rankings/mens/player-rankings" target="_blank" class="external-link">
-                <div>
-                    <h4>ICC Official Rankings</h4>
-                    <p>दुनिया के टॉप खिलाड़ियों की ताज़ा रैंकिंग और पॉइंट्स।</p>
+                <div class="bio-card">
+                    <h4>विराट कोहली</h4>
+                    <p>आधुनिक युग के सर्वश्रेष्ठ बल्लेबाज। 50 ODI शतक और अविश्वसनीय फिटनेस। उन्होंने भारतीय क्रिकेट में आक्रामकता और जीत की भूख पैदा की।</p>
                 </div>
-            </a>
-            <a href="https://en.wikipedia.org/wiki/List_of_cricket_records" target="_blank" class="external-link">
-                <div>
-                    <h4>Wikipedia Cricket Records</h4>
-                    <p>क्रिकेट के इतिहास के सभी प्रमुख रिकॉर्ड्स की विस्तृत सूची।</p>
+                <div class="bio-card">
+                    <h4>शेन वार्न</h4>
+                    <p>'शताब्दी की गेंद' (Ball of the Century) फेंकने वाले लेग-स्पिन के जादूगर। उन्होंने मृतप्राय लेग-स्पिन कला को फिर से जीवित किया।</p>
                 </div>
-            </a>
-            <a href="https://www.cricbuzz.com/cricket-stats" target="_blank" class="external-link">
-                <div>
-                    <h4>Cricbuzz Stats Central</h4>
-                    <p>खिलाड़ियों और टीमों के ताज़ा आंकड़ों का हब।</p>
+                <div class="bio-card">
+                    <h4>विव रिचर्ड्स</h4>
+                    <p>बिना हेलमेट के खौफनाक तेज गेंदबाजों का सामना करने वाले विंडीज के शेर। उनकी बल्लेबाजी में जो धमक थी, वो आज भी मिसाल है।</p>
                 </div>
-            </a>
+            </div>
         </div>
 
-        <div class="article-content">
-            <h2>भविष्य का लक्ष्य: करोड़ों शब्दों का डेटाबेस</h2>
-            <p>हमारा लक्ष्य सचिन AI स्टूडियो को एक ऐसे प्लेटफॉर्म में बदलना है जहाँ क्रिकेट के हर एक मैच की गेंद-दर-गेंद जानकारी उपलब्ध हो। 2026 तक, हमने AI का उपयोग करके ऐतिहासिक मैचों के डेटा को प्रोसेस किया है। ऊपर दिए गए लिंक्स के माध्यम से आप उस अनंत डेटा तक पहुँच सकते हैं जो इंटरनेट पर मौजूद है।</p>
-            <p>चाहे वह 1877 का पहला टेस्ट हो या 2026 का T20 वर्ल्ड कप फाइनल, क्रिकेट का हर पल यहाँ संजोया गया है।</p>
+        <!-- Section 3: Captaincy Records 2026 -->
+        <div class="section">
+            <h2 class="section-title">3. कप्तानों का साम्राज्य (The Era of Captains)</h2>
+            <div class="content-card">
+                <p>बतौर कप्तान सबसे ज्यादा रन बनाने का रिकॉर्ड रिकी पोंटिंग के नाम है, लेकिन औसत के मामले में विराट कोहली और बाबर आज़म ने नए कीर्तिमान स्थापित किए हैं। 2026 तक के आंकड़े यहाँ दिए गए हैं:</p>
+                <table class="data-table">
+                    <thead>
+                        <tr><th>कप्तान</th><th>कुल रन (बतौर कप्तान)</th><th>औसत</th><th>खिताब</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>रिकी पोंटिंग</td><td>15,440</td><td>45.54</td><td>2 WC, 2 CT</td></tr>
+                        <tr><td>ग्रीम स्मिथ</td><td>14,878</td><td>42.38</td><td>-</td></tr>
+                        <tr><td>विराट कोहली</td><td>12,883</td><td>59.92</td><td>-</td></tr>
+                        <tr><td>एमएस धोनी</td><td>11,207</td><td>47.08</td><td>1 WC, 1 T20 WC, 1 CT</td></tr>
+                        <tr><td>एलन बॉर्डर</td><td>11,062</td><td>44.24</td><td>1 WC</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
+
+        <!-- Section 4: Stadiums & Tech -->
+        <div class="section">
+            <h2 class="section-title">4. स्टेडियम और तकनीक (Venues & Technology)</h2>
+            <div class="content-card">
+                <h3>क्रिकेट के मंदिर</h3>
+                <p><strong>लॉर्ड्स (इंग्लैंड):</strong> क्रिकेट का मक्का। यहाँ खेलना हर खिलाड़ी का सपना होता है।</p>
+                <p><strong>मेलबर्न (ऑस्ट्रेलिया):</strong> दुनिया का दूसरा सबसे बड़ा स्टेडियम, जहाँ 1877 में पहला टेस्ट हुआ था।</p>
+                <p><strong>नरेंद्र मोदी स्टेडियम (भारत):</strong> 1,32,000 की क्षमता वाला दुनिया का सबसे बड़ा क्रिकेट स्टेडियम।</p>
+                
+                <h3>तकनीकी क्रांति</h3>
+                <p>1990 के दशक में थर्ड अंपायर की शुरुआत से लेकर आज के DRS (Decision Review System) तक, तकनीक ने क्रिकेट को निष्पक्ष बनाया है। <strong>हॉक-आई (Hawk-Eye)</strong>, <strong>स्निकोमीटर (Snickometer)</strong> और <strong>हॉटस्पॉट (Hotspot)</strong> ने अंपायरों की गलतियों को कम किया है।</p>
+            </div>
+        </div>
+
+        <!-- Section 5: The Global Links -->
+        <div class="section">
+            <h2 class="section-title">5. अनंत डेटा के द्वार (Gateway to Infinite Data)</h2>
+            <p>क्रिकेट का डेटा इतना विशाल है कि उसे एक लाख शब्दों में भी समेटना मुश्किल है। इसलिए, हम आपको दुनिया के सबसे बड़े क्रिकेट डेटाबेस से जोड़ रहे हैं:</p>
+            <div class="link-section">
+                <a href="https://www.espncricinfo.com/records" target="_blank" class="ext-link">ESPNCricinfo Records</a>
+                <a href="https://www.cricbuzz.com/cricket-stats" target="_blank" class="ext-link">Cricbuzz Statistics</a>
+                <a href="https://www.howstat.com/Cricket/home.asp" target="_blank" class="ext-link">HowSTAT Analysis</a>
+                <a href="https://cricketarchive.com/" target="_blank" class="ext-link">Cricket Archive</a>
+                <a href="https://www.icc-cricket.com/stats" target="_blank" class="ext-link">ICC Official Stats</a>
+                <a href="https://en.wikipedia.org/wiki/History_of_cricket" target="_blank" class="ext-link">Full Wiki History</a>
+            </div>
+        </div>
+
+        <div class="highlight" style="text-align: center;">
+            <h3>"क्रिकेट केवल एक खेल नहीं, यह एक भावना है।"</h3>
+            <p>सचिन AI स्टूडियो के साथ क्रिकेट की इस अनंत यात्रा का हिस्सा बनें।</p>
+        </div>
+
     </div>
 
     <footer>
-        <p>&copy; 2026 Sachin AI Studio. क्रिकेट के प्रति हमारा जुनून, आंकड़ों की जुबानी।</p>
+        <p>&copy; 2026 Sachin AI Studio. All rights reserved. <br> "क्रिकेट के प्रति हमारा जुनून, आंकड़ों की जुबानी।"</p>
     </footer>
 
 </body>
