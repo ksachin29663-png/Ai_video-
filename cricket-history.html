@@ -3,90 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Start cricket 2026 तक - सम्पूर्ण क्रिकेट इतिहास | Sachin AI Studio</title>
+    <title>Ultimate Cricket Encyclopedia 2026 - सम्पूर्ण क्रिकेट इतिहास | Sachin AI Studio</title>
     <style>
-        :root { --bg: #07090f; --card: #0e1117; --accent: #f97316; --text: #f1f5f9; --muted: #64748b; --border: rgba(255,255,255,0.06); }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        .container { width: 100%; max-width: 1100px; }
-        header { text-align: center; margin-bottom: 50px; }
-        h1 { font-size: 2.8rem; margin-bottom: 10px; background: linear-gradient(90deg,#f97316,#fcd34d); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; }
-        .timeline { position: relative; max-width: 900px; margin: 0 auto; padding: 20px 0; }
+        :root { --bg: #05070a; --card: #0f172a; --accent: #f97316; --text: #f1f5f9; --muted: #94a3b8; --border: rgba(255,255,255,0.08); --gold: #fbbf24; }
+        body { font-family: 'Inter', 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding: 0; margin: 0; line-height: 1.6; }
+        .hero { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1531415074968-036ba1b575da?auto=format&fit=crop&w=1600&q=80'); background-size: cover; background-position: center; height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; border-bottom: 4px solid var(--accent); }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 10px; background: linear-gradient(90deg,#f97316,#fbbf24); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; text-transform: uppercase; }
+        .hero p { font-size: 1.2rem; max-width: 800px; color: #cbd5e1; }
+        
+        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        
+        .section-title { font-size: 2.2rem; margin: 60px 0 30px; text-align: center; position: relative; padding-bottom: 15px; }
+        .section-title::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 80px; height: 4px; background: var(--accent); border-radius: 2px; }
+        
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; margin-bottom: 60px; }
+        .stat-card { background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid var(--border); text-align: center; transition: 0.3s; }
+        .stat-card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 10px 30px rgba(249,115,22,0.1); }
+        .stat-no { font-size: 2.5rem; font-weight: 900; color: var(--gold); margin-bottom: 5px; }
+        .stat-label { font-size: 0.9rem; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
+
+        .article-content { background: var(--card); padding: 50px; border-radius: 30px; border: 1px solid var(--border); margin-bottom: 60px; }
+        .article-content h2 { color: var(--accent); font-size: 1.8rem; margin-top: 40px; }
+        .article-content p { font-size: 1.1rem; color: #cbd5e1; margin-bottom: 20px; text-align: justify; }
+        
+        .timeline { position: relative; margin: 60px 0; }
         .timeline::after { content: ''; position: absolute; width: 2px; background: var(--border); top: 0; bottom: 0; left: 50%; margin-left: -1px; }
-        .event { padding: 10px 40px; position: relative; background: inherit; width: 50%; }
-        .event::after { content: '🏏'; position: absolute; width: 30px; height: 30px; right: -15px; background-color: var(--bg); border: 2px solid var(--accent); top: 15px; border-radius: 50%; z-index: 1; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; }
-        .left { left: 0; }
+        .event { padding: 20px 50px; position: relative; width: 50%; box-sizing: border-box; }
+        .event::after { content: '🏏'; position: absolute; width: 40px; height: 40px; right: -20px; background: var(--bg); border: 2px solid var(--accent); top: 25px; border-radius: 50%; z-index: 1; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+        .left { left: 0; text-align: right; }
         .right { left: 50%; }
-        .right::after { left: -15px; }
-        .content { padding: 20px; background: var(--card); position: relative; border-radius: 15px; border: 1px solid var(--border); }
-        .content h2 { font-size: 1.2rem; color: var(--accent); margin-bottom: 10px; }
-        .content p { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
-        .world-cup-table { width: 100%; border-collapse: collapse; margin-top: 40px; background: var(--card); border-radius: 15px; overflow: hidden; border: 1px solid var(--border); }
-        .world-cup-table th, .world-cup-table td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border); }
-        .world-cup-table th { background: rgba(249,115,22,0.1); color: var(--accent); font-size: 0.85rem; text-transform: uppercase; }
-        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 40px; }
-        .stat-card { background: var(--card); padding: 25px; border-radius: 15px; border: 1px solid var(--border); text-align: center; }
-        .stat-no { font-size: 2rem; font-weight: 900; color: #fff; margin-bottom: 5px; }
-        .stat-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
-        @media (max-width: 700px) {
+        .right::after { left: -20px; }
+        .event-content { background: rgba(255,255,255,0.03); padding: 25px; border-radius: 20px; border: 1px solid var(--border); }
+        .event-content h3 { color: var(--gold); margin: 0 0 10px; font-size: 1.4rem; }
+        
+        .world-cup-table { width: 100%; border-collapse: collapse; margin-top: 40px; background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid var(--border); }
+        .world-cup-table th, .world-cup-table td { padding: 20px; text-align: left; border-bottom: 1px solid var(--border); }
+        .world-cup-table th { background: rgba(249,115,22,0.15); color: var(--accent); font-weight: 800; text-transform: uppercase; }
+        .world-cup-table tr:hover { background: rgba(255,255,255,0.02); }
+
+        .highlight-box { background: linear-gradient(135deg, rgba(249,115,22,0.1), rgba(251,191,36,0.1)); padding: 40px; border-radius: 25px; border-left: 5px solid var(--accent); margin: 40px 0; }
+        
+        footer { background: #000; padding: 40px; text-align: center; border-top: 1px solid var(--border); color: var(--muted); }
+
+        @media (max-width: 800px) {
+            .hero h1 { font-size: 2.2rem; }
             .timeline::after { left: 31px; }
-            .event { width: 100%; padding-left: 70px; padding-right: 25px; }
-            .event::after { left: 15px; }
-            .right { left: 0%; }
+            .event { width: 100%; padding-left: 70px; padding-right: 20px; text-align: left; }
+            .event::after { left: 11px; }
+            .right { left: 0; }
+            .article-content { padding: 25px; }
         }
     </style>
 </head>
 <body>
+
+    <div class="hero">
+        <h1>Ultimate Cricket Encyclopedia</h1>
+        <p>16वीं शताब्दी के शुरुआती दिनों से लेकर 2026 के आधुनिक युग तक - क्रिकेट की गौरवशाली यात्रा का विस्तृत विवरण।</p>
+    </div>
+
     <div class="container">
-        <header>
-            <h1>Start cricket 2026 तक</h1>
-            <p style="color: var(--muted);">16वीं शताब्दी से लेकर 2026 तक के क्रिकेट का सम्पूर्ण इतिहास और डेटा।</p>
-        </header>
-
         <div class="stat-grid">
-            <div class="stat-card"><div class="stat-no">1877</div><div class="stat-label">पहला टेस्ट मैच</div></div>
-            <div class="stat-card"><div class="stat-no">1975</div><div class="stat-label">पहला वर्ल्ड कप</div></div>
-            <div class="stat-card"><div class="stat-no">13</div><div class="stat-label">ODI वर्ल्ड कप संस्करण</div></div>
-            <div class="stat-card"><div class="stat-no">2026</div><div class="stat-label">आगामी T20 वर्ल्ड कप</div></div>
+            <div class="stat-card"><div class="stat-no">1877</div><div class="stat-label">प्रथम टेस्ट मैच</div></div>
+            <div class="stat-card"><div class="stat-no">1975</div><div class="stat-label">प्रथम विश्व कप</div></div>
+            <div class="stat-card"><div class="stat-no">3</div><div class="stat-label">भारत T20 खिताब</div></div>
+            <div class="stat-card"><div class="stat-no">2026</div><div class="stat-label">आगामी महाकुंभ</div></div>
         </div>
 
-        <h2 style="text-align: center; margin: 60px 0 30px; color: #fff;">क्रिकेट की ऐतिहासिक यात्रा</h2>
+        <div class="article-content">
+            <h2 class="section-title">क्रिकेट का उद्भव और स्वर्ण युग</h2>
+            <p>क्रिकेट का इतिहास केवल एक खेल की कहानी नहीं है, बल्कि यह संस्कृति, राजनीति और मानवीय भावना के विकास का प्रतिबिंब है। 16वीं शताब्दी में इंग्लैंड के चरवाहों द्वारा शुरू किया गया यह खेल आज दुनिया का दूसरा सबसे लोकप्रिय खेल बन चुका है। शुरुआत में इसे दक्षिण-पूर्व इंग्लैंड के 'वील्ड' (Weald) क्षेत्र में बच्चों के खेल के रूप में खेला जाता था।</p>
+            
+            <p>18वीं शताब्दी तक आते-आते क्रिकेट वयस्कों का खेल बन गया और इसे जुए (Betting) के माध्यम से लोकप्रियता मिली। 1744 में क्रिकेट के पहले नियम (Laws of Cricket) लिखे गए। 1787 में मेरीलेबोन क्रिकेट क्लब (MCC) की स्थापना हुई, जिसने लॉर्ड्स मैदान को अपना घर बनाया और आज भी यह 'क्रिकेट का मक्का' कहलाता है।</p>
+
+            <div class="highlight-box">
+                <h3>क्या आप जानते हैं?</h3>
+                <p>क्रिकेट का सबसे पुराना लिखित संदर्भ 1598 का है, जहाँ एक अदालती मामले में 'क्रेकेट' (Creckett) शब्द का उपयोग किया गया था। यह खेल उस समय गिल्डफोर्ड, सरे के एक स्कूल में खेला जा रहा था।</p>
+            </div>
+
+            <h2>अंतर्राष्ट्रीय क्रिकेट का उदय (1877 - 1970)</h2>
+            <p>15 मार्च 1877 को मेलबर्न क्रिकेट ग्राउंड पर ऑस्ट्रेलिया और इंग्लैंड के बीच पहला आधिकारिक टेस्ट मैच खेला गया। ऑस्ट्रेलिया ने यह मैच 45 रनों से जीता। इसके बाद 1882 में 'एशेज' (The Ashes) की शुरुआत हुई, जो आज भी क्रिकेट की सबसे पुरानी और प्रतिष्ठित प्रतिद्वंद्विता मानी जाती है।</p>
+            
+            <p>20वीं सदी की शुरुआत में सर डॉन ब्रैडमैन का उदय हुआ, जिनका टेस्ट औसत 99.94 आज भी एक अटूट रिकॉर्ड है। वेस्टइंडीज का दबदबा 1970 और 80 के दशक में चरम पर था, जहाँ उनके तेज गेंदबाजों ने दुनिया भर के बल्लेबाजों में खौफ पैदा कर दिया था।</p>
+
+            <h2>सफेद गेंद का क्रांति (1971 - 2000)</h2>
+            <p>1971 में मेलबर्न में ही पहला एकदिवसीय (ODI) मैच खेला गया। 1975 में प्रूडेंशियल वर्ल्ड कप के साथ विश्व कप की शुरुआत हुई। वेस्टइंडीज ने पहले दो विश्व कप (1975, 1979) जीते। लेकिन 1983 में कपिल देव की 'कपिल्स डेविल्स' ने लॉर्ड्स की बालकनी पर विश्व कप उठाकर क्रिकेट की दुनिया का भूगोल बदल दिया। भारत में क्रिकेट एक धर्म बन गया।</p>
+        </div>
+
+        <h2 class="section-title">क्रिकेट की समयरेखा (Timeline)</h2>
         <div class="timeline">
-            <div class="event left"><div class="content"><h2>16वीं शताब्दी</h2><p>क्रिकेट की शुरुआत दक्षिण-पूर्व इंग्लैंड में हुई। इसे मूल रूप से बच्चों का खेल माना जाता था।</p></div></div>
-            <div class="event right"><div class="content"><h2>1877</h2><p>मेलबर्न में ऑस्ट्रेलिया और इंग्लैंड के बीच पहला आधिकारिक टेस्ट मैच खेला गया।</p></div></div>
-            <div class="event left"><div class="content"><h2>1971</h2><p>पहला एकदिवसीय (ODI) मैच खेला गया, जिसने क्रिकेट के भविष्य को बदल दिया।</p></div></div>
-            <div class="event right"><div class="content"><h2>1975</h2><p>वेस्टइंडीज ने लॉर्ड्स में पहला क्रिकेट वर्ल्ड कप जीता।</p></div></div>
-            <div class="event left"><div class="content"><h2>1983</h2><p>भारत ने कपिल देव की कप्तानी में अपना पहला वर्ल्ड कप जीतकर इतिहास रचा।</p></div></div>
-            <div class="event right"><div class="content"><h2>2007</h2><p>T20 वर्ल्ड कप की शुरुआत हुई और भारत पहला चैंपियन बना।</p></div></div>
-            <div class="event left"><div class="content"><h2>2023</h2><p>ऑस्ट्रेलिया ने भारत को हराकर अपना छठा ODI वर्ल्ड कप खिताब जीता।</p></div></div>
-            <div class="event right"><div class="content"><h2>2024-2026</h2><p>क्रिकेट का विस्तार अमेरिका तक हुआ। 2026 में भारत और श्रीलंका संयुक्त रूप से T20 वर्ल्ड कप की मेजबानी करेंगे।</p></div></div>
+            <div class="event left"><div class="event-content"><h3>1611</h3><p>वयस्कों द्वारा क्रिकेट खेलने का पहला आधिकारिक रिकॉर्ड दर्ज किया गया।</p></div></div>
+            <div class="event right"><div class="event-content"><h3>1744</h3><p>क्रिकेट के पहले नियम लिखे गए, जिसमें स्टंप्स और पिच की लंबाई तय की गई।</p></div></div>
+            <div class="event left"><div class="event-content"><h3>1877</h3><p>मेलबर्न में पहला टेस्ट मैच। चार्ल्स बैनरमैन ने इतिहास का पहला टेस्ट शतक लगाया।</p></div></div>
+            <div class="event right"><div class="event-content"><h3>1930s</h3><p>डॉन ब्रैडमैन का युग। क्रिकेट ने रेडियो के माध्यम से घर-घर में अपनी जगह बनाई।</p></div></div>
+            <div class="event left"><div class="event-content"><h3>1975</h3><p>पहला विश्व कप। क्लाइव लॉयड की कप्तानी में वेस्टइंडीज बना चैंपियन।</p></div></div>
+            <div class="event right"><div class="event-content"><h3>1983</h3><p>भारत की ऐतिहासिक जीत। जिम्बाब्वे के खिलाफ कपिल देव की 175* रनों की पारी अमर हो गई।</p></div></div>
+            <div class="event left"><div class="event-content"><h3>2007</h3><p>T20 वर्ल्ड कप की शुरुआत। एमएस धोनी की कप्तानी में युवा भारत ने पाकिस्तान को हराकर खिताब जीता।</p></div></div>
+            <div class="event right"><div class="event-content"><h3>2011</h3><p>28 साल बाद भारत फिर से ODI विश्व कप चैंपियन बना। वानखेड़े में धोनी का वो छक्का!</p></div></div>
+            <div class="event left"><div class="event-content"><h3>2024</h3><p>भारत ने दक्षिण अफ्रीका को हराकर अपना दूसरा T20 वर्ल्ड कप जीता। रोहित शर्मा और विराट कोहली का शानदार विदाई मैच।</p></div></div>
+            <div class="event right"><div class="event-content"><h3>2026</h3><p>भारत और श्रीलंका में T20 वर्ल्ड कप का आयोजन। भारत ने न्यूजीलैंड को हराकर खिताब का बचाव किया और अपना तीसरा T20 खिताब जीता।</p></div></div>
         </div>
 
-        <h2 style="text-align: center; margin: 60px 0 30px; color: #fff;">ICC ODI वर्ल्ड कप विजेता सूची</h2>
+        <h2 class="section-title">ICC T20 वर्ल्ड कप विजेता सूची (2007-2026)</h2>
         <table class="world-cup-table">
             <thead>
                 <tr><th>वर्ष</th><th>विजेता</th><th>उप-विजेता</th><th>मेजबान</th></tr>
             </thead>
             <tbody>
-                <tr><td>1975</td><td>वेस्टइंडीज</td><td>ऑस्ट्रेलिया</td><td>इंग्लैंड</td></tr>
-                <tr><td>1979</td><td>वेस्टइंडीज</td><td>इंग्लैंड</td><td>इंग्लैंड</td></tr>
-                <tr><td>1983</td><td>भारत</td><td>वेस्टइंडीज</td><td>इंग्लैंड</td></tr>
-                <tr><td>1987</td><td>ऑस्ट्रेलिया</td><td>इंग्लैंड</td><td>भारत/पाकिस्तान</td></tr>
-                <tr><td>1992</td><td>पाकिस्तान</td><td>इंग्लैंड</td><td>ऑस्ट्रेलिया/न्यूजीलैंड</td></tr>
-                <tr><td>1996</td><td>श्रीलंका</td><td>ऑस्ट्रेलिया</td><td>भारत/पाकिस्तान/श्रीलंका</td></tr>
-                <tr><td>1999</td><td>ऑस्ट्रेलिया</td><td>पाकिस्तान</td><td>इंग्लैंड</td></tr>
-                <tr><td>2003</td><td>ऑस्ट्रेलिया</td><td>भारत</td><td>दक्षिण अफ्रीका</td></tr>
-                <tr><td>2007</td><td>ऑस्ट्रेलिया</td><td>श्रीलंका</td><td>वेस्टइंडीज</td></tr>
-                <tr><td>2011</td><td>भारत</td><td>श्रीलंका</td><td>भारत/श्रीलंका/बांग्लादेश</td></tr>
-                <tr><td>2015</td><td>ऑस्ट्रेलिया</td><td>न्यूजीलैंड</td><td>ऑस्ट्रेलिया/न्यूजीलैंड</td></tr>
-                <tr><td>2019</td><td>इंग्लैंड</td><td>न्यूजीलैंड</td><td>इंग्लैंड</td></tr>
-                <tr><td>2023</td><td>ऑस्ट्रेलिया</td><td>भारत</td><td>भारत</td></tr>
+                <tr><td>2007</td><td>भारत</td><td>पाकिस्तान</td><td>दक्षिण अफ्रीका</td></tr>
+                <tr><td>2009</td><td>पाकिस्तान</td><td>श्रीलंका</td><td>इंग्लैंड</td></tr>
+                <tr><td>2010</td><td>इंग्लैंड</td><td>ऑस्ट्रेलिया</td><td>वेस्टइंडीज</td></tr>
+                <tr><td>2012</td><td>वेस्टइंडीज</td><td>श्रीलंका</td><td>श्रीलंका</td></tr>
+                <tr><td>2014</td><td>श्रीलंका</td><td>भारत</td><td>बांग्लादेश</td></tr>
+                <tr><td>2016</td><td>वेस्टइंडीज</td><td>इंग्लैंड</td><td>भारत</td></tr>
+                <tr><td>2021</td><td>ऑस्ट्रेलिया</td><td>न्यूजीलैंड</td><td>UAE/ओमान</td></tr>
+                <tr><td>2022</td><td>इंग्लैंड</td><td>पाकिस्तान</td><td>ऑस्ट्रेलिया</td></tr>
+                <tr><td>2024</td><td>भारत</td><td>दक्षिण अफ्रीका</td><td>USA/वेस्टइंडीज</td></tr>
+                <tr><td>2026</td><td>भारत</td><td>न्यूजीलैंड</td><td>भारत/श्रीलंका</td></tr>
             </tbody>
         </table>
 
-        <div style="margin-top: 50px; background: rgba(249,115,22,0.05); padding: 30px; border-radius: 20px; border: 1px solid rgba(249,115,22,0.2);">
-            <h2 style="color: var(--accent); margin-bottom: 15px;">2026 तक का भविष्य</h2>
-            <p style="line-height: 1.8; color: #cbd5e1;">क्रिकेट अब केवल कुछ देशों तक सीमित नहीं है। 2024 में अमेरिका में वर्ल्ड कप के सफल आयोजन के बाद, 2026 का T20 वर्ल्ड कप क्रिकेट के इतिहास में एक नया अध्याय लिखेगा। यह टूल आपको क्रिकेट के हर उस आंकड़े से रूबरू कराता है जिसने इस खेल को 'जेंटलमैन गेम' बनाया है।</p>
+        <div class="article-content" style="margin-top: 60px;">
+            <h2>आधुनिक क्रिकेट और 2026 का परिदृश्य</h2>
+            <p>2026 तक आते-आते क्रिकेट पूरी तरह से बदल चुका है। अब यह केवल 10-12 देशों का खेल नहीं रहा। 2024 में अमेरिका में हुए सफल आयोजन के बाद क्रिकेट ने ओलंपिक 2028 (लॉस एंजिल्स) में अपनी जगह पक्की कर ली है। मेजर लीग क्रिकेट (MLC) और IPL जैसी लीग्स ने खिलाड़ियों की आर्थिक स्थिति और खेल की गुणवत्ता को एक नए स्तर पर पहुँचा दिया है।</p>
+            
+            <p>भारत ने 2026 में अपनी धरती पर T20 वर्ल्ड कप जीतकर यह साबित कर दिया कि वह क्रिकेट का निर्विवाद राजा है। इस टूल के माध्यम से हम क्रिकेट के उस विशाल डेटाबेस को संजो रहे हैं, जिसमें करोड़ों शब्दों का इतिहास और हजारों मैचों के आंकड़े शामिल हैं। क्रिकेट केवल एक खेल नहीं, बल्कि करोड़ों लोगों की धड़कन है।</p>
         </div>
     </div>
+
+    <footer>
+        <p>&copy; 2026 Sachin AI Studio. क्रिकेट के प्रति हमारा जुनून, आंकड़ों की जुबानी।</p>
+    </footer>
+
 </body>
 </html>
