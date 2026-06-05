@@ -3,20 +3,27 @@ Allow: /
 
 # Important pages - high priority
 Allow: /index.html
-Allow: /text-to-image.html
-Allow: /bg-remove.html
+Allow: /shayari-hub.html
+Allow: /about_us_new.html
+Allow: /privacy_policy_new.html
+Allow: /terms_of_service_new.html
 Allow: /blog.html
-Allow: /bg-changer.html
-Allow: /photo-restore.html
-Allow: /ai-remini.html
-Allow: /ai-video.html
-Allow: /ai-avatar.html
-Allow: /ai-sketch.html
-Allow: /ai-upscaler.html
-Allow: /ai-film-filters.html
+Allow: /cricket-history.html
+Allow: /age-calculator.html
+Allow: /emi-calculator.html
+Allow: /image-compressor.html
+Allow: /news-hub.html
+Allow: /unit-converter.html
+Allow: /qr-master.html
+Allow: /text-to-speech.html
 
-# Do not index auth or internal pages
-Disallow: /auth.html
+# Do not index admin or internal pages
+Disallow: /admin/
+Disallow: /private/
+Disallow: /temp/
 
 # Sitemap location
-Sitemap: https://aiwebsite36tootcreatephoto.online/sitemap.xml
+Sitemap: https://yourdomain.com/sitemap.xml
+
+# Crawl delay (in seconds)
+Crawl-delay: 1
