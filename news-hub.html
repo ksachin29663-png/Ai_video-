@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global News & Story Hub - ताज़ा ख़बरें और कहानियाँ | Sachin AI Studio</title>
+    <style>
+        :root { --bg: #07090f; --card: #0e1117; --accent: #22d3ee; --text: #f1f5f9; --muted: #64748b; --border: rgba(255,255,255,0.06); }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .container { width: 100%; max-width: 1200px; }
+        header { text-align: center; margin-bottom: 40px; }
+        h1 { font-size: 2.5rem; margin-bottom: 10px; background: linear-gradient(90deg,#22d3ee,#818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; }
+        .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px; }
+        .news-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; }
+        .news-card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 10px 30px rgba(34,211,238,0.1); }
+        .news-img { width: 100%; height: 200px; background: #1a1f2e; object-fit: cover; }
+        .news-content { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+        .news-tag { font-size: 0.7rem; font-weight: 800; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; }
+        .news-title { font-size: 1.1rem; font-weight: 700; line-height: 1.4; margin-bottom: 12px; color: #fff; }
+        .news-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
+        .news-footer { margin-top: auto; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 15px; }
+        .news-date { font-size: 0.75rem; color: var(--muted); }
+        .read-more { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 0.85rem; }
+        .loader { border: 4px solid var(--border); border-top: 4px solid var(--accent); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 50px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .category-tabs { display: flex; gap: 10px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap; }
+        .tab { padding: 8px 20px; border-radius: 99px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--muted); cursor: pointer; font-weight: 600; transition: 0.2s; }
+        .tab.active { background: var(--accent); color: #000; border-color: var(--accent); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Global News & Story Hub</h1>
+            <p style="color: var(--muted);">दुनिया भर की ताज़ा ख़बरें और दिलचस्प कहानियाँ, सिर्फ आपके लिए।</p>
+        </header>
+
+        <div class="category-tabs">
+            <button class="tab active" data-cat="general">All News</button>
+            <button class="tab" data-cat="technology">Technology</button>
+            <button class="tab" data-cat="business">Business</button>
+            <button class="tab" data-cat="science">Science</button>
+            <button class="tab" data-cat="health">Health</button>
+        </div>
+
+        <div id="loader" class="loader"></div>
+        <div class="news-grid" id="newsGrid"></div>
+    </div>
+
+    <script>
+        const newsGrid = document.getElementById('newsGrid');
+        const loader = document.getElementById('loader');
+        const tabs = document.querySelectorAll('.tab');
+
+        // Note: In a real app, you'd use a secure backend API key. 
+        // For this demo, we use a public feed aggregator or sample data.
+        async function fetchNews(category = 'general') {
+            loader.style.display = 'block';
+            newsGrid.innerHTML = '';
+            
+            try {
+                // Using a proxy to fetch news (example: newsapi.org or similar)
+                // Since we can't use private keys here, we'll simulate with high-quality content
+                const response = await fetch(`https://saurav.tech/NewsAPI/top-headlines/category/${category}/in.json`);
+                const data = await response.json();
+                
+                loader.style.display = 'none';
+                displayNews(data.articles);
+            } catch (error) {
+                loader.style.display = 'none';
+                newsGrid.innerHTML = '<p style="text-align:center; grid-column: 1/-1;">खबरें लोड करने में समस्या हुई। कृपया बाद में प्रयास करें।</p>';
+            }
+        }
+
+        function displayNews(articles) {
+            articles.slice(0, 12).forEach(article => {
+                if (!article.title || !article.urlToImage) return;
+                
+                const card = document.createElement('div');
+                card.className = 'news-card';
+                card.innerHTML = `
+                    <img src="${article.urlToImage}" class="news-img" alt="${article.title}" onerror="this.src='https://via.placeholder.com/400x200?text=News'">
+                    <div class="news-content">
+                        <div class="news-tag">${article.source.name}</div>
+                        <h2 class="news-title">${article.title}</h2>
+                        <p class="news-desc">${article.description || 'इस खबर के बारे में अधिक जानकारी के लिए नीचे दिए गए लिंक पर क्लिक करें।'}</p>
+                        <div class="news-footer">
+                            <span class="news-date">${new Date(article.publishedAt).toLocaleDateString('hi-IN')}</span>
+                            <a href="${article.url}" target="_blank" class="read-more">पूरा पढ़ें →</a>
+                        </div>
+                    </div>
+                `;
+                newsGrid.appendChild(card);
+            });
+        }
+
+        tabs.forEach(tab => {
+            tab.onclick = () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                fetchNews(tab.dataset.cat);
+            };
+        });
+
+        fetchNews();
+    </script>
+</body>
+</html>
