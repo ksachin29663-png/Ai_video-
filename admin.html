@@ -2,29 +2,34 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>एडमिन पैनल - सचिन भाई</title>
+    <title>VIP एडमिन पैनल - सचिन भाई</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; background: #f4f4f4; text-align: center; }
-        .box { background: white; padding: 20px; border-radius: 10px; max-width: 400px; margin: auto; }
-        input, select, button { width: 100%; padding: 12px; margin: 8px 0; }
-        button { background: #27ae60; color: white; border: none; cursor: pointer; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: white; padding: 20px; text-align: center; }
+        .box { background: #1e293b; padding: 25px; border-radius: 15px; max-width: 450px; margin: auto; border: 2px solid #38bdf8; }
+        input, select, button { width: 100%; padding: 14px; margin: 10px 0; border-radius: 8px; border: none; }
+        button { background: #38bdf8; color: #000; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #fff; }
     </style>
 </head>
 <body>
 
 <div id="login-section" class="box">
-    <h2>लॉगिन करें</h2>
-    <input type="email" id="email-input" placeholder="अपनी ईमेल डालें">
-    <button onclick="checkLogin()">लॉगिन</button>
+    <h2>🔒 सिक्योरिटी चेक</h2>
+    <input type="email" id="email-input" placeholder="अपनी ईमेल बताएं...">
+    <button onclick="checkLogin()">एंट्री लें</button>
 </div>
 
 <div id="admin-section" class="box" style="display:none;">
     <h2 id="welcome-msg"></h2>
-    <select id="category"><option value="business">बिजनेस</option><option value="youtube">YouTube</option><option value="shayari">शायरी</option></select>
-    <input type="text" id="title" placeholder="टाइटल">
-    <input type="text" id="imageUrl" placeholder="फोटो का लिंक">
-    <button onclick="postData()">पोस्ट पब्लिश करें</button>
-    <p><small>एडिटिंग के लिए आप Firebase Console का इस्तेमाल करें, वहाँ डेटा तुरंत अपडेट हो जाता है।</small></p>
+    <select id="category">
+        <option value="business">बिजनेस</option>
+        <option value="youtube">YouTube</option>
+        <option value="shayari">शायरी</option>
+    </select>
+    <input type="text" id="title" placeholder="टाइटल यहाँ लिखें">
+    <input type="text" id="imageUrl" placeholder="फोटो का लिंक (Thumbnail)">
+    <input type="text" id="postLink" placeholder="यहाँ वेबसाइट/वीडियो का असली लिंक डालें">
+    <button onclick="postData()">🚀 पोस्ट पब्लिश करें</button>
 </div>
 
 <script type="module">
@@ -33,35 +38,26 @@
 
     const firebaseConfig = {
         apiKey: "AIzaSyCglO0vHutINDOWaIWMsv4N9_54dpbPvIo",
-        authDomain: "project-8621d575-e2f7-45a2-963.firebaseapp.com",
         databaseURL: "https://project-8621d575-e2f7-45a2-963-default-rtdb.firebaseio.com",
-        projectId: "project-8621d575-e2f7-45a2-963",
-        storageBucket: "project-8621d575-e2f7-45a2-963.firebasestorage.app",
-        messagingSenderId: "756626829965",
-        appId: "1:756626829965:web:1a73e566660c489811a8c4"
+        projectId: "project-8621d575-e2f7-45a2-963"
     };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+    const db = getDatabase(initializeApp(firebaseConfig));
 
     window.checkLogin = function() {
-        const email = document.getElementById('email-input').value;
-        if (email === "sachinrajput9852@gmail.com") {
+        if (document.getElementById('email-input').value === "sachinrajput9852@gmail.com") {
             document.getElementById('login-section').style.display = 'none';
             document.getElementById('admin-section').style.display = 'block';
-            document.getElementById('welcome-msg').innerText = "सचिन भाई, स्वागत है! अपना भाई आ गया है, जलवा होगा!";
-        } else {
-            alert("तुम मेरे मालिक नहीं हो! गेट आउट!");
-        }
+            document.getElementById('welcome-msg').innerText = "स्वागत है, सचिन भाई! 🔥";
+        } else { alert("गलत ईमेल! तुम मालिक नहीं हो!"); }
     };
 
     window.postData = function() {
-        const cat = document.getElementById('category').value;
-        const title = document.getElementById('title').value;
-        const img = document.getElementById('imageUrl').value;
-        push(ref(db, 'posts/' + cat), { title, imageUrl: img }).then(() => alert("पोस्ट पब्लिश हो गई!"));
+        push(ref(db, 'posts/' + document.getElementById('category').value), {
+            title: document.getElementById('title').value,
+            imageUrl: document.getElementById('imageUrl').value,
+            postLink: document.getElementById('postLink').value
+        }).then(() => alert("पोस्ट धमाके के साथ पब्लिश हो गई!"));
     };
 </script>
 </body>
-      </html>
-  
+</html>
