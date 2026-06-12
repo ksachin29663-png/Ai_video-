@@ -1,7 +1,0 @@
-.env
-node_modules
-uploads
-*.mp4
-*.mp3
-*.jpg
-*.png
