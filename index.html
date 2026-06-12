@@ -2,95 +2,66 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Website 36 Tool Create Photo</title>
+    <title>AI Website 36 - अपना करियर शुरू करें</title>
     <link rel="stylesheet" href="style.css">
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCglO0vHutINDOWaIWMsv4N9_54dpbPvIo",
-            authDomain: "project-8621d575-e2f7-45a2-963.firebaseapp.com",
             databaseURL: "https://project-8621d575-e2f7-45a2-963-default-rtdb.firebaseio.com",
-            projectId: "project-8621d575-e2f7-45a2-963",
-            storageBucket: "project-8621d575-e2f7-45a2-963.firebasestorage.app",
-            messagingSenderId: "756626829965",
-            appId: "1:756626829965:web:1a73e566660c489811a8c4"
+            projectId: "project-8621d575-e2f7-45a2-963"
         };
+        const db = getDatabase(initializeApp(firebaseConfig));
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+        window.onload = () => {
+            if (!localStorage.getItem('visited')) {
+                alert("स्वागत है! AI Website 36 में आपका स्वागत है। इस वेबसाइट के साथ अपना करियर शुरू करें।");
+                localStorage.setItem('visited', 'true');
+            }
+            loadPosts('home');
+        };
 
         window.loadPosts = function(category) {
             const container = document.getElementById('post-container');
             container.innerHTML = '<p>लोड हो रहा है...</p>';
             
-            // डेटाबेस का पाथ (अगर 'home' है तो सब ले, वरना कैटेगरी)
-            const path = (category === 'home') ? 'posts' : 'posts/' + category;
-            const dbRef = ref(db, path);
-
+            // अगर 'home' है तो 'posts' का सारा डेटा उठाएं
+            const dbRef = (category === 'home') ? ref(db, 'posts') : ref(db, 'posts/' + category);
+            
             onValue(dbRef, (snapshot) => {
                 container.innerHTML = ''; 
                 const data = snapshot.val();
-                
-                if (data) {
-                    // अगर डेटा एक ऑब्जेक्ट है तो उसे लूप में चलाएं
-                                onValue(dbRef, (snapshot) => {
-                container.innerHTML = ''; 
-                const data = snapshot.val();
-                
-                if (data) {
-                    // अगर डेटा एक ऑब्जेक्ट है (जिसमें ID/Keys हैं)
-                    Object.keys(data).forEach((key) => {
-                        const item = data[key];
-
-                        // चेक करें कि क्या यह सीधा पोस्ट ऑब्जेक्ट है या कैटेगरी के अंदर का डेटा
-                        if (item.title) {
-                            // अगर सीधा पोस्ट है
-                            renderPost(item);
-                        } else {
-                            // अगर अंदर और फोल्डर्स (जैसे business/post1) हैं
-                            Object.values(item).forEach(post => renderPost(post));
-                        }
-                    });
-                } else {
-                    container.innerHTML = '<p>अभी कोई पोस्ट नहीं है।</p>';
-                }
-            });
-
-            // पोस्ट कार्ड बनाने का छोटा सा हेल्पर फंक्शन
-            function renderPost(post) {
-                const container = document.getElementById('post-container');
-                const img = post.imageUrl || 'https://via.placeholder.com/400';
-                container.innerHTML += `
-                    <div class="youtube-card">
-                        <img src="${img}" class="post-thumb">
-                        <div class="post-details">
-                            <h3>${post.title || 'शीर्षक नहीं है'}</h3>
-                        </div>
-                    </div>
-                `;
-            }
-
-                    Object.values(data).forEach((post) => {
-                        container.innerHTML += `
-                            <div class="youtube-card">
-                                <img src="${post.imageUrl || 'https://via.placeholder.com/400'}" class="post-thumb">
-                                <div class="post-details">
-                                    <h3>${post.title}</h3>
-                                </div>
-                            </div>
-                        `;
-                    });
-                } else {
+                if (!data) {
                     container.innerHTML = '<p>कोई पोस्ट नहीं मिली।</p>';
+                    return;
+                }
+
+                // यहाँ से डेटा को 'फ्लैट' करना जरूरी है (ताकि undefined न आए)
+                if (category === 'home') {
+                    Object.values(data).forEach(catData => {
+                        Object.values(catData).forEach(post => renderPost(post));
+                    });
+                } else {
+                    Object.values(data).forEach(post => renderPost(post));
                 }
             });
         };
 
-        window.onload = () => window.loadPosts('home');
+        function renderPost(post) {
+            const container = document.getElementById('post-container');
+            container.innerHTML += `
+                <div class="youtube-card">
+                    <a href="${post.postLink || '#'}" target="_blank" style="text-decoration:none; color:inherit;">
+                        <img src="${post.imageUrl || 'https://via.placeholder.com/400'}" class="post-thumb">
+                        <div class="post-details">
+                            <h3>${post.title || 'शीर्षक नहीं है'}</h3>
+                        </div>
+                    </a>
+                </div>
+            `;
+        }
     </script>
 </head>
 <body>
