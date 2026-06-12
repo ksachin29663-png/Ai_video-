@@ -5,26 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Website 36 Tool Create Photo</title>
     <link rel="stylesheet" href="style.css">
+    
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyCglO0vHutINDOWaIWMsv4N9_54dpbPvIo",
+        authDomain: "project-8621d575-e2f7-45a2-963.firebaseapp.com",
+        databaseURL: "https://project-8621d575-e2f7-45a2-963-default-rtdb.firebaseio.com",
+        projectId: "project-8621d575-e2f7-45a2-963",
+        storageBucket: "project-8621d575-e2f7-45a2-963.firebasestorage.app",
+        messagingSenderId: "756626829965",
+        appId: "1:756626829965:web:1a73e566660c489811a8c4"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+
+      // डेटा लोड करने का फंक्शन (ग्लोबल बनाया है ताकि script.js से एक्सेस हो सके)
+      window.loadPosts = function(category) {
+          const container = document.getElementById('post-container');
+          container.innerHTML = '<p>Loading...</p>';
+          
+          const dbRef = ref(db, 'posts/' + (category === 'home' ? '' : category));
+          
+          onValue(dbRef, (snapshot) => {
+              container.innerHTML = ''; 
+              const data = snapshot.val();
+              if (data) {
+                  // यहाँ हम डेटा रेंडर करेंगे
+                  console.log(data); // चेक करने के लिए
+                  container.innerHTML = '<p>डेटा आ गया! (अब इसे कार्ड्स में सजाना है)</p>';
+              }
+          });
+      };
+      
+      window.onload = () => window.loadPosts('home');
+    </script>
 </head>
 <body>
-
-    <header>
-        <h1>AI Website 36 Tool Create Photo</h1>
-    </header>
-
-    <nav>
-        <a href="index.html">होम</a>
-        <a href="business.html">बिजनेस</a>
-        <a href="youtube.html">YouTube</a>
-        <a href="shayari.html">शायरी</a>
+    <header><h1>AI Website 36 Tool Create Photo</h1></header>
+    <nav class="category-tabs">
+        <button onclick="loadPosts('home')">होम</button>
+        <button onclick="loadPosts('business')">बिजनेस</button>
+        <button onclick="loadPosts('youtube')">YouTube</button>
+        <button onclick="loadPosts('shayari')">शायरी</button>
     </nav>
-
-    <div class="category-container">
-        <h2>हमारी मुख्य कैटेगरी</h2>
-        <a href="business.html" class="category-btn">बिजनेस और फाइनेंशियल</a>
-        <a href="youtube.html" class="category-btn">YouTube वायरल</a>
-        <a href="shayari.html" class="category-btn">शायरी</a>
-    </div>
-
+    <main id="post-container"></main>
 </body>
 </html>
