@@ -1,23 +1,66 @@
-body { font-family: sans-serif; margin: 0; padding: 0; text-align: center; }
-
-header { background: #2c3e50; color: #fff; padding: 20px; }
-
-nav { background: #34495e; padding: 10px; }
-nav a { color: white; margin: 0 15px; text-decoration: none; font-size: 18px; }
-
-.category-container { margin-top: 30px; }
-
-.category-btn {
-    display: block;
-    background: #ecf0f1;
-    color: #2c3e50;
-    padding: 20px;
-    margin: 15px auto;
-    width: 80%;
-    text-decoration: none;
-    border-radius: 10px;
-    font-weight: bold;
-    border: 1px solid #bdc3c7;
+/* पूरे पेज का लेआउट */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f4f9;
 }
 
-.category-btn:hover { background: #dcdde1; }
+/* हेडर को थोड़ा और साफ़ और बड़ा करें */
+header {
+    background: #0f172a;
+    color: white;
+    padding: 20px 10px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 24px; /* नाम को बड़ा किया */
+    margin: 0;
+}
+
+/* कैटेगरी के बटनों को मोबाइल फ्रेंडली बनाएं */
+.category-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px;
+    overflow-x: auto; /* अगर बटन ज्यादा हों तो स्क्रॉल हो सके */
+    background: white;
+}
+
+.category-tabs button {
+    padding: 10px 20px;
+    font-size: 16px; /* बटन का टेक्स्ट बड़ा किया */
+    border-radius: 25px; /* गोल बटन */
+    border: none;
+    background: #38bdf8;
+    color: white;
+    font-weight: bold;
+}
+
+/* सबसे जरूरी: पोस्ट कार्ड को बड़ा और साफ़ दिखाएं */
+.youtube-style-grid {
+    padding: 15px;
+}
+
+.youtube-card {
+    background: white;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.post-thumb {
+    width: 100%;
+    height: 220px; /* फोटो की हाइट बढ़ाई */
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.post-details h3 {
+    font-size: 18px; /* टाइटल को बड़ा किया */
+    color: #333;
+    margin: 10px 0;
+}
