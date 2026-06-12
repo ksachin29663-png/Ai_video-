@@ -1,36 +1,29 @@
-/* style.css */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
+/* वेबसाइट का टाइटल */
+header {
+    background-color: #2c3e50;
+    color: white;
+    text-align: center;
     padding: 20px;
-    background-color: #f4f4f9;
 }
 
-.card {
-    background: white;
-    padding: 20px;
-    margin: 10px 0;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+/* नेविगेशन बार को प्रोफेशनल बनाएं */
+nav {
+    background-color: #34495e;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* बटनों के बीच की दूरी */
 }
 
-button {
-    margin-top: 10px;
-    padding: 8px 15px;
-    cursor: pointer;
-}/* रिस्पॉन्सिव सेटिंग्स */
-@media screen and (max-width: 600px) {
-    body {
-        padding: 10px;
-    }
-    
-    nav a {
-        display: block; /* मेनू को एक के नीचे एक कर देगा */
-        margin: 10px 0;
-    }
-
-    .card {
-        padding: 15px;
-    }
+nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background 0.3s;
 }
 
+nav a:hover {
+    background-color: #1abc9c; /* माउस ले जाने पर रंग बदलेगा */
+}
