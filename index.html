@@ -36,7 +36,37 @@
               if (data) {
                   // यहाँ हम डेटा रेंडर करेंगे
                   console.log(data); // चेक करने के लिए
-                  container.innerHTML = '<p>डेटा आ गया! (अब इसे कार्ड्स में सजाना है)</p>';
+                  // यह कोड index.html में रखें
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const db = getDatabase();
+
+function loadPosts(category) {
+    const container = document.getElementById('post-container');
+    // अगर होम है तो पूरी 'posts' ले, वरना कैटेगरी वाइज
+    const dbRef = (category === 'home') ? ref(db, 'posts') : ref(db, 'posts/' + category);
+
+    // .onValue का मतलब है कि जैसे ही डेटाबेस बदलेगा, ये अपने आप चल जाएगा
+    onValue(dbRef, (snapshot) => {
+        container.innerHTML = ''; // पुराना डेटा साफ़ करें
+        const data = snapshot.val();
+        
+        if (data) {
+            // डेटा को लूप चलाकर वेबसाइट पर दिखाएं
+            Object.values(data).forEach((post) => {
+                container.innerHTML += `
+                    <div class="youtube-card">
+                        <img src="${post.imageUrl}" class="post-thumb">
+                        <div class="post-details">
+                            <h3>${post.title}</h3>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+    });
+}
+
               }
           });
       };
