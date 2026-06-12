@@ -2,69 +2,29 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Website 36 - अपना करियर शुरू करें</title>
     <link rel="stylesheet" href="style.css">
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCglO0vHutINDOWaIWMsv4N9_54dpbPvIo",
-            databaseURL: "https://project-8621d575-e2f7-45a2-963-default-rtdb.firebaseio.com",
-            projectId: "project-8621d575-e2f7-45a2-963"
-        };
-        const db = getDatabase(initializeApp(firebaseConfig));
-
-        window.onload = () => {
-            if (!localStorage.getItem('visited')) {
-                alert("स्वागत है! AI Website 36 में आपका स्वागत है। इस वेबसाइट के साथ अपना करियर शुरू करें।");
-                localStorage.setItem('visited', 'true');
-            }
-            loadPosts('home');
-        };
-
-        window.loadPosts = function(category) {
-            const container = document.getElementById('post-container');
-            container.innerHTML = '<p>लोड हो रहा है...</p>';
-            
-            // अगर 'home' है तो 'posts' का सारा डेटा उठाएं
-            const dbRef = (category === 'home') ? ref(db, 'posts') : ref(db, 'posts/' + category);
-            
-            onValue(dbRef, (snapshot) => {
-                container.innerHTML = ''; 
-                const data = snapshot.val();
-                if (!data) {
-                    container.innerHTML = '<p>कोई पोस्ट नहीं मिली।</p>';
-                    return;
-                }
-
-                // यहाँ से डेटा को 'फ्लैट' करना जरूरी है (ताकि undefined न आए)
-                if (category === 'home') {
-                    Object.values(data).forEach(catData => {
-                        Object.values(catData).forEach(post => renderPost(post));
-                    });
-                } else {
-                    Object.values(data).forEach(post => renderPost(post));
-                }
-            });
-        };
-
-        function renderPost(post) {
-            const container = document.getElementById('post-container');
-            container.innerHTML += `
-                <div class="youtube-card">
-                    <a href="${post.postLink || '#'}" target="_blank" style="text-decoration:none; color:inherit;">
-                        <img src="${post.imageUrl || 'https://via.placeholder.com/400'}" class="post-thumb">
-                        <div class="post-details">
-                            <h3>${post.title || 'शीर्षक नहीं है'}</h3>
-                        </div>
-                    </a>
-                </div>
-            `;
+    <style>
+        /* वेलकम मैसेज का रंगीन स्टाइल */
+        #welcome-overlay {
+            position: fixed; top:0; left:0; width: 100%; height:100%; 
+            background: linear-gradient(135deg, #0f172a, #38bdf8);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 9999; color: white; text-align: center; padding: 20px;
         }
-    </script>
+    </style>
 </head>
 <body>
+
+    <div id="welcome-overlay">
+        <div>
+            <h1 style="font-size: 3em;">नमस्ते, सचिन भाई! 🔥</h1>
+            <p style="font-size: 1.5em;">AI Website 36 में आपका स्वागत है। अपना करियर शुरू करें!</p>
+            <button onclick="document.getElementById('welcome-overlay').style.display='none'" style="padding: 15px 30px; font-size: 1.2em; border-radius: 25px; border:none; cursor:pointer;">वेबसाइट में प्रवेश करें</button>
+        </div>
+    </div>
+
     <header><h1>AI Website 36 Tool Create Photo</h1></header>
     <nav class="category-tabs">
         <button onclick="loadPosts('home')">होम</button>
@@ -73,5 +33,46 @@
         <button onclick="loadPosts('shayari')">शायरी</button>
     </nav>
     <main id="post-container" class="youtube-style-grid"></main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const db = getDatabase(initializeApp({
+            apiKey: "AIzaSyCglO0vHutINDOWaIWMsv4N9_54dpbPvIo",
+            databaseURL: "https://project-8621d575-e2f7-45a2-963-default-rtdb.firebaseio.com",
+            projectId: "project-8621d575-e2f7-45a2-963"
+        }));
+
+        window.loadPosts = function(category) {
+            const container = document.getElementById('post-container');
+            container.innerHTML = '<p>लोड हो रहा है...</p>';
+            const dbRef = (category === 'home') ? ref(db, 'posts') : ref(db, 'posts/' + category);
+            
+            onValue(dbRef, (snapshot) => {
+                container.innerHTML = '';
+                const data = snapshot.val();
+                if (!data) { container.innerHTML = '<p>कोई पोस्ट नहीं है।</p>'; return; }
+
+                if (category === 'home') {
+                    Object.values(data).forEach(catData => Object.values(catData).forEach(p => render(p)));
+                } else {
+                    Object.values(data).forEach(p => render(p));
+                }
+            });
+        };
+
+        function render(p) {
+            document.getElementById('post-container').innerHTML += `
+                <div class="youtube-card" style="margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-radius: 15px; overflow: hidden; background: white;">
+                    <a href="${p.postLink || '#'}" target="_blank" style="text-decoration:none; color:black;">
+                        <img src="${p.imageUrl || 'https://via.placeholder.com/400'}" style="width:100%; height:200px; object-fit:cover;">
+                        <div style="padding: 15px;"><h3>${p.title || 'शीर्षक'}</h3></div>
+                    </a>
+                </div>
+            `;
+        }
+        window.loadPosts('home');
+    </script>
 </body>
 </html>
