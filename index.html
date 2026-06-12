@@ -37,6 +37,43 @@
                 
                 if (data) {
                     // अगर डेटा एक ऑब्जेक्ट है तो उसे लूप में चलाएं
+                                onValue(dbRef, (snapshot) => {
+                container.innerHTML = ''; 
+                const data = snapshot.val();
+                
+                if (data) {
+                    // अगर डेटा एक ऑब्जेक्ट है (जिसमें ID/Keys हैं)
+                    Object.keys(data).forEach((key) => {
+                        const item = data[key];
+
+                        // चेक करें कि क्या यह सीधा पोस्ट ऑब्जेक्ट है या कैटेगरी के अंदर का डेटा
+                        if (item.title) {
+                            // अगर सीधा पोस्ट है
+                            renderPost(item);
+                        } else {
+                            // अगर अंदर और फोल्डर्स (जैसे business/post1) हैं
+                            Object.values(item).forEach(post => renderPost(post));
+                        }
+                    });
+                } else {
+                    container.innerHTML = '<p>अभी कोई पोस्ट नहीं है।</p>';
+                }
+            });
+
+            // पोस्ट कार्ड बनाने का छोटा सा हेल्पर फंक्शन
+            function renderPost(post) {
+                const container = document.getElementById('post-container');
+                const img = post.imageUrl || 'https://via.placeholder.com/400';
+                container.innerHTML += `
+                    <div class="youtube-card">
+                        <img src="${img}" class="post-thumb">
+                        <div class="post-details">
+                            <h3>${post.title || 'शीर्षक नहीं है'}</h3>
+                        </div>
+                    </div>
+                `;
+            }
+
                     Object.values(data).forEach((post) => {
                         container.innerHTML += `
                             <div class="youtube-card">
