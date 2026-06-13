@@ -1,77 +1,84 @@
 <!DOCTYPE html>
-<html>
+<html lang="hi">
 <head>
-    <title>Manage Posts - Admin</title>
+    <meta charset="UTF-8">
+    <title>Manage Posts - सुरक्षित एडमिन</title>
 </head>
 <body>
     <div id="login-section">
         <h2>प्रशासन लॉगिन</h2>
-        <button id="google-login">Sachinrajput29204@gmail.com से लॉगिन करें</button>
+        <p>आगे बढ़ने के लिए अपनी अधिकृत ईमेल से लॉगिन करें:</p>
+        <button id="google-login">Google से लॉगिन करें</button>
     </div>
 
     <div id="admin-panel" style="display:none;">
-        <h2>पोस्ट जोड़ें/मैनेज करें</h2>
-        <input type="text" id="title" placeholder="पोस्ट का टाइटल लिखें"><br><br>
-        <input type="text" id="imgUrl" placeholder="फोटो का लिंक यहाँ डालें"><br><br>
-        <textarea id="content" placeholder="पोस्ट का कंटेंट (लिखाई) यहाँ लिखें" rows="5" style="width:300px;"></textarea><br><br>
-        
+        <h2>नमस्ते सचिन भाई, स्वागत है!</h2>
+        <input type="text" id="title" placeholder="टाइटल"><br>
+        <input type="text" id="imgUrl" placeholder="फोटो लिंक"><br>
+        <textarea id="content" placeholder="कंटेंट"></textarea><br>
         <button onclick="addPost()">पोस्ट पब्लिश करें</button>
-        <hr>
-        <h3>सभी पोस्ट्स:</h3>
         <div id="post-list"></div>
     </div>
 
     <script type="module">
-        import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
-        import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
-        
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
+        import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js";
+
+        // अपना Firebase Config यहाँ डालें
+        const firebaseConfig = { /* ... */ };
+        initializeApp(firebaseConfig);
+
         const auth = getAuth();
         const db = getDatabase();
         const MASTER_EMAIL = "Sachinrajput29204@gmail.com"; 
 
-        // लॉगिन सिस्टम
         document.getElementById('google-login').onclick = () => {
-            signInWithPopup(auth, new GoogleAuthProvider()).then((result) => {
-                if (result.user.email === MASTER_EMAIL) {
-                    document.getElementById('login-section').style.display = 'none';
-                    document.getElementById('admin-panel').style.display = 'block';
-                    loadPosts();
-                } else { alert("एक्सेस डिनाइड!"); auth.signOut(); }
+            const provider = new GoogleAuthProvider();
+            signInWithPopup(auth, provider).then((result) => {
+                checkEmail(result.user.email);
             });
         };
 
-        // 1. पोस्ट जोड़ने का काम
+        function checkEmail(email) {
+            if (email === MASTER_EMAIL) {
+                document.getElementById('login-section').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+                loadPosts();
+            } else {
+                alert("एक्सेस डिनाइड: यह ईमेल ऑथोराइज्ड नहीं है!");
+                auth.signOut();
+            }
+        }
+
+        // पोस्ट पब्लिश
         window.addPost = () => {
             push(ref(db, 'posts/'), {
                 title: document.getElementById('title').value,
                 img: document.getElementById('imgUrl').value,
                 body: document.getElementById('content').value
             });
-            alert('पोस्ट पब्लिश हो गई!');
         };
 
-        // 2. पोस्ट दिखाने और 3. डिलीट करने का काम
+        // पोस्ट्स को एडिट और डिलीट करना
         function loadPosts() {
             onValue(ref(db, 'posts/'), (snapshot) => {
                 const list = document.getElementById('post-list');
                 list.innerHTML = "";
                 snapshot.forEach((child) => {
                     const post = child.val();
-                    const postId = child.key;
                     list.innerHTML += `
-                        <div style="border:1px solid #ccc; padding:10px; margin-top:10px;">
+                        <div style="border:1px solid #000; padding:10px; margin:5px;">
                             <h4>${post.title}</h4>
-                            <img src="${post.img}" style="width:100px;"><br>
-                            <button onclick="deletePost('${postId}')">डिलीट करें</button>
+                            <button onclick="deletePost('${child.key}')">डिलीट करें</button>
                         </div>`;
                 });
             });
         }
 
         window.deletePost = (id) => {
-            if(confirm("पक्का डिलीट करना है?")) remove(ref(db, 'posts/' + id));
+            if(confirm("क्या आप इसे हटाना चाहते हैं?")) remove(ref(db, 'posts/' + id));
         };
     </script>
 </body>
 </html>
-
