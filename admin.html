@@ -3,84 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <title>VIP एडमिन पैनल - सचिन भाई</title>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: white; padding: 20px; text-align: center; }
-        .box { background: #1e293b; padding: 25px; border-radius: 15px; max-width: 450px; margin: auto; border: 2px solid #38bdf8; }
-        input, select, button { width: 100%; padding: 14px; margin: 10px 0; border-radius: 8px; border: none; }
-        button { background: #38bdf8; color: #000; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button:hover { background: #fff; }
+        .box { background: #1e293b; padding: 25px; border-radius: 15px; max-width: 500px; margin: auto; border: 2px solid #38bdf8; }
+        input, select, button { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; }
+        button { background: #38bdf8; color: #000; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div id="login-section" class="box">
     <h2>🔒 सिक्योरिटी चेक</h2>
-    <input type="email" id="email-input" placeholder="अपनी ईमेल बताएं...">
-    <button onclick="checkLogin()">एंट्री लें</button>
+    <input type="email" id="email-input" placeholder="अपनी ईमेल डालें...">
+    <button onclick="checkLogin()">लॉगिन करें</button>
 </div>
 
 <div id="admin-section" class="box" style="display:none;">
     <h2 id="welcome-msg"></h2>
     <select id="category">
-        <option value="business">बिजनेस</option>
+        <option value="business">बिज़नेस</option>
         <option value="youtube">YouTube</option>
         <option value="shayari">शायरी</option>
     </select>
-    <input type="text" id="title" placeholder="टाइटल यहाँ लिखें">
-    <input type="text" id="imageUrl" placeholder="फोटो का लिंक (Thumbnail)">
-    <input type="text" id="postLink" placeholder="यहाँ वेबसाइट/वीडियो का असली लिंक डालें">
-    <button onclick="postData()">🚀 पोस्ट पब्लिश करें</button>
+    <input type="text" id="title" placeholder="आर्टिकल का टाइटल">
+    <input type="file" id="file-input">
+    <div id="editor-container" style="height: 200px; background: white; color: black; text-align: left;"></div>
+    <button onclick="savePost()">🚀 पोस्ट पब्लिश करें</button>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+    import Quill from "https://cdn.skypack.dev/quill";
 
     const firebaseConfig = {
-        apiKey: "AIzaSyCglO0vHutINDOWaIWMsv4N9_54dpbPvIo",
+        apiKey: "AIzaSyCg100vhutIND0WaJvMsv4N9_54dpbVlo",
         databaseURL: "https://project-8621d575-e2f7-45a2-963-default-rtdb.firebaseio.com",
         projectId: "project-8621d575-e2f7-45a2-963"
     };
-    const db = getDatabase(initializeApp(firebaseConfig));
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const storage = getStorage(app);
+    const quill = new Quill('#editor-container', { theme: 'snow' });
 
     window.checkLogin = function() {
-        if (document.getElementById('email-input').value === "ksachin29663@gmail.com") {
+        if (document.getElementById('email-input').value === "ksachin20663@gmail.com") {
             document.getElementById('login-section').style.display = 'none';
             document.getElementById('admin-section').style.display = 'block';
             document.getElementById('welcome-msg').innerText = "स्वागत है, सचिन भाई! 🔥";
-        } else { alert("गलत ईमेल! तुम मालिक नहीं हो!"); }
+        } else { alert("गलत ईमेल!"); }
     };
 
-    window.postData = function() {
-        push(ref(db, 'posts/' + document.getElementById('category').value), {
-            title: document.getElementById('title').value,
-            imageUrl: document.getElementById('imageUrl').value,
-            postLink: document.getElementById('postLink').value
-        }).then(() => alert("पोस्ट धमाके के साथ पब्लिश हो गई!"));
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-
-<input type="text" id="title" placeholder="आर्टिकल का टाइटल">
-<input type="file" id="file-input"> <div id="editor-container" style="height: 200px;"></div> <button onclick="savePost()">पब्लिश करें</button>
-
-<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-<script>
-    var quill = new Quill('#editor-container', { theme: 'snow' });
-
-    window.savePost = function() {
+    window.savePost = async function() {
         const file = document.getElementById('file-input').files[0];
         const title = document.getElementById('title').value;
-        const content = quill.root.innerHTML; // एडिटर का पूरा HTML कंटेंट
+        const category = document.getElementById('category').value;
+        const content = quill.root.innerHTML;
 
-        // Firebase Storage में फोटो अपलोड करें
-        const storageRef = firebase.storage().ref('posts/' + file.name);
-        storageRef.put(file).then(snapshot => {
-            snapshot.ref.getDownloadURL().then(url => {
-                // डेटाबेस में सेव करें
-                push(ref(db, 'posts/'), { title, content, imageUrl: url });
-                alert("सफलतापूर्वक पोस्ट हुआ!");
-            });
-        });
+        if (!file || !title) { alert("कृपया फोटो और टाइटल भरें!"); return; }
+
+        const storageRef = sRef(storage, 'posts/' + file.name);
+        await uploadBytes(storageRef, file);
+        const url = await getDownloadURL(storageRef);
+
+        push(ref(db, 'posts/' + category), { title, content, imageUrl: url });
+        alert("सफलतापूर्वक पब्लिश हो गया!");
     };
-</script>};
+</script>
+
 </body>
 </html>
