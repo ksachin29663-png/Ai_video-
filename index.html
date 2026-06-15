@@ -1,117 +1,140 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-301868976412219" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Website 36 - अपना करियर शुरू करें!</title>
-    
-    <link rel="stylesheet" href="style.css">
-    
+    <title>VIP एडमिन पैनल - AI Website 36</title>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <style>
-        .page-content { display: none; }
-        .active { display: block; }
-        #new-article-popup { display:none; position:fixed; bottom:20px; right:20px; background:#fff; padding:15px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.2); z-index:1000; border: 1px solid #38bdf8; }
-        .post-thumb { width: 120px !important; height: 120px !important; object-fit: cover; border-radius: 10px; display: block; margin: 0 auto; border: 2px solid #ddd; }
-        .youtube-card { text-align: center; padding: 10px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: white; padding: 15px; margin: 0; }
+        .container { max-width: 600px; margin: auto; background: #1e293b; padding: 20px; border-radius: 15px; border: 2px solid #38bdf8; box-shadow: 0 0 20px rgba(56, 189, 248, 0.2); }
+        h2 { text-align: center; color: #38bdf8; }
+        input, select, button { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; font-size: 16px; box-sizing: border-box; }
+        input, select { background: #334155; color: white; }
+        button { background: #38bdf8; color: #0f172a; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #0ea5e9; }
+        #editor-container { height: 250px; background: white; color: black; border-radius: 8px; margin-bottom: 15px; }
+        .loading { display: none; color: #fbbf24; text-align: center; font-weight: bold; margin: 10px 0; }
+        #login-section { margin-top: 100px; }
     </style>
 </head>
 <body>
 
-<div id="welcome-overlay">
-    <div style="text-align: center; padding: 20px;">
-        <h1 style="font-size: 3em;">नमस्ते, सचिन भाई! 🔥</h1>
-        <p style="font-size: 1.5em;">AI Website 36 में आपका स्वागत है। अपना करियर शुरू करें!</p>
-        <button onclick="document.getElementById('welcome-overlay').style.display='none'" style="padding: 15px 30px;">यहाँ क्लिक करें</button>
-    </div>
+<div id="login-section" class="container">
+    <h2>🔒 VIP लॉगिन</h2>
+    <input type="email" id="email-input" placeholder="अपनी रजिस्टर्ड ईमेल डालें...">
+    <button onclick="checkLogin()">लॉगिन करें</button>
 </div>
 
-<header><h1>AI Website 36 Tool Create Photo</h1></header>
+<div id="admin-section" class="container" style="display:none;">
+    <h2 id="welcome-msg"></h2>
+    
+    <label>कैटगरी चुनें:</label>
+    <select id="category">
+        <option value="business">बिज़नेस आइडियाज</option>
+        <option value="youtube">YouTube टूल्स</option>
+        <option value="shayari">लेटेस्ट शायरी</option>
+    </select>
 
-<nav class="category-tabs">
-    <button onclick="showPage('home')">होम</button>
-    <button onclick="showPage('about')">हमारे बारे में</button>
-    <button onclick="showPage('disclaimer')">डिस्क्लेमर</button>
-</nav>
+    <label>आर्टिकल का टाइटल:</label>
+    <input type="text" id="title" placeholder="यहाँ टाइटल लिखें...">
 
-<main id="home" class="page-content active">
-    <div id="post-container" class="youtube-style-grid"></div>
-</main>
+    <label>थंबनेल फोटो चुनें (YouTube साइज):</label>
+    <input type="file" id="file-input" accept="image/*">
 
-<main id="about" class="page-content">
-    <h2>हमारे बारे में</h2>
-    <p>AI Website 36 एक ऐसा प्लेटफॉर्म है जहाँ आपको बेहतरीन बिज़नेस आइडियाज मिलते हैं।</p>
-</main>
+    <label>आर्टिकल का कंटेंट (ब्लॉगर जैसा एडिटर):</label>
+    <div id="editor-container"></div>
 
-<main id="disclaimer" class="page-content">
-    <h2>डिस्क्लेमर</h2>
-    <p>इस वेबसाइट पर दी गई जानकारी केवल शैक्षिक उद्देश्यों के लिए है। किसी भी निवेश से पहले खुद रिसर्च करें।</p>
-</main>
-
-<div id="new-article-popup">
-    <p>नया बिज़नेस आइडिया आया है!</p>
-    <button onclick="window.location.reload()">यहाँ देखें</button>
-    <button onclick="document.getElementById('new-article-popup').style.display='none'">बंद करें</button>
+    <div id="loading-msg" class="loading">⏳ पोस्ट अपलोड हो रही है, कृपया रुकें...</div>
+    <button id="submit-btn" onclick="savePost()">🚀 वेबसाइट पर लाइव करें</button>
 </div>
 
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
-    const db = getDatabase(initializeApp({
+    // आपकी Firebase कॉन्फ़िगरेशन
+    const firebaseConfig = {
         apiKey: "AIzaSyCg100vhutIND0WaJvMsv4N9_54dpbVlo",
         databaseURL: "https://project-8621d575-e2f7-45a2-963-default-rtdb.firebaseio.com",
-        projectId: "project-8621d575-e2f7-45a2-963"
-    }));
-
-    window.showPage = function(pageId) {
-        document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
-        document.getElementById(pageId).classList.add('active');
-        if(pageId === 'home') loadPosts('home');
+        projectId: "project-8621d575-e2f7-45a2-963",
+        storageBucket: "project-8621d575-e2f7-45a2-963.appspot.com"
     };
 
-    window.loadPosts = function(category) {
-        const container = document.getElementById('post-container');
-        container.innerHTML = '<p>लोड हो रहा है...</p>';
-        const dbRef = (category === 'home') ? ref(db, 'posts') : ref(db, 'posts/' + category);
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const storage = getStorage(app);
 
-        onValue(dbRef, (snapshot) => {
-            container.innerHTML = '';
-            const data = snapshot.val();
-            if (!data) { container.innerHTML = '<p>कोई पोस्ट नहीं है!</p>'; return; }
-            
-            document.getElementById('new-article-popup').style.display = 'block';
-            
-            Object.values(data).forEach(catData => {
-                if(catData.title) render(catData); 
-                else if (typeof catData === 'object') Object.values(catData).forEach(p => render(p));
+    // एडिटर सेटअप
+    const quill = new Quill('#editor-container', {
+        theme: 'snow',
+        placeholder: 'यहाँ अपना विस्तार से आर्टिकल लिखें...',
+        modules: {
+            toolbar: [
+                ['bold', 'italic', 'underline'],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                ['link', 'clean']
+            ]
+        }
+    });
+
+    // लॉगिन फंक्शन
+    window.checkLogin = function() {
+        const email = document.getElementById('email-input').value;
+        if (email === "ksachin20663@gmail.com") {
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('admin-section').style.display = 'block';
+            document.getElementById('welcome-msg').innerText = "स्वागत है, सचिन भाई! 🔥";
+        } else {
+            alert("पहुँच वर्जित! केवल सचिन भाई लॉगिन कर सकते हैं।");
+        }
+    };
+
+    // पोस्ट सेव करने का फंक्शन
+    window.savePost = async function() {
+        const file = document.getElementById('file-input').files[0];
+        const title = document.getElementById('title').value;
+        const category = document.getElementById('category').value;
+        const content = quill.root.innerHTML; // एडिटर से HTML लेना
+        const loading = document.getElementById('loading-msg');
+        const btn = document.getElementById('submit-btn');
+
+        if (!file || !title || quill.getText().trim().length === 0) {
+            alert("भाई, टाइटल, फोटो और कंटेंट तीनों जरूरी हैं!");
+            return;
+        }
+
+        try {
+            loading.style.display = 'block';
+            btn.disabled = true;
+
+            // 1. फोटो को Storage में अपलोड करें
+            const storageRef = sRef(storage, 'images/' + Date.now() + "_" + file.name);
+            const snapshot = await uploadBytes(storageRef, file);
+            const url = await getDownloadURL(snapshot.ref);
+
+            // 2. डेटाबेस में जानकारी सेव करें (posts/ के अंदर)
+            await push(ref(db, 'posts/'), {
+                title: title,
+                content: content,
+                imageUrl: url,
+                category: category,
+                date: new Date().toLocaleDateString()
             });
-        });
+
+            alert("बधाई हो! आपकी पोस्ट वेबसाइट पर लाइव हो गई है।");
+            location.reload(); // पेज रिफ्रेश करें
+        } catch (error) {
+            console.error(error);
+            alert("ओह! कुछ गड़बड़ हो गई। चेक करें कि Firebase Storage ऑन है या नहीं।");
+        } finally {
+            loading.style.display = 'none';
+            btn.disabled = false;
+        }
     };
-
-    function render(p) {
-        const container = document.getElementById('post-container');
-        const card = document.createElement('div');
-        card.className = "youtube-card";
-        card.innerHTML = `<img src="${p.imageUrl || ''}" class="post-thumb"><h3>${p.title || ''}</h3><div>${p.content || ''}</div>`;
-        container.appendChild(card);
-    }
-    loadPosts('home');
 </script>
 
-<script src="menu.js"></script>
-
-<footer id="footer-links" style="text-align: center; padding: 20px; margin-top: 50px;"></footer>
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-6CY39WPNPS"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-6CY39WPNPS');
-</script>
-
-<a href="manage.html" style="color:transparent; font-size:1px;">.</a>
 </body>
-   </html>
-   
+</html>
