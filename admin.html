@@ -2,33 +2,39 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>VIP एडमिन पैनल - AI Website 36</title>
+    <title>एडमिन पैनल - AI Website 36</title>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f1f5f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .panel-card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 500px; text-align: center; }
-        h2 { color: #1e293b; margin-bottom: 20px; }
-        input, button { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #e2e8f0; border-radius: 10px; box-sizing: border-box; }
-        button { background-color: #0f172a; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button:hover { background-color: #334155; }
-        #editor { height: 150px; margin-bottom: 15px; border-radius: 10px; }
+        body { font-family: sans-serif; background: #f1f5f9; padding: 20px; }
+        .box { max-width: 500px; margin: 40px auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        input, select, button { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        button { background: #0f172a; color: white; font-weight: bold; cursor: pointer; }
+        #editor { height: 150px; margin-bottom: 10px; background: #fff; }
         .hidden { display: none; }
     </style>
 </head>
 <body>
 
-<div id="login-section" class="panel-card">
-    <h2>🔒 एडमिन एक्सेस</h2>
-    <input type="email" id="email-input" placeholder="ईमेल डालें...">
+<div id="login-box" class="box">
+    <h2>🔒 एडमिन लॉगिन</h2>
+    <input type="email" id="email-check" placeholder="अपनी ईमेल डालें...">
     <button onclick="verifyEmail()">लॉगिन करें</button>
 </div>
 
-<div id="admin-section" class="panel-card hidden">
-    <h2>स्वागत है, सचिन भाई! 🔥</h2>
+<div id="admin-box" class="box hidden">
+    <h2>नमस्ते सचिन भाई!</h2>
     <input type="text" id="title" placeholder="आर्टिकल टाइटल...">
+    
+    <label>कैटेगरी चुनें:</label>
+    <select id="category">
+        <option value="business">बिज़नेस आइडियाज</option>
+        <option value="youtube">YouTube टूल्स</option>
+        <option value="shayari">शायरी</option>
+    </select>
+
     <input type="file" id="file-input">
     <div id="editor"></div>
-    <button onclick="uploadPost()">🚀 लाइव पोस्ट करें</button>
+    <button onclick="uploadPost()">🚀 पोस्ट लाइव करें</button>
 </div>
 
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
@@ -41,14 +47,14 @@
     const storage = getStorage(initializeApp({ projectId: "project-8621d575-e2f7-45a2-963" }));
     const quill = new Quill('#editor', { theme: 'snow' });
 
-    // ईमेल फिक्सिंग गेटवे
+    // ईमेल गेटवे - यहाँ मैंने आपकी दी हुई ईमेल फिक्स कर दी है
     window.verifyEmail = function() {
-        const email = document.getElementById('email-input').value;
-        const fixEmail = "ksachin20663@gmail.com"; 
-        
-        if (email === fixEmail) {
-            document.getElementById('login-section').classList.add('hidden');
-            document.getElementById('admin-section').classList.remove('hidden');
+        const inputEmail = document.getElementById('email-check').value;
+        const myFixedEmail = "ksachin29663@gmail.com"; // यह ईमेल अब कोड में फिक्स है
+
+        if (inputEmail === myFixedEmail) {
+            document.getElementById('login-box').classList.add('hidden');
+            document.getElementById('admin-box').classList.remove('hidden');
         } else {
             alert("❌ एक्सेस अस्वीकार: गलत ईमेल!");
         }
@@ -57,18 +63,19 @@
     window.uploadPost = async function() {
         const file = document.getElementById('file-input').files[0];
         const title = document.getElementById('title').value;
-        if(!file || !title) return alert("सब कुछ भरें भाई!");
+        const category = document.getElementById('category').value;
+        
+        if(!file || !title) return alert("फोटो और टाइटल डालें!");
 
-        const storageRef = sRef(storage, 'posts/' + file.name);
+        const storageRef = sRef(storage, 'posts/' + category + '/' + file.name);
         await uploadBytes(storageRef, file);
         const url = await getDownloadURL(storageRef);
 
-        await push(ref(db, 'posts/'), { title, content: quill.root.innerHTML, imageUrl: url });
-        alert("पोस्ट पब्लिश हो गई है!");
+        await push(ref(db, 'posts/' + category), { title, content: quill.root.innerHTML, imageUrl: url });
+        alert("पोस्ट सफलतापूर्वक लाइव हो गई!");
         location.reload();
     };
 </script>
-
 </body>
-</html>
-45
+    </html>
+    
