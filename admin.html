@@ -2,80 +2,62 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>एडमिन पैनल - AI Website 36</title>
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <title>VIP एडमिन पैनल - सचिन भाई</title>
     <style>
-        body { font-family: sans-serif; background: #f1f5f9; padding: 20px; }
-        .box { max-width: 500px; margin: 40px auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        input, select, button { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        button { background: #0f172a; color: white; font-weight: bold; cursor: pointer; }
-        #editor { height: 150px; margin-bottom: 10px; background: #fff; }
-        .hidden { display: none; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: white; padding: 20px; text-align: center; }
+        .box { background: #1e293b; padding: 25px; border-radius: 15px; max-width: 450px; margin: auto; border: 2px solid #38bdf8; }
+        input, select, button { width: 100%; padding: 14px; margin: 10px 0; border-radius: 8px; border: none; }
+        button { background: #38bdf8; color: #000; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #fff; }
     </style>
 </head>
 <body>
 
-<div id="login-box" class="box">
-    <h2>🔒 एडमिन लॉगिन</h2>
-    <input type="email" id="email-check" placeholder="अपनी ईमेल डालें...">
-    <button onclick="verifyEmail()">लॉगिन करें</button>
+<div id="login-section" class="box">
+    <h2>लॉगिन करें</h2>
+    <input type="email" id="email-input" placeholder="अपनी ईमेल डालें...">
+    <button onclick="checkLogin()">लॉगिन करें</button>
 </div>
 
-<div id="admin-box" class="box hidden">
-    <h2>नमस्ते सचिन भाई!</h2>
-    <input type="text" id="title" placeholder="आर्टिकल टाइटल...">
-    
-    <label>कैटेगरी चुनें:</label>
+<div id="admin-section" class="box" style="display:none;">
+    <h2 id="welcome-msg"></h2>
     <select id="category">
-        <option value="business">बिज़नेस आइडियाज</option>
-        <option value="youtube">YouTube टूल्स</option>
+        <option value="business">बिज़नेस</option>
+        <option value="youtube">YouTube</option>
         <option value="shayari">शायरी</option>
     </select>
-
-    <input type="file" id="file-input">
-    <div id="editor"></div>
-    <button onclick="uploadPost()">🚀 पोस्ट लाइव करें</button>
+    <input type="text" id="title" placeholder="टाइटल यहाँ लिखें">
+    <input type="text" id="imageUrl" placeholder="फोटो का लिंक (Thumbnail)">
+    <input type="text" id="postLink" placeholder="यहाँ वेबसाइट/वीडियो का असली लिंक डालें">
+    <button onclick="postData()">पोस्ट पब्लिश करें</button>
 </div>
 
-<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-    import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
-    const db = getDatabase(initializeApp({ databaseURL: "https://project-8621d575-e2f7-45a2-963-default-rtdb.firebaseio.com" }));
-    const storage = getStorage(initializeApp({ projectId: "project-8621d575-e2f7-45a2-963" }));
-    const quill = new Quill('#editor', { theme: 'snow' });
+    const firebaseConfig = {
+        apiKey: "AIzaSyCg10UvIutINDxMaIVMsv4N9_5dpbPvlo",
+        databaseURL: "https://project-8621d575-e2f7-45a2-963-default-rtdb.firebaseio.com",
+        projectId: "project-8621d575-e2f7-45a2-963"
+    };
+    const db = getDatabase(initializeApp(firebaseConfig));
 
-    // ईमेल गेटवे - यहाँ मैंने आपकी दी हुई ईमेल फिक्स कर दी है
-    window.verifyEmail = function() {
-        const inputEmail = document.getElementById('email-check').value;
-        const myFixedEmail = "ksachin29663@gmail.com"; // यह ईमेल अब कोड में फिक्स है
-
-        if (inputEmail === myFixedEmail) {
-            document.getElementById('login-box').classList.add('hidden');
-            document.getElementById('admin-box').classList.remove('hidden');
-        } else {
-            alert("❌ एक्सेस अस्वीकार: गलत ईमेल!");
-        }
+    window.checkLogin = function() {
+        if (document.getElementById('email-input').value === "ksachin20663@gmail.com") {
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('admin-section').style.display = 'block';
+            document.getElementById('welcome-msg').innerText = "स्वागत है, सचिन भाई! 🔥";
+        } else { alert("गलत ईमेल! तुम सचिन नहीं हो!"); }
     };
 
-    window.uploadPost = async function() {
-        const file = document.getElementById('file-input').files[0];
-        const title = document.getElementById('title').value;
-        const category = document.getElementById('category').value;
-        
-        if(!file || !title) return alert("फोटो और टाइटल डालें!");
-
-        const storageRef = sRef(storage, 'posts/' + category + '/' + file.name);
-        await uploadBytes(storageRef, file);
-        const url = await getDownloadURL(storageRef);
-
-        await push(ref(db, 'posts/' + category), { title, content: quill.root.innerHTML, imageUrl: url });
-        alert("पोस्ट सफलतापूर्वक लाइव हो गई!");
-        location.reload();
+    window.postData = function() {
+        push(ref(db, 'posts/' + document.getElementById('category').value), {
+            title: document.getElementById('title').value,
+            imageUrl: document.getElementById('imageUrl').value,
+            postLink: document.getElementById('postLink').value
+        }).then(() => alert("पोस्ट सफल के साथ पब्लिश हो गई!"));
     };
 </script>
 </body>
-    </html>
-    
+</html>
