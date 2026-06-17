@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ऑटोमैटिक लाइव स्कोर</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            margin: 0;
+            padding: 10px;
+            text-align: center;
+        }
+        .live-scoreboard {
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .live-tag {
+            background-color: #ef4444;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink { 50% { opacity: 0.5; } }
+        .score { font-size: 35px; font-weight: bold; margin: 10px 0; }
+        
+        .captains-section {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: #1e293b;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .captain-card { width: 45%; }
+        .captain-card img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #3b82f6;
+            object-fit: cover;
+            background-color: #334155;
+        }
+        
+        .info-section {
+            background-color: #1e293b;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="live-scoreboard">
+        <span class="live-tag">● LIVE</span>
+        <div style="font-size: 14px; margin-top: 5px; color: #cbd5e1;">IND vs AFG - टी20 मैच</div>
+        <div class="score" id="score-display">Loading...</div>
+        <div style="color: #f59e0b; font-weight: bold;" id="status-display">कनेक्ट हो रहा है...</div>
+    </div>
+
+    <div class="captains-section">
+        <div class="captain-card">
+            <img src="https://placehold.co/100x100/3b82f6/white?text=Rohit" alt="Rohit Sharma">
+            <div style="margin-top: 5px; font-weight: bold;">रोहित शर्मा</div>
+            <div style="font-size: 12px; color: #94a3b8;">भारत</div>
+        </div>
+        <div style="font-size: 20px; font-weight: bold; color: #f59e0b;">VS</div>
+        <div class="captain-card">
+            <img src="https://placehold.co/100x100/ef4444/white?text=Rashid" alt="Rashid Khan">
+            <div style="margin-top: 5px; font-weight: bold;">राशिद खान</div>
+            <div style="font-size: 12px; color: #94a3b8;">अफगानिस्तान</div>
+        </div>
+    </div>
+
+    <div class="info-section">
+        <h3 style="color: #f59e0b; margin-top: 0;">📋 मैच की जानकारी</h3>
+        <p><strong>खिलाड़ी:</strong> दोनों टीमों के बेस्ट 11 खिलाड़ी मैदान पर हैं।</p>
+        <hr style="border-color: #334155;">
+        <p><strong>लाइव कमेंट्री:</strong></p>
+        <div style="font-size: 15px; color: #cbd5e1; line-height: 1.6;" id="commentary-display">
+            लोड हो रहा है...
+        </div>
+    </div>
+
+    <script>
+        // ⚠️ यहाँ अपनी असली Google Sheet ID डालें
+        const SHEET_ID = 'YOUR_SPREADSHEET_ID_HERE'; 
+        const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+
+        async function fetchLiveScore() {
+            try {
+                const response = await fetch(SHEET_URL);
+                const text = await response.text();
+                
+                // गूगल शीट का डेटा क्लीन करना
+                const jsonData = JSON.parse(text.substr(47).slice(0, -2));
+                const row = jsonData.table.rows[0].c; // Row 2 का डेटा (इंडेक्स 0)
+
+                // डेटा निकालना
+                const runs = row[0] ? row[0].v : '0';
+                const wickets = row[1] ? row[1].v : '0';
+                const overs = row[2] ? row[2].v : '0.0';
+                const status = row[3] ? row[3].v : '';
+                const commentary = row[4] ? row[4].v : '';
+
+                // HTML एलिमेंट्स अपडेट करना
+                document.getElementById('score-display').innerHTML = `${runs} / ${wickets} <span style="font-size: 18px; font-weight: normal;">(${overs} Over)</span>`;
+                document.getElementById('status-display').innerText = status;
+                document.getElementById('commentary-display').innerHTML = commentary.replace(/\n/g, '<br>');
+
+            } catch (error) {
+                console.error("डेटा लोड करने में समस्या:", error);
+            }
+        }
+
+        // हर 3 सेकंड (3000ms) में स्कोर अपने आप अपडेट होगा
+        setInterval(fetchLiveScore, 3000);
+        
+        // पहली बार पेज खुलने पर तुरंत लोड करें
+        fetchLiveScore();
+    </script>
+</body>
+  </html>
+  
