@@ -1,80 +1,203 @@
+/* General Setup */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
-    background-color: #f1f1f1;
+    background-color: #f9f9f9;
+    color: #0f0f0f;
+    padding-top: 60px; /* Header space */
 }
 
-/* हेडर का डिज़ाइन */
-.main-header {
-    background-color: #fff;
-    padding: 15px 20px;
+/* YouTube Header */
+.yt-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 56px;
+    background-color: #ffffff;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-    position: sticky;
-    top: 0;
+    padding: 0 16px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.1);
     z-index: 100;
 }
 
-.main-header .logo {
-    font-size: 22px;
-    font-weight: bold;
-    color: #ff0000;
+.brand-logo {
+    font-size: 20px;
+    font-weight: 700;
+    color: #ff0000; /* YouTube Red color */
+    letter-spacing: -0.5px;
 }
 
-.main-header nav a {
-    text-decoration: none;
-    color: #333;
-    margin-left: 15px;
-    font-weight: bold;
+.three-dots-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #606060;
+    padding: 4px 8px;
+    border-radius: 50%;
 }
 
-.container {
+.three-dots-btn:active {
+    background-color: #e5e5e5;
+}
+
+/* Posts Layout (YouTube Video Feed Style) */
+.posts-container {
     max-width: 600px;
-    margin: 20px auto;
-    padding: 0 10px;
+    margin: 0 auto;
+    padding: 12px 0;
 }
 
-/* पोस्ट कार्ड डिज़ाइन */
 .post-card {
-    background: #fff;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    padding: 15px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    background-color: #ffffff;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #e5e5e5;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Full Width Image like YT Thumbnail */
+.post-images-grid img {
+    width: 100%;
+    height: auto;
+    max-height: 340px;
+    object-fit: cover;
+    display: block;
+}
+
+/* Post Content Styling */
+.post-text-area {
+    padding: 12px 16px;
 }
 
 .post-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 5px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: #0f0f0f;
+    margin-bottom: 6px;
 }
 
 .post-location {
     font-size: 12px;
-    color: #777;
+    color: #606060;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.post-content {
+    font-size: 14px;
+    color: #0f0f0f;
+    line-height: 1.5;
     margin-bottom: 10px;
 }
 
-/* इमेज गैलरी */
-.post-images img {
+.post-meta {
+    padding: 0 16px 12px 16px;
+    font-size: 12px;
+    color: #606060;
+    display: flex;
+    gap: 12px;
+}
+
+/* Auto Highlight Box */
+.auto-highlight {
+    background-color: #f2f2f2;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin: 10px 0;
+    border-left: 4px solid #ff0000;
+}
+
+/* Modern Smooth PopUp (Modal) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* Opens from bottom on mobile like YT */
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-box {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 600px;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    padding: 20px;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-box {
+    transform: translateY(0);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e5e5e5;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+}
+
+.modal-header h3 {
+    font-size: 18px;
+    color: #0f0f0f;
+}
+
+.close-modal-btn {
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #606060;
+    cursor: pointer;
+}
+
+/* Accordion Accordance inside Modal */
+details {
+    background: #f9f9f9;
+    padding: 12px;
     border-radius: 8px;
     margin-bottom: 10px;
+    border: 1px solid #e5e5e5;
 }
 
-/* ऑटोमैटिक हाईलाइट बॉक्स */
-.auto-highlight {
-    background-color: #f9f9ff;
-    border-left: 4px solid #0056b3;
-    padding: 10px;
-    margin: 15px 0;
-    font-style: italic;
-    color: #333;
+summary {
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
 }
+
+details p {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #606060;
+    line-height: 1.5;
+    }
+        
