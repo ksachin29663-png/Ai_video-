@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Website</title>
+    <!-- हमारी CSS स्टाइल फाइल -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- हेडर -->
+    <header class="main-header">
+        <div class="logo">AI Website</div>
+        <nav>
+            <a href="index.html" class="active">होम</a>
+            <a href="admin.html">एडमिन पैनल</a>
+        </nav>
+    </header>
+
+    <!-- यहाँ हमारी पोस्ट्स लोड होंगी -->
+    <main class="container">
+        <div id="posts-container" class="youtube-style-feed">
+            <div class="loading">पोस्ट लोड हो रही हैं...</div>
+        </div>
+    </main>
+
+    <!-- हमारी मुख्य JavaScript फाइल (type="module" लगाना ज़रूरी है) -->
+    <script type="module" src="app.js"></script>
+</body>
+</html>
+
