@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Website - एडमिन पैनल</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-box { background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-top: 20px; }
+        .dashboard-stats { display: flex; gap: 15px; margin-bottom: 20px; background: #e3f2fd; padding: 15px; border-radius: 8px; font-weight: bold; color: #0d47a1; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; }
+        .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 15px; }
+        .form-group textarea { height: 200px; resize: vertical; }
+        .counter-info { font-size: 13px; color: #666; margin-top: 5px; text-align: right; }
+        .btn-submit { background: #ff0000; color: #fff; border: none; padding: 12px 20px; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; }
+        .btn-submit:disabled { background: #ccc; }
+        #image-preview { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+        #image-preview img { width: 80px; height: 80px; object-fit: cover; border-radius: 5px; border: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo">AI Website <span style="font-size: 12px; color: #666;">(एडमिन)</span></div>
+        <nav>
+            <a href="index.html">होम</a>
+            <a href="admin.html" class="active">एडमिन पैनल</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="dashboard-stats">
+            📊 कुल पब्लिश की गई पोस्ट: <span id="total-posts-count">0</span>
+        </div>
+
+        <div class="admin-box">
+            <h2 style="margin-bottom: 15px; border-bottom: 2px solid #f1f1f1; padding-bottom: 5px;">नई पोस्ट लिखें</h2>
+            
+            <form id="post-form">
+                <div class="form-group">
+                    <label for="post-title">पोस्ट का टाइटल (Title)</label>
+                    <input type="text" id="post-title" placeholder="यहाँ टाइटल लिखें..." required>
+                </div>
+
+                <div class="form-group">
+                    <label for="post-location">जगह/लोकेशन (Location)</label>
+                    <input type="text" id="post-location" placeholder="जैसे: लखनऊ, उत्तर प्रदेश" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="post-images">फोटो चुनें (ज्यादा से ज्यादा 4 फोटो लोड कर सकते हैं)</label>
+                    <input type="file" id="post-images" accept="image/*" multiple>
+                    <div id="image-preview"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="post-content">ब्लॉग की मुख्य जानकारी (कंटेंट)</label>
+                    <textarea id="post-content" placeholder="यहाँ अपनी पूरी जानकारी विस्तार से लिखें (अधिकतम 5000 शब्द)..." required></textarea>
+                    <div class="counter-info">
+                        अक्षर (Characters): <span id="char-count" style="font-weight: bold; color: #ff0000;">0</span> | 
+                        शब्द (Words): <span id="word-count" style="font-weight: bold; color: #0056b3;">0</span> / 5000
+                    </div>
+                </div>
+
+                <button type="submit" id="submit-btn" class="btn-submit">पोस्ट पब्लिश करें 🚀</button>
+            </form>
+        </div>
+    </main>
+
+    <script type="module" src="admin.js"></script>
+</body>
+                                     </html>
+
