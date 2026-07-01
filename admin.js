@@ -1,6 +1,5 @@
-import { database, storage } from "./firebase-config.js";
+import { database } from "./firebase-config.js";
 import { ref, set, push, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-import { ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
 const postForm = document.getElementById('post-form');
 const postTitle = document.getElementById('post-title');
@@ -15,6 +14,7 @@ const submitBtn = document.getElementById('submit-btn');
 
 let selectedFiles = [];
 
+// लाइव वर्ड और कैरेक्टर काउंटर
 postContent.addEventListener('input', () => {
     const text = postContent.value;
     charCountSpan.textContent = text.length;
@@ -29,6 +29,7 @@ postContent.addEventListener('input', () => {
     }
 });
 
+// फोटो चुनने पर प्रीव्यू दिखाना
 postImages.addEventListener('change', (e) => {
     imagePreview.innerHTML = "";
     selectedFiles = Array.from(e.target.files);
@@ -51,6 +52,7 @@ postImages.addEventListener('change', (e) => {
     });
 });
 
+// कुल पोस्ट काउंटर
 const totalPostsRef = ref(database, 'posts');
 onValue(totalPostsRef, (snapshot) => {
     if (snapshot.exists()) {
@@ -62,6 +64,17 @@ onValue(totalPostsRef, (snapshot) => {
     }
 });
 
+// फाइल को Base64 टेक्स्ट में बदलने का फंक्शन
+const convertFileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+    });
+};
+
+// फॉर्म सबमिट होने पर सीधा डेटाबेस में सेव करना
 postForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     submitBtn.disabled = true;
@@ -73,33 +86,32 @@ postForm.addEventListener('submit', async (e) => {
     
     const finalCharCount = content.length;
     const finalWordCount = content.trim().split(/\s+/).filter(word => word.length > 0).length;
-    const imageUrls = [];
+    
+    const base64Images = [];
 
     try {
+        // सभी चुनी हुई फोटो को एक-एक करके टेक्स्ट (Base64) में बदलना
         for (let i = 0; i < selectedFiles.length; i++) {
             const file = selectedFiles[i];
-            const uniqueFileName = `post_images/${Date.now()}_${i}_${file.name}`;
-            const storageRef = sRef(storage, uniqueFileName);
-            
-            await uploadBytes(storageRef, file);
-            const downloadUrl = await getDownloadURL(storageRef);
-            imageUrls.push(downloadUrl);
+            const base64String = await convertFileToBase64(file);
+            base64Images.push(base64String); // यह सीधा टेक्स्ट एरे में जाएगा
         }
 
         const newPostRef = push(ref(database, 'posts'));
         
+        // सीधे रियल-टाइम डेटाबेस में सारा डेटा एक साथ सेव करना
         await set(newPostRef, {
             title: title,
             location: location,
             content: content,
-            images: imageUrls,
+            images: base64Images, // फोटो अब टेक्स्ट बनकर सीधा डेटाबेस में जा रही है
             views: 0,
             date: new Date().toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' }),
             charCount: finalCharCount,
             wordCount: finalWordCount
         });
 
-        alert("🚀 आपकी पोस्ट सफलतापूर्वक पब्लिश हो गई है!");
+        alert("🚀 आपकी पोस्ट बिना किसी स्टोरेज के सीधे रियल-टाइम डेटाबेस में पब्लिश हो गई है!");
         postForm.reset();
         imagePreview.innerHTML = "";
         selectedFiles = [];
@@ -112,4 +124,4 @@ postForm.addEventListener('submit', async (e) => {
         submitBtn.textContent = "पोस्ट पब्लिश करें 🚀";
     }
 });
-                
+            
