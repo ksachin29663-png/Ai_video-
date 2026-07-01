@@ -5,57 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Website</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Fonts and Icons for YouTube Look -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <!-- YouTube Style Header -->
     <header class="yt-header">
         <div class="header-left">
-            <span class="brand-logo">AI Website</span>
+            <span class="brand-logo">AI Website <span style="font-size: 14px; color: #666; font-weight: normal;">| Feed</span></span>
         </div>
         <div class="header-right">
-            <!-- थ्री-डॉट बटन -->
             <button class="three-dots-btn" id="menuBtn">⋮</button>
         </div>
     </header>
 
-    <!-- Main Posts Container -->
     <main class="posts-container" id="posts-container">
-        <!-- जावास्क्रिप्ट के ज़रिए यहाँ YouTube स्टाइल पोस्ट्स लोड होंगी -->
+        <div class="loading">पोस्ट लोड हो रही हैं...</div>
     </main>
 
-    <!-- Privacy & Terms Modal Popup -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-box">
             <div class="modal-header">
-                <h3>जानकारी और नीतियां</h3>
+                <h3>वेबसाइट मेनू और नीतियां</h3>
                 <button class="close-modal-btn" id="closeBtn">&times;</button>
             </div>
             <div class="modal-body">
-                <details>
-                    <summary>🔒 प्राइवेसी पॉलिसी (Privacy Policy)</summary>
-                    <p>हम अपने उपयोगकर्ताओं की गोपनीयता का पूरा सम्मान करते हैं। इस वेबसाइट पर आपका कोई भी व्यक्तिगत डेटा बिना अनुमति के संग्रहीत या साझा नहीं किया जाता है।</p>
-                </details>
-                
-                <details>
-                    <summary>📜 नियम और शर्तें (Terms & Conditions)</summary>
-                    <p>इस वेबसाइट पर दी गई सभी सामग्री केवल सूचनात्मक उद्देश्यों के लिए है। किसी भी सामग्री का दुरुपयोग करना सख्त वर्जित है।</p>
-                </details>
-
-                <details>
-                    <summary>📞 हमसे संपर्क करें (Contact Us)</summary>
-                    <p>यदि आपके पास कोई प्रश्न या सुझाव है, तो आप हमें ईमेल कर सकते हैं: <strong>Ksachin29663@gmail.com</strong></p>
-                </details>
+                <ul class="policy-links-list">
+                    <li><a href="about.html">ℹ️ हमारे बारे में (About Us)</a></li>
+                    <li><a href="contact.html">📞 हमसे संपर्क करें (Contact Us)</a></li>
+                    <li><a href="privacy.html">🔒 प्राइवेसी पॉलिसी (Privacy Policy)</a></li>
+                    <li><a href="terms.html">📜 नियम और शर्तें (Terms & Conditions)</a></li>
+                    <li><a href="disclaimer.html">⚠️ डिस्क्लेमर (Disclaimer)</a></li>
+                    <li><a href="cookies.html">🍪 कुकीज़ पॉलिसी (Cookies Policy)</a></li>
+                </ul>
             </div>
         </div>
     </div>
 
-    <!-- Firebase Logic Link -->
     <script type="module" src="app.js"></script>
     
-    <!-- Menu Control Script -->
     <script>
         const menuBtn = document.getElementById('menuBtn');
         const modalOverlay = document.getElementById('modalOverlay');
@@ -75,14 +62,5 @@
             }
         });
     </script>
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<meta name="robots" content="index, follow">
-
-<meta name="author" content="AI Video">
-
-<meta name="theme-color" content="#0b63ce">
 </body>
 </html>
