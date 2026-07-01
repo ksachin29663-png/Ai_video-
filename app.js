@@ -1,92 +1,127 @@
-// हमारी फायरबेस कॉन्फ़िगरेशन फ़ाइल से डेटाबेस को इंपोर्ट करना
 import { database } from "./firebase-config.js";
-import { ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { ref, set, push, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-const postsContainer = document.getElementById('posts-container');
+const postForm = document.getElementById('post-form');
+const postTitle = document.getElementById('post-title');
+const postLocation = document.getElementById('post-location');
+const postImages = document.getElementById('post-images');
+const imagePreview = document.getElementById('image-preview');
+const postContent = document.getElementById('post-content');
+const charCountSpan = document.getElementById('char-count');
+const wordCountSpan = document.getElementById('word-count');
+const totalPostsCountSpan = document.getElementById('total-posts-count');
+const submitBtn = document.getElementById('submit-btn');
 
-// 1. पैराग्राफ को प्रोसेस करके ऑटोमैटिक हाईलाइट बॉक्स तैयार करने वाला फंक्शन
-function processContentWithHighlights(text) {
-    // टेक्स्ट को पैराग्राफ (\n) के आधार पर अलग करना
-    const paragraphs = text.split('\n').filter(p => p.trim().length > 0);
-    let htmlContent = "";
+let selectedFiles = [];
 
-    paragraphs.forEach((para, index) => {
-        // सामान्य पैराग्राफ जोड़ना
-        htmlContent += `<p class="post-content">${para}</p>`;
-
-        // हर 2 पैराग्राफ के बाद एक ऑटोमैटिक हाईलाइट बॉक्स बनाना (यदि कंटेंट लंबा है)
-        if ((index + 1) % 2 === 0 && para.length > 30) {
-            // पैराग्राफ के पहले 60 अक्षरों को हाईलाइट के रूप में इस्तेमाल करना
-            const highlightText = para.substring(0, 60) + "...";
-            htmlContent += `
-                <div class="auto-highlight">
-                    📌 मुख्य आकर्षण: "${highlightText}"
-                </div>
-            `;
-        }
-    });
-
-    return htmlContent;
-}
-
-// 2. फायरबेस से रियल-टाइम में पोस्ट्स लोड करना
-const postsRef = ref(database, 'posts');
-
-onValue(postsRef, (snapshot) => {
-    postsContainer.innerHTML = ""; // पुराना लोडिंग टेक्स्ट हटाएं
-
-    if (snapshot.exists()) {
-        const postsData = snapshot.val();
-        
-        // पोस्ट्स को उल्टे क्रम (Newest First) में दिखाने के लिए एरे में बदलना
-        const postsList = Object.keys(postsData).map(key => ({
-            id: key,
-            ...postsData[key]
-        })).reverse();
-
-        postsList.forEach(post => {
-            // पोस्ट कार्ड का मुख्य ढांचा बनाना
-            const postCard = document.createElement('div');
-            postCard.className = 'post-card';
-
-            // इमेज ग्रिड तैयार करना (1 फोटो या मल्टीपल फोटो के हिसाब से)
-            let imagesHtml = "";
-            if (post.images && post.images.length > 0) {
-                const isMulti = post.images.length > 1 ? "multi-img" : "";
-                imagesHtml = `<div class="post-images-grid ${isMulti}">`;
-                post.images.forEach(imgUrl => {
-                    imagesHtml += `<img src="${imgUrl}" alt="Post Image" loading="lazy">`;
-                });
-                imagesHtml += `</div>`;
-            }
-
-            // प्रोसेस किया हुआ कंटेंट (जिसमें ऑटो-हाईलाइट शामिल है)
-            const processedBody = processContentWithHighlights(post.content);
-
-            // पूरा YouTube स्टाइल लेआउट असेम्बल करना
-            postCard.innerHTML = `
-                <h2 class="post-title">${post.title}</h2>
-                <div class="post-location">📍 ${post.location}</div>
-                
-                ${imagesHtml}
-                
-                <div class="post-text-area">
-                    ${processedBody}
-                </div>
-                
-                <div class="post-meta">
-                    <span>👁️ ${post.views || 0} व्यूज</span>
-                    <span>📅 ${post.date}</span>
-                </div>
-            `;
-
-            postsContainer.appendChild(postCard);
-        });
+// लाइव वर्ड और कैरेक्टर काउंटर
+postContent.addEventListener('input', () => {
+    const text = postContent.value;
+    charCountSpan.textContent = text.length;
+    
+    const words = text.trim().split(/\s+/).filter(word => word.length > 0);
+    wordCountSpan.textContent = words.length;
+    
+    if (words.length > 5000) {
+        wordCountSpan.style.color = "red";
     } else {
-        postsContainer.innerHTML = "<div class='loading'>अभी तक कोई पोस्ट पब्लिश नहीं की गई है।</div>";
+        wordCountSpan.style.color = "#0056b3";
     }
-}, (error) => {
-    console.error("डेटा लोड करने में समस्या आई: ", error);
-    postsContainer.innerHTML = "<div class='loading'>डेटा लोड करने में एरर आया।</div>";
 });
-          
+
+// फोटो चुनने पर प्रीव्यू दिखाना
+postImages.addEventListener('change', (e) => {
+    imagePreview.innerHTML = "";
+    selectedFiles = Array.from(e.target.files);
+    
+    if (selectedFiles.length > 4) {
+        alert("आप अधिकतम 4 फोटो ही अपलोड कर सकते हैं!");
+        postImages.value = "";
+        selectedFiles = [];
+        return;
+    }
+
+    selectedFiles.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const img = document.createElement('img');
+            img.src = event.target.result;
+            imagePreview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    });
+});
+
+// कुल पोस्ट काउंटर
+const totalPostsRef = ref(database, 'posts');
+onValue(totalPostsRef, (snapshot) => {
+    if (snapshot.exists()) {
+        const data = snapshot.val();
+        const totalCount = Object.keys(data).length;
+        totalPostsCountSpan.textContent = totalCount;
+    } else {
+        totalPostsCountSpan.textContent = 0;
+    }
+});
+
+// फाइल को Base64 टेक्स्ट में बदलने का फंक्शन
+const convertFileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+    });
+};
+
+// फॉर्म सबमिट होने पर सीधा डेटाबेस में सेव करना
+postForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.textContent = "पब्लिश हो रहा है, कृपया रुकें... ⏳";
+
+    const title = postTitle.value;
+    const location = postLocation.value;
+    const content = postContent.value;
+    
+    const finalCharCount = content.length;
+    const finalWordCount = content.trim().split(/\s+/).filter(word => word.length > 0).length;
+    
+    const base64Images = [];
+
+    try {
+        // सभी चुनी हुई फोटो को एक-एक करके टेक्स्ट (Base64) में बदलना
+        for (let i = 0; i < selectedFiles.length; i++) {
+            const file = selectedFiles[i];
+            const base64String = await convertFileToBase64(file);
+            base64Images.push(base64String); // यह सीधा टेक्स्ट एरे में जाएगा
+        }
+
+        const newPostRef = push(ref(database, 'posts'));
+        
+        // सीधे रियल-टाइम डेटाबेस में सारा डेटा एक साथ सेव करना
+        await set(newPostRef, {
+            title: title,
+            location: location,
+            content: content,
+            images: base64Images, // फोटो अब टेक्स्ट बनकर सीधा डेटाबेस में जा रही है
+            views: 0,
+            date: new Date().toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' }),
+            charCount: finalCharCount,
+            wordCount: finalWordCount
+        });
+
+        alert("🚀 आपकी पोस्ट बिना किसी स्टोरेज के सीधे रियल-टाइम डेटाबेस में पब्लिश हो गई है!");
+        postForm.reset();
+        imagePreview.innerHTML = "";
+        selectedFiles = [];
+        
+    } catch (error) {
+        console.error("Error publishing post: ", error);
+        alert("❌ कुछ गड़बड़ हुई! कृपया दोबारा प्रयास करें।");
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "पोस्ट पब्लिश करें 🚀";
+    }
+});
+        
