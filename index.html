@@ -5,22 +5,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Website</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Fonts and Icons for YouTube Look -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <header class="main-header">
-        <div class="logo">AI Website <span style="font-size: 14px; color: #666; font-weight: normal;">| Feed</span></div>
-        <nav>
-            <a href="index.html" class="active">होम</a>
-        </nav>
+    <!-- YouTube Style Header -->
+    <header class="yt-header">
+        <div class="header-left">
+            <span class="brand-logo">AI Website</span>
+        </div>
+        <div class="header-right">
+            <!-- थ्री-डॉट बटन -->
+            <button class="three-dots-btn" id="menuBtn">⋮</button>
+        </div>
     </header>
 
-    <main class="container">
-        <div id="posts-container" class="youtube-style-feed">
-            <div class="loading">पोस्ट लोड हो रही हैं...</div>
-        </div>
+    <!-- Main Posts Container -->
+    <main class="posts-container" id="posts-container">
+        <!-- जावास्क्रिप्ट के ज़रिए यहाँ YouTube स्टाइल पोस्ट्स लोड होंगी -->
     </main>
 
+    <!-- Privacy & Terms Modal Popup -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>जानकारी और नीतियां</h3>
+                <button class="close-modal-btn" id="closeBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <details>
+                    <summary>🔒 प्राइवेसी पॉलिसी (Privacy Policy)</summary>
+                    <p>हम अपने उपयोगकर्ताओं की गोपनीयता का पूरा सम्मान करते हैं। इस वेबसाइट पर आपका कोई भी व्यक्तिगत डेटा बिना अनुमति के संग्रहीत या साझा नहीं किया जाता है।</p>
+                </details>
+                
+                <details>
+                    <summary>📜 नियम और शर्तें (Terms & Conditions)</summary>
+                    <p>इस वेबसाइट पर दी गई सभी सामग्री केवल सूचनात्मक उद्देश्यों के लिए है। किसी भी सामग्री का दुरुपयोग करना सख्त वर्जित है।</p>
+                </details>
+
+                <details>
+                    <summary>📞 हमसे संपर्क करें (Contact Us)</summary>
+                    <p>यदि आपके पास कोई प्रश्न या सुझाव है, तो आप हमें ईमेल कर सकते हैं: <strong>Ksachin29663@gmail.com</strong></p>
+                </details>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Logic Link -->
     <script type="module" src="app.js"></script>
+    
+    <!-- Menu Control Script -->
+    <script>
+        const menuBtn = document.getElementById('menuBtn');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const closeBtn = document.getElementById('closeBtn');
+
+        menuBtn.addEventListener('click', () => {
+            modalOverlay.classList.add('active');
+        });
+
+        closeBtn.addEventListener('click', () => {
+            modalOverlay.classList.remove('active');
+        });
+
+        modalOverlay.addEventListener('click', (e) => {
+            if(e.target === modalOverlay) {
+                modalOverlay.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>
